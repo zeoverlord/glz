@@ -81,7 +81,7 @@ static bool isinited_shd;
 static unsigned int passtroughprogram;
 
 
-
+//Position.xyz
 char vertexpasstrough[] =
 
 "#version 140\r\n"

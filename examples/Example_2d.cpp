@@ -346,7 +346,7 @@ ps.run(seconds);
 void draw_text(float x, float y, int text, int font, unsigned int po, unsigned int col)
 {
 	glUseProgram(po);
-
+	
 	unsigned int loc1 = glGetUniformLocation(po,"projMat");
 	unsigned int loc2 = glGetUniformLocation(po,"texunit0");
 	unsigned int loc3 = glGetUniformLocation(po,"tint");
@@ -364,13 +364,13 @@ void draw_text(float x, float y, int text, int font, unsigned int po, unsigned i
 	if (col==COL_GREEN)	glUniform4f(loc3, 0.0f,1.0f,0.0f,1.0f);
 	if (col==COL_BLUE)	glUniform4f(loc3, 0.0f,0.0f,1.0f,1.0f);
 
-
+glzShaderUsePasstrough();
 	
 
 	glBindTexture(GL_TEXTURE_2D,fonttexture[font]);
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
-	glzDrawVAO(textvao_num[text],textvao[text],GL_TRIANGLES);
+	glzDrawVAO(textvao_num[text],textvao[text],GL_POINTS);
 	glDisable(GL_BLEND);
 
 }
@@ -583,7 +583,7 @@ void Draw (void)
 
 	if (gamestate == 5)
 	{
-
+		glDisable(GL_DEPTH_TEST);
 		m.LoadIdentity();
 		m.ortho(-400, 400, -250, 250, -100, 100);
 
@@ -593,34 +593,35 @@ void Draw (void)
 
 		glBindTexture(GL_TEXTURE_2D, texture[1]);
 	
-		glzDirectSpriteRender(m, texture[1], 0, 0, 2, 100, 100, 0, 0, 1.0, 1.0, glzOrigin::TOP_LEFT);
-		glzDirectSpriteRender(m, texture[1], 0, 0, 2, 100, 100, 0, 0, 1.0, 1.0, glzOrigin::BOTTOM_LEFT);
+		glzDirectSpriteRender(m, texture[1], 0, 0, 0, 100, 100, 1, 0, 1.0, 1.0, glzOrigin::TOP_LEFT);
+		glzDirectSpriteRender(m, texture[1], 0, 0, 0, 100, 100, 1, 0, 1.0, 1.0, glzOrigin::BOTTOM_LEFT);
 		
-		glzDirectSpriteRender(m, texture[1], 0, 0, 2, 100, 100, 0, 0, 1.0, 1.0, glzOrigin::BOTTOM_RIGHT);
-		glzDirectSpriteRender(m, texture[1], 0, 0, 2, 100, 100, 0, 0, 1.0, 1.0, glzOrigin::TOP_RIGHT);
+		glzDirectSpriteRender(m, texture[1], 0, 0, 0, 100, 100, 1, 0, 1.0, 1.0, glzOrigin::BOTTOM_RIGHT);
+		glzDirectSpriteRender(m, texture[1], 0, 0, 0, 100, 100, 1, 0, 1.0, 1.0, glzOrigin::TOP_RIGHT);
 
 		glBlendFunc(GL_ONE, GL_ONE);
 		glBlendFunc(GL_CONSTANT_COLOR, GL_ONE_MINUS_CONSTANT_COLOR);
 		glBlendColor(1, 0, 1, 1.0f);
 		glEnable(GL_BLEND);
 
-		glzDrawTexture(texture[3], 0, 0, 0, 200, 200, 3, 0, 0, 1, 1);
+		glzDrawTexture(texture[3], 0, 0, 0, 200, 200, 0, 0, 0, 1, 1);
 
 		glDisable(GL_BLEND);
 
 		glBindTexture(GL_TEXTURE_2D, texture[3]);
 
-	//	glUniform4f(loc3, 1.0f, 0.0f, 1.0f, 1.0f);
-		glzDirectSpriteRenderAtlas(0, 0, 1, 100, 100, 4, 4, 14, glzOrigin::CENTERED);
+		//glUniform4f(loc3, 1.0f, 0.0f, 1.0f, 1.0f);
+		glzDirectSpriteRenderAtlas(0, 0, 0, 100, 100, 4, 4, 14, glzOrigin::CENTERED);
 
 		glzDirectSpriteRenderAtlasPixelPerfect(192, 192, 1, 64, 64, 4, 4, 1, glzOrigin::BOTTOM_LEFT);
 		glzDirectSpriteRenderAtlasPixelPerfectQuantized(208, 192, 1, 64, 64, 4, 4, 1, 16.0f, glzOrigin::BOTTOM_LEFT);
 
-
-
+		
 		
 		draw_text(-3.9f, 1.9f, 12, 2, ProgramObject, COL_WHITE);
 		draw_text(1.7f, -1.8f, 15, 2, ProgramObject, COL_WHITE);
+		
+		glEnable(GL_DEPTH_TEST);
 
 	}
 
