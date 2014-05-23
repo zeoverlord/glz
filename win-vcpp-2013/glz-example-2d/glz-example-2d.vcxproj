@@ -97,6 +97,7 @@
     <ClCompile Include="..\..\glz\ztool-geo-generate.cpp" />
     <ClCompile Include="..\..\glz\ztool-geo.cpp" />
     <ClCompile Include="..\..\glz\ztool-glz.cpp" />
+    <ClCompile Include="..\..\glz\ztool-particle.cpp" />
     <ClCompile Include="..\..\glz\ztool-shader.cpp" />
     <ClCompile Include="..\..\glz\ztool-tex.cpp" />
     <ClCompile Include="..\..\glz\ztool-vectormath.cpp" />
@@ -113,6 +114,7 @@
     <ClInclude Include="..\..\glz\ztool-geo-generate.h" />
     <ClInclude Include="..\..\glz\ztool-geo.h" />
     <ClInclude Include="..\..\glz\ztool-glz.h" />
+    <ClInclude Include="..\..\glz\ztool-particle.h" />
     <ClInclude Include="..\..\glz\ztool-shader.h" />
     <ClInclude Include="..\..\glz\ztool-tex.h" />
     <ClInclude Include="..\..\glz\ztool-type.h" />

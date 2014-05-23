@@ -115,12 +115,18 @@ texture_transform glzMakeTT(glzTTType type, float u_scale, float v_scale, float 
 	long glzCountFromIndexArrays(long vert_face[], int enteries);
 	void glzVAOMakeFromArray(float v[], float t[], float n[], long enteties, unsigned int *vao, glzVAOType type);
 	void glzVAOMakeFromVector(vector<poly3> pdata, unsigned int *vao, glzVAOType type);
+	void glzVAOMakeFromVector(vector<point3> pdata, unsigned int *vao, glzVAOType type);
+
+	
 
 	long glzConvertVectorToArray(float *v, float *t, float *n, vector<poly3> pdata);
+	long glzConvertVectorToArray(float *v, float *t, float *n, vector<point3> pdata);
+
 
 
 
 	void glzDirectPointArrayRender(float v[], float t[], int E);
+	void glzDirectPointVectorRender(vector<point3> pdata);
 	void glzDirectCubeRender(float X, float Y, float Z, float W, float H, float D, texture_transform tt, unsigned int atlas); // does exactly you think it does
 
 	void glzKillVAO(unsigned int vao);

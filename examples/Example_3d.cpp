@@ -35,6 +35,7 @@
 #include "..\glz\ztool-tex.h"
 #include "..\glz\ztool-geo-2d.h"
 #include "..\glz\ztool-geo-generate.h"
+#include "..\glz\ztool-particle.h"
 
 
 using namespace std;										
@@ -64,10 +65,14 @@ float texttimer=0;
 float spriteframetimer=0;
 int spriteframe=0;
 
+
+glzQuaternion qr;
 glzQuaternion q;
 glzQuaternion q2;
 glzQuaternion q3;
 glzQuaternion qn;
+
+pos3 tankpos(vert3(0, -2, -17));
 
 int gamestate=4;
 
@@ -247,6 +252,8 @@ BOOL Initialize (GL_Window* window, Keys* keys)					// Any GL Init Code & User I
 	texture[2] = glzLoadTexture("data\\cv90base.tga", glzTexFilter::ANSIO_MAX);
 	texture[4] = glzLoadTexture("data\\gridlines.tga", glzTexFilter::ANSIO_MAX);
 
+//	tankpos.pos = vert3(0, -2, -17);
+	tankpos.scale = vec3(0.5, 0.5, 0.5);
 
 
 
@@ -280,20 +287,35 @@ void Update (float seconds)								// Perform Motion Updates Here
 	if (gamestate==1)
 	{
 
-		q.rotate(seconds * 50, 0.0, 1.0, 0.0);
-		q.rotate(seconds * 40, 1.0, 0.0, 0.0);
+		qr.identity();
 
+		qr.rotate(50, 0.0, 1.0, 0.0);
+		qr.rotate(40, 1.0, 0.0, 0.0);
+
+		qr *= seconds;
+
+		q *= qr;
+
+		
 
 	}
 
 	if (gamestate==2)
 	{
 		
-		if (g_keys->keyDown[VK_UP] == TRUE)q2.rotate(seconds * 40, 1.0, 0.0, 0.0);
-		if (g_keys->keyDown[VK_DOWN] == TRUE)q2.rotate(seconds * -40, 1.0, 0.0, 0.0);
+		
+		tankpos.rs.identity();
 
-		if (g_keys->keyDown[VK_LEFT] == TRUE)q2.rotate(seconds * 40, 0.0, 1.0, 0.0);
-		if (g_keys->keyDown[VK_RIGHT] == TRUE)q2.rotate(seconds * -40, 0.0, 1.0, 0.0);
+		if (g_keys->keyDown[VK_UP] == TRUE)tankpos.rs.rotate(40, 1.0, 0.0, 0.0);
+		if (g_keys->keyDown[VK_DOWN] == TRUE)tankpos.rs.rotate(-40, 1.0, 0.0, 0.0);
+
+		if (g_keys->keyDown[VK_LEFT] == TRUE)tankpos.rs.rotate(40, 0.0, 1.0, 0.0);
+		if (g_keys->keyDown[VK_RIGHT] == TRUE)tankpos.rs.rotate(-40, 0.0, 1.0, 0.0);
+
+		
+
+		tankpos.pos = vert3(0, -2+(sin(angle*PI_OVER_180)*2), -17);
+		tankpos.tick(seconds);
 		
 	}
 
@@ -327,6 +349,8 @@ if (angle > 360) angle -= 360;
 	if (g_keys->keyDown['3'] == TRUE) gamestate = 3;
 	if (g_keys->keyDown['4'] == TRUE) gamestate = 4;
 	if (g_keys->keyDown['5'] == TRUE) gamestate = 5;
+
+
 
 }
 
@@ -480,10 +504,16 @@ void Draw (void)
 		// draw tank
 	m.LoadIdentity();
 	m.perspective(45.0f, 1.618f, 1.0f, 100.0f);
-	m.translate(0,-2,-17);	
-	m.scale(0.5,0.5,0.5);
 	
-	m.loadQuanternion(q2);
+	m*= tankpos.m;
+	//m.translate(0,-2,-17);	
+	//m.scale(0.5,0.5,0.5);
+	
+	//m.loadQuanternion(tankpos.r);
+
+	m.transferMatrix(&mtemp[0]);
+
+
 
 	m.transferMatrix(&mtemp[0]);
 	glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);

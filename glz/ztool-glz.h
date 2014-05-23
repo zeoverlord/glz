@@ -56,6 +56,9 @@ float glzRandf(glzDistribution D);
 float glzRandfs(void);  //produces a value between 1 and -1
 float glzRandfs(glzDistribution D);
 
+vec3 glzRandfs_vec3(void);
+vec3 glzRandfs_vec3(glzDistribution D);
+
 // static noise functions
 float glzMersienneNoise(float seed);
 float glzMersienneNoise(float seed, float x);

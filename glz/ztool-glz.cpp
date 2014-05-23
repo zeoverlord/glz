@@ -123,6 +123,47 @@ if (dist_i(mt)) sign = -1;
 }
 
 
+vec3 glzRandfs_vec3(void)  //produces a value between 1 and -1
+{
+	std::uniform_real_distribution<float> dist(-1.0, 1.0);
+
+	vec3 r(dist(mt), dist(mt), dist(mt));
+
+	return r;
+}
+
+vec3 glzRandfs_vec3(glzDistribution D)  //produces a value between 1 and -1
+{
+	std::uniform_real_distribution<float> dist_u(-1.0, 1.0);
+	std::normal_distribution<float> dist_n(0.0, 1.0);
+	std::gamma_distribution<float> dist_g(1.0, 1.0);
+	std::exponential_distribution<float> dist_e(1.0);
+	std::uniform_int_distribution<int> dist_i(0, 1);
+
+	int sign = 1;
+	if (dist_i(mt)) sign = -1;
+
+	switch (D)
+	{
+	case glzDistribution::UNIFORM:
+		return vec3(dist_u(mt), dist_u(mt), dist_u(mt));
+		break;
+	case glzDistribution::NORMAL:
+		return vec3(dist_n(mt)*sign, dist_n(mt)*sign, dist_n(mt)*sign);
+		break;
+	case glzDistribution::GAMMA:
+		return vec3(dist_g(mt)*sign, dist_g(mt)*sign, dist_g(mt)*sign);
+		break;
+	case glzDistribution::EXPONENTIAL:
+		return vec3(dist_e(mt)*sign, dist_e(mt)*sign, dist_e(mt)*sign);
+		break;
+	default:
+		return vec3(dist_u(mt), dist_u(mt), dist_u(mt));
+		break;
+	}
+
+}
+
 // static noise functions, works but is slower than random because of overhead, still they are pretty good for generation of pseudorandom data that needs to be the same every time
 
 

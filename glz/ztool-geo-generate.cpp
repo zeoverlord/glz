@@ -831,7 +831,8 @@ void glzLoadFileGeometryObjVector(char filename[255], vector<poly3> *pdata, int 
 					ptemp.group = group;
 					ptemp.atlas = atlas;
 
-
+					
+					//generatetexture = true;
 					if (generatenormal)	ptemp.generateNormal();
 					if (generatetexture) ptemp.generateTexture(1.0);
 					//ptemp.tempAddNormalToVertex();

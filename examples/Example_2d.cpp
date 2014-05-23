@@ -35,6 +35,7 @@
 #include "..\glz\ztool-tex.h"
 #include "..\glz\ztool-geo-2d.h"
 #include "..\glz\ztool-geo-generate.h"
+#include "..\glz\ztool-particle.h"
 
 using namespace std;										
 
@@ -325,10 +326,10 @@ if (gamestate == 6)
 	if (g_keys->keyDown[VK_SPACE] == TRUE)
 	{
 	
-		ps.spawn_burst(100, 0.0f, 0.0f, 0.0f, 0.1f, 2.0f, 3.0f, 0.5f, 3.0f, 0.3f, 1.0, 2.0f);
+		ps.spawn_burst(100, vert3(0.0f, 0.0f, 0.0f), 0.1f, 2.0f, 3.0f, 0.5f, 3.0f, 0.3f, 1.0, 2.0f);
 		
 }
-ps.run(seconds);
+ps.tick(seconds);
 
 }
 	

@@ -141,6 +141,9 @@ void glzMatrix::translate(double x, double y, double z)
 
 }
 
+
+
+
 void glzMatrix::scale(double x, double y, double z)
 {
 	{
