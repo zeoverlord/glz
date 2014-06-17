@@ -112,6 +112,8 @@ public:
 	double magnitude(void) { return sqrt((x * x) + (y * y) + (z * z)); }
 	//double distance(vec3 a) { return sqrt((x-a.x * x-a.x) + (y-a.y * y-a.y) + (z-a.z * z-a.z)); }
 	double dot(vec3 a) { return x*a.x + y*a.y + z*a.z; }
+	vec3 inverse() { return vec3(-1 * x, -1 * y, -1 * z); }
+	void reflect(vec3 b);
 	void normalize(double l) { if (!this->magnitude()) return; double m = l / this->magnitude(); x *= m; y *= m; z *= m; }
 	void crossproduct(vec3 a, vec3 b) { x = b.y * a.z - a.y * b.z; y = b.z * a.x - a.z * b.x; z = b.x * a.y - a.x * b.y; }
 	void project(glzMatrix m);
@@ -364,6 +366,32 @@ public:
 
 
 	/*
+	turn to
+	move to
+	align to
+
+	*/
+
+};
+
+class glzRidgidSimple{ //basic physics class
+
+private:
+
+
+public:
+	pos3 p;
+	double weight;
+
+
+	glzRidgidSimple() : p(pos3()), weight(1.0) {}
+	glzRidgidSimple(pos3 pin, double weightin) : p{ pin }, weight{ weightin } {}
+/*	pos3(vert3 posin) : pos{ posin }, dir(vec3()), r(glzQuaternion()), rs(glzQuaternion()), scale(vec3(1.0, 1.0, 1.0)) {}
+
+	void tick(double seconds) { pos += dir*seconds;	r *= rs*seconds; m.LoadIdentity();	m.translate(pos); m.scale(scale); m.loadQuanternion(r); }
+
+
+	
 	turn to
 	move to
 	align to

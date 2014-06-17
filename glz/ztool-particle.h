@@ -39,14 +39,14 @@ typedef struct{
 	float maxage; //when to die
 	float drag; // how much it's effected by drag
 	float gravity;
-	float noise;
+	float weight;
 	bool active;
 }glzSimpleParticle;
 
 class glzSimpleParticleSystem{
 private: 
 	
-	vec3 gv;
+	double time;
 	float scale;
 	bool running;
 	unsigned int pc;
@@ -55,12 +55,35 @@ private:
 
 public:
 	glzSimpleParticleSystem();
-	void set_environment(float gx_in, float gy_in, float gz_in, float scale_in);
+	void set_time(float t) { time = t; }
+	void set_environment(float scale_in);
 	void set_clamp(bool clampx_in, bool clampy_in, bool clampz_in);
 
-	void spawn_burst(unsigned int num, vert3 pos_in, float v_in, float mag, float maxage_in, float agediff, float drag_in, float dragdiff, float gravity, float noise_in);
-	bool tick(float t);
+	// spawners
+	void spawn_burst(unsigned int num, vert3 pos_in, float v_in, float mag, float maxage_in, float agediff, float drag_in, float dragdiff, float gravity, float weightin);
+
+	void spawn_line_burst(unsigned int num, vert3 pos_in, float width, float v_in, float mag, float maxage_in, float agediff, float drag_in, float dragdiff, float gravity, float weightin);
+
+	// aditional effects
+
+	void collide_plane(vec3 normal, vert3 pl);
+	void collide_plane_y(double y, bool up);
+
+	void singularity(vert3 p, float range, double strength);
+	
+	void noise(double magnitude);
+	void drag(double magnitude);
+	void terminal_velocity(double magnitude);
+	void gravity(vec3 gv);
+
+
+
+	// final steps
+
+	bool tick();
 	void render_out();
+
+	
 };
 
 

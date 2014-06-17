@@ -63,7 +63,7 @@ float texttimer=0;
 float spriteframetimer=0;
 int spriteframe=0;
 
-int gamestate=5;
+int gamestate=6;
 
 
 GLhandleARB  ProgramObject,ProgramObjectFT,ProgramObjectFSQ;
@@ -326,10 +326,30 @@ if (gamestate == 6)
 	if (g_keys->keyDown[VK_SPACE] == TRUE)
 	{
 	
-		ps.spawn_burst(100, vert3(0.0f, 0.0f, 0.0f), 0.1f, 2.0f, 3.0f, 0.5f, 3.0f, 0.3f, 1.0, 2.0f);
+		ps.spawn_burst(1000*seconds, vert3(0.0f, 100.0f, 0.0f), 0.1f, 2.0f, 1.0f, 0.5f, 3.0f, 0.3f, 1.0, 1.0f);
+		//ps.spawn_line_burst(1000*seconds, vert3(0.0f, 100.0f, 0.0f),600.0, 0.1f, 2.0f, 1.0f, 0.5f, 2.2f, 0.2f, 1.0, 1.0f);
 		
 }
-ps.tick(seconds);
+	vec3 ctemp(0.0,1.0,0.0);
+	ctemp.normalize(1.0);
+	vec3 ctemp2(-0.2, 1.0, 0.0);
+	ctemp2.normalize(1.0);
+
+	vec3 gv(0.0f, -9.82f, 0.0f);
+
+	ps.set_time(seconds);
+
+	ps.singularity(vert3(-100.0, -50.0, 0.0), 100.0, 5.0);
+	ps.singularity(vert3(-100.0, 50.0, 0.0), 100.0, 10.0);
+	ps.noise(10.0);
+	ps.drag(1.0);
+	ps.terminal_velocity(1000.0);
+	ps.gravity(gv);
+	ps.collide_plane(ctemp, vert3(0.0, -100.0, 0.0));
+
+	//ps.collide_plane(ctemp2, vert3(0.0, -100.0, 0.0));
+	//ps.collide_plane_y(-100, true);
+	ps.tick();
 
 }
 	
@@ -352,7 +372,7 @@ void draw_text(float x, float y, int text, int font, unsigned int po, unsigned i
 	unsigned int loc2 = glGetUniformLocation(po,"texunit0");
 	unsigned int loc3 = glGetUniformLocation(po,"tint");
 	m.LoadIdentity();
-	m.ortho( -4, 4, -2, 2, -100, 100);
+	m.ortho( -4, 4, -2, 2, -100, 100);	
 	m.translate(x,y,0);
 
 	float mtemp[16];
@@ -365,13 +385,13 @@ void draw_text(float x, float y, int text, int font, unsigned int po, unsigned i
 	if (col==COL_GREEN)	glUniform4f(loc3, 0.0f,1.0f,0.0f,1.0f);
 	if (col==COL_BLUE)	glUniform4f(loc3, 0.0f,0.0f,1.0f,1.0f);
 
-glzShaderUsePasstrough();
+//glzShaderUsePasstrough();
 	
 
 	glBindTexture(GL_TEXTURE_2D,fonttexture[font]);
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
-	glzDrawVAO(textvao_num[text],textvao[text],GL_POINTS);
+	glzDrawVAO(textvao_num[text],textvao[text],GL_TRIANGLES);
 	glDisable(GL_BLEND);
 
 }
