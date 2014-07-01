@@ -51,6 +51,15 @@ void vert3::project(glzMatrix m)
 
 }
 
+void vec3::reflect(vec3 b)
+{
+	vec3 a(x, y, z);
+	vec3 res = -2 * (a.dot(b))*b + a;
+	x = res.x;
+	y = res.y;
+	z = res.z;
+}
+
 void vec3::project(glzMatrix m)
 {
 
@@ -140,6 +149,9 @@ void glzMatrix::translate(double x, double y, double z)
 	return;
 
 }
+
+
+
 
 void glzMatrix::scale(double x, double y, double z)
 {

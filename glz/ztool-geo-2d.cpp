@@ -27,6 +27,7 @@
 #include "ztool-geo.h"
 #include "ztool-geo-2d.h"
 #include "ztool-shader.h"
+#include "ztool-vectormath.h"
 #include <stdio.h>
 #include <windows.h>													// Header File For The Windows Library
 #include <gl/gl.h>														// Header File For The OpenGL32 Library
@@ -550,49 +551,55 @@ void glzDirectDrawText(char text[255], float scale, float aspect, float kern, gl
 void glzDrawTexture(unsigned int texture, unsigned int sampler, float X0, float Y0, float X1, float Y1, float Z, float s0, float t0, float s1, float t1)
 {
 	if (has_drawtexture) 
-	{
-		glDrawTextureNV(texture, sampler, X0, Y0, X1, Y1, Z, s0, t0, s1, t1);
+	{		
+		glDrawTextureNV(texture, sampler, X0, Y0, X1, Y1, Z, s0, t0, s1, t1);		
 		return;
 	}
+
+
+	
+
+	unsigned int localVAO;
+	vector<poly3> p;
+
+
+	vert3 v1(X0, Y0, Z);
+	vert3 v2(X1, Y0, Z);
+	vert3 v3(X1, Y1, Z);
+
+	vert3 v4(X0, Y1, Z);
+	vert3 v5(X0, Y0, Z);
+	vert3 v6(X1, Y1, Z);
+
+	
+	tex2 tx1(s0, t0);
+	tex2 tx2(s1, t0);
+	tex2 tx3(s1, t1);
+	tex2 tx4(s0, t1);
+	tex2 tx5(s0, t0);
+	tex2 tx6(s1, t1);
+	
+	vec3 n(0.0f, 0.0f, 1.0f);
+
+	poly3 p1(point3(v1, tx1, n), point3(v2, tx2, n), point3(v3, tx3, n), 0, 0);
+	poly3 p2(point3(v4, tx4, n), point3(v5, tx5, n), point3(v6, tx6, n), 0, 0);
+
+	p.push_back(p1);
+	p.push_back(p2);
+
 
 
 	GLint viewport[4];
 
 	glGetIntegerv(GL_VIEWPORT, viewport);
 
-	float m[16];
-	glzLoadIdentity(m);
-	glzOrtho2DPixelspace(m, viewport[2], viewport[3], glzOrigin::BOTTOM_LEFT);
+	glzMatrix m;
+	m.LoadIdentity();
+	m.ortho2DPixelspace(viewport[2], viewport[3], glzOrigin::BOTTOM_LEFT);
+		
 
-	unsigned int localVAO;
-
-	float v[] = {
-		X0, Y0, Z,
-		X1, Y0, Z,
-		X1, Y1, Z,
-		X0, Y1, Z,
-		X0, Y0, Z,
-		X1, Y1, Z };
-
-	float t[] = {
-		s0, t0,
-		s1, t0,
-		s1, t1,
-		s0, t1,
-		s0, t0,
-		s1, t1 };
-
-	float n[] = {
-		0.0f, 0.0f, 1.0f,
-		0.0f, 0.0f, 1.0f,
-		0.0f, 0.0f, 1.0f,
-		0.0f, 0.0f, 1.0f,
-		0.0f, 0.0f, 1.0f,
-		0.0f, 0.0f, 1.0f };
-
-	glzProjectVertexArray(v, m, 6);
-	 
-	glzVAOMakeFromArray(v, t, n, 6, &localVAO, glzVAOType::AUTO);
+	glzProjectVertexArray(&p, m, 0);		 
+	glzVAOMakeFromVector(p, &localVAO, glzVAOType::AUTO);
 
 
 	GLint c_program=0;
@@ -604,8 +611,9 @@ void glzDrawTexture(unsigned int texture, unsigned int sampler, float X0, float 
 	glBindSampler(0,sampler);
 	glBindTexture(GL_TEXTURE_2D, texture);
 
-	glzDrawVAO(0, 6, localVAO, GL_TRIANGLES);
+	glzDrawVAO(0, p.size()*3, localVAO, GL_TRIANGLES);
 	glzKillVAO(localVAO);
+
 
 	glUseProgram(c_program);
 

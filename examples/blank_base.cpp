@@ -51,6 +51,16 @@ unsigned int texture[5],fonttexture;
 
 
 
+glzAppinitialization preInitialize(void)
+{
+	glzAppinitialization app(L"ZeoBase GL Framework");
+
+	return app;
+
+}
+
+
+
 BOOL Initialize (GL_Window* window, Keys* keys)					// Any GL Init Code & User Initialiazation Goes Here
 {
 	g_window	= window;

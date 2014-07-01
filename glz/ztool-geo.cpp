@@ -932,6 +932,75 @@ void glzVAOMakeFromVector(vector<poly3> pdata, unsigned int *vao, glzVAOType typ
 }
 
 
+void glzVAOMakeFromVector(vector<point3> pdata, unsigned int *vao, glzVAOType type)
+{
+	if (!isinited_geo) ini_geo();
+
+	unsigned int vaopoint;
+	vaopoint = *vao;
+	if (glIsVertexArray((GLuint)&vao) == GL_FALSE) glzKillVAO(vaopoint);
+
+	unsigned int vaotemp;
+	unsigned int buffer[3];
+
+	float *v, *t, *n;
+	v = new float[pdata.size() * 3];
+	t = new float[pdata.size() * 2];
+	n = new float[pdata.size() * 3];
+
+
+	int elements = glzConvertVectorToArray(v, t, n, pdata);
+
+
+
+	glGenVertexArrays(1, &vaotemp);   //generate the vao for this mesh
+	glBindVertexArray(vaotemp);
+
+	glGenBuffers(3, &buffer[0]);	// Get A Valid Name
+
+	glBindBuffer(GL_ARRAY_BUFFER, buffer[0]);			// Bind The Buffer
+	glBufferData(GL_ARRAY_BUFFER, elements * 3 * sizeof(float), v, GL_DYNAMIC_DRAW);
+	glVertexAttribPointer((GLuint)0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+	if ((type == glzVAOType::AUTO) || (type == glzVAOType::VERTEX_TEXTURE) || (type == glzVAOType::VERTEX_TEXTURE_NORMAL))
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, buffer[1]);			// Bind The Buffer
+		glBufferData(GL_ARRAY_BUFFER, elements * 2 * sizeof(float), t, GL_DYNAMIC_DRAW);
+		glVertexAttribPointer((GLuint)1, 2, GL_FLOAT, GL_FALSE, 0, 0);
+	}
+
+
+	if ((type == glzVAOType::AUTO) || (type == glzVAOType::VERTEX_NORMAL) || (type == glzVAOType::VERTEX_TEXTURE_NORMAL))
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, buffer[2]);			// Bind The Buffer
+		glBufferData(GL_ARRAY_BUFFER, elements * 3 * sizeof(float), n, GL_DYNAMIC_DRAW);
+		glVertexAttribPointer((GLuint)2, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	}
+
+	glEnableVertexAttribArray(0);
+	if ((type == glzVAOType::AUTO) || (type == glzVAOType::VERTEX_TEXTURE) || (type == glzVAOType::VERTEX_TEXTURE_NORMAL)) glEnableVertexAttribArray(1);
+	if ((type == glzVAOType::AUTO) || (type == glzVAOType::VERTEX_NORMAL) || (type == glzVAOType::VERTEX_TEXTURE_NORMAL)) glEnableVertexAttribArray(2);
+
+
+	glBindVertexArray(0);
+
+	vao[0] = vaotemp;
+	addToVaoList(vaotemp, type);
+
+
+	delete[] v;
+	delete[] t;
+	delete[] n;
+	v = NULL;
+	t = NULL;
+	n = NULL;
+
+
+	return;
+
+}
+
+
 
 long glzConvertVectorToArray(float *v, float *t, float *n, vector<poly3> pdata)
 {
@@ -978,7 +1047,36 @@ long glzConvertVectorToArray(float *v, float *t, float *n, vector<poly3> pdata)
 	}
 
 
-	return (i * 3);
+	return (pdata.size() * 3);
+}
+
+
+
+long glzConvertVectorToArray(float *v, float *t, float *n, vector<point3> pdata)
+{
+
+	int i = 0;
+
+	for (auto p : pdata)
+	{
+
+		v[i * 3 + 0] = p.v.x;
+		v[i * 3 + 1] = p.v.y;
+		v[i * 3 + 2] = p.v.z;
+
+		t[i * 2 + 0] = p.t.u;
+		t[i * 2 + 1] = p.t.v;
+
+		n[i * 3 + 0] = p.n.x;
+		n[i * 3 + 1] = p.n.y;
+		n[i * 3 + 2] = p.n.z;
+
+		i++;
+				
+	}
+
+
+	return (pdata.size());
 }
 
 
@@ -998,6 +1096,19 @@ void glzDirectPointArrayRender(float v[], float t[], int E)
 	return;
 }
 
+void glzDirectPointVectorRender(vector<point3> pdata)
+{
+
+	unsigned int localVAO;
+
+	glzVAOMakeFromVector(pdata, &localVAO, glzVAOType::VERTEX_TEXTURE);
+
+
+	glzDrawVAO(0, pdata.size(), localVAO, GL_POINTS);
+	glzKillVAO(localVAO);
+
+	return;
+}
 
 void glzDirectCubeRender(float X, float Y, float Z, float W, float H, float D, texture_transform tt, unsigned int atlas)
 {

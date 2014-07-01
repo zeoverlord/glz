@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\examples\Example_2d.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\examples\stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -36,9 +33,6 @@
     <ClCompile Include="..\..\glz\ztool-tex.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\glz\2d-scenegraph-base.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\glz\ztool_type.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -51,7 +45,7 @@
     <ClCompile Include="..\..\glz\ztool-vectormath.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\glz\ztool-particle.cpp">
+    <ClCompile Include="..\..\examples\z-tile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -83,9 +77,6 @@
     <ClInclude Include="..\..\glz\ztool-tex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\2d-scenegraph-base.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\glz\ztool-type.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -96,9 +87,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\glz\ztool-vectormath.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\glz\ztool-particle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -55,6 +55,7 @@ unsigned int glzLoadTexture(char filename[255], glzTexFilter filter);  // type i
 
 void glzScreenShot(char filename[255], int x, int y, glzTexCompression type);  // auto saves a compressed file
 void glzScreenShotADV(char filename[255], int xoffset, int yoffset, int x, int y, int lossy, glzTexCompression type);
+void glzSaveTGA(char filename[255], int x, int y, int lossy, glzTexCompression type, unsigned int tex_type, unsigned char *in_data);
 
 
 /*
@@ -66,6 +67,8 @@ void glzScreenShotADV(char filename[255], int xoffset, int yoffset, int x, int y
 * subtexture loading, using chunks for megatextures
 * procedural texture generation, also megatexture capable
 * some FBO management
+* texture array manager - load textures as a large 4k texture array so that you only have to tell the shader where that texture is, so basically a bind once use forever texture
+* dynamic texture manager for the above, defrags a texture array to make more space.
 
 */
 

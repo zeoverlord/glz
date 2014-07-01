@@ -77,37 +77,6 @@ enum class glzSceneGraphSubMessage {
 
 };
 
-typedef struct{
-	float x_pos, y_pos, z_pos;
-	float x_vec, y_vec, z_vec;  // motion vector in units per second
-	float u, v;
-	float age;  // how old this particle is, affects the u texture coordinate
-	float maxage; //when to die
-	float drag; // how much it's effected by drag
-	float gravity;
-	float noise;
-	bool active;
-}glzSimpleParticle;
-
-class glzSimpleParticleSystem{
-private: 
-	
-	float gx, gy, gz;
-	float scale;
-	bool running;
-	unsigned int pc;
-	bool clampx, clampy, clampz;
-	vector<glzSimpleParticle> p;
-
-public:
-	glzSimpleParticleSystem();
-	void set_environment(float gx_in, float gy_in, float gz_in, float scale_in);
-	void set_clamp(bool clampx_in, bool clampy_in, bool clampz_in);
-
-	void spawn_burst(unsigned int num, float x_in, float y_in, float z_in, float v_in, float mag, float maxage_in, float agediff, float drag_in, float dragdiff, float gravity, float noise_in);
-	bool run(float t);
-	void render_out();
-};
 
 // todo, move to own cpp file
 

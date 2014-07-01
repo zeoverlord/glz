@@ -11,9 +11,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{651AA368-D5A5-4ADC-A30E-FABA14FD6DC0}</ProjectGuid>
+    <ProjectGuid>{64E853BF-057C-4DFD-84B5-D90A65DD55C8}</ProjectGuid>
     <RootNamespace>glzexample2d</RootNamespace>
     <Keyword>Win32Proj</Keyword>
+    <ProjectName>z-tile</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -56,7 +57,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
@@ -89,22 +90,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\examples\Example_2d.cpp" />
     <ClCompile Include="..\..\examples\stdafx.cpp" />
+    <ClCompile Include="..\..\examples\z-tile.cpp" />
     <ClCompile Include="..\..\examples\zeobase2.cpp" />
-    <ClCompile Include="..\..\glz\2d-scenegraph-base.cpp" />
     <ClCompile Include="..\..\glz\ztool-geo-2d.cpp" />
     <ClCompile Include="..\..\glz\ztool-geo-generate.cpp" />
     <ClCompile Include="..\..\glz\ztool-geo.cpp" />
     <ClCompile Include="..\..\glz\ztool-glz.cpp" />
-    <ClCompile Include="..\..\glz\ztool-particle.cpp" />
     <ClCompile Include="..\..\glz\ztool-shader.cpp" />
     <ClCompile Include="..\..\glz\ztool-tex.cpp" />
     <ClCompile Include="..\..\glz\ztool-vectormath.cpp" />
     <ClCompile Include="..\..\glz\ztool_type.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\glz\2d-scenegraph-base.h" />
     <ClInclude Include="..\..\glz\primitives.h" />
     <ClInclude Include="..\..\examples\Resource.h" />
     <ClInclude Include="..\..\examples\stdafx.h" />
@@ -114,7 +112,6 @@
     <ClInclude Include="..\..\glz\ztool-geo-generate.h" />
     <ClInclude Include="..\..\glz\ztool-geo.h" />
     <ClInclude Include="..\..\glz\ztool-glz.h" />
-    <ClInclude Include="..\..\glz\ztool-particle.h" />
     <ClInclude Include="..\..\glz\ztool-shader.h" />
     <ClInclude Include="..\..\glz\ztool-tex.h" />
     <ClInclude Include="..\..\glz\ztool-type.h" />

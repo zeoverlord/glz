@@ -56,6 +56,9 @@ float glzRandf(glzDistribution D);
 float glzRandfs(void);  //produces a value between 1 and -1
 float glzRandfs(glzDistribution D);
 
+vec3 glzRandfs_vec3(void);
+vec3 glzRandfs_vec3(glzDistribution D);
+
 // static noise functions
 float glzMersienneNoise(float seed);
 float glzMersienneNoise(float seed, float x);
@@ -66,6 +69,7 @@ float glzModF(float f, float m);  //float modulo function
 int glzModFStep(float f, float m);  //special float modulo function that returns the number of times m fits in f
 int glzTimeCounter(float *t, float m);  //timing function
 float quantize(float f, float s); //quantized steping formula
+float glzIntegral(float f);
 
 
 // some general math functions
