@@ -552,6 +552,267 @@ data=NULL;
 
 
 
+void glzSaveTGA(char filename[255], int x, int y, int lossy, glzTexCompression type, unsigned int tex_type, unsigned char *in_data)
+{
+	if (!isinited_tex) ini_tex();
+
+
+	bool has_alpha = false;
+	if (tex_type == GL_RGBA) has_alpha = true;
+	if (tex_type == GL_RGB) has_alpha = false;
+
+	// get the image data
+	long imageSize = x * y * 3;
+	if (has_alpha) imageSize = x * y * 4;
+	unsigned char *data = new unsigned char[imageSize];
+	unsigned char cdata[4];  //new space for an yline
+
+	int i = 0;
+
+	unsigned char dt = 0;
+
+
+	//Because TGA file store their colors in BGRA format we need to swap the red and blue color components
+	while (i<imageSize)
+	{
+		data[i + 0] = in_data[i + 2];
+		data[i + 1] = in_data[i + 1];
+		data[i + 2] = in_data[i + 0];
+		if (has_alpha) data[i + 3] = in_data[i + 3];
+
+		if (has_alpha) i += 4;
+		else i += 3;
+	}
+
+
+	// split x and y sizes into bytes
+	int xa = x % 256;
+	int xb = (x - xa) / 256;
+
+	int ya = y % 256;
+	int yb = (y - ya) / 256;
+
+	unsigned char header[18] = { 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, (char)xa, (char)xb, (char)ya, (char)yb, 24, 0 };
+
+	if (has_alpha) header[16] = 32;
+
+	if (type == glzTexCompression::UNCOMPRESSED)
+	{
+		//assemble the uncompressed header
+		header[2] = 2;
+
+		// write header and uncompressed data to file
+		fstream File(filename, ios::out | ios::binary);
+		File.write(reinterpret_cast<char *>(header), sizeof (char)* 18);
+		File.write(reinterpret_cast<char *>(data), sizeof (char)*imageSize);
+		File.close();
+
+	}
+	else if (type == glzTexCompression::COMPRESSED)
+	{
+		// write header to file
+		fstream File(filename, ios::out | ios::binary);
+		File.write(reinterpret_cast<char *>(header), sizeof (char)* 18);
+
+
+		int yline = 0, xp = 0;
+		int dc = 0, i = 0, rlel = 0, rlec = 0, dpos = 0, cdpos = 0, same = 0;
+		char curPixel[3] = { 0, 0, 0 }, rlelength = 0;
+		// run trough all lines
+		while (yline<y)
+		{
+
+			// scan for  rle segments, at least 3 pixels in a row
+			i = 0;
+			rlelength = 0;
+			while (i<x)
+			{
+				rlelength = 0;
+
+				//is the segment compressed
+
+				rlec = 0;
+				if (i <= x)  // it's not if it's at the end of the line
+				{
+					rlec = 1;
+					if (!has_alpha)
+					{
+						if (data[dpos + (i * 3) + 0] != data[dpos + (i * 3) + 3]) rlec = 0;
+						if (data[dpos + (i * 3) + 1] != data[dpos + (i * 3) + 4]) rlec = 0;
+						if (data[dpos + (i * 3) + 2] != data[dpos + (i * 3) + 5]) rlec = 0;
+						if (!lossy){
+							if (data[dpos + (i * 3) + 0] != data[dpos + (i * 3) + 6]) rlec = 0;
+							if (data[dpos + (i * 3) + 1] != data[dpos + (i * 3) + 7]) rlec = 0;
+							if (data[dpos + (i * 3) + 2] != data[dpos + (i * 3) + 8]) rlec = 0;
+						}
+					}
+					else
+					{
+						if (data[dpos + (i * 4) + 0] != data[dpos + (i * 4) + 3]) rlec = 0;
+						if (data[dpos + (i * 4) + 1] != data[dpos + (i * 4) + 4]) rlec = 0;
+						if (data[dpos + (i * 4) + 2] != data[dpos + (i * 4) + 5]) rlec = 0;
+						if (data[dpos + (i * 4) + 3] != data[dpos + (i * 4) + 6]) rlec = 0;
+						if (!lossy){
+
+							if (data[dpos + (i * 4) + 0] != data[dpos + (i * 4) + 7]) rlec = 0;
+							if (data[dpos + (i * 4) + 1] != data[dpos + (i * 4) + 8]) rlec = 0;
+							if (data[dpos + (i * 4) + 2] != data[dpos + (i * 4) + 9]) rlec = 0;
+							if (data[dpos + (i * 4) + 3] != data[dpos + (i * 4) + 0]) rlec = 0;
+						}
+					}
+					/*if(data[dpos+(i*3)+0]!=data[dpos+(i*3)+9]) rlec=0;
+					if(data[dpos+(i*3)+1]!=data[dpos+(i*3)+10]) rlec=0;
+					if(data[dpos+(i*3)+2]!=data[dpos+(i*3)+11]) rlec=0;
+					if(data[dpos+(i*3)+0]!=data[dpos+(i*3)+12]) rlec=0;
+					if(data[dpos+(i*3)+1]!=data[dpos+(i*3)+13]) rlec=0;
+					if(data[dpos+(i*3)+2]!=data[dpos+(i*3)+14]) rlec=0;
+					if(data[dpos+(i*3)+0]!=data[dpos+(i*3)+15]) rlec=0;
+					if(data[dpos+(i*3)+1]!=data[dpos+(i*3)+16]) rlec=0;
+					if(data[dpos+(i*3)+2]!=data[dpos+(i*3)+17]) rlec=0;
+					if(data[dpos+(i*3)+0]!=data[dpos+(i*3)+18]) rlec=0;
+					if(data[dpos+(i*3)+1]!=data[dpos+(i*3)+19]) rlec=0;
+					if(data[dpos+(i*3)+2]!=data[dpos+(i*3)+20]) rlec=0;*/
+				}
+
+				// of rlec is still 1 then yes
+
+
+				if (rlec) // compressed segment
+				{
+					xp++;
+					//scan till the data changes or rlelength=127 or i=x
+					rlelength = 0;
+					same = 1;
+					while (same)
+					{
+						rlelength++;
+
+						if (!lossy)
+						{
+							// non destructive encoding
+							if (!has_alpha)
+							{
+
+								if (data[dpos + (i * 3) + 0 + 3] != data[dpos + ((i + rlelength + 1) * 3) + 0]) same = 0;
+								if (data[dpos + (i * 3) + 1 + 3] != data[dpos + ((i + rlelength + 1) * 3) + 1]) same = 0;
+								if (data[dpos + (i * 3) + 2 + 3] != data[dpos + ((i + rlelength + 1) * 3) + 2]) same = 0;
+							}
+							else
+							{
+								if (data[dpos + (i * 4) + 0 + 4] != data[dpos + ((i + rlelength + 1) * 4) + 0]) same = 0;
+								if (data[dpos + (i * 4) + 1 + 4] != data[dpos + ((i + rlelength + 1) * 4) + 1]) same = 0;
+								if (data[dpos + (i * 4) + 2 + 4] != data[dpos + ((i + rlelength + 1) * 4) + 2]) same = 0;
+								if (data[dpos + (i * 4) + 3 + 4] != data[dpos + ((i + rlelength + 1) * 4) + 3]) same = 0;
+
+							}
+
+						}
+
+						else
+						{
+							// destructive encoding
+							if (!has_alpha)
+							{
+								if (data[dpos + (i * 3) + 0 + 3]<(data[dpos + ((i + rlelength + 1) * 3) + 0] - lossy)) same = 0;
+								if (data[dpos + (i * 3) + 1 + 3]<(data[dpos + ((i + rlelength + 1) * 3) + 1] - lossy)) same = 0;
+								if (data[dpos + (i * 3) + 2 + 3]<(data[dpos + ((i + rlelength + 1) * 3) + 2] - lossy)) same = 0;
+
+								if (data[dpos + (i * 3) + 0 + 3]>(data[dpos + ((i + rlelength + 1) * 3) + 0] + lossy)) same = 0;
+								if (data[dpos + (i * 3) + 1 + 3]>(data[dpos + ((i + rlelength + 1) * 3) + 1] + lossy)) same = 0;
+								if (data[dpos + (i * 3) + 2 + 3]>(data[dpos + ((i + rlelength + 1) * 3) + 2] + lossy)) same = 0;
+							}
+							else
+							{
+								if (data[dpos + (i * 4) + 0 + 4]<(data[dpos + ((i + rlelength + 1) * 4) + 0] - lossy)) same = 0;
+								if (data[dpos + (i * 4) + 1 + 4]<(data[dpos + ((i + rlelength + 1) * 4) + 1] - lossy)) same = 0;
+								if (data[dpos + (i * 4) + 2 + 4]<(data[dpos + ((i + rlelength + 1) * 4) + 2] - lossy)) same = 0;
+								if (data[dpos + (i * 4) + 3 + 4]<(data[dpos + ((i + rlelength + 1) * 4) + 3] - lossy)) same = 0;
+
+								if (data[dpos + (i * 4) + 0 + 4]>(data[dpos + ((i + rlelength + 1) * 4) + 0] + lossy)) same = 0;
+								if (data[dpos + (i * 4) + 1 + 4]>(data[dpos + ((i + rlelength + 1) * 4) + 1] + lossy)) same = 0;
+								if (data[dpos + (i * 4) + 2 + 4]>(data[dpos + ((i + rlelength + 1) * 4) + 2] + lossy)) same = 0;
+								if (data[dpos + (i * 4) + 3 + 4]>(data[dpos + ((i + rlelength + 1) * 4) + 3] + lossy)) same = 0;
+							}
+						}
+
+						if (i + rlelength >= x) same = 0;
+						if (rlelength >= 127) same = 0;
+						if (i == x)  same = 0;
+					}
+
+					// write the rle segment to the data storage
+					cdata[0] = rlelength + 127;
+					File.write(reinterpret_cast<char *>(cdata), sizeof(char));
+					if (!has_alpha) File.write(reinterpret_cast<char *>(data)+dpos + (i * 3), sizeof(char)* 3);
+					else File.write(reinterpret_cast<char *>(data)+dpos + (i * 4), sizeof(char)* 4);
+
+					i += rlelength;
+
+
+				}
+
+				else // uncompressed segment
+				{
+					//get the length of this segment by scaning for the next compressed one
+					rlelength = 0;
+					same = 1;
+					while (same)
+					{
+						rlelength++;
+
+						if (i == x)  same = 0;
+						if (i + rlelength >= x)  same = 0; // it's not if it's at the end of the line
+						if (!has_alpha)
+						{
+							if (data[dpos + ((i + rlelength - 1) * 3) + 0] == data[dpos + ((i + rlelength - 1) * 3) + 3]) same = 0;
+							if (data[dpos + ((i + rlelength - 1) * 3) + 1] == data[dpos + ((i + rlelength - 1) * 3) + 4]) same = 0;
+							if (data[dpos + ((i + rlelength - 1) * 3) + 2] == data[dpos + ((i + rlelength - 1) * 3) + 5]) same = 0;
+						}
+						else{
+
+							if (data[dpos + ((i + rlelength - 1) * 4) + 0] == data[dpos + ((i + rlelength - 1) * 4) + 3]) same = 0;
+							if (data[dpos + ((i + rlelength - 1) * 4) + 1] == data[dpos + ((i + rlelength - 1) * 4) + 4]) same = 0;
+							if (data[dpos + ((i + rlelength - 1) * 4) + 2] == data[dpos + ((i + rlelength - 1) * 4) + 5]) same = 0;
+							if (data[dpos + ((i + rlelength - 1) * 4) + 3] == data[dpos + ((i + rlelength - 1) * 4) + 6]) same = 0;
+
+						}
+						// if rlec is still 1 then the next pixel is a new segment
+						if (rlelength >= 127) same = 0;
+
+					}
+
+
+					//now write the data
+
+					cdata[0] = rlelength - 1;
+					File.write(reinterpret_cast<char *>(cdata), sizeof(char));
+					if (!has_alpha) File.write(reinterpret_cast<char *>(data)+dpos + (i * 3), sizeof(char)* 3 * rlelength);
+					else File.write(reinterpret_cast<char *>(data)+dpos + (i * 4), sizeof(char)* 4 * rlelength);
+					i += rlelength;
+
+				}
+
+
+
+
+
+
+			}
+
+			yline++;
+			dpos = yline*(x * 3);
+		}
+
+		// close the file
+		File.close();
+		delete(data);
+
+
+	}
+
+}
+
+
 // things i like to add in the future
 
 // openEXR support, both loading and saving

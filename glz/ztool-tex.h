@@ -55,6 +55,7 @@ unsigned int glzLoadTexture(char filename[255], glzTexFilter filter);  // type i
 
 void glzScreenShot(char filename[255], int x, int y, glzTexCompression type);  // auto saves a compressed file
 void glzScreenShotADV(char filename[255], int xoffset, int yoffset, int x, int y, int lossy, glzTexCompression type);
+void glzSaveTGA(char filename[255], int x, int y, int lossy, glzTexCompression type, unsigned int tex_type, unsigned char *in_data);
 
 
 /*

@@ -245,6 +245,17 @@ float quantize(float f, float s)
 	return r;
 }
 
+float glzIntegral(float f)
+{
+	float r = 0.0f;
+	if (1.0 <= 0.0f) return f;
+
+	if (f<0)  // negative numbers
+	while (f <= r - 1.0) r -= 1.0;
+	else      // possitive numbers
+	while (f >= r + 1.0) r += 1.0;
+	return r;
+}
 
 // some general math functions
 

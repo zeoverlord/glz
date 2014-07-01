@@ -73,6 +73,18 @@ static PFNGLUNIFORM4FARBPROC                    glUniform4f;
 static PFNGLGETUNIFORMLOCATIONPROC              glGetUniformLocation;
 
 
+int WINDOW_HEIGHT;
+int WINDOW_WIDTH;
+
+glzAppinitialization preInitialize(void)
+{
+	glzAppinitialization app(L"ZeoBase GL Framework");
+	WINDOW_HEIGHT = app.WINDOW_HEIGHT;
+	WINDOW_WIDTH = app.WINDOW_WIDTH;
+
+	return app;
+
+}
 
 BOOL Initialize (GL_Window* window, Keys* keys)					// Any GL Init Code & User Initialiazation Goes Here
 {

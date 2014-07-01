@@ -29,6 +29,7 @@
 #include <gl/glext.h>
 #include <gl/wglext.h>
 #include <fstream>
+#include <windowsx.h>
 
 #pragma comment( lib, "opengl32.lib" )							// Search For OpenGL32.lib While Linking
 #pragma comment( lib, "glu32.lib" )								// Search For GLu32.lib While Linking
@@ -41,6 +42,8 @@ using namespace std;
 static BOOL g_isProgramLooping;											// Window Creation Loop, For FullScreen/Windowed Toggle																		// Between Fullscreen / Windowed Mode
 static BOOL g_createFullScreen;											// If TRUE, Then Create Fullscreen
 static float dtTemp;													// temp value to store the deltatime in
+
+static glzAppinitialization app;
 
 DWORD windowStyle = WS_POPUP;
 
@@ -58,7 +61,7 @@ void TerminateApplication (GL_Window* window)							// Terminate The Application
 
 void ToggleFullscreen (GL_Window* window)								// Toggle Fullscreen/Windowed
 {
-	if (ALLOW_FULLSCREENSWITCH)
+	if (app.ALLOW_FULLSCREENSWITCH)
 		PostMessage (window->hWnd, WM_TOGGLEFULLSCREEN, 0, 0);				// Send A WM_TOGGLEFULLSCREEN Message
 }
 
@@ -103,12 +106,12 @@ BOOL CreateWindowGL (GL_Window* window)									// This Code Creates Our OpenGL 
 	int x=0,y=0;
 	GLuint PixelFormat;													// Will Hold The Selected Pixel Format
 
-	if (SHOW_FRAME) 
+	if (app.SHOW_FRAME)
 	{
-		if (ALLOW_RESIZE) windowStyle = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME;
+		if (app.ALLOW_RESIZE) windowStyle = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME;
 		else windowStyle = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU;
 
-		if(ALLOW_MAAXIMIZE)
+		if (app.ALLOW_MAAXIMIZE)
 			windowStyle=windowStyle | WS_MINIMIZEBOX | WS_MAXIMIZEBOX;
 
 	}
@@ -123,7 +126,7 @@ BOOL CreateWindowGL (GL_Window* window)									// This Code Creates Our OpenGL 
 		if (ChangeScreenResolution (window->init.width, window->init.height, window->init.bitsPerPixel) == FALSE)
 		{
 			// Fullscreen Mode Failed.  Run In Windowed Mode Instead
-			if(DISPLAY_ERRORS) MessageBox (HWND_DESKTOP, L"Mode Switch Failed.\nRunning In Windowed Mode.", L"Error", MB_OK | MB_ICONEXCLAMATION);
+			if (app.DISPLAY_ERRORS) MessageBox(HWND_DESKTOP, L"Mode Switch Failed.\nRunning In Windowed Mode.", L"Error", MB_OK | MB_ICONEXCLAMATION);
 			window->init.isFullScreen = FALSE;							// Set isFullscreen To False (Windowed Mode)
 			x=window->x;									
 			y=window->y;
@@ -209,9 +212,9 @@ BOOL CreateWindowGL (GL_Window* window)									// This Code Creates Our OpenGL 
 	PFNWGLCREATECONTEXTATTRIBSARBPROC wglCreateContextAttribsARB;
 	wglCreateContextAttribsARB = (PFNWGLCREATECONTEXTATTRIBSARBPROC) wglGetProcAddress("wglCreateContextAttribsARB");
 
-	if((wglCreateContextAttribsARB == NULL) || (!FORCE_OPENGL_VERSION)) //OpenGL 3.0 is not supported or not wanted
+	if ((wglCreateContextAttribsARB == NULL) || (!app.FORCE_OPENGL_VERSION)) //OpenGL 3.0 is not supported or not wanted
 	{
-		if((DISPLAY_ERRORS) && (FORCE_OPENGL_VERSION)) MessageBox(NULL,L"Cannot get Proc Adress for CreateContextAttribs.\n\nThe cause for this error is usually when your graphics drivers does not support at least openGL 3.0 \nIf they do then, try rebooting, that might fix it\n\nDefaulting to a regular decive context even though this couls cause problems", L"ERROR",MB_OK);
+		if ((app.DISPLAY_ERRORS) && (app.FORCE_OPENGL_VERSION)) MessageBox(NULL, L"Cannot get Proc Adress for CreateContextAttribs.\n\nThe cause for this error is usually when your graphics drivers does not support at least openGL 3.0 \nIf they do then, try rebooting, that might fix it\n\nDefaulting to a regular decive context even though this couls cause problems", L"ERROR", MB_OK);
 
 		if (!(window->hRC = wglCreateContext(window->hDC)))												// Did We Get A normal Rendering Context?
 		{
@@ -267,7 +270,7 @@ BOOL CreateWindowGL (GL_Window* window)									// This Code Creates Our OpenGL 
 
 	wglSwapIntervalEXT = (PFNWGLSWAPINTERVALEXTPROC) wglGetProcAddress("wglSwapIntervalEXT");
 
-	if (ENABLE_VSYNC) wglSwapIntervalEXT(1);
+	if (app.ENABLE_VSYNC) wglSwapIntervalEXT(1);
 	else wglSwapIntervalEXT(0);
 
 
@@ -377,13 +380,53 @@ LRESULT CALLBACK WindowProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			}
 		break;															// Break
 
+		case WM_LBUTTONDOWN:
+			window->keys->LMdown = true;
+			break;
+
+		case WM_LBUTTONUP:
+			window->keys->LMdown = false;
+			break;
+
+		case WM_RBUTTONDOWN:
+			window->keys->RMdown = true;
+			break;
+
+		case WM_RBUTTONUP:
+			window->keys->RMdown = false;
+			break;
+
+		case WM_MBUTTONDOWN:
+			window->keys->MMdown = true;
+			break;
+
+		case WM_MBUTTONUP:
+			window->keys->MMdown = false;
+			break;
+
+		case WM_MOUSEMOVE:
+			window->keys->Mpos_x = GET_X_LPARAM(lParam);
+			window->keys->Mpos_y = GET_Y_LPARAM(lParam);
+
+			break;
+
+		case WM_MOUSEWHEEL:
+			window->keys->Mweel += GET_WHEEL_DELTA_WPARAM(wParam);
+			//window->keys->Mactive = true;
+			break;
+
+		case WM_CAPTURECHANGED:
+			//	window->keys->Mactive=false;
+			break;
+
+
 		case WM_TOGGLEFULLSCREEN:										// Toggle FullScreen Mode On/Off
 			g_createFullScreen = (g_createFullScreen == TRUE) ? FALSE : TRUE;
 
 			if (g_createFullScreen== TRUE)							
 			{
-				window->init.width			= FULLSCREEN_WIDTH;						// Window Width
-				window->init.height			= FULLSCREEN_HEIGHT;					// Window Height
+				window->init.width = app.FULLSCREEN_WIDTH;						// Window Width
+				window->init.height = app.FULLSCREEN_HEIGHT;					// Window Height
 
 				ShowCursor (FALSE);										// Turn Off The Cursor
 				
@@ -396,8 +439,8 @@ LRESULT CALLBACK WindowProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			else
 			{	
 				
-				window->init.width= WINDOW_WIDTH;						// Window Width
-				window->init.height= WINDOW_HEIGHT;					// Window Height
+				window->init.width = app.WINDOW_WIDTH;						// Window Width
+				window->init.height = app.WINDOW_HEIGHT;					// Window Height
 				ShowCursor (TRUE);										// Turn On The Cursor
 
 				SetWindowLong(hWnd,GWL_EXSTYLE,WS_EX_APPWINDOW);		// returns the window back to normalcy
@@ -432,7 +475,7 @@ BOOL RegisterWindowClass (Application* application)						// Register A Window Cl
 	if (RegisterClassEx (&windowClass) == 0)							// Did Registering The Class Fail?
 	{
 		// NOTE: Failure, Should Never Happen
-		if(DISPLAY_ERRORS) MessageBox (HWND_DESKTOP, L"RegisterClassEx Failed!", L"Error", MB_OK | MB_ICONEXCLAMATION);
+		if (app.DISPLAY_ERRORS) MessageBox(HWND_DESKTOP, L"RegisterClassEx Failed!", L"Error", MB_OK | MB_ICONEXCLAMATION);
 		return FALSE;													// Return False (Failure)
 	}
 	return TRUE;														// Return True (Success)
@@ -441,6 +484,9 @@ BOOL RegisterWindowClass (Application* application)						// Register A Window Cl
 
 int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow)
 {
+
+	app=preInitialize();
+
 	Application			application;									// Application Structure
 	GL_Window			window;											// Window Structure
 	Keys				keys;											// Key Structure
@@ -458,9 +504,9 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 	ZeroMemory (&window, sizeof (GL_Window));							// Make Sure Memory Is Zeroed
 	window.keys					= &keys;								// Window Key Structure
 	window.init.application		= &application;							// Window Application
-	window.init.title			= WINDOW_TITLE;							// Window Title
-	window.init.width			= FULLSCREEN_WIDTH;						// Window Width
-	window.init.height			= FULLSCREEN_HEIGHT;					// Window Height
+	window.init.title = app.WINDOW_TITLE;							// Window Title
+	window.init.width = app.FULLSCREEN_WIDTH;						// Window Width
+	window.init.height = app.FULLSCREEN_HEIGHT;					// Window Height
 	window.init.bitsPerPixel	= 32;									// Bits Per Pixel
 	window.init.isFullScreen	= true;								// Fullscreen? (Set To TRUE)
 	window.x					= 0;									// x position of window
@@ -473,26 +519,26 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 
 	EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &devMode);			// this bit of code gets the current display settings
 
-	if(NATIVE_FULLSCREEN) // normally better than to force a fixed resolution, but do make sure your app likes running att different resolutions
+	if (app.NATIVE_FULLSCREEN) // normally better than to force a fixed resolution, but do make sure your app likes running att different resolutions
 	{
 		window.init.width			= (int)devMode.dmPelsWidth;					// Window Width
 		window.init.height			= (int)devMode.dmPelsHeight;					// Window Height
 
 	}
 
-	if(START_WINDOWED) // runs if i want to start in windowed mode
+	if (app.START_WINDOWED) // runs if i want to start in windowed mode
 	{
 		window.init.isFullScreen = false;
-		window.x= WINDOW_X;												// x position of window
-		window.y= WINDOW_Y;												// y position of window	
-		window.init.width			= WINDOW_WIDTH;						// Window Width
-		window.init.height			= WINDOW_HEIGHT;					// Window Height
+		window.x = app.WINDOW_X;												// x position of window
+		window.y = app.WINDOW_Y;												// y position of window	
+		window.init.width = app.WINDOW_WIDTH;						// Window Width
+		window.init.height = app.WINDOW_HEIGHT;					// Window Height
 
-		if (START_CENTERED)  // this is a pretty good choice for windowed games
+		if (app.START_CENTERED)  // this is a pretty good choice for windowed games
 		{	
 
-			window.x= (devMode.dmPelsWidth/2)-(WINDOW_WIDTH/2);									// x position of window
-			window.y= (devMode.dmPelsHeight/2)-(WINDOW_HEIGHT/2);									// y position of window
+			window.x = (devMode.dmPelsWidth / 2) - (app.WINDOW_WIDTH / 2);									// x position of window
+			window.y = (devMode.dmPelsHeight / 2) - (app.WINDOW_HEIGHT / 2);									// y position of window
 
 		}		
 	}
@@ -502,7 +548,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 	if (RegisterWindowClass (&application) == FALSE)					// Did Registering A Class Fail?
 	{
 		// Failure
-		if(DISPLAY_ERRORS) MessageBox (HWND_DESKTOP, L"Error Registering Window Class!", L"Error", MB_OK | MB_ICONEXCLAMATION);
+		if (app.DISPLAY_ERRORS) MessageBox(HWND_DESKTOP, L"Error Registering Window Class!", L"Error", MB_OK | MB_ICONEXCLAMATION);
 		return -1;														// Terminate Application
 	}
 
@@ -573,7 +619,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 		else															// If Window Creation Failed
 		{
 			// Error Creating Window
-			if(DISPLAY_ERRORS) MessageBox (HWND_DESKTOP, L"Error Creating OpenGL Window, try rebboring or fixing your drivers", L"Error", MB_OK | MB_ICONEXCLAMATION);
+			if (app.DISPLAY_ERRORS) MessageBox(HWND_DESKTOP, L"Error Creating OpenGL Window, try rebboring or fixing your drivers", L"Error", MB_OK | MB_ICONEXCLAMATION);
 			g_isProgramLooping = FALSE;									// Terminate The Loop
 		}
 	}																	// While (isProgramLooping)
