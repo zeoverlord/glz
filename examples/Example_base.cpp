@@ -28,6 +28,7 @@
 #include "zeobase2.h"
 #include <fstream>
 #include <math.h>
+#include "..\glz\z-tool_appbase.h"
 #include "..\glz\ztool-geo.h"
 #include "..\glz\ztool-geo-generate.h"
 #include "..\glz\ztool-vectormath.h"
@@ -76,14 +77,12 @@ static PFNGLGETUNIFORMLOCATIONPROC              glGetUniformLocation;
 int WINDOW_HEIGHT;
 int WINDOW_WIDTH;
 
-glzAppinitialization preInitialize(void)
+void preInitialize(void)
 {
-	glzAppinitialization app(L"ZeoBase GL Framework");
-	WINDOW_HEIGHT = app.WINDOW_HEIGHT;
-	WINDOW_WIDTH = app.WINDOW_WIDTH;
-
-	return app;
-
+	glzAppinitialization app;
+	app.set_title(L"ZeoBase GL Framework");
+	WINDOW_HEIGHT = app.data.WINDOW_HEIGHT;
+	WINDOW_WIDTH = app.data.WINDOW_WIDTH;
 }
 
 BOOL Initialize (GL_Window* window, Keys* keys)					// Any GL Init Code & User Initialiazation Goes Here

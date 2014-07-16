@@ -54,6 +54,9 @@
     <ClCompile Include="..\..\glz\ztool-particle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\glz\z-tool_appbase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\glz\primitives.h">
@@ -99,6 +102,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\glz\ztool-particle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz\z-tool_appbase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

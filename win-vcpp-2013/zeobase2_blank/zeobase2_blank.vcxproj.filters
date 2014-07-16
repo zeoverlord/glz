@@ -24,6 +24,9 @@
     <ClCompile Include="..\..\examples\zeobase2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\glz\z-tool_appbase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\examples\Resource.h">
@@ -36,6 +39,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\examples\zeobase2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz\z-tool_appbase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

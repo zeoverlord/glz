@@ -26,6 +26,7 @@
 #include <gl\glu.h>												// Header File For The GLu32 Library
 #include <gl\glext.h>
 #include "zeobase2.h"
+#include "..\glz\z-tool_appbase.h"
 #include <fstream>
 #include <math.h>
 #include "..\glz\ztool-geo.h"
@@ -91,14 +92,12 @@ static PFNGLBLENDCOLORPROC						glBlendColor;
 int WINDOW_HEIGHT;
 int WINDOW_WIDTH;
 
-glzAppinitialization preInitialize(void)
+void preInitialize(void)
 {
-	glzAppinitialization app(L"ZeoBase GL Framework");
-	WINDOW_HEIGHT = app.WINDOW_HEIGHT;
-	WINDOW_WIDTH = app.WINDOW_WIDTH;
-
-	return app;
-
+	glzAppinitialization app;
+	app.set_title(L"ZeoBase GL Framework");	
+	WINDOW_HEIGHT = app.data.WINDOW_HEIGHT;
+	WINDOW_WIDTH = app.data.WINDOW_WIDTH;
 }
 
 BOOL Initialize (GL_Window* window, Keys* keys)					// Any GL Init Code & User Initialiazation Goes Here
