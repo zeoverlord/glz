@@ -1,0 +1,186 @@
+// Copyright 2014 Peter Wallström
+//
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+
+// Unless required by applicable law or agreed to in writing, software distributed under the License is
+// distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and limitations under the License.
+
+// while it is not required i like to request a few things
+// 1. please do share any meaningfull/usefull changes/additions/fixes you make with me so that i could include it in any future version
+// 2. likewise do share any ideas for improvements
+// 3. If you make something comersiol or at least something you release publicly that relies on this code then i would like to know and maybe use in my CV
+// 4. Please do include me in your credits
+
+// tile helper functions
+// visit http://www.flashbang.se or contact me at overlord@flashbang.se
+// the entire toolkit should exist in it's entirety at github
+// https://github.com/zeoverlord/glz.git
+
+
+#include "ztool_tiletools.h"
+
+
+
+void glztiles::load(char filename[255])
+{
+	sprintf(img_filename, filename);
+
+	glzReadTgaHead(&imghdr, img_filename);
+	data = new unsigned char[imghdr.imageSize];
+	glzLoadTga(&imghdr, img_filename, data);
+	glzMaketex(&imghdr, data, glzTexFilter::NEAREST);
+	tex = imghdr.m_id;
+
+	width = imghdr.m_width;
+	height = imghdr.m_height;
+
+	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, imghdr.m_width, imghdr.m_height, imghdr.m_type, GL_UNSIGNED_BYTE, data);
+}
+
+void glztiles::update_texture(void)
+{
+
+	glBindTexture(GL_TEXTURE_2D, tex);
+	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, imghdr.m_width, imghdr.m_height, imghdr.m_type, GL_UNSIGNED_BYTE, data);
+}
+
+void glztiles::save(void)
+{
+
+	glzSaveTGA(img_filename, imghdr.m_width, imghdr.m_height, 0, glzTexCompression::UNCOMPRESSED, imghdr.m_type, data);
+}
+
+
+
+void glztiles::paint_pixel(int x, int y, int sx, int sy, bool animate, bool flip, int layer)
+{
+
+
+	int d_o = 0;
+	char dx, dy;
+
+	if (type == glzTileType::DOUBLE_LAYER)
+	{ 
+
+	// get data
+
+
+	if (layer == 2) d_o = 2;
+
+	dx = data[glz2dTo1dImageRemap(x, y, 0 + d_o, 4, imghdr.m_width, imghdr.m_height, true)];
+	dy = data[glz2dTo1dImageRemap(x, y, 1 + d_o, 4, imghdr.m_width, imghdr.m_height, true)];
+
+	bool ani = false, ext = false;
+	if (dx > 127) { dx -= 128; ani = true; }
+	if (dy > 127) { dy -= 128; ext = true; }
+
+	if ((sx == dx) && (sy == dy) && (animate == ani) && (flip == ext)) return; //no change so do nothing
+
+	if (sx > 127) sx = 127;
+	if (sy > 127) sy = 127;
+
+	if (animate) sx += 128;
+	if (flip) sy += 128;
+
+
+	data[glz2dTo1dImageRemap(x, y, 0 + d_o, 4, imghdr.m_width, imghdr.m_height, true)] = sx;
+	data[glz2dTo1dImageRemap(x, y, 1 + d_o, 4, imghdr.m_width, imghdr.m_height, true)] = sy;
+
+
+
+	}
+
+	else
+	{		
+		if (layer == 1) d_o = 0;
+		if (layer == 2) d_o = 1;
+		if (layer == 3) d_o = 2;
+		if (layer == 4) d_o = 3;
+
+		//dx = data[glz2dTo1dImageRemap(x, y, 0 + d_o, 4, imghdr.m_width, imghdr.m_height, true)];
+		data[glz2dTo1dImageRemap(x, y, 0 + d_o, 4, imghdr.m_width, imghdr.m_height, true)] = sx;
+	}
+
+	return;
+}
+
+
+
+
+
+// finish this before LD48
+bool glztiles::getTilecolision(float x, float y, int layer)
+{
+		
+	//test if coords are inside tile area, if not return false.
+	if (x < 00.0f) return false;
+	if (x >= width) return false;
+
+	if (y<0.0f) return false;
+	if (y>height) return false;
+
+
+
+	//split coords into integral and fractional parts.
+	int xi = (int)x, yi = (int)y;
+	float xf = x - (float)xi, yf = y - (float)yi;
+
+
+	//if (xf > 0.70) return true;
+	//use integral part to read the current tile data.
+	int d_o = 0;
+	char td = 0;
+
+	if (layer == 1) d_o = 0;
+	if (layer == 2) d_o = 1;
+	if (layer == 3) d_o = 2;
+	if (layer == 4) d_o = 3;
+	
+	td = data[glz2dTo1dImageRemap(xi, yi, 0 + d_o, 4, imghdr.m_width, imghdr.m_height, true)];
+	//td = data[((int)x + ((int)y*width)) * 4 + d_o];
+
+//	if (td == 0) return true;
+	
+
+	//Use fractional part to determine of said coordinate is inside the colision area of the tile, return true if that is the case.
+
+	switch (td)
+	{
+	case 0: //fully transparent
+		return false;
+		break;
+
+	case 18:  //fully opaque
+		return true;
+		break;
+
+	case 38:  // 45 degree slope with lower right opaque
+		if (xf+yf>1.0)
+			return true;
+		break;
+
+	case 39:  // 45 degree slope with lower left opaque
+		if ((1.0-xf) + yf>1.0) return true;
+		break;
+
+	case 54:  // 45 degree slope with upper right opaque
+		if ((1.0 - xf) + yf<1.0) return true;
+		break;
+
+	case 55:  // 45 degree slope with upper left opaque
+		if (xf + yf<1.0) return true;
+		break;
+
+	default:
+	
+		break;
+	}
+
+
+
+	return false;
+
+}

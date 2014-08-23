@@ -57,7 +57,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
@@ -93,6 +93,8 @@
     <ClCompile Include="..\..\examples\stdafx.cpp" />
     <ClCompile Include="..\..\examples\z-tile.cpp" />
     <ClCompile Include="..\..\examples\zeobase2.cpp" />
+    <ClCompile Include="..\..\glz\ztool_appbase.cpp" />
+    <ClCompile Include="..\..\glz\ztool_tiletools.cpp" />
     <ClCompile Include="..\..\glz\ztool-geo-2d.cpp" />
     <ClCompile Include="..\..\glz\ztool-geo-generate.cpp" />
     <ClCompile Include="..\..\glz\ztool-geo.cpp" />
@@ -108,6 +110,8 @@
     <ClInclude Include="..\..\examples\stdafx.h" />
     <ClInclude Include="..\..\examples\targetver.h" />
     <ClInclude Include="..\..\examples\zeobase2.h" />
+    <ClInclude Include="..\..\glz\ztool_appbase.h" />
+    <ClInclude Include="..\..\glz\ztool_tiletools.h" />
     <ClInclude Include="..\..\glz\ztool-geo-2d.h" />
     <ClInclude Include="..\..\glz\ztool-geo-generate.h" />
     <ClInclude Include="..\..\glz\ztool-geo.h" />

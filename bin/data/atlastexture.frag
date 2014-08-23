@@ -8,8 +8,6 @@ uniform sampler2D texunit0; // atlas reference map
 uniform sampler2D texunit1; // atlas map
 uniform  int layer;
 uniform  int anim;
-uniform  int extr;
-
 
 uniform int width;  // height and width of the atlas reference map
 uniform int height;
@@ -102,8 +100,12 @@ float ani_o=mod(modf(sx/4.0,ani_b)*4.0+anim,4.0);
 
 if (animate==1) sx=(ani_b*4.0)+ani_o;
 
+vec2 newtx;
 
-vec2 newtx = vec2(fract(txcoord.x*width),fract(txcoord.y*height))*vec2(1.0-(pb*2),1.0-(pb*2))+ vec2(pb,pb);
+if (extra==1)
+newtx = vec2(fract(-txcoord.x*width),fract(txcoord.y*height))*vec2(1.0-(pb*2),1.0-(pb*2))+ vec2(pb,pb);
+else
+newtx = vec2(fract(txcoord.x*width),fract(txcoord.y*height))*vec2(1.0-(pb*2),1.0-(pb*2))+ vec2(pb,pb);
 
 sy=(a_height-1)-sy;
 
@@ -114,7 +116,6 @@ newtx.y+=(1.0/a_height)*sy;
 vec4 am = texture2D(texunit1, newtx.xy);
 
 fragment_color=am;
-if (extr==1) fragment_color=am+vec4(0.0,extra,0.0,0.0);
 //fragment_color=vec4(newtx.xy,0.0,1.0);
 //fragment_color=vec4(1.0,0.0,0.0,1.0);
 

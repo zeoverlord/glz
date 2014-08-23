@@ -28,6 +28,7 @@
 #include "zeobase2.h"
 #include <fstream>
 #include <math.h>
+#include "..\glz\ztool_appbase.h"
 #include "..\glz\ztool-geo.h"
 #include "..\glz\ztool-shader.h"
 #include "..\glz\ztool-glz.h"
@@ -35,6 +36,7 @@
 #include "..\glz\ztool-tex.h"
 #include "..\glz\ztool-geo-2d.h"
 #include "..\glz\ztool-geo-generate.h"
+#include "..\glz\ztool_tiletools.h"
 
 using namespace std;										
 
@@ -59,7 +61,7 @@ enum ztLeveltex { L1A, L1B, L2A, L2B, DYNAMIC_A, DYNAMIC_B, DYNAMIC_C, DYNAMIC_D
 float		angle=0,width,height;												// Used To Rotate The Triangles
 unsigned int vao[16],vao_num[16],textvao[16],textvao_num[16];
 glzMatrix m;
-unsigned int spritetexture[5], fonttexture[15], leveltexture[5];
+unsigned int spritetexture[10], fonttexture[15], leveltexture[10];
 
 
 char tbuffer[160];
@@ -130,6 +132,7 @@ char leveltex_2_filename[255] = "data\\supertiles2.tga";
 char leveltex_d_filename[255] = "data\\supertilesd.tga";
 //char leveltex_filename[255] = "data\\supertilesaspect.tga";
 //char leveltex_filename[255] = "data\\a-map.tga";
+glztiles fakelevel;
 
 
 
@@ -152,18 +155,19 @@ static PFNGLACTIVETEXTUREPROC					glActiveTexture;
 int WINDOW_HEIGHT;
 int WINDOW_WIDTH;
 
-glzAppinitialization preInitialize(void)
+
+void preInitialize(void)
 {
-	glzAppinitialization app(L"z-tile level editor");
-	app.WINDOW_WIDTH = 1280;
-	app.WINDOW_HEIGHT = 720;
-	app.ALLOW_RESIZE = true;
-	WINDOW_HEIGHT = app.WINDOW_HEIGHT;
-	WINDOW_WIDTH = app.WINDOW_WIDTH;
-
-	return app;
-
+	glzAppinitialization app;
+	app.set_title(L"z-tile level editor");
+	app.data.WINDOW_WIDTH = 1280;
+	app.data.WINDOW_HEIGHT = 720;
+	WINDOW_HEIGHT = app.data.WINDOW_HEIGHT;
+	WINDOW_WIDTH = app.data.WINDOW_WIDTH;
+	
+	app.data.ALLOW_RESIZE = true;
 }
+
 
 BOOL Initialize (GL_Window* window, Keys* keys)					// Any GL Init Code & User Initialiazation Goes Here
 {
@@ -231,7 +235,19 @@ BOOL Initialize (GL_Window* window, Keys* keys)					// Any GL Init Code & User I
 
 	// load data
 
-	spritetexture[0] = glzLoadTexture("data\\tileset.tga", glzTexFilter::NEAREST);
+	spritetexture[0] = glzLoadTexture("data\\tileset.tga", glzTexFilter::NEAREST); // sprite layers
+	spritetexture[1] = glzLoadTexture("data\\colisiontile.tga", glzTexFilter::NEAREST); // dynamics layer1
+	spritetexture[2] = glzLoadTexture("data\\tileset.tga", glzTexFilter::NEAREST); // dynamics layer2
+	spritetexture[3] = glzLoadTexture("data\\tileset.tga", glzTexFilter::NEAREST); // entity layer
+	spritetexture[4] = glzLoadTexture("data\\tileset.tga", glzTexFilter::NEAREST); // entity layer
+	spritetexture[5] = glzLoadTexture("data\\red.tga", glzTexFilter::NEAREST);
+	spritetexture[6] = glzLoadTexture("data\\cursor.tga", glzTexFilter::NEAREST);
+
+	fakelevel.load(leveltex_d_filename);
+	fakelevel.type = glzTileType::QUAD_LAYER;
+
+	
+
 
 
 	if (has_l1)
@@ -274,12 +290,6 @@ BOOL Initialize (GL_Window* window, Keys* keys)					// Any GL Init Code & User I
 
 
 
-
-	//texture[1] = glzLoadTexture("data\\a-map.tga", glzTexFilter::NEAREST);
-
-
-	spritetexture[2] = glzLoadTexture("data\\red.tga", glzTexFilter::NEAREST);
-	spritetexture[3] = glzLoadTexture("data\\cursor.tga", glzTexFilter::NEAREST);
 
 	
 
@@ -370,7 +380,7 @@ void paint_dynamic_pixel(int x, int y, int data, ztLeveltex layer)
 	if (layer == ztLeveltex::DYNAMIC_C) d_o = 2;
 	if (layer == ztLeveltex::DYNAMIC_D) d_o = 3;	
 
-	dx = img_d_data[glz2dTo1dImageRemap(x, y, 0 + d_o, 4, img_d.m_width, img_d.m_height, true)];	
+	//dx = img_d_data[glz2dTo1dImageRemap(x, y, 0 + d_o, 4, img_d.m_width, img_d.m_height, true)];	
 	img_d_data[glz2dTo1dImageRemap(x, y, 0 + d_o, 4, img_d.m_width, img_d.m_height, true)] = data;
 
 	image_has_changed = layer;
@@ -986,17 +996,18 @@ void Draw (void)
 			if ((curlayer == ztLeveltex::L1A) || (curlayer == ztLeveltex::L1B))	glBindTexture(GL_TEXTURE_2D, leveltexture[1]);
 			if (has_l2) { if ((curlayer == ztLeveltex::L2A) || (curlayer == ztLeveltex::L2B))	glBindTexture(GL_TEXTURE_2D, leveltexture[2]); }
 			if (has_d) { if ((curlayer == ztLeveltex::DYNAMIC_A) || (curlayer == ztLeveltex::DYNAMIC_B) || (curlayer == ztLeveltex::DYNAMIC_C) || (curlayer == ztLeveltex::DYNAMIC_D))	glBindTexture(GL_TEXTURE_2D, leveltexture[3]); }
-
-
-
+			
+			
 			if ((curlayer == ztLeveltex::L1A) || (curlayer == ztLeveltex::L2A))glUniform1i(loc7, 0);
 			if ((curlayer == ztLeveltex::L1B) || (curlayer == ztLeveltex::L2B))	glUniform1i(loc7, 1);
-			
-			if (curlayer == ztLeveltex::DYNAMIC_A)	glUniform1i(loc7, 2);
-			if (curlayer == ztLeveltex::DYNAMIC_B)	glUniform1i(loc7, 3);
-			if (curlayer == ztLeveltex::DYNAMIC_C)	glUniform1i(loc7, 4);
-			if (curlayer == ztLeveltex::DYNAMIC_D)	glUniform1i(loc7, 5);
 
+
+			glActiveTexture(GL_TEXTURE1);
+			if (curlayer == ztLeveltex::DYNAMIC_A)	{glBindTexture(GL_TEXTURE_2D, spritetexture[1]); glUniform1i(loc7, 2);}
+			if (curlayer == ztLeveltex::DYNAMIC_B)	{glBindTexture(GL_TEXTURE_2D, spritetexture[2]); glUniform1i(loc7, 3);}
+			if (curlayer == ztLeveltex::DYNAMIC_C)	{glBindTexture(GL_TEXTURE_2D, spritetexture[3]); glUniform1i(loc7, 4);}
+			if (curlayer == ztLeveltex::DYNAMIC_D)	{glBindTexture(GL_TEXTURE_2D, spritetexture[4]); glUniform1i(loc7, 5);}
+			glActiveTexture(GL_TEXTURE0);
 
 			glzDirectSpriteRender(0.0, 0.0, 2, arm_width / arm_height, 1.0, 0, 0, 1.0, 1.0, glzOrigin::CENTERED);
 
@@ -1024,6 +1035,7 @@ void Draw (void)
 			if (has_l1)
 			{
 				glBindTexture(GL_TEXTURE_2D, leveltexture[1]);
+								
 				glUniform1i(loc7, 0);
 				glzDirectSpriteRender(0.0, 0.0, 2, arm_width / arm_height, 1.0, 0, 0, 1.0, 1.0, glzOrigin::CENTERED);
 
@@ -1044,11 +1056,13 @@ void Draw (void)
 
 			if ((curlayer == ztLeveltex::DYNAMIC_A) || (curlayer == ztLeveltex::DYNAMIC_B) || (curlayer == ztLeveltex::DYNAMIC_C) || (curlayer == ztLeveltex::DYNAMIC_D))
 			{ 
-
-				if (curlayer == ztLeveltex::DYNAMIC_A)	glUniform1i(loc7, 2);
-				if (curlayer == ztLeveltex::DYNAMIC_B)	glUniform1i(loc7, 3);
-				if (curlayer == ztLeveltex::DYNAMIC_C)	glUniform1i(loc7, 4);
-				if (curlayer == ztLeveltex::DYNAMIC_D)	glUniform1i(loc7, 5);
+			
+				glActiveTexture(GL_TEXTURE1);
+				if (curlayer == ztLeveltex::DYNAMIC_A)	{ glBindTexture(GL_TEXTURE_2D, spritetexture[1]); glUniform1i(loc7, 2); }
+				if (curlayer == ztLeveltex::DYNAMIC_B)	{ glBindTexture(GL_TEXTURE_2D, spritetexture[2]); glUniform1i(loc7, 3); }
+				if (curlayer == ztLeveltex::DYNAMIC_C)	{ glBindTexture(GL_TEXTURE_2D, spritetexture[3]); glUniform1i(loc7, 4); }
+				if (curlayer == ztLeveltex::DYNAMIC_D)	{ glBindTexture(GL_TEXTURE_2D, spritetexture[4]); glUniform1i(loc7, 5); }
+				glActiveTexture(GL_TEXTURE0);
 
 				glBindTexture(GL_TEXTURE_2D, leveltexture[3]);
 				glzDirectSpriteRender(0.0, 0.0, 2, arm_width / arm_height, 1.0, 0, 0, 1.0, 1.0, glzOrigin::CENTERED);
@@ -1065,7 +1079,7 @@ void Draw (void)
 
 
 
-		glBindTexture(GL_TEXTURE_2D, spritetexture[3]);
+		glBindTexture(GL_TEXTURE_2D, spritetexture[6]);
 		glUseProgram(ProgramObject);
 
 		glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
@@ -1074,8 +1088,12 @@ void Draw (void)
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_BLEND);
 
-		
+	    // render cursor
 		if (z_tileUI_point == ztUIP::PIXELMAP) glzDirectSpriteRender(-0.5*aspect + (0.5f*aspect / arm_width) + (paintarea_pixel_x / arm_width)*aspect, -0.5 + (0.5f / arm_height) + ((arm_height - 1 - paintarea_pixel_y) / arm_height), 2, (1.0 / arm_width)*(arm_width / arm_height), 1.0 / arm_height, 0, 0, 1.0, 1.0, glzOrigin::CENTERED);
+
+		//if ((z_tileUI_point == ztUIP::PIXELMAP) && (fakelevel.getTilecolision((mwp.x + 0.5*aspect)*arm_width / aspect, (mwp.y + 0.5)*arm_height, 1))) glzDirectSpriteRender(-0.5*aspect + (0.5f*aspect / arm_width) + (paintarea_pixel_x / arm_width)*aspect, -0.5 + (0.5f / arm_height) + ((arm_height - 1 - paintarea_pixel_y) / arm_height), 2, (1.0 / arm_width)*(arm_width / arm_height), 1.0 / arm_height, 0, 0, 1.0, 1.0, glzOrigin::CENTERED);
+
+
 
 		glDisable(GL_BLEND);
 		
@@ -1092,8 +1110,14 @@ void Draw (void)
 		glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
 
 		glBindTexture(GL_TEXTURE_2D, spritetexture[0]);
-		//glzDirectSpriteRender(viewport[2] / 2, -viewport[3] / 2, 2, 64.0, 64.0, 0, 0, 1.0, 1.0, glzOrigin::BOTTOM_RIGHT);
-		glzDirectSpriteRenderAtlas(viewport[2] / 2, -viewport[3] / 2, 1, 64, 64, tiles_width, tiles_height, (cursprite_y* tiles_width) + (tiles_width - cursprite_x - 1), glzOrigin::BOTTOM_RIGHT);
+		if (curlayer == ztLeveltex::DYNAMIC_A)	{ glBindTexture(GL_TEXTURE_2D, spritetexture[1]); }
+		if (curlayer == ztLeveltex::DYNAMIC_B)	{ glBindTexture(GL_TEXTURE_2D, spritetexture[2]); }
+		if (curlayer == ztLeveltex::DYNAMIC_C)	{ glBindTexture(GL_TEXTURE_2D, spritetexture[3]); }
+		if (curlayer == ztLeveltex::DYNAMIC_D)	{ glBindTexture(GL_TEXTURE_2D, spritetexture[4]); }
+		//glzDirectSpriteRender(viewport[2] / 2, -viewport[3] / 2, 2, 64.0, 64.0, 0, 0, 1.0, 1.0, glzOrigin::BOTTOM_RIGHT);	
+		
+		// render the little sprite tile
+		glzDirectSpriteRenderAtlas((viewport[2] / 2) - 64, (-viewport[3] / 2) + 64, 1, -64, -64, tiles_width, tiles_height, (cursprite_y* tiles_width) + (tiles_width - cursprite_x - 1), glzOrigin::BOTTOM_RIGHT);
 
 		glEnable(GL_DEPTH_TEST);
 
@@ -1126,12 +1150,17 @@ void Draw (void)
 
 				
 		glBindTexture(GL_TEXTURE_2D, spritetexture[0]);
+		if (curlayer == ztLeveltex::DYNAMIC_A)	{ glBindTexture(GL_TEXTURE_2D, spritetexture[1]); }
+		if (curlayer == ztLeveltex::DYNAMIC_B)	{ glBindTexture(GL_TEXTURE_2D, spritetexture[2]); }
+		if (curlayer == ztLeveltex::DYNAMIC_C)	{ glBindTexture(GL_TEXTURE_2D, spritetexture[3]); }
+		if (curlayer == ztLeveltex::DYNAMIC_D)	{ glBindTexture(GL_TEXTURE_2D, spritetexture[4]); }
+		
 		
 				glzDirectSpriteRender(0.0 , 0.0, 2, 1.0 , 1.0 , 0, 0, 1.0, 1.0, glzOrigin::CENTERED);
 
 
 
-				glBindTexture(GL_TEXTURE_2D, spritetexture[3]);
+				glBindTexture(GL_TEXTURE_2D, spritetexture[6]);
 		
 
 		glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
@@ -1155,8 +1184,16 @@ void Draw (void)
 		glUniform1i(loc7, 0);
 
 		glBindTexture(GL_TEXTURE_2D, spritetexture[0]);
+
+		if (curlayer == ztLeveltex::DYNAMIC_A)	{ glBindTexture(GL_TEXTURE_2D, spritetexture[1]); }
+		if (curlayer == ztLeveltex::DYNAMIC_B)	{ glBindTexture(GL_TEXTURE_2D, spritetexture[2]); }
+		if (curlayer == ztLeveltex::DYNAMIC_C)	{ glBindTexture(GL_TEXTURE_2D, spritetexture[3]); }
+		if (curlayer == ztLeveltex::DYNAMIC_D)	{ glBindTexture(GL_TEXTURE_2D, spritetexture[4]); }
+
 		//glzDirectSpriteRender(viewport[2] / 2, -viewport[3] / 2, 2, 64.0, 64.0, 0, 0, 1.0, 1.0, glzOrigin::BOTTOM_RIGHT);
-		glzDirectSpriteRenderAtlas(viewport[2] / 2, -viewport[3] / 2, 1, 64, 64, tiles_width, tiles_height, (cursprite_y* tiles_width) + (tiles_width-cursprite_x-1), glzOrigin::BOTTOM_RIGHT);
+		// render the little sprite tile
+		glzDirectSpriteRenderAtlas((viewport[2] / 2) - 64, (-viewport[3] / 2) + 64, 1, -64, -64, tiles_width, tiles_height, (cursprite_y* tiles_width) + (tiles_width - cursprite_x - 1), glzOrigin::BOTTOM_RIGHT);
+
 
 		glEnable(GL_DEPTH_TEST);
 
