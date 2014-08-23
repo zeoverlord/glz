@@ -28,7 +28,7 @@
 #include "zeobase2.h"
 #include <fstream>
 #include <math.h>
-#include "..\glz\z-tool_appbase.h"
+#include "..\glz\ztool_appbase.h"
 #include "..\glz\ztool-geo.h"
 #include "..\glz\ztool-shader.h"
 #include "..\glz\ztool-glz.h"
@@ -36,6 +36,7 @@
 #include "..\glz\ztool-tex.h"
 #include "..\glz\ztool-geo-2d.h"
 #include "..\glz\ztool-geo-generate.h"
+#include "..\glz\ztool_tiletools.h"
 
 using namespace std;										
 
@@ -131,6 +132,7 @@ char leveltex_2_filename[255] = "data\\supertiles2.tga";
 char leveltex_d_filename[255] = "data\\supertilesd.tga";
 //char leveltex_filename[255] = "data\\supertilesaspect.tga";
 //char leveltex_filename[255] = "data\\a-map.tga";
+glztiles fakelevel;
 
 
 
@@ -241,6 +243,10 @@ BOOL Initialize (GL_Window* window, Keys* keys)					// Any GL Init Code & User I
 	spritetexture[5] = glzLoadTexture("data\\red.tga", glzTexFilter::NEAREST);
 	spritetexture[6] = glzLoadTexture("data\\cursor.tga", glzTexFilter::NEAREST);
 
+	fakelevel.load(leveltex_d_filename);
+	fakelevel.type = glzTileType::QUAD_LAYER;
+
+	
 
 
 
@@ -990,9 +996,8 @@ void Draw (void)
 			if ((curlayer == ztLeveltex::L1A) || (curlayer == ztLeveltex::L1B))	glBindTexture(GL_TEXTURE_2D, leveltexture[1]);
 			if (has_l2) { if ((curlayer == ztLeveltex::L2A) || (curlayer == ztLeveltex::L2B))	glBindTexture(GL_TEXTURE_2D, leveltexture[2]); }
 			if (has_d) { if ((curlayer == ztLeveltex::DYNAMIC_A) || (curlayer == ztLeveltex::DYNAMIC_B) || (curlayer == ztLeveltex::DYNAMIC_C) || (curlayer == ztLeveltex::DYNAMIC_D))	glBindTexture(GL_TEXTURE_2D, leveltexture[3]); }
-
-
-
+			
+			
 			if ((curlayer == ztLeveltex::L1A) || (curlayer == ztLeveltex::L2A))glUniform1i(loc7, 0);
 			if ((curlayer == ztLeveltex::L1B) || (curlayer == ztLeveltex::L2B))	glUniform1i(loc7, 1);
 
@@ -1030,6 +1035,7 @@ void Draw (void)
 			if (has_l1)
 			{
 				glBindTexture(GL_TEXTURE_2D, leveltexture[1]);
+								
 				glUniform1i(loc7, 0);
 				glzDirectSpriteRender(0.0, 0.0, 2, arm_width / arm_height, 1.0, 0, 0, 1.0, 1.0, glzOrigin::CENTERED);
 
@@ -1082,8 +1088,12 @@ void Draw (void)
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_BLEND);
 
-	
+	    // render cursor
 		if (z_tileUI_point == ztUIP::PIXELMAP) glzDirectSpriteRender(-0.5*aspect + (0.5f*aspect / arm_width) + (paintarea_pixel_x / arm_width)*aspect, -0.5 + (0.5f / arm_height) + ((arm_height - 1 - paintarea_pixel_y) / arm_height), 2, (1.0 / arm_width)*(arm_width / arm_height), 1.0 / arm_height, 0, 0, 1.0, 1.0, glzOrigin::CENTERED);
+
+		//if ((z_tileUI_point == ztUIP::PIXELMAP) && (fakelevel.getTilecolision((mwp.x + 0.5*aspect)*arm_width / aspect, (mwp.y + 0.5)*arm_height, 1))) glzDirectSpriteRender(-0.5*aspect + (0.5f*aspect / arm_width) + (paintarea_pixel_x / arm_width)*aspect, -0.5 + (0.5f / arm_height) + ((arm_height - 1 - paintarea_pixel_y) / arm_height), 2, (1.0 / arm_width)*(arm_width / arm_height), 1.0 / arm_height, 0, 0, 1.0, 1.0, glzOrigin::CENTERED);
+
+
 
 		glDisable(GL_BLEND);
 		

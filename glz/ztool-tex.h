@@ -22,6 +22,8 @@
 
 #include "ztool-type.h"
 
+#ifndef __glztex__
+#define __glztex__
 
 typedef struct
 	{
@@ -75,7 +77,7 @@ void glzSaveTGA(char filename[255], int x, int y, int lossy, glzTexCompression t
 
 
 
-
+#endif /* __glztex__ */
 
 
 

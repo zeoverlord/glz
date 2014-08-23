@@ -30,7 +30,7 @@
 #include <gl/wglext.h>
 #include <fstream>
 #include <windowsx.h>
-#include "..\glz\z-tool_appbase.h"
+#include "..\glz\ztool_appbase.h"
 
 #pragma comment( lib, "opengl32.lib" )							// Search For OpenGL32.lib While Linking
 #pragma comment( lib, "glu32.lib" )								// Search For GLu32.lib While Linking

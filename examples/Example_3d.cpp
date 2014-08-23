@@ -28,7 +28,7 @@
 #include "zeobase2.h"
 #include <fstream>
 #include <math.h>
-#include "..\glz\z-tool_appbase.h"
+#include "..\glz\ztool_appbase.h"
 #include "..\glz\ztool-geo.h"
 #include "..\glz\ztool-shader.h"
 #include "..\glz\ztool-glz.h"

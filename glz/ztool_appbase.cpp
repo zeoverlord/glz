@@ -20,7 +20,7 @@
 // https://github.com/zeoverlord/glz.git
 
 
-#include "z-tool_appbase.h"
+#include "ztool_appbase.h"
 
 glzAppinitializationData::glzAppinitializationData()
 {

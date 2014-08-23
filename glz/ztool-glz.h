@@ -22,6 +22,10 @@
 #include "ztool-type.h"
 #include "ztool-vectormath.h"
 
+#ifndef __glz__
+#define __glz__
+
+
 const unsigned int  GLZ_MIRROR_X = 1;
 const unsigned int  GLZ_MIRROR_Y = 2;
 const unsigned int  GLZ_REPEAT_X = 4;
@@ -158,7 +162,7 @@ void glzQuaternionToMatrixf(float *m, float q[4]);
 unsigned int glzPhys2DColideBox2(float x1,float y1,float r1, float x2,float y2,float r2);
 
 
-
+#endif /* __glz__ */
 
 
 
