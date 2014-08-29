@@ -44,16 +44,25 @@ public:
 	unsigned char *data;
 	unsigned int tex;
 	char img_filename[255];
+	bool tex_changed;
+	bool data_changed;
 	
+	void load(char filename[255], glzTileType intype);
 
-
-	void load(char filename[255]);
 	void update_texture(void);
 	void save(void);
 
+	// helper functions to read an write data
+	char get_pixel(int x, int y, int layer);
+	void put_pixel(int x, int y, int layer, char value);
+
+
 	void paint_pixel(int x, int y, int px, int py, bool animate, bool flip, int layer);
+	void put_extra_bit(int x, int y, bool bitdata, int layer);
 
 	bool getTilecolision(float x, float y, int layer, bool flip_y);
+
+	~glztiles();
 
 };
 

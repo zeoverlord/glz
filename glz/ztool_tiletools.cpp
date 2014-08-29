@@ -24,7 +24,7 @@
 
 
 
-void glztiles::load(char filename[255])
+void glztiles::load(char filename[255], glzTileType intype)
 {
 	sprintf(img_filename, filename);
 
@@ -38,21 +38,36 @@ void glztiles::load(char filename[255])
 	height = imghdr.m_height;
 
 	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, imghdr.m_width, imghdr.m_height, imghdr.m_type, GL_UNSIGNED_BYTE, data);
+	type = intype;
+	tex_changed = false;
+	data_changed = false;
 }
 
 void glztiles::update_texture(void)
 {
-
+	if (!tex_changed) return;
 	glBindTexture(GL_TEXTURE_2D, tex);
 	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, imghdr.m_width, imghdr.m_height, imghdr.m_type, GL_UNSIGNED_BYTE, data);
+	tex_changed = false;
 }
 
 void glztiles::save(void)
 {
-
-	glzSaveTGA(img_filename, imghdr.m_width, imghdr.m_height, 0, glzTexCompression::UNCOMPRESSED, imghdr.m_type, data);
+	if (data_changed) glzSaveTGA(img_filename, imghdr.m_width, imghdr.m_height, 0, glzTexCompression::COMPRESSED, imghdr.m_type, data);
 }
 
+char glztiles::get_pixel(int x, int y, int layer)
+{
+	return data[glz2dTo1dImageRemap(x, y, layer, 4, imghdr.m_width, imghdr.m_height, true)];
+}
+
+void glztiles::put_pixel(int x, int y, int layer, char value)
+{
+	data[glz2dTo1dImageRemap(x, y, layer, 4, imghdr.m_width, imghdr.m_height, true)] = value;
+	tex_changed = true;
+	data_changed = true;
+
+}
 
 
 void glztiles::paint_pixel(int x, int y, int sx, int sy, bool animate, bool flip, int layer)
@@ -70,8 +85,11 @@ void glztiles::paint_pixel(int x, int y, int sx, int sy, bool animate, bool flip
 
 	if (layer == 2) d_o = 2;
 
-	dx = data[glz2dTo1dImageRemap(x, y, 0 + d_o, 4, imghdr.m_width, imghdr.m_height, true)];
-	dy = data[glz2dTo1dImageRemap(x, y, 1 + d_o, 4, imghdr.m_width, imghdr.m_height, true)];
+	dx = get_pixel(x, y, d_o);
+	dy = get_pixel(x, y, d_o+1);
+
+	//dx = data[glz2dTo1dImageRemap(x, y, 0 + d_o, 4, imghdr.m_width, imghdr.m_height, true)];
+	//dy = data[glz2dTo1dImageRemap(x, y, 1 + d_o, 4, imghdr.m_width, imghdr.m_height, true)];
 
 	bool ani = false, ext = false;
 	if (dx > 127) { dx -= 128; ani = true; }
@@ -86,8 +104,11 @@ void glztiles::paint_pixel(int x, int y, int sx, int sy, bool animate, bool flip
 	if (flip) sy += 128;
 
 
-	data[glz2dTo1dImageRemap(x, y, 0 + d_o, 4, imghdr.m_width, imghdr.m_height, true)] = sx;
-	data[glz2dTo1dImageRemap(x, y, 1 + d_o, 4, imghdr.m_width, imghdr.m_height, true)] = sy;
+	put_pixel(x, y, d_o,sx);
+	put_pixel(x, y, d_o + 1,sy);
+
+//	data[glz2dTo1dImageRemap(x, y, 0 + d_o, 4, imghdr.m_width, imghdr.m_height, true)] = sx;
+//	data[glz2dTo1dImageRemap(x, y, 1 + d_o, 4, imghdr.m_width, imghdr.m_height, true)] = sy;
 
 
 
@@ -101,13 +122,28 @@ void glztiles::paint_pixel(int x, int y, int sx, int sy, bool animate, bool flip
 		if (layer == 4) d_o = 3;
 
 		//dx = data[glz2dTo1dImageRemap(x, y, 0 + d_o, 4, imghdr.m_width, imghdr.m_height, true)];
-		data[glz2dTo1dImageRemap(x, y, 0 + d_o, 4, imghdr.m_width, imghdr.m_height, true)] = sx;
+		//data[glz2dTo1dImageRemap(x, y, 0 + d_o, 4, imghdr.m_width, imghdr.m_height, true)] = sx;
+		put_pixel(x, y, d_o, sx);
 	}
 
 	return;
 }
 
 
+void glztiles::put_extra_bit(int x, int y, bool bitdata, int layer)
+{
+	if (type != glzTileType::DOUBLE_LAYER) return; // only double layer tilemaps have extra bits
+
+	char pxdata = get_pixel(x, y, layer);
+
+	pxdata = pxdata & 127; // strip bit data
+	if (bitdata) pxdata = pxdata | 128; // add bit data if needed
+
+
+	put_pixel(x, y, layer, pxdata);
+
+
+}
 
 
 
@@ -222,4 +258,9 @@ bool glztiles::getTilecolision(float x, float y, int layer, bool flip_y)
 
 	return false;
 
+}
+
+glztiles::~glztiles()
+{
+	delete data;
 }
