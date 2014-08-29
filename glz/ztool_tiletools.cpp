@@ -111,8 +111,7 @@ void glztiles::paint_pixel(int x, int y, int sx, int sy, bool animate, bool flip
 
 
 
-// finish this before LD48
-bool glztiles::getTilecolision(float x, float y, int layer)
+bool glztiles::getTilecolision(float x, float y, int layer, bool flip_y)
 {
 		
 	//test if coords are inside tile area, if not return false.
@@ -129,7 +128,6 @@ bool glztiles::getTilecolision(float x, float y, int layer)
 	float xf = x - (float)xi, yf = y - (float)yi;
 
 
-	//if (xf > 0.70) return true;
 	//use integral part to read the current tile data.
 	int d_o = 0;
 	char td = 0;
@@ -139,10 +137,8 @@ bool glztiles::getTilecolision(float x, float y, int layer)
 	if (layer == 3) d_o = 2;
 	if (layer == 4) d_o = 3;
 	
-	td = data[glz2dTo1dImageRemap(xi, yi, 0 + d_o, 4, imghdr.m_width, imghdr.m_height, true)];
-	//td = data[((int)x + ((int)y*width)) * 4 + d_o];
-
-//	if (td == 0) return true;
+	td = data[glz2dTo1dImageRemap(xi, yi, 0 + d_o, 4, imghdr.m_width, imghdr.m_height, flip_y)];
+	
 	
 
 	//Use fractional part to determine of said coordinate is inside the colision area of the tile, return true if that is the case.

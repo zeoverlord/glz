@@ -53,7 +53,7 @@ public:
 
 	void paint_pixel(int x, int y, int px, int py, bool animate, bool flip, int layer);
 
-	bool getTilecolision(float x, float y, int layer);
+	bool getTilecolision(float x, float y, int layer, bool flip_y);
 
 };
 

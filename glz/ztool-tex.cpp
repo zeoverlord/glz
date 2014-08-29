@@ -648,16 +648,16 @@ void glzSaveTGA(char filename[255], int x, int y, int lossy, glzTexCompression t
 					}
 					else
 					{
-						if (data[dpos + (i * 4) + 0] != data[dpos + (i * 4) + 3]) rlec = 0;
-						if (data[dpos + (i * 4) + 1] != data[dpos + (i * 4) + 4]) rlec = 0;
-						if (data[dpos + (i * 4) + 2] != data[dpos + (i * 4) + 5]) rlec = 0;
-						if (data[dpos + (i * 4) + 3] != data[dpos + (i * 4) + 6]) rlec = 0;
+						if (data[dpos + (i * 4) + 0] != data[dpos + (i * 4) + 4]) rlec = 0;
+						if (data[dpos + (i * 4) + 1] != data[dpos + (i * 4) + 5]) rlec = 0;
+						if (data[dpos + (i * 4) + 2] != data[dpos + (i * 4) + 6]) rlec = 0;
+						if (data[dpos + (i * 4) + 3] != data[dpos + (i * 4) + 7]) rlec = 0;
 						if (!lossy){
 
-							if (data[dpos + (i * 4) + 0] != data[dpos + (i * 4) + 7]) rlec = 0;
-							if (data[dpos + (i * 4) + 1] != data[dpos + (i * 4) + 8]) rlec = 0;
-							if (data[dpos + (i * 4) + 2] != data[dpos + (i * 4) + 9]) rlec = 0;
-							if (data[dpos + (i * 4) + 3] != data[dpos + (i * 4) + 0]) rlec = 0;
+							if (data[dpos + (i * 4) + 0] != data[dpos + (i * 4) + 8]) rlec = 0;
+							if (data[dpos + (i * 4) + 1] != data[dpos + (i * 4) + 9]) rlec = 0;
+							if (data[dpos + (i * 4) + 2] != data[dpos + (i * 4) + 10]) rlec = 0;
+							if (data[dpos + (i * 4) + 3] != data[dpos + (i * 4) + 11]) rlec = 0;
 						}
 					}
 					/*if(data[dpos+(i*3)+0]!=data[dpos+(i*3)+9]) rlec=0;
@@ -770,10 +770,10 @@ void glzSaveTGA(char filename[255], int x, int y, int lossy, glzTexCompression t
 						}
 						else{
 
-							if (data[dpos + ((i + rlelength - 1) * 4) + 0] == data[dpos + ((i + rlelength - 1) * 4) + 3]) same = 0;
-							if (data[dpos + ((i + rlelength - 1) * 4) + 1] == data[dpos + ((i + rlelength - 1) * 4) + 4]) same = 0;
-							if (data[dpos + ((i + rlelength - 1) * 4) + 2] == data[dpos + ((i + rlelength - 1) * 4) + 5]) same = 0;
-							if (data[dpos + ((i + rlelength - 1) * 4) + 3] == data[dpos + ((i + rlelength - 1) * 4) + 6]) same = 0;
+							if (data[dpos + ((i + rlelength - 1) * 4) + 0] == data[dpos + ((i + rlelength - 1) * 4) + 4]) same = 0;
+							if (data[dpos + ((i + rlelength - 1) * 4) + 1] == data[dpos + ((i + rlelength - 1) * 4) + 5]) same = 0;
+							if (data[dpos + ((i + rlelength - 1) * 4) + 2] == data[dpos + ((i + rlelength - 1) * 4) + 6]) same = 0;
+							if (data[dpos + ((i + rlelength - 1) * 4) + 3] == data[dpos + ((i + rlelength - 1) * 4) + 7]) same = 0;
 
 						}
 						// if rlec is still 1 then the next pixel is a new segment
@@ -800,7 +800,8 @@ void glzSaveTGA(char filename[255], int x, int y, int lossy, glzTexCompression t
 			}
 
 			yline++;
-			dpos = yline*(x * 3);
+			if (!has_alpha) dpos = yline*(x * 3);
+			else  dpos = yline*(x * 4);
 		}
 
 		// close the file

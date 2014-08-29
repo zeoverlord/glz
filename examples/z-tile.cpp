@@ -754,13 +754,13 @@ void Update (float seconds)								// Perform Motion Updates Here
 	{
 		if (g_keys->keyDown[VK_RETURN]) {
 			if (has_l1)
-				glzSaveTGA(leveltex_1_filename, img_1.m_width, img_1.m_height, 0, glzTexCompression::UNCOMPRESSED, img_1.m_type, img_1_data); keyTimer = 0; 
+				glzSaveTGA(leveltex_1_filename, img_1.m_width, img_1.m_height, 0, glzTexCompression::COMPRESSED, img_1.m_type, img_1_data); keyTimer = 0;
 
 			if (has_l2)
-				glzSaveTGA(leveltex_2_filename, img_2.m_width, img_2.m_height, 0, glzTexCompression::UNCOMPRESSED, img_2.m_type, img_2_data); keyTimer = 0;
+				glzSaveTGA(leveltex_2_filename, img_2.m_width, img_2.m_height, 0, glzTexCompression::COMPRESSED, img_2.m_type, img_2_data); keyTimer = 0;
 
 			if (has_d)
-				glzSaveTGA(leveltex_d_filename, img_d.m_width, img_d.m_height, 0, glzTexCompression::UNCOMPRESSED, img_d.m_type, img_d_data); keyTimer = 0;
+				glzSaveTGA(leveltex_d_filename, img_d.m_width, img_d.m_height, 0, glzTexCompression::COMPRESSED, img_d.m_type, img_d_data); keyTimer = 0;
 		}
 	}
 }
