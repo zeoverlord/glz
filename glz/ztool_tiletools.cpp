@@ -166,12 +166,55 @@ bool glztiles::getTilecolision(float x, float y, int layer)
 		if ((1.0-xf) + yf>1.0) return true;
 		break;
 
+	case 17:
+	case 52:  // right half opaque vertical 
+		if (xf >0.5)
+			return true;
+		break;
+
+	case 19:
+	case 53:  // left half opaque vertical 
+		if (1.0-xf >0.5)
+			return true;
+		break;
+
+
 	case 54:  // 45 degree slope with upper right opaque
 		if ((1.0 - xf) + yf<1.0) return true;
 		break;
 
 	case 55:  // 45 degree slope with upper left opaque
 		if (xf + yf<1.0) return true;
+		break;
+
+	case 70:  // 45 degree half slope with lower right opaque
+		if (xf + yf>1.5)
+			return true;
+		break;
+
+	case 71:  // 45 degree slope with lower left opaque
+		if ((1.0 - xf) + yf>1.5) return true;
+		break;
+
+	case 86:  // 45 degree half slope with lower right opaque
+		if ((1.0 - xf) + yf<0.5)
+			return true;
+		break;
+
+	case 87:  // 45 degree slope with lower left opaque
+		if (xf + yf<0.5) return true;
+		break;
+
+	case 2:
+	case 103:  // right half opaque horizontal 
+		if (yf >0.5)
+			return true;
+		break;
+
+	case 34:
+	case 119:  // left half opaque horizontal 
+		if (1.0 - yf >0.5)
+			return true;
 		break;
 
 	default:

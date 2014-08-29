@@ -51,7 +51,8 @@ static glzAppinitializationData appData;
 
 glzAppinitialization::glzAppinitialization() { data = appData; } // grab the global data on construction
 
-void glzAppinitialization::refresh() { data = appData; } // grab the global data in case it changed
+void glzAppinitialization::pull() { data = appData; } // grab the global data in case it changed
+void glzAppinitialization::push() { appData = data; } // grab the global data in case it changed
 
 void glzAppinitialization::set_title(const wchar_t title[255])	{ swprintf(appData.WINDOW_TITLE, title); swprintf(data.WINDOW_TITLE, title); }
 void glzAppinitialization::set_logfile(const char logfile[255])	{ sprintf(appData.LOGFILE, logfile); sprintf(data.LOGFILE, logfile); }
