@@ -259,7 +259,7 @@ bool glztiles::getTilecolision(float x, float y, int layer, bool flip_y)
 	return false;
 
 }
-
+ 
 glztiles::~glztiles()
 {
 	delete data;
