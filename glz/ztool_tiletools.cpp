@@ -24,7 +24,7 @@
 
 
 
-void glztiles::load(char filename[255])
+void glztiles::load(char filename[255], glzTileType intype)
 {
 	sprintf(img_filename, filename);
 
@@ -38,21 +38,36 @@ void glztiles::load(char filename[255])
 	height = imghdr.m_height;
 
 	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, imghdr.m_width, imghdr.m_height, imghdr.m_type, GL_UNSIGNED_BYTE, data);
+	type = intype;
+	tex_changed = false;
+	data_changed = false;
 }
 
 void glztiles::update_texture(void)
 {
-
+	if (!tex_changed) return;
 	glBindTexture(GL_TEXTURE_2D, tex);
 	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, imghdr.m_width, imghdr.m_height, imghdr.m_type, GL_UNSIGNED_BYTE, data);
+	tex_changed = false;
 }
 
 void glztiles::save(void)
 {
-
-	glzSaveTGA(img_filename, imghdr.m_width, imghdr.m_height, 0, glzTexCompression::UNCOMPRESSED, imghdr.m_type, data);
+	if (data_changed) glzSaveTGA(img_filename, imghdr.m_width, imghdr.m_height, 0, glzTexCompression::COMPRESSED, imghdr.m_type, data);
 }
 
+char glztiles::get_pixel(int x, int y, int layer)
+{
+	return data[glz2dTo1dImageRemap(x, y, layer, 4, imghdr.m_width, imghdr.m_height, true)];
+}
+
+void glztiles::put_pixel(int x, int y, int layer, char value)
+{
+	data[glz2dTo1dImageRemap(x, y, layer, 4, imghdr.m_width, imghdr.m_height, true)] = value;
+	tex_changed = true;
+	data_changed = true;
+
+}
 
 
 void glztiles::paint_pixel(int x, int y, int sx, int sy, bool animate, bool flip, int layer)
@@ -70,8 +85,11 @@ void glztiles::paint_pixel(int x, int y, int sx, int sy, bool animate, bool flip
 
 	if (layer == 2) d_o = 2;
 
-	dx = data[glz2dTo1dImageRemap(x, y, 0 + d_o, 4, imghdr.m_width, imghdr.m_height, true)];
-	dy = data[glz2dTo1dImageRemap(x, y, 1 + d_o, 4, imghdr.m_width, imghdr.m_height, true)];
+	dx = get_pixel(x, y, d_o);
+	dy = get_pixel(x, y, d_o+1);
+
+	//dx = data[glz2dTo1dImageRemap(x, y, 0 + d_o, 4, imghdr.m_width, imghdr.m_height, true)];
+	//dy = data[glz2dTo1dImageRemap(x, y, 1 + d_o, 4, imghdr.m_width, imghdr.m_height, true)];
 
 	bool ani = false, ext = false;
 	if (dx > 127) { dx -= 128; ani = true; }
@@ -86,8 +104,11 @@ void glztiles::paint_pixel(int x, int y, int sx, int sy, bool animate, bool flip
 	if (flip) sy += 128;
 
 
-	data[glz2dTo1dImageRemap(x, y, 0 + d_o, 4, imghdr.m_width, imghdr.m_height, true)] = sx;
-	data[glz2dTo1dImageRemap(x, y, 1 + d_o, 4, imghdr.m_width, imghdr.m_height, true)] = sy;
+	put_pixel(x, y, d_o,sx);
+	put_pixel(x, y, d_o + 1,sy);
+
+//	data[glz2dTo1dImageRemap(x, y, 0 + d_o, 4, imghdr.m_width, imghdr.m_height, true)] = sx;
+//	data[glz2dTo1dImageRemap(x, y, 1 + d_o, 4, imghdr.m_width, imghdr.m_height, true)] = sy;
 
 
 
@@ -101,18 +122,32 @@ void glztiles::paint_pixel(int x, int y, int sx, int sy, bool animate, bool flip
 		if (layer == 4) d_o = 3;
 
 		//dx = data[glz2dTo1dImageRemap(x, y, 0 + d_o, 4, imghdr.m_width, imghdr.m_height, true)];
-		data[glz2dTo1dImageRemap(x, y, 0 + d_o, 4, imghdr.m_width, imghdr.m_height, true)] = sx;
+		//data[glz2dTo1dImageRemap(x, y, 0 + d_o, 4, imghdr.m_width, imghdr.m_height, true)] = sx;
+		put_pixel(x, y, d_o, sx);
 	}
 
 	return;
 }
 
 
+void glztiles::put_extra_bit(int x, int y, bool bitdata, int layer)
+{
+	if (type != glzTileType::DOUBLE_LAYER) return; // only double layer tilemaps have extra bits
+
+	char pxdata = get_pixel(x, y, layer);
+
+	pxdata = pxdata & 127; // strip bit data
+	if (bitdata) pxdata = pxdata | 128; // add bit data if needed
+
+
+	put_pixel(x, y, layer, pxdata);
+
+
+}
 
 
 
-// finish this before LD48
-bool glztiles::getTilecolision(float x, float y, int layer)
+bool glztiles::getTilecolision(float x, float y, int layer, bool flip_y)
 {
 		
 	//test if coords are inside tile area, if not return false.
@@ -129,7 +164,6 @@ bool glztiles::getTilecolision(float x, float y, int layer)
 	float xf = x - (float)xi, yf = y - (float)yi;
 
 
-	//if (xf > 0.70) return true;
 	//use integral part to read the current tile data.
 	int d_o = 0;
 	char td = 0;
@@ -139,10 +173,8 @@ bool glztiles::getTilecolision(float x, float y, int layer)
 	if (layer == 3) d_o = 2;
 	if (layer == 4) d_o = 3;
 	
-	td = data[glz2dTo1dImageRemap(xi, yi, 0 + d_o, 4, imghdr.m_width, imghdr.m_height, true)];
-	//td = data[((int)x + ((int)y*width)) * 4 + d_o];
-
-//	if (td == 0) return true;
+	td = data[glz2dTo1dImageRemap(xi, yi, 0 + d_o, 4, imghdr.m_width, imghdr.m_height, flip_y)];
+	
 	
 
 	//Use fractional part to determine of said coordinate is inside the colision area of the tile, return true if that is the case.
@@ -166,12 +198,55 @@ bool glztiles::getTilecolision(float x, float y, int layer)
 		if ((1.0-xf) + yf>1.0) return true;
 		break;
 
+	case 17:
+	case 52:  // right half opaque vertical 
+		if (xf >0.5)
+			return true;
+		break;
+
+	case 19:
+	case 53:  // left half opaque vertical 
+		if (1.0-xf >0.5)
+			return true;
+		break;
+
+
 	case 54:  // 45 degree slope with upper right opaque
 		if ((1.0 - xf) + yf<1.0) return true;
 		break;
 
 	case 55:  // 45 degree slope with upper left opaque
 		if (xf + yf<1.0) return true;
+		break;
+
+	case 70:  // 45 degree half slope with lower right opaque
+		if (xf + yf>1.5)
+			return true;
+		break;
+
+	case 71:  // 45 degree slope with lower left opaque
+		if ((1.0 - xf) + yf>1.5) return true;
+		break;
+
+	case 86:  // 45 degree half slope with lower right opaque
+		if ((1.0 - xf) + yf<0.5)
+			return true;
+		break;
+
+	case 87:  // 45 degree slope with lower left opaque
+		if (xf + yf<0.5) return true;
+		break;
+
+	case 2:
+	case 103:  // right half opaque horizontal 
+		if (yf >0.5)
+			return true;
+		break;
+
+	case 34:
+	case 119:  // left half opaque horizontal 
+		if (1.0 - yf >0.5)
+			return true;
 		break;
 
 	default:
@@ -183,4 +258,9 @@ bool glztiles::getTilecolision(float x, float y, int layer)
 
 	return false;
 
+}
+ 
+glztiles::~glztiles()
+{
+	delete data;
 }
