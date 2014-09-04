@@ -166,16 +166,7 @@ long glzPrimText(char *text, float k, float *v, float *t, float *n, glzOrigin or
 		if (text[c] == '\n') { yp -= 1; xp = 0; newline = true; c++; }
 		else if (text[c] == '\t')
 		{
-			if (xp>90 * st)	xp = 100 * st;
-			else if (xp >= 80 * st)	xp = 90 * st;
-			else if (xp >= 70 * st)	xp = 80 * st;
-			else if (xp >= 60 * st)	xp = 70 * st;
-			else if (xp >= 50 * st)	xp = 60 * st;
-			else if (xp >= 40 * st)	xp = 50 * st;
-			else if (xp >= 30 * st)	xp = 40 * st;
-			else if (xp >= 20 * st)	xp = 30 * st;
-			else if (xp >= 10 * st)	xp = 20 * st;
-			else if (xp >= 0)		xp = 10 * st;
+			xp = quantize(xp, 10.0 * st) + 10.0 * st;
 
 
 			c++;
@@ -303,7 +294,7 @@ void glzPrimTextVector(char *text, float k, vector<poly3> *pdata, int group, int
 	float small_kern = kern*0.6f;
 	float st = 0.33f, x = 0.0f, y = 0.0f;
 	float xp = 0, yp = -1.0f;
-	unsigned int c = 0, iv = 0, it = 0, i = 0;
+	unsigned int c = 0, i = 0;
 	bool newline = true;
 
 
@@ -318,25 +309,6 @@ void glzPrimTextVector(char *text, float k, vector<poly3> *pdata, int group, int
 
 	
 	font_def textkern[256];
-	//glzAtlassprite testsprite = glzAtlasQuad(16, 16, 'a', origin);
-	poly3 p1, p2;
-
-	p1.atlas = atlas;
-	p2.atlas = atlas;
-
-	p1.group = group;
-	p2.group = group;
-
-	vec3 n(0.0,1.0,0.0);
-
-	p1.a.n = n;
-	p1.b.n = n;
-	p1.c.n = n;
-
-	p2.a.n = n;
-	p2.b.n = n;
-	p2.c.n = n;
-
 	
 	i = 0;
 		// precomputation stage
@@ -351,7 +323,6 @@ void glzPrimTextVector(char *text, float k, vector<poly3> *pdata, int group, int
 		switch (i)
 		{
 		case 'i':
-
 		case 'I':
 		case 'l':
 		case '1':
@@ -393,18 +364,7 @@ void glzPrimTextVector(char *text, float k, vector<poly3> *pdata, int group, int
 		if (text[c] == '\n') { yp -= 1; xp = 0; newline = true; c++; }
 		else if (text[c] == '\t')
 		{
-			if (xp>90 * st)	xp = 100 * st;
-			else if (xp >= 80 * st)	xp = 90 * st;
-			else if (xp >= 70 * st)	xp = 80 * st;
-			else if (xp >= 60 * st)	xp = 70 * st;
-			else if (xp >= 50 * st)	xp = 60 * st;
-			else if (xp >= 40 * st)	xp = 50 * st;
-			else if (xp >= 30 * st)	xp = 40 * st;
-			else if (xp >= 20 * st)	xp = 30 * st;
-			else if (xp >= 10 * st)	xp = 20 * st;
-			else if (xp >= 0)		xp = 10 * st;
-
-
+			xp = quantize(xp, 10.0 * st) + 10.0 * st;
 			c++;
 			newline = true;
 
@@ -416,30 +376,7 @@ void glzPrimTextVector(char *text, float k, vector<poly3> *pdata, int group, int
 
 			newline = false;
 
-			
-			// temp coords of a
-			
-			p1.a.t = textkern[text[c]].charsprite.a;
-			p1.b.t = textkern[text[c]].charsprite.b;
-			p1.c.t = textkern[text[c]].charsprite.c;
-
-			p2.a.t = textkern[text[c]].charsprite.c;
-			p2.b.t = textkern[text[c]].charsprite.b;
-			p2.c.t = textkern[text[c]].charsprite.d;
-				
-
-
-
-			p1.a.v = vert3(0.0 + x + xp, 0.0 + y + yp, 0.0);
-			p1.b.v = vert3(1.0 + x + xp, 0.0 + y + yp, 0.0);
-			p1.c.v = vert3(0.0 + x + xp, 1.0 + y + yp, 0.0);
-
-			p2.a.v = vert3(0.0 + x + xp, 1.0 + y + yp, 0.0);
-			p2.b.v = vert3(1.0 + x + xp, 0.0 + y + yp, 0.0);
-			p2.c.v = vert3(1.0 + x + xp, 1.0 + y + yp, 0.0);
-
-			pdata->push_back(p1);
-			pdata->push_back(p2);
+			textkern[text[c]].charsprite.make_polygons(pdata, x + xp, y + yp, 1.0, 1.0, group, atlas);
 
 			xp += textkern[text[c]].backkern;
 
@@ -586,6 +523,7 @@ void glzDrawTexture(unsigned int texture, unsigned int sampler, float X0, float 
 
 	p.push_back(p1);
 	p.push_back(p2);
+
 
 
 

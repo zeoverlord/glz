@@ -55,13 +55,19 @@ const double PI_OVER_180_REVERSE = 57.2957795131;
 
 // usefull stuff
 
+
+double glzRandfs(void);  //produces a value between 1 and -1
+double glzRandfs(glzDistribution D);
+
 float glzRandf(void);  //produces a value between 1 and 0
 float glzRandf(glzDistribution D);
-float glzRandfs(void);  //produces a value between 1 and -1
-float glzRandfs(glzDistribution D);
+
 
 vec3 glzRandfs_vec3(void);
 vec3 glzRandfs_vec3(glzDistribution D);
+
+vert3 glzRandfs_vert3(void);
+vert3 glzRandfs_vert3(glzDistribution D);
 
 // static noise functions
 float glzMersienneNoise(float seed);

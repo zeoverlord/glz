@@ -138,40 +138,22 @@ void glzPrimRandomVector(vector<poly3> *pdata, int group, int atlas, int num)
 
 	for (i = 0; i<num ; i++)
 	{
-		p.a.v.x = glzRandfs()*0.5f;
-		p.a.v.y = glzRandfs()*0.5f;
-		p.a.v.z = glzRandfs()*0.5f;		
-
+		p.a.v = glzRandfs_vert3() * 0.5;	
 		p.a.t.u = glzRandf();
 		p.a.t.v = glzRandf();
-
-		p.a.n.x = glzRandfs();
-		p.a.n.y = glzRandfs();
-		p.a.n.z = glzRandfs();
+		p.a.n = glzRandfs_vec3();
 		p.a.n.normalize(1.0);
 
-		p.b.v.x = glzRandfs()*0.5f;
-		p.b.v.y = glzRandfs()*0.5f;
-		p.b.v.z = glzRandfs()*0.5f;
-
+		p.b.v = glzRandfs_vert3() * 0.5;
 		p.b.t.u = glzRandf();
 		p.b.t.v = glzRandf();
-
-		p.b.n.x = glzRandfs();
-		p.b.n.y = glzRandfs();
-		p.b.n.z = glzRandfs();
+		p.b.n = glzRandfs_vec3();
 		p.b.n.normalize(1.0);
 
-		p.c.v.x = glzRandfs()*0.5f;
-		p.c.v.y = glzRandfs()*0.5f;
-		p.c.v.z = glzRandfs()*0.5f;
-
+		p.c.v = glzRandfs_vert3() * 0.5;
 		p.c.t.u = glzRandf();
 		p.c.t.v = glzRandf();
-
-		p.c.n.x = glzRandfs();
-		p.c.n.y = glzRandfs();
-		p.c.n.z = glzRandfs();
+		p.c.n = glzRandfs_vec3();
 		p.b.n.normalize(1.0);
 
 		p.group = group;

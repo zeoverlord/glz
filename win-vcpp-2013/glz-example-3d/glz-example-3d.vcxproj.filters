@@ -45,7 +45,7 @@
     <ClCompile Include="..\..\glz\ztool-vectormath.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\glz\z-tool_appbase.cpp">
+    <ClCompile Include="..\..\glz\ztool_appbase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -89,7 +89,7 @@
     <ClInclude Include="..\..\glz\ztool-vectormath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\z-tool_appbase.h">
+    <ClInclude Include="..\..\glz\ztool_appbase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

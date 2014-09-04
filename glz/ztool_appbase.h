@@ -65,7 +65,8 @@ public:
 
 	glzAppinitialization(); // grab the global data on construction
 
-	void refresh(); // grab the global data in case it changed
+	void push(); 
+	void pull();// grab the global data in case it changed
 
 	void set_title(const wchar_t title[255]);
 	void set_logfile(const char logfile[255]);

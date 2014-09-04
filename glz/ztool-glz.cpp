@@ -84,19 +84,20 @@ float glzRandf(glzDistribution D)  //produces a value between 1 and 0
 
 }
 
-float glzRandfs(void)  //produces a value between 1 and -1
+double glzRandfs(void)  //produces a value between 1 and -1
 {
-	std::uniform_real_distribution<float> dist(-1.0, 1.0);
+	std::uniform_real_distribution<double> dist(-1.0, 1.0);
 	return dist(mt);
 }
 
-float glzRandfs(glzDistribution D)  //produces a value between 1 and -1
+
+double glzRandfs(glzDistribution D)  //produces a value between 1 and -1
 {
-std::uniform_real_distribution<float> dist_u(-1.0, 1.0);
-std::normal_distribution<float> dist_n(0.0, 1.0);
-std::gamma_distribution<float> dist_g(1.0, 1.0);
-std::exponential_distribution<float> dist_e(1.0);
-std::uniform_int_distribution<int> dist_i(0, 1);
+	std::uniform_real_distribution<double> dist_u(-1.0, 1.0);
+	std::normal_distribution<double> dist_n(0.0, 1.0);
+	std::gamma_distribution<double> dist_g(1.0, 1.0);
+	std::exponential_distribution<double> dist_e(1.0);
+   std::uniform_int_distribution<int> dist_i(0, 1);
 
 int sign = 1;
 if (dist_i(mt)) sign = -1;
@@ -124,14 +125,28 @@ if (dist_i(mt)) sign = -1;
 
 
 vec3 glzRandfs_vec3(void)  //produces a value between 1 and -1
-{
-	std::uniform_real_distribution<float> dist(-1.0, 1.0);
-
-	vec3 r(dist(mt), dist(mt), dist(mt));
-
-	return r;
+{	
+	return vec3(glzRandfs(), glzRandfs(), glzRandfs());
 }
 
+vec3 glzRandfs_vec3(glzDistribution D)  //produces a value between 1 and -1
+{
+	return vec3(glzRandfs(D), glzRandfs(D), glzRandfs(D));
+}
+
+vert3 glzRandfs_vert3(void)  //produces a value between 1 and -1
+{
+	return vert3(glzRandfs(), glzRandfs(), glzRandfs());
+}
+
+vert3 glzRandfs_vert3(glzDistribution D)  //produces a value between 1 and -1
+{
+	return vert3(glzRandfs(D), glzRandfs(D), glzRandfs(D));
+}
+
+
+
+/*
 vec3 glzRandfs_vec3(glzDistribution D)  //produces a value between 1 and -1
 {
 	std::uniform_real_distribution<float> dist_u(-1.0, 1.0);
@@ -162,7 +177,7 @@ vec3 glzRandfs_vec3(glzDistribution D)  //produces a value between 1 and -1
 		break;
 	}
 
-}
+}*/
 
 // static noise functions, works but is slower than random because of overhead, still they are pretty good for generation of pseudorandom data that needs to be the same every time
 

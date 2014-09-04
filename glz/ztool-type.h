@@ -78,6 +78,10 @@ enum class glzSceneGraphSubMessage {
 };
 
 
+
+
+
+
 // todo, move to own cpp file
 
 class glzQuaternion;

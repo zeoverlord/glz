@@ -25,13 +25,33 @@ using namespace std;
 #include "ztool-glz.h"
 #include "ztool-vectormath.h"
 
+double vert3::distance(vert3 a) 
+{ 
+	//double r;
+	vec3 d = this->vectorTo(a);
+	d.absolute();
+	return d.magnitude();
+	//r = sqrt((d.x*d.x) + (d.y*d.y) + (d.y*d.y));
+	//return r;
+}
 
 vec3 vert3::vectorTo(vert3 b)
 {
 	vec3 c;
-	c.x = b.x - x;
-	c.y = b.y - y;
-	c.z = b.z - z;
+	c.x = b.x - this->x;
+	c.y = b.y - this->y;
+	c.z = b.z - this->z;
+	
+	return c;
+
+}
+
+vec3 vert3::vectorPointsTo(vert3 b)
+{
+	vec3 c;
+	c.x = b.x - this->x;
+	c.y = b.y - this->y;
+	c.z = b.z - this->z;
 
 	c.normalize(1.0);
 	return c;
@@ -50,6 +70,7 @@ void vert3::project(glzMatrix m)
 	z = zt;
 
 }
+
 
 void vec3::reflect(vec3 b)
 {
@@ -520,6 +541,49 @@ glzAtlassprite::glzAtlassprite(unsigned int xdim, unsigned int ydim, unsigned in
 	depth = depthin;
 
 }
+
+void glzAtlassprite::make_polygons(vector<poly3> *pdata, double x, double y, double width, double height, int group, int atlas)
+{
+
+	poly3 p1, p2;
+
+	p1.atlas = atlas;
+	p2.atlas = atlas;
+
+	p1.group = group;
+	p2.group = group;
+
+	vec3 n(0.0, 1.0, 0.0);
+
+	p1.a.n = n;
+	p1.b.n = n;
+	p1.c.n = n;
+
+	p2.a.n = n;
+	p2.b.n = n;
+	p2.c.n = n;
+
+	p1.a.t = a;
+	p1.b.t = b;
+	p1.c.t = c;
+
+	p2.a.t = c;
+	p2.b.t = b;
+	p2.c.t = d;
+
+	p1.a.v = vert3(0.0 + x, 0.0 + y, 0.0);
+	p1.b.v = vert3(width + x, 0.0 + y, 0.0);
+	p1.c.v = vert3(0.0 + x, height + y, 0.0);
+
+	p2.a.v = vert3(0.0 + x, height + y, 0.0);
+	p2.b.v = vert3(width + x, 0.0 + y, 0.0);
+	p2.c.v = vert3(width + x, height + y, 0.0);
+
+	pdata->push_back(p1);
+	pdata->push_back(p2);
+
+}
+
 
 glzAtlasMap::glzAtlasMap(int w, int h) // direct initialization with preset
 {

@@ -26,7 +26,7 @@
 #include <gl\glu.h>												// Header File For The GLu32 Library
 #include <gl\glext.h>
 #include "zeobase2.h"
-#include "..\glz\z-tool_appbase.h"
+#include "..\glz\ztool_appbase.h"
 #include <fstream>
 #include <math.h>
 #include "..\glz\ztool-geo.h"
@@ -64,10 +64,10 @@ float texttimer=0;
 float spriteframetimer=0;
 int spriteframe=0;
 
-int gamestate=6;
+int gamestate=1;
 
 
-GLhandleARB  ProgramObject,ProgramObjectFT,ProgramObjectFSQ;
+GLhandleARB  ProgramObject, ProgramObjectFT, ProgramObjectFSQ, ProgramObjectFSQ_glitch;
 texture_transform text_tt;
 
 
@@ -80,6 +80,7 @@ static PFNGLUNIFORMMATRIX4FVPROC                glUniformMatrix4fv;
 static PFNGLUNIFORM4FARBPROC                    glUniform4f;
 static PFNGLGETUNIFORMLOCATIONPROC              glGetUniformLocation;
 static PFNGLBLENDCOLORPROC						glBlendColor;
+static PFNGLACTIVETEXTUREPROC					glActiveTexture;
 
 
 #define COL_BLACK	0
@@ -95,7 +96,9 @@ int WINDOW_WIDTH;
 void preInitialize(void)
 {
 	glzAppinitialization app;
-	app.set_title(L"ZeoBase GL Framework");	
+	app.set_title(L"ZeoBase GL Frameworkx");	
+	app.data.START_WINDOWED = false;
+	//app.data.SHOW_FRAME = false;
 	WINDOW_HEIGHT = app.data.WINDOW_HEIGHT;
 	WINDOW_WIDTH = app.data.WINDOW_WIDTH;
 }
@@ -132,6 +135,7 @@ BOOL Initialize (GL_Window* window, Keys* keys)					// Any GL Init Code & User I
 	glUniformMatrix4fv= (PFNGLUNIFORMMATRIX4FVPROC) wglGetProcAddress("glUniformMatrix4fv");
 
 	glBlendColor = (PFNGLBLENDCOLORPROC)wglGetProcAddress("glBlendColor");
+	glActiveTexture = (PFNGLACTIVETEXTUREPROC)wglGetProcAddress("glActiveTexture");
 
 	
 
@@ -252,9 +256,13 @@ BOOL Initialize (GL_Window* window, Keys* keys)					// Any GL Init Code & User I
 	ProgramObject = glzShaderLoad("data\\glsl.vert", "data\\glsl.frag", glzVAOType::AUTO);
 	ProgramObjectFT = glzShaderLoad("data\\fancytext.vert", "data\\fancytext.frag", glzVAOType::AUTO);
 	ProgramObjectFSQ = glzShaderLoad("data\\fsq.vert", "data\\fsq.frag", glzVAOType::AUTO);
+	ProgramObjectFSQ_glitch = glzShaderLoad("data\\fsq_gltch.vert", "data\\fsq_gltch.frag", glzVAOType::AUTO);
+
+	
 	glzShaderLink(ProgramObject);
 	glzShaderLink(ProgramObjectFT);
 	glzShaderLink(ProgramObjectFSQ);
+	glzShaderLink(ProgramObjectFSQ_glitch);
 	// load the textures
 	fonttexture[0] = glzLoadTexture("data\\fonts\\arial.tga", glzTexFilter::LINEAR);
 	fonttexture[1] = glzLoadTexture("data\\fonts\\minya_m.tga", glzTexFilter::LINEAR);
@@ -266,6 +274,9 @@ BOOL Initialize (GL_Window* window, Keys* keys)					// Any GL Init Code & User I
 	texture[1] = glzLoadTexture("data\\derpy_phirana.tga", glzTexFilter::LINEAR);  // the derpy phirana is not an actual logo but just an example on how you can put it there
 	texture[2] = glzLoadTexture("data\\explotion128a.tga", glzTexFilter::NEAREST);
 	texture[3] = glzLoadTexture("data\\tinytiles.tga", glzTexFilter::NEAREST);
+	texture[4] = glzLoadTexture("data\\blob.tga", glzTexFilter::NEAREST);
+	texture[5] = glzLoadTexture("data\\cv90-1080p-04.tga", glzTexFilter::NEAREST);
+
 
 	
 
@@ -303,16 +314,23 @@ void Update (float seconds)								// Perform Motion Updates Here
 
 	if (gamestate==1)
 	{
-		angle += seconds;						// Update angle Based On The Clock
-		if (angle>90001) angle=0;
+		angle += seconds*10;						// Update angle Based On The Clock
+		if (angle>360) angle=0;
+
+
+		vert3 testa(2.0, 2.0, 2.0);
+		vert3 testb(sin(angle*PI_OVER_180), 2.0, 2.0);
+
+		float testc = 0.0f;
+		testc = testb.distance(testa);
 
 		
-		sprintf_s (tbuffer,160,"fast changing text:%f", angle);  
+		sprintf_s(tbuffer, 160, "fast changing text:%f", testc);
 		textvao_num[2] = glzVAOMakeText(tbuffer, mt, 1.0f, text_tt, glzOrigin::TOP_LEFT, &textvao[2]);  // this updates text once every frame
 
 		if (texttimer>1.0)
 		{
-			sprintf_s (tbuffer2,160,"slow changing text:%f", angle); 
+			sprintf_s(tbuffer2, 160, "slow changing text:%f", testc);
 			textvao_num[3] = glzVAOMakeText(tbuffer2, mt, 1.0f, text_tt, glzOrigin::TOP_LEFT, &textvao[3]);  // this updates text once every second
 			texttimer=0.0f;
 		}
@@ -371,6 +389,7 @@ if (gamestate == 6)
 	if (g_keys->keyDown['4'] == TRUE) gamestate = 4;
 	if (g_keys->keyDown['5'] == TRUE) gamestate = 5;
 	if (g_keys->keyDown['6'] == TRUE) gamestate = 6;
+	if (g_keys->keyDown['7'] == TRUE) gamestate = 7;
 
 }
 
@@ -492,10 +511,10 @@ void draw_backdrop(unsigned int bgtexture)
 void draw_backdrop2(unsigned int bgtexture, glzMatrix mat, float col[4])
 {
 	glUseProgram(ProgramObjectFSQ);
-	unsigned int loc1 = glGetUniformLocation(ProgramObjectFSQ,"projMat");
-	unsigned int loc2 = glGetUniformLocation(ProgramObjectFSQ,"texunit0");
-	unsigned int loc3 = glGetUniformLocation(ProgramObjectFSQ,"tint");
-	
+	unsigned int loc1 = glGetUniformLocation(ProgramObjectFSQ, "projMat");
+	unsigned int loc2 = glGetUniformLocation(ProgramObjectFSQ, "texunit0");
+	unsigned int loc3 = glGetUniformLocation(ProgramObjectFSQ, "tint");
+
 
 
 	float mtemp[16];
@@ -503,9 +522,39 @@ void draw_backdrop2(unsigned int bgtexture, glzMatrix mat, float col[4])
 	glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
 
 	glUniform1i(loc2, 0);
-	glUniform4f(loc3, col[0],col[1],col[2],col[3]);
-	glBindTexture(GL_TEXTURE_2D,bgtexture);
-	glzDrawVAO(vao_num[0],vao[0],GL_TRIANGLES);
+	glUniform4f(loc3, col[0], col[1], col[2], col[3]);
+	glBindTexture(GL_TEXTURE_2D, bgtexture);
+	glzDrawVAO(vao_num[0], vao[0], GL_TRIANGLES);
+
+}
+
+void draw_backdrop_glitch(unsigned int bgtexture, unsigned int bgtexture2)
+{
+	glUseProgram(ProgramObjectFSQ_glitch);
+	unsigned int loc1 = glGetUniformLocation(ProgramObjectFSQ_glitch, "projMat");
+	unsigned int loc2 = glGetUniformLocation(ProgramObjectFSQ_glitch, "texunit0");
+	unsigned int loc3 = glGetUniformLocation(ProgramObjectFSQ_glitch, "texunit1");
+	unsigned int loc4 = glGetUniformLocation(ProgramObjectFSQ_glitch, "tint");
+	unsigned int loc5 = glGetUniformLocation(ProgramObjectFSQ_glitch, "width");
+	unsigned int loc6 = glGetUniformLocation(ProgramObjectFSQ_glitch, "height");
+
+
+	m.LoadIdentity();
+
+	float mtemp[16];
+	m.transferMatrix(&mtemp[0]);
+	glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
+	glUniform1i(loc2, 0);
+	glUniform1i(loc3, 1);
+	glUniform4f(loc4, 1.0f, 1.0f, 1.0f, 1.0f);
+	glUniform1i(loc5, WINDOW_WIDTH);
+	glUniform1i(loc6, WINDOW_HEIGHT);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, bgtexture);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, bgtexture2);
+	glActiveTexture(GL_TEXTURE0);
+	glzDrawVAO(vao_num[0], vao[0], GL_TRIANGLES);
 
 }
 
@@ -514,6 +563,8 @@ void Draw (void)
 {
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		// Clear Screen And Depth Buffer
 	
+
+
 	float mtemp[16];
 	glEnable(GL_TEXTURE_2D);
 	unsigned int loc1 = glGetUniformLocation(ProgramObject,"projMat");
@@ -679,6 +730,32 @@ void Draw (void)
 
 		draw_text(-3.9f, 1.9f, 13, 2, ProgramObject, COL_WHITE);
 		draw_text(1.7f, -1.8f, 15, 2, ProgramObject, COL_WHITE);
+
+	}
+
+
+	if (gamestate == 7)
+	{
+	
+		draw_backdrop_glitch(texture[5], texture[4]);
+
+		glzMatrix mi;
+		mi.LoadIdentity();
+		mi.scale(0.17f, 0.17f, 0.17f);
+		float col[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+
+		mi.translate(-4.7f, -4.7f, 0.0f);
+
+
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glEnable(GL_BLEND);
+	//	draw_backdrop2(texture[1], mi, col); // the derpy phirana
+		glDisable(GL_BLEND);
+
+
+		draw_text(-3.9f, 1.9f, 9, 2, ProgramObject, COL_BLACK);
+		draw_text(1.7f, -1.8f, 15, 2, ProgramObject, COL_BLACK);
+
 
 	}
 

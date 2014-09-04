@@ -492,6 +492,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 
 	glzAppinitialization app;
 	preInitialize();
+	app.pull();
 
 	Application			application;									// Application Structure
 	GL_Window			window;											// Window Structure

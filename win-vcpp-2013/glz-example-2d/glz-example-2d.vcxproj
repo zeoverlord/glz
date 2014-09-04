@@ -93,8 +93,6 @@
     <ClCompile Include="..\..\examples\stdafx.cpp" />
     <ClCompile Include="..\..\examples\zeobase2.cpp" />
     <ClCompile Include="..\..\glz\2d-scenegraph-base.cpp" />
-    <ClCompile Include="..\..\glz\z-tool_appbase.cpp" />
-    <ClCompile Include="..\..\glz\z-tool_tiletools.cpp" />
     <ClCompile Include="..\..\glz\ztool-geo-2d.cpp" />
     <ClCompile Include="..\..\glz\ztool-geo-generate.cpp" />
     <ClCompile Include="..\..\glz\ztool-geo.cpp" />
@@ -103,6 +101,8 @@
     <ClCompile Include="..\..\glz\ztool-shader.cpp" />
     <ClCompile Include="..\..\glz\ztool-tex.cpp" />
     <ClCompile Include="..\..\glz\ztool-vectormath.cpp" />
+    <ClCompile Include="..\..\glz\ztool_appbase.cpp" />
+    <ClCompile Include="..\..\glz\ztool_tiletools.cpp" />
     <ClCompile Include="..\..\glz\ztool_type.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -112,8 +112,6 @@
     <ClInclude Include="..\..\examples\stdafx.h" />
     <ClInclude Include="..\..\examples\targetver.h" />
     <ClInclude Include="..\..\examples\zeobase2.h" />
-    <ClInclude Include="..\..\glz\z-tool_appbase.h" />
-    <ClInclude Include="..\..\glz\z-tool_tiletools.h" />
     <ClInclude Include="..\..\glz\ztool-geo-2d.h" />
     <ClInclude Include="..\..\glz\ztool-geo-generate.h" />
     <ClInclude Include="..\..\glz\ztool-geo.h" />
@@ -123,6 +121,8 @@
     <ClInclude Include="..\..\glz\ztool-tex.h" />
     <ClInclude Include="..\..\glz\ztool-type.h" />
     <ClInclude Include="..\..\glz\ztool-vectormath.h" />
+    <ClInclude Include="..\..\glz\ztool_appbase.h" />
+    <ClInclude Include="..\..\glz\ztool_tiletools.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\examples\small.ico" />
