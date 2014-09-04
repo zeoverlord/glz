@@ -97,8 +97,9 @@ void preInitialize(void)
 {
 	glzAppinitialization app;
 	app.set_title(L"ZeoBase GL Frameworkx");	
-	app.data.START_WINDOWED = false;
+	//app.data.START_WINDOWED = false;
 	//app.data.SHOW_FRAME = false;
+	app.data.ALLOW_RESIZE = true;
 	WINDOW_HEIGHT = app.data.WINDOW_HEIGHT;
 	WINDOW_WIDTH = app.data.WINDOW_WIDTH;
 }
@@ -275,7 +276,7 @@ BOOL Initialize (GL_Window* window, Keys* keys)					// Any GL Init Code & User I
 	texture[2] = glzLoadTexture("data\\explotion128a.tga", glzTexFilter::NEAREST);
 	texture[3] = glzLoadTexture("data\\tinytiles.tga", glzTexFilter::NEAREST);
 	texture[4] = glzLoadTexture("data\\blob.tga", glzTexFilter::NEAREST);
-	texture[5] = glzLoadTexture("data\\cv90-1080p-04.tga", glzTexFilter::NEAREST);
+	texture[5] = glzLoadTexture("data\\cv90-1080p-04.tga", glzTexFilter::LINEAR);
 
 
 	
@@ -298,6 +299,9 @@ void Deinitialize (void)										// Any User DeInitialization Goes Here
 void Update (float seconds)								// Perform Motion Updates Here
 {
 
+	glzAppinitialization app;
+	WINDOW_HEIGHT = app.data.WINDOW_HEIGHT;
+	WINDOW_WIDTH = app.data.WINDOW_WIDTH;
 		glzMatrix mt;
 		mt.LoadIdentity();
 		mt.scale(0.17f,0.17f,0.17f);
