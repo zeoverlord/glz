@@ -25,5 +25,3 @@ using namespace std;
 #include "ztool-type.h"
 #include "ztool-glz.h"
 #include "ztool-geo.h"
-
-

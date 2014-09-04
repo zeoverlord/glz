@@ -492,7 +492,8 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 
 	glzAppinitialization app;
 	preInitialize();
-	
+	app.pull();
+
 	//since the app data structure has allready been created, we need to do a pull operation to update the data in the structure to have up to date data in it
 	app.pull();	
 

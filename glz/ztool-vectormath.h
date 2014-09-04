@@ -109,11 +109,11 @@ public:
 	vec3 vec3::operator/= (vec3 b) { x /= b.x; y /= b.y; z /= b.z; return *this; }
 	vec3 vec3::operator/= (double b) { x /= b; y /= b; z /= b; return *this; }
 
-	double magnitude(void) { return sqrt((x * x) + (y * y) + (z * z)); }
-	//double distance(vec3 a) { return sqrt((x-a.x * x-a.x) + (y-a.y * y-a.y) + (z-a.z * z-a.z)); }
+	double magnitude(void) { return sqrt((abs(x) * abs(x)) + (abs(y) * abs(y)) + (abs(z)* abs(z))); }
 	double dot(vec3 a) { return x*a.x + y*a.y + z*a.z; }
 	vec3 inverse() { return vec3(-1 * x, -1 * y, -1 * z); }
 	void reflect(vec3 b);
+	void absolute(void) { x = abs(x); y = abs(y); z = abs(z); }
 	void normalize(double l) { if (!this->magnitude()) return; double m = l / this->magnitude(); x *= m; y *= m; z *= m; }
 	void crossproduct(vec3 a, vec3 b) { x = b.y * a.z - a.y * b.z; y = b.z * a.x - a.z * b.x; z = b.x * a.y - a.x * b.y; }
 	void project(glzMatrix m);
@@ -160,9 +160,10 @@ public:
 	vert3 vert3::operator/= (double b) { x /= b; y/= b; z /= b; return *this; }
 
 
-	double distance(vert3 a) { return sqrt((x - a.x * x - a.x) + (y - a.y * y - a.y) + (z - a.z * z - a.z)); }
+	double distance(vert3 a);
 	void normalizeOrigin(double l) { if (!this->magnitude()) return; double m = l / this->magnitude(); x *= m; y *= m; z *= m; }
 	vec3 vectorTo(vert3 b);
+	vec3 vectorPointsTo(vert3 b);	
 	void project(glzMatrix m);
 
 };
@@ -197,8 +198,8 @@ public:
 	tex2 tex2::operator/= (double b) { u /= b; v /= b; return *this; }
 
 
-	double magnitude(void) { return sqrt((u * u) + (v * v)); }
-	double distance(tex2 a) { return sqrt((u - a.u * u - a.u) + (v - a.v * v - a.v)); }
+	double magnitude(void) { return sqrt((abs(u*u)) + (abs(v*v))); }
+	double distance(tex2 a) { return sqrt((abs(u - a.u) * abs(u - a.u)) + (abs(v - a.v) * abs(v - a.v))); }
 	void normalize(double l) { if (!this->magnitude()) return; double m = l / this->magnitude(); u *= m; v *= m; }
 };
 
@@ -424,6 +425,8 @@ public:
 	glzAtlassprite(tex2 pos, tex2 dim, double depthin) : a{ tex2(pos.u, pos.v) }, b{ tex2(pos.u + dim.u, pos.v) }, c{ tex2(pos.u, pos.v + dim.v) }, d{ tex2(pos.u + dim.u, pos.v + dim.v) }, depth{ depthin }{} // simpler initialization
 
 	glzAtlassprite(unsigned int xdim, unsigned int ydim, unsigned int atlas, double depthin); // grid atlas initialization
+
+	void make_polygons(vector<poly3> *pdata, double x, double y, double width, double height, int group, int atlas);
 };
 
 
