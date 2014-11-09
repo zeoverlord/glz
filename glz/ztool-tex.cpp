@@ -137,7 +137,7 @@ void chooseFilter(glzTexFilter filter)
 
 // this function will only read the head of a tga file and report back things like size dimetions and color channels
 // it is mainly used to get the size of the data buffer you need to load this image, it is in img.imageSize for ease of use later on
-void glzReadTgaHead(img_head *img,char filename[255])
+void glzReadTgaHead(img_head *img, string filename)
 	{
 
 
@@ -202,7 +202,7 @@ void glzReadTgaHead(img_head *img,char filename[255])
 
 // this function on the oter hand will load the entire tga into the data buffer
 
-void glzLoadTga(img_head *img,char filename[255], unsigned char *data)
+void glzLoadTga(img_head *img, string filename, unsigned char *data)
 {		
 
 	ifstream File(filename, ios::in | ios::binary);
@@ -338,7 +338,7 @@ if(!isinited_tex) ini_tex();
 
 
 // this is pretty self explanatory, supply filename and filter type (GLZ_FILTER_ANSIO_MAX is reccomended) and it spits out a texture handle
-unsigned int glzLoadTexture(char filename[255], glzTexFilter filter)
+unsigned int glzLoadTexture(string filename, glzTexFilter filter)
 {
 	if(!isinited_tex) ini_tex();
 
@@ -364,18 +364,18 @@ return img.m_id;
 // glzScreenShotADV adds x and y offsets and lossy compression, the lossy compression basically just lowers the sensitivity on the rle segments with +- the lossy argument
 // it's especially useful if you have lots of low amplidude high frequency noice and few gradients, but it can look uggly if set to high or if it is animated, below 5 should be ok in most cases
 
-void glzScreenShot(char filename[255], int x, int y, glzTexCompression type)
+void glzScreenShot(string filename, int x, int y, glzTexCompression type)
 {
 	glzScreenShotADV(filename,0,0,x,y,0,type);
 }
 
-void glzScreenShotADV(char filename[255], int xoffset, int yoffset, int x, int y, int lossy, glzTexCompression type)
+void glzScreenShotADV(string filename, int xoffset, int yoffset, int x, int y, int lossy, glzTexCompression type)
 {
 if(!isinited_tex) ini_tex();
 
 
 // get the image data
-long imageSize = x * y * 3;									
+long const imageSize = x * y * 3;									
 unsigned char *data = new unsigned char[imageSize];
 unsigned char cdata[4];  //new space for an yline
 
@@ -383,23 +383,22 @@ glReadPixels(xoffset,yoffset,x,y, GL_BGR,GL_UNSIGNED_BYTE,data);
 
 
 // split x and y sizes into bytes
-int xa= x % 256;
-int xb= (x-xa)/256;
+int const xa = x % 256;
+int const xb = (x - xa) / 256;
 
-int ya= y % 256;
-int yb= (y-ya)/256;
+int const ya = y % 256;
+int const yb = (y - ya) / 256;
 
-unsigned char header[18]={0,0,10,0,0,0,0,0,0,0,0,0,(char)xa,(char)xb,(char)ya,(char)yb,24,0};
+unsigned char const uncompressed_header[18] = { 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, (char)xa, (char)xb, (char)ya, (char)yb, 24, 0 };
+unsigned char const compressed_header[18] = { 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, (char)xa, (char)xb, (char)ya, (char)yb, 24, 0 };
 
 if (type == glzTexCompression::UNCOMPRESSED)
 {
-	//assemble the uncompressed header
-	header[2]=2;
-
+	
 	// write header and uncompressed data to file
 fstream File(filename, ios::out | ios::binary);
-File.write (reinterpret_cast<char *>(header), sizeof (char)*18);
-File.write (reinterpret_cast<char *>(data), sizeof (char)*imageSize);
+File.write(reinterpret_cast<char const *>(uncompressed_header), sizeof (char)* 18);
+File.write (reinterpret_cast<char const *>(data), sizeof (char)*imageSize);
 File.close();
 
 }
@@ -407,7 +406,7 @@ else if (type == glzTexCompression::COMPRESSED)
 {
 	// write header to file
 fstream File(filename, ios::out | ios::binary);
-File.write (reinterpret_cast<char *>(header), sizeof (char)*18);
+File.write(reinterpret_cast<char const *>(compressed_header), sizeof (char)* 18);
 
 
 int yline=0,xp=0;
@@ -552,7 +551,7 @@ data=NULL;
 
 
 
-void glzSaveTGA(char filename[255], int x, int y, int lossy, glzTexCompression type, unsigned int tex_type, unsigned char *in_data)
+void glzSaveTGA(string filename, int x, int y, int lossy, glzTexCompression type, unsigned int tex_type, unsigned char *in_data)
 {
 	if (!isinited_tex) ini_tex();
 
@@ -568,7 +567,7 @@ void glzSaveTGA(char filename[255], int x, int y, int lossy, glzTexCompression t
 	unsigned char cdata[4];  //new space for an yline
 
 	int i = 0;
-
+	
 	unsigned char dt = 0;
 
 
@@ -592,18 +591,19 @@ void glzSaveTGA(char filename[255], int x, int y, int lossy, glzTexCompression t
 	int ya = y % 256;
 	int yb = (y - ya) / 256;
 
-	unsigned char header[18] = { 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, (char)xa, (char)xb, (char)ya, (char)yb, 24, 0 };
+	int bpp = 24;
+	if (has_alpha) bpp = 32;
 
-	if (has_alpha) header[16] = 32;
+	 char const uncompressed_header[18] = { 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, (char)xa, (char)xb, (char)ya, (char)yb, bpp, 0 };
+	 char const compressed_header[18] = { 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, (char)xa, (char)xb, (char)ya, (char)yb, bpp, 0 };
+
+	
 
 	if (type == glzTexCompression::UNCOMPRESSED)
 	{
-		//assemble the uncompressed header
-		header[2] = 2;
-
 		// write header and uncompressed data to file
 		fstream File(filename, ios::out | ios::binary);
-		File.write(reinterpret_cast<char *>(header), sizeof (char)* 18);
+		File.write(reinterpret_cast<char const *>(uncompressed_header), sizeof (char)* 18);
 		File.write(reinterpret_cast<char *>(data), sizeof (char)*imageSize);
 		File.close();
 
@@ -612,8 +612,8 @@ void glzSaveTGA(char filename[255], int x, int y, int lossy, glzTexCompression t
 	{
 		// write header to file
 		fstream File(filename, ios::out | ios::binary);
-		File.write(reinterpret_cast<char *>(header), sizeof (char)* 18);
-
+		File.write(compressed_header, sizeof (char)* 18);
+		
 
 		int yline = 0, xp = 0;
 		int dc = 0, i = 0, rlel = 0, rlec = 0, dpos = 0, cdpos = 0, same = 0;

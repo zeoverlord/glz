@@ -1,4 +1,4 @@
-// Copyright 2013 Peter Wallström
+// Copyright 2014 Peter Wallström
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 //
@@ -14,33 +14,7 @@
 // 3. If you make something comersiol or at least something you release publicly that relies on this code then i would like to know and maybe use in my CV
 // 4. Please do include me in your credits
 
-// glz shader toolkit - Warning does not produce actual shade
+// glz 2d scenegraph base class - i think it's usefull
 // visit http://www.flashbang.se or contact me at overlord@flashbang.se
 // the entire toolkit should exist in it's entirety at github
 // https://github.com/zeoverlord/glz.git
-
-#include "ztool-type.h"
-
-
-
-		//type signifies the type of data to choose from, if set at GLZ_AUTO it chooses the default settings
-
-enum class glzShadertype{ VERTEX_SHADER,FRAGMENT_SHADER, GEOMETRY_SHADER };
-
-unsigned int glzShaderLoad(string const file_vert, string const file_geo, string const file_frag, glzVAOType type);
-unsigned int glzShaderLoad(string const file_vert, string const file_frag, glzVAOType type);
-unsigned int glzShaderLoadString(string const vert, string const frag, glzVAOType type);
-void glzShaderLink(unsigned int program);
-void glzShaderUsePasstrough(void);
-
-// make sure this replaces all uses of the openGL set uniform functions
-//void glzSetuniform(int type, int location, GLsizei count, GLboolean transpose, const GLfloat *value)
-
-// for now just call one of the two first ones with "glzVAOType::AUTO" as the type then the last one, there will be much more here in future versions
-
-
-
-
-
-
-

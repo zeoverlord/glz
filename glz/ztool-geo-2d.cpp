@@ -98,10 +98,10 @@ long glzCountPrimText(char *text)
 long glzPrimText(char *text, float k, float *v, float *t, float *n, glzOrigin origin)
 {
 	
-	float kern = k*0.2500f;
-	float medium_kern = kern*0.75f;
-	float small_kern = kern*0.6f;
-	float st = 0.33f, x = 0.0f, y = 0.0f;
+	float  const kern = k*0.2500f;
+	float const medium_kern = kern*0.75f;
+	float const small_kern = kern*0.6f;
+	float const st = 0.33f, x = 0.0f, y = 0.0f;
 	float xp = 0, yp = -1.0f;
 	unsigned int c = 0, iv = 0, it = 0, i = 0;
 	bool newline = true;
@@ -289,10 +289,10 @@ long glzPrimText(char *text, float k, float *v, float *t, float *n, glzOrigin or
 void glzPrimTextVector(char *text, float k, vector<poly3> *pdata, int group, int atlas, glzOrigin origin)
 {
 
-	float kern = k*0.2500f;
-	float medium_kern = kern*0.75f;
-	float small_kern = kern*0.6f;
-	float st = 0.33f, x = 0.0f, y = 0.0f;
+	float const kern = k*0.2500f;
+	float const medium_kern = kern*0.75f;
+	float const small_kern = kern*0.6f;
+	float const st = 0.33f, x = 0.0f, y = 0.0f;
 	float xp = 0, yp = -1.0f;
 	unsigned int c = 0, i = 0;
 	bool newline = true;
@@ -312,7 +312,7 @@ void glzPrimTextVector(char *text, float k, vector<poly3> *pdata, int group, int
 	
 	i = 0;
 		// precomputation stage
-	while (i < 256)
+	while (i < 256)  // this should be a ranged for loop
 	{
 		// get the uv coordinates
 
@@ -476,8 +476,7 @@ long glzVAOMakeText2d(char text[255], float scale, float aspect, float kern, tex
 void glzDirectDrawText(char text[255], float scale, float aspect, float kern, glzOrigin textorigin)
 {
 	unsigned int localVAO;
-	long verts;
-	verts = glzVAOMakeText2d(text, scale, aspect, kern, glzMakeTTAtlas(16, 16, 0, glzOrigin::BOTTOM_LEFT), textorigin, &localVAO);
+	long const verts = glzVAOMakeText2d(text, scale, aspect, kern, glzMakeTTAtlas(16, 16, 0, glzOrigin::BOTTOM_LEFT), textorigin, &localVAO);
 	glzDrawVAO(0, verts, localVAO, GL_TRIANGLES);
 	glzKillVAO(localVAO);
 

@@ -26,26 +26,26 @@
 #define __glz__
 
 
-const unsigned int  GLZ_MIRROR_X = 1;
-const unsigned int  GLZ_MIRROR_Y = 2;
-const unsigned int  GLZ_REPEAT_X = 4;
-const unsigned int  GLZ_REPEAT_Y = 8;
-const unsigned int  GLZ_CLAMP_X = 16;
-const unsigned int  GLZ_CLAMP_Y = 32;
+const auto  GLZ_MIRROR_X = 1;
+const auto  GLZ_MIRROR_Y = 2;
+const auto  GLZ_REPEAT_X = 4;
+const auto  GLZ_REPEAT_Y = 8;
+const auto  GLZ_CLAMP_X = 16;
+const auto  GLZ_CLAMP_Y = 32;
 
 
 // color channels
 
 
-const unsigned int GLZ_RGB = 3;
-const unsigned int GLZ_RGBA = 4;
+const auto GLZ_RGB = 3;
+const auto GLZ_RGBA = 4;
 
 
 
-const double PI = 3.1415926535897932384626433832795;
-const double PI_OVER_180 = 0.017453292519943295769236907684886;
-const double PI_OVER_360 = 0.0087266462599716478846184538424431;
-const double PI_OVER_180_REVERSE = 57.2957795131;
+const auto PI = 3.1415926535897932384626433832795;
+const auto PI_OVER_180 = 0.017453292519943295769236907684886;
+const auto PI_OVER_360 = 0.0087266462599716478846184538424431;
+const auto PI_OVER_180_REVERSE = 57.2957795131;
 
 
 
@@ -134,6 +134,7 @@ void glzAtlasUVarrayRemapRotate(unsigned int r, unsigned int atlas, unsigned int
 void glzProjectVertex(float  *vert, float Matrix[16]);
 void glzProjectVertexArray(float  *vert, float Matrix[16], int num);
 void glzProjectVertex(poly3 *p, float Matrix[16], int group);
+void glzProjectVertex(poly3 *p, glzMatrix m, int group);
 void glzProjectVertexArray(vector<poly3> *p, float Matrix[16], int group);
 void glzProjectVertexArray(vector<poly3> *p, glzMatrix m, int group);
 

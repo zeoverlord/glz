@@ -89,7 +89,7 @@ public:
 
 
 typedef struct{
-	pos3 p;
+	node3 p;
 	tex2 t,tscale;
 	glzPrimitive shape;  // how old this particle is, affects the u texture coordinate
 	float maxage; //when to die

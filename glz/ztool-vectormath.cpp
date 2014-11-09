@@ -519,6 +519,51 @@ void poly3::generateTexture(double scale)
 
 
 
+plane3::plane3(poly3 a)
+{
+	vec3 fn = a.getFaceNormal(); // first get the normal
+	n = fn;
+	d = (a.a.v.x*fn.x)+(a.a.v.y*fn.y)+(a.a.v.z*fn.z);
+}
+
+bool plane3::is_infront(vert3 a)
+{
+			
+	double d2 = (a.x*n.x) + (a.y*n.y) + (a.z*n.z);
+
+	if (d2>d) return true;			
+	else return false;
+}
+
+bool plane3::can_intersect(vert3 a, vec3 b)
+{
+
+	if ((this->is_infront(a)) && (b.dot(this->n) <= 0.0)) return true;
+
+	if ((!this->is_infront(a)) && (b.dot(this->n) >= 0.0)) return true;
+
+	return false;
+}
+
+
+vert3 plane3::intesect_line(line3 a)
+{
+	vert3 origin;
+	float nDotA = n.dot(origin.vectorTo(a.p));
+	float nDotBA = n.dot(a.n);
+
+	return a.p + (((d - nDotA) / nDotBA) * a.n);  // hope it works
+}
+
+//vert3 plane3::intesect_line(line3 a)
+//{
+
+
+//	n.x* (a.p.x + a.n.x*t) + n.y *(a.p.y - a.n.y*t) - n.z* (a.p.z + a.n.z*t) = d.
+//}
+
+
+
 void poly3::tempAddNormalToVertex()
 
 {
@@ -584,6 +629,51 @@ void glzAtlassprite::make_polygons(vector<poly3> *pdata, double x, double y, dou
 
 }
 
+
+void glzAtlassprite::make_polygons(vector<poly3> *pdata, double x, double y, double width, double height, int group, int atlas, glzMatrix m)
+{
+
+	poly3 p1, p2;
+
+	p1.atlas = atlas;
+	p2.atlas = atlas;
+
+	p1.group = group;
+	p2.group = group;
+
+	vec3 n(0.0, 1.0, 0.0);
+
+	p1.a.n = n;
+	p1.b.n = n;
+	p1.c.n = n;
+
+	p2.a.n = n;
+	p2.b.n = n;
+	p2.c.n = n;
+
+	p1.a.t = a;
+	p1.b.t = b;
+	p1.c.t = c;
+
+	p2.a.t = c;
+	p2.b.t = b;
+	p2.c.t = d;
+
+	p1.a.v = vert3(0.0 + x, 0.0 + y, 0.0);
+	p1.b.v = vert3(width + x, 0.0 + y, 0.0);
+	p1.c.v = vert3(0.0 + x, height + y, 0.0);
+
+	p2.a.v = vert3(0.0 + x, height + y, 0.0);
+	p2.b.v = vert3(width + x, 0.0 + y, 0.0);
+	p2.c.v = vert3(width + x, height + y, 0.0);
+
+	glzProjectVertex(&p1, m, group);
+	glzProjectVertex(&p2, m, group);
+
+	pdata->push_back(p1);
+	pdata->push_back(p2);
+
+}
 
 glzAtlasMap::glzAtlasMap(int w, int h) // direct initialization with preset
 {

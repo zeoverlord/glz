@@ -82,7 +82,7 @@ static unsigned int passtroughprogram;
 
 
 //Position.xyz
-char vertexpasstrough[] =
+string const vertexpasstrough ={
 
 "#version 140\r\n"
 ""
@@ -93,9 +93,9 @@ char vertexpasstrough[] =
 "	gl_Position = vec4(Position.xyz, 1.0);"
 "	tc = vec4(TexCoord.xy, 0.0, 1.0);"
 "}"
-"";
+""};
 
-char fragmentpasstrough[] =
+string const fragmentpasstrough = {
 "#version 140\r\n"
 ""
 "in vec4 tc;"
@@ -105,7 +105,7 @@ char fragmentpasstrough[] =
 	"vec4 base = texture2D(texunit0, tc.xy);"
 	"fragment_color = base;"
 "}"
-"";
+""};
 
 
 // now i made all of these static, so you shouldn't have to initialize them again
@@ -171,139 +171,115 @@ unsigned long getFileLength(ifstream& file)
     
 //    unsigned long pos=file.tellg();
     file.seekg(0,ios::end);
-    unsigned long len = file.tellg();
+	unsigned long const len = file.tellg();
     file.seekg(ios::beg);
     
     return len;
 }
 
 
-// these next 3 functions will load a file, compile it and attach it to a program object
-void loadVShadeString(unsigned int program, char *shadercode)  //loads a vertex shader in glsl format
+void loadShaderString(unsigned int program, string const shadercode, glzShadertype type)  //loads a vertex shader in glsl format
 {
 
-	unsigned int  VertexShaderObject;
+	unsigned int  ShaderObject;
 
 	// start compilling the source
-	VertexShaderObject = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(VertexShaderObject, 1, (const char **)&shadercode, NULL);
+	if (type == glzShadertype::VERTEX_SHADER)	ShaderObject = glCreateShader(GL_VERTEX_SHADER);
+	else if (type == glzShadertype::FRAGMENT_SHADER)	ShaderObject = glCreateShader(GL_FRAGMENT_SHADER);
+	else if (type == glzShadertype::GEOMETRY_SHADER)	ShaderObject = glCreateShader(GL_GEOMETRY_SHADER);
+	else return;
+	glShaderSource(ShaderObject, 1, (const char **)&shadercode, NULL);
 
 	int compiled = 0;
 	char str[4096];
 	// Compile the vertex and fragment shader, and print out any arrors
 
-	glCompileShader(VertexShaderObject);
-	glGetShaderiv(VertexShaderObject, GL_COMPILE_STATUS, &compiled);
+	glCompileShader(ShaderObject);
+	glGetShaderiv(ShaderObject, GL_COMPILE_STATUS, &compiled);
 
 	if (!compiled) {
 
-		glGetShaderInfoLog(VertexShaderObject, sizeof(str), NULL, str);
-		MessageBoxA(NULL, str, "vertex Shader Compile Error", MB_OK | MB_ICONEXCLAMATION);
+		glGetShaderInfoLog(ShaderObject, sizeof(str), NULL, str);
+		if (type == glzShadertype::VERTEX_SHADER)	MessageBoxA(NULL, str, "vertex Shader Compile Error", MB_OK | MB_ICONEXCLAMATION);
+		else if (type == glzShadertype::FRAGMENT_SHADER)	MessageBoxA(NULL, str, "fragment Shader Compile Error", MB_OK | MB_ICONEXCLAMATION);
+		else if (type == glzShadertype::GEOMETRY_SHADER)	MessageBoxA(NULL, str, "geometry Shader Compile Error", MB_OK | MB_ICONEXCLAMATION);
+		else MessageBoxA(NULL, str, "unknown Shader Compile Error", MB_OK | MB_ICONEXCLAMATION);
 		return;
 	}
 
-	glAttachShader(program, VertexShaderObject);
+	glAttachShader(program, ShaderObject);
 
-	glDeleteShader(VertexShaderObject);
+	glDeleteShader(ShaderObject);
 
 	return;
 }
 
 
-
-void loadFShadeString(unsigned int program, char *shadercode)  //dito on a fragment shader
+// this function will load a file, compile it and attach it to a program object
+void loadShaderFile(unsigned int program, string const filename, glzShadertype type)  //loads a vertex shader in glsl format
 {
 
-	unsigned int  FragmentShaderObject;
-
-	// start compilling the source
-	FragmentShaderObject = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(FragmentShaderObject, 1, (const char **)&shadercode, NULL);
-
-	int compiled = 0;
-	char str[4096];
-	// Compile the vertex and fragment shader, and print out any arrors
-
-	glCompileShader(FragmentShaderObject);
-	glGetShaderiv(FragmentShaderObject, GL_COMPILE_STATUS, &compiled);
-
-	if (!compiled) {
-
-		glGetShaderInfoLog(FragmentShaderObject, sizeof(str), NULL, str);
-		MessageBoxA(NULL, str, "vertex Shader Compile Error", MB_OK | MB_ICONEXCLAMATION);
-		return;
-	}
-
-	glAttachShader(program, FragmentShaderObject);
-
-
-	glDeleteShader(FragmentShaderObject);
-
-	return;
-}
-
-
-
-
-// these next 3 functions will load a file, compile it and attach it to a program object
-void loadVShade(unsigned int program, char filename[160])  //loads a vertex shader in glsl format
-{
-
-	unsigned int  VertexShaderObject;
-	char*     VertexShaderSource;
+	unsigned int  ShaderObject;
+	char*     ShaderSource;
 	ifstream file;
-    file.open(filename, ios::in);
-	if(!file) {return;}
-    
-    unsigned long len = getFileLength(file);
-    
-    if (len==0) { return;}   // "Empty File" 
-    
-    
-    VertexShaderSource = new char[len+1];
-    if (VertexShaderSource == 0) {return;}   // can't reserve memory
-    
-    VertexShaderSource[len] = 0;  // len isn't always strlen cause some characters are stripped in ascii read...
-                            // it is important to 0-terminate the real length later, len is just max possible value...
-   
-    unsigned int i=0;
-    while (file.good())
-    {
-        VertexShaderSource[i++] = file.get();       // get character from file
-        if (i>len) i=len;   // coding guidelines...
-    }
-    i--;
-    VertexShaderSource[i] = 0;  // 0 terminate it.
-    
-    file.close();   
+	file.open(filename, ios::in);
+	if (!file) { return; }
+
+	unsigned long const len = getFileLength(file);
+
+	if (len == 0) { return; }   // "Empty File" 
+
+
+	ShaderSource = new char[len + 1];
+	if (ShaderSource == 0) { return; }   // can't reserve memory
+
+	ShaderSource[len] = 0;  // len isn't always strlen cause some characters are stripped in ascii read...
+	// it is important to 0-terminate the real length later, len is just max possible value...
+
+	unsigned int i = 0;
+	while (file.good())
+	{
+		ShaderSource[i++] = file.get();       // get character from file
+		if (i>len) i = len;   // coding guidelines...
+	}
+	i--;
+	ShaderSource[i] = 0;  // 0 terminate it.
+
+	file.close();
 
 	// i just have to say this about file loading, it is bloddy anoying, this should be like a single line
 	// and maybe it will whenever i get arround to doing the packed file loading i want to do.
 
 
 	// start compilling the source
-	VertexShaderObject = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(VertexShaderObject, 1, (const char **)&VertexShaderSource, NULL);
+	if (type==glzShadertype::VERTEX_SHADER)	ShaderObject = glCreateShader(GL_VERTEX_SHADER);
+	else if (type == glzShadertype::FRAGMENT_SHADER)	ShaderObject = glCreateShader(GL_FRAGMENT_SHADER);
+	else if (type == glzShadertype::GEOMETRY_SHADER)	ShaderObject = glCreateShader(GL_GEOMETRY_SHADER);
+	else return;
+	glShaderSource(ShaderObject, 1, (const char **)&ShaderSource, NULL);
 
-	delete[] VertexShaderSource;
+	delete[] ShaderSource;
 
 	int compiled = 0;
 	char str[4096];
 	// Compile the vertex and fragment shader, and print out any arrors
 
-	glCompileShader(VertexShaderObject);
-	glGetShaderiv(VertexShaderObject,GL_COMPILE_STATUS, &compiled);
+	glCompileShader(ShaderObject);
+	glGetShaderiv(ShaderObject, GL_COMPILE_STATUS, &compiled);
 
 	if (!compiled) {
 
-		glGetShaderInfoLog( VertexShaderObject, sizeof(str), NULL, str );
-		MessageBoxA( NULL, str, "vertex Shader Compile Error", MB_OK|MB_ICONEXCLAMATION );
-	    return;
+		glGetShaderInfoLog(ShaderObject, sizeof(str), NULL, str);
+		if (type == glzShadertype::VERTEX_SHADER)	MessageBoxA(NULL, str, "vertex Shader Compile Error", MB_OK | MB_ICONEXCLAMATION);
+		else if (type == glzShadertype::FRAGMENT_SHADER)	MessageBoxA(NULL, str, "fragment Shader Compile Error", MB_OK | MB_ICONEXCLAMATION);
+		else if (type == glzShadertype::GEOMETRY_SHADER)	MessageBoxA(NULL, str, "geometry Shader Compile Error", MB_OK | MB_ICONEXCLAMATION);
+		else MessageBoxA(NULL, str, "unknown Shader Compile Error", MB_OK | MB_ICONEXCLAMATION);
+		return;
 	}
 
-	glAttachShader(program,VertexShaderObject);
+	glAttachShader(program, ShaderObject);
 
-	glDeleteShader(VertexShaderObject);
+	glDeleteShader(ShaderObject);
 
 	return;
 }
@@ -311,135 +287,7 @@ void loadVShade(unsigned int program, char filename[160])  //loads a vertex shad
 
 
 
-
-void loadFShade(unsigned int program, char filename[160])  //dito on a fragment shader
-{
-
-	unsigned int  FragmentShaderObject;
-	char*     FragmentShaderSource;
-
-
-	ifstream file;
-    file.open(filename, ios::in);
-    if(!file) {return;}
-    
-    unsigned long len = getFileLength(file);
-    
-    if (len==0) { return;}   // "Empty File" 
-    
-    
-    FragmentShaderSource =  new char[len+1];
-    if (FragmentShaderSource == 0) { return;}   // can't reserve memory
-    
-    FragmentShaderSource[len] = 0;  // len isn't always strlen cause some characters are stripped in ascii read...
-                            // it is important to 0-terminate the real length later, len is just max possible value...
-   
-    unsigned int i=0;
-    while (file.good())
-    {
-        FragmentShaderSource[i++] = file.get();       // get character from file
-        if (i>len) i=len;   // coding guidelines...
-    }
-    
-	i--;
-    FragmentShaderSource[i] = 0;  // 0 terminate it.
-    
-    file.close();   
-
-	// start compilling the source
-	FragmentShaderObject = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(FragmentShaderObject, 1, (const char **)&FragmentShaderSource, NULL);
-
-	delete[] FragmentShaderSource;
-
-	int compiled = 0;
-	char str[4096];
-	// Compile the vertex and fragment shader, and print out any arrors
-
-	glCompileShader(FragmentShaderObject);
-	glGetShaderiv(FragmentShaderObject,GL_COMPILE_STATUS, &compiled);
-
-	if (!compiled) {
-
-		glGetShaderInfoLog( FragmentShaderObject, sizeof(str), NULL, str );
-		MessageBoxA( NULL, str, "vertex Shader Compile Error", MB_OK|MB_ICONEXCLAMATION );
-	    return;
-	}
-
-	glAttachShader(program,FragmentShaderObject);
-
-	
-	glDeleteShader(FragmentShaderObject);
-
-	return;
-}
-
-
-
-void loadGShade(unsigned int program, char filename[160])  //dito on a fragment shader
-{
-
-	
-	unsigned int  GeometryShaderObject;
-	char*     GeometryShaderSource;
-
-	ifstream file;
-    file.open(filename, ios::in);
-    if(!file) {return;}
-    
-    unsigned long len = getFileLength(file);
-    
-    if (len==0) {return;}   // "Empty File" 
-    
-    
-    GeometryShaderSource =  new char[len+1];
-    if ( GeometryShaderSource == 0) {return;}   // can't reserve memory
-    
-     GeometryShaderSource[len] = 0;  // len isn't always strlen cause some characters are stripped in ascii read...
-                            // it is important to 0-terminate the real length later, len is just max possible value...
-   
-    unsigned int i=0;
-    while (file.good())
-    {
-         GeometryShaderSource[i++] = file.get();       // get character from file
-        if (i>len) i=len;   // coding guidelines...
-    }
-    
-	i--;
-     GeometryShaderSource[i] = 0;  // 0 terminate it.
-   
-    file.close();  
-
-	// start compilling the source
-	GeometryShaderObject = glCreateShader(GL_GEOMETRY_SHADER);
-	glShaderSource(GeometryShaderObject, 1, (const char **)&GeometryShaderSource, NULL);
-
-	delete[] GeometryShaderSource;
-
-	int compiled = 0;
-	char str[4096];
-	// Compile the vertex and fragment shader, and print out any arrors
-
-	glCompileShader(GeometryShaderObject);
-	glGetShaderiv(GeometryShaderObject,GL_COMPILE_STATUS, &compiled);
-
-	if (!compiled) {
-
-		glGetShaderInfoLog( GeometryShaderObject, sizeof(str), NULL, str );
-		MessageBoxA( NULL, str, "vertex Shader Compile Error", MB_OK|MB_ICONEXCLAMATION );
-	    return;
-	}
-
-	glAttachShader(program,GeometryShaderObject);
-	
-	glDeleteShader(GeometryShaderObject);
-
-	return;
-}
-
-// this specific function will only work if you have openGL 3.2 installed because of the geometry shader which should be any dx 10 class hardware, basically gf8xxx and above
-
-unsigned int glzShaderLoadString(char *vert, char *frag, glzVAOType type)
+unsigned int glzShaderLoadString(string const vert, string const frag, glzVAOType type)
 {
 	if (!isinited_shd) ini_shd();
 
@@ -448,8 +296,9 @@ unsigned int glzShaderLoadString(char *vert, char *frag, glzVAOType type)
 	program = glCreateProgram();
 
 
-	loadVShadeString(program, vert);
-	loadFShadeString(program, frag);
+	loadShaderString(program, vert, glzShadertype::VERTEX_SHADER);
+	loadShaderString(program, frag, glzShadertype::FRAGMENT_SHADER);
+
 
 
 	if (type == glzVAOType::AUTO)
@@ -462,7 +311,8 @@ unsigned int glzShaderLoadString(char *vert, char *frag, glzVAOType type)
 	return program;
 }
 
-unsigned int glzShaderLoad(char file_vert[255], char file_geo[255], char file_frag[255], glzVAOType type)
+// this specific function will only work if you have openGL 3.2 installed because of the geometry shader which should be any dx 10 class hardware, basically gf8xxx and above
+unsigned int glzShaderLoad(string const file_vert, string const file_geo, string const file_frag, glzVAOType type)
 {
 	if(!isinited_shd) ini_shd();
 
@@ -471,9 +321,10 @@ unsigned int glzShaderLoad(char file_vert[255], char file_geo[255], char file_fr
 	program	   = glCreateProgram();
 		
 
-	loadVShade(program, file_vert);
-	loadGShade(program, file_geo);
-	loadFShade(program, file_frag);
+	loadShaderFile(program, file_vert, glzShadertype::VERTEX_SHADER);
+	loadShaderFile(program, file_geo, glzShadertype::GEOMETRY_SHADER);
+	loadShaderFile(program, file_frag, glzShadertype::FRAGMENT_SHADER);
+
 
 	
 	if (type == glzVAOType::AUTO)
@@ -489,7 +340,7 @@ unsigned int glzShaderLoad(char file_vert[255], char file_geo[255], char file_fr
 // this function loads only the certex and fragment programs and like the above it sets the vertex attribute locations
 // in the rare case you want to set these yourself then use any number you like above lets say 5, its really 1 but i might add support for like just vertex + texture and such later on
 // one thing to note is that the program is not linked, that function is lower down
-unsigned int glzShaderLoad(char file_vert[255], char file_frag[255], glzVAOType type)
+unsigned int glzShaderLoad(string const file_vert, string const file_frag, glzVAOType type)
 {
 	if(!isinited_shd) ini_shd();
 
@@ -498,8 +349,9 @@ unsigned int glzShaderLoad(char file_vert[255], char file_frag[255], glzVAOType 
 	program	   = glCreateProgram();
 		
 
-	loadVShade(program, file_vert);
-	loadFShade(program, file_frag);
+	loadShaderFile(program, file_vert,glzShadertype::VERTEX_SHADER);
+	loadShaderFile(program, file_frag, glzShadertype::FRAGMENT_SHADER);
+
 	
 	if (type == glzVAOType::AUTO)
 	{	

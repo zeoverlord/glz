@@ -26,8 +26,8 @@ using namespace std;
 #ifndef __glz_geogenerate__
 #define __glz_geogenerate__
 
-long glzVAOMakeFromFile(char filename[255], glzMatrix matrix, texture_transform tt, unsigned int *vao);
-long glzVAOMakeFromFileVector(char filename[255], glzMatrix matrix, texture_transform tt, unsigned int *vao);
+long glzVAOMakeFromFile(string const filename, glzMatrix matrix, texture_transform tt, unsigned int *vao);
+long glzVAOMakeFromFileVector(string const filename, glzMatrix matrix, texture_transform tt, unsigned int *vao);
 long glzVAOMakeFromVector(vector<poly3> pdata, unsigned int *vao);
 
 long glzVAOMakeAtlasGrid(unsigned int x, unsigned int y, glzMatrix matrix, texture_transform tt, unsigned int *vao);

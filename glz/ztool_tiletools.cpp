@@ -24,9 +24,9 @@
 
 
 
-void glztiles::load(char filename[255], glzTileType intype)
+void glztiles::load(string const filename, glzTileType intype)
 {
-	sprintf(img_filename, filename);
+	img_filename=filename;
 
 	glzReadTgaHead(&imghdr, img_filename);
 	data = new unsigned char[imghdr.imageSize];
@@ -157,24 +157,20 @@ bool glztiles::getTilecolision(float x, float y, int layer, bool flip_y)
 	if (y<0.0f) return false;
 	if (y>height) return false;
 
+	if (layer<1) return false;
+	if (layer>4) return false;
+
+
 
 
 	//split coords into integral and fractional parts.
-	int xi = (int)x, yi = (int)y;
-	float xf = x - (float)xi, yf = y - (float)yi;
+	int const xi = (int)x, yi = (int)y;
+	float const xf = x - (float)xi, yf = y - (float)yi;
 
 
 	//use integral part to read the current tile data.
-	int d_o = 0;
-	char td = 0;
-
-	if (layer == 1) d_o = 0;
-	if (layer == 2) d_o = 1;
-	if (layer == 3) d_o = 2;
-	if (layer == 4) d_o = 3;
-	
-	td = data[glz2dTo1dImageRemap(xi, yi, 0 + d_o, 4, imghdr.m_width, imghdr.m_height, flip_y)];
-	
+	int const d_o = layer-1;	
+	char const td = data[glz2dTo1dImageRemap(xi, yi, 0 + d_o, 4, imghdr.m_width, imghdr.m_height, flip_y)];	
 	
 
 	//Use fractional part to determine of said coordinate is inside the colision area of the tile, return true if that is the case.

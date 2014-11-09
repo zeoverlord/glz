@@ -44,20 +44,20 @@ typedef struct
 //loading
 
 // segmented loading, for if you want to load a texture into the cpu
-void glzReadTgaHead(img_head *img,char filename[255]);
-void glzLoadTga(img_head *img,char filename[255], unsigned char *data);
+void glzReadTgaHead(img_head *img,string filename);
+void glzLoadTga(img_head *img, string filename, unsigned char *data);
 void glzMaketex(img_head *img, unsigned char data[], glzTexFilter filter);
 
-unsigned int glzLoadTexture(char filename[255], glzTexFilter filter);  // type is here which image type (same as in openGL) and filter is the texture filtering
+unsigned int glzLoadTexture(string filename, glzTexFilter filter);  // type is here which image type (same as in openGL) and filter is the texture filtering
 // this load function only loads either TGA files or whtever the file ending is, but that's for another version
 
 
 // saving
 
 
-void glzScreenShot(char filename[255], int x, int y, glzTexCompression type);  // auto saves a compressed file
-void glzScreenShotADV(char filename[255], int xoffset, int yoffset, int x, int y, int lossy, glzTexCompression type);
-void glzSaveTGA(char filename[255], int x, int y, int lossy, glzTexCompression type, unsigned int tex_type, unsigned char *in_data);
+void glzScreenShot(string filename, int x, int y, glzTexCompression type);  // auto saves a compressed file
+void glzScreenShotADV(string filename, int xoffset, int yoffset, int x, int y, int lossy, glzTexCompression type);
+void glzSaveTGA(string filename, int x, int y, int lossy, glzTexCompression type, unsigned int tex_type, unsigned char *in_data);
 
 
 /*

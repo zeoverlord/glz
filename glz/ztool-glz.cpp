@@ -1482,6 +1482,23 @@ void glzProjectVertex(poly3 *p, float Matrix[16], int group)
 
 }
 
+void glzProjectVertex(poly3 *p, glzMatrix m, int group)
+{
+	if (p->group == group)
+		{
+
+			p->a.v.project(m);
+			p->b.v.project(m);
+			p->c.v.project(m);
+
+			p->a.n.project(m);
+			p->b.n.project(m);
+			p->c.n.project(m);
+
+		}
+}
+
+
 
 void glzProjectVertexArray(vector<poly3> *p, float Matrix[16], int group)
 {

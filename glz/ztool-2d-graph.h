@@ -14,33 +14,79 @@
 // 3. If you make something comersiol or at least something you release publicly that relies on this code then i would like to know and maybe use in my CV
 // 4. Please do include me in your credits
 
-// glz shader toolkit - Warning does not produce actual shade
+// glz 2d scenegraph base class - i think it's usefull
 // visit http://www.flashbang.se or contact me at overlord@flashbang.se
 // the entire toolkit should exist in it's entirety at github
 // https://github.com/zeoverlord/glz.git
 
+
+// overall
+	//rendering
+	//messaging
+	//ticks
+
+
+
+// data
+	//position  -  should this be in it's own struct?
+	//orientation
+	//speed
+
+	//type -which type of object is this
+
+
+	// colision data
+		//xy offset
+		//shape
+		//size
+
+	//render data
+		//origin
+		//atlas or uv data
+		//Texture reference?
+
+	//health
+	//armorvalue - essencially a health loss multiplier
+
+	// internal additional data - float[16]
+
+
+	// message- vector<message> - needs type, data and so on
+
+
+// actions
+	//run
+	//render
+
 #include "ztool-type.h"
+#include "ztool-vectormath.h"
+
+#ifndef __2dscenegraphbase__
+#define __2dscenegraphbase__
 
 
 
-		//type signifies the type of data to choose from, if set at GLZ_AUTO it chooses the default settings
+class Object2D {
+	// position, orientation, speed and such	
 
-enum class glzShadertype{ VERTEX_SHADER,FRAGMENT_SHADER, GEOMETRY_SHADER };
+public:
 
-unsigned int glzShaderLoad(string const file_vert, string const file_geo, string const file_frag, glzVAOType type);
-unsigned int glzShaderLoad(string const file_vert, string const file_frag, glzVAOType type);
-unsigned int glzShaderLoadString(string const vert, string const frag, glzVAOType type);
-void glzShaderLink(unsigned int program);
-void glzShaderUsePasstrough(void);
+	node3 n;
+	glzCamera2D *camera;
+	virtual void draw() { return; }
 
-// make sure this replaces all uses of the openGL set uniform functions
-//void glzSetuniform(int type, int location, GLsizei count, GLboolean transpose, const GLfloat *value)
+};
 
-// for now just call one of the two first ones with "glzVAOType::AUTO" as the type then the last one, there will be much more here in future versions
+class obj2d_Sprite : public Object2D
+{
+
+	glzAtlassprite sprite;
+
+public:
+	obj2d_Sprite() : sprite(glzAtlassprite()) {}
+
+};
 
 
 
-
-
-
-
+#endif /* __2dscenegraphbase__ */

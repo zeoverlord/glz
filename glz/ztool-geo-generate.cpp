@@ -624,7 +624,7 @@ void glzPrimGridVector(texture_transform tt, unsigned int x, unsigned int y, glz
 // the name glzLoafFileGeometryObj is a strong hint that i will add more formats
 
 
-void glzLoadFileGeometryObjVector(char filename[255], vector<poly3> *pdata, int group, int atlas)
+void glzLoadFileGeometryObjVector(string const filename, vector<poly3> *pdata, int group, int atlas)
 {
 
 	ifstream file;
@@ -939,7 +939,7 @@ long glzLoadFileGeometryObj(char filename[255], float *v, float *t, float *n)
 */
 
 
-long glzVAOMakeFromFile(char filename[255], glzMatrix matrix, texture_transform tt, unsigned int *vao)
+long glzVAOMakeFromFile(string const filename, glzMatrix matrix, texture_transform tt, unsigned int *vao)
 {
 	if (!isinited_geo_generate) ini_geo_generate();
 

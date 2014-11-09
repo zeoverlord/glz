@@ -28,6 +28,109 @@ using namespace std;
 #define __glzvectormath__
 
 
+enum class glzLinkStates { VAR, LINK, BOTH };
+
+
+template<typename T>
+class Link{
+
+private:
+	T value;
+	Link *linkptr;
+	
+
+public:
+
+	glzLinkStates state;
+
+	Link()
+	{
+		state= glzLinkStates::VAR;
+		linkptr = nullptr;			
+	}
+
+	Link(T v)
+	{
+		state = glzLinkStates::VAR;
+		linkptr = nullptr;
+		value = v;
+	}
+
+	Link(Link *lp) 
+	{
+		if (lp == this) return;
+		//value = 0.0;		
+		state = glzLinkStates::LINK;
+		linkptr = lp;
+	}
+
+	Link(T v, Link *lp)
+	{
+		if (lp == this) return;
+		value =v;		
+		state = glzLinkStates::BOTH;
+		linkptr = lp;
+	}
+
+	Link(Link *lp, glzLinkStates st)
+	{
+		if (lp == this) return;
+	//	value = 0.0;
+		state = st;
+		linkptr = lp;
+	}
+
+	T get()
+	{
+		T lnkval;
+		if (state == glzLinkStates::VAR) lnkval = value;
+		if (state == glzLinkStates::LINK) lnkval = linkptr->get();
+		if (state == glzLinkStates::BOTH) lnkval = value + linkptr->get();
+		return lnkval;
+	}
+	
+	void set(T v) { var = v; }
+
+
+	T *operator->() { return value; }
+
+
+	operator T() { return this->get(); }
+		
+	template<typename T2>
+	Link<T> operator = (T2 v) { value = v; return *this; }
+	template<typename T2>
+	Link<T> operator += (T2 v) { value += v; return *this; }
+	template<typename T, typename T2>
+	Link<T> operator -= (T2 v) { value -= v; return *this; }
+	template<typename T, typename T2>
+	Link<T> operator *= (T2 v) { value *= v; return *this; }
+	template<typename T, typename T2>
+	Link<T> operator /= (T2 v) { value /= v; return *this; }
+	template<typename T, typename T2>
+	Link<T> operator + (T2 v) { value += v; return *this; }
+
+};
+
+template<typename T1,typename T2>
+inline Link<T1> operator+(Link<T1> lhs, T2 rhs) { lhs.value += rhs;	return lhs; }
+
+template<typename T1, typename T2>
+inline Link<T1> operator-(Link<T1> lhs, T2 rhs) { lhs.value -= rhs;	return lhs; }
+
+template<typename T1, typename T2>
+inline Link<T1> operator*(Link<T1> lhs, T2 rhs) { lhs.value *= rhs;	return lhs; }
+
+template<typename T1, typename T2>
+inline Link<T1> operator/(Link<T1> lhs, T2 rhs) { lhs.value /= rhs;	return lhs; }
+
+
+
+
+
+
+
+
 // todo, change all instances to return *this instead
 
 class glzMatrix;
@@ -143,6 +246,11 @@ public:
 	vert3 vert3::operator+= (vec3 b) { x += b.x; y += b.y; z += b.z; return *this; }
 	vert3 vert3::operator- (vec3 b) { return vert3(x-b.x,y-b.y,z-b.z); }
 	vert3 vert3::operator-= (vec3 b) { x -= b.x; y -= b.y; z -= b.z; return *this; }
+
+	vert3 vert3::operator+ (vert3 b) { return vert3(x + b.x, y + b.y, z + b.z); }
+	vert3 vert3::operator+= (vert3 b) { x += b.x; y += b.y; z += b.z; return *this; }
+	vert3 vert3::operator- (vert3 b) { return vert3(x - b.x, y - b.y, z - b.z); }
+	vert3 vert3::operator-= (vert3 b) { x -= b.x; y -= b.y; z -= b.z; return *this; }
 
 
 	vert3 vert3::operator* (vert3 b) { return vert3(x * b.x, y * b.y, z * b.z); }
@@ -344,8 +452,50 @@ public:
 
 };
 
+class line3{ //a mathematical line
 
-class pos3{ //3-Dimetional possition class
+private:
+
+public:
+		
+	vec3 n;
+	vert3 p;
+
+	line3() : n(vec3()), p(vert3()) {}
+	line3(vec3 nin, vert3 pin) : n{ nin }, p{ pin }{}
+	
+	line3(vert3 a, vert3 b) { p = a; n = a.vectorTo(b); }
+};
+
+
+
+class plane3{ //a mathematical plane
+
+private:
+
+
+public:
+	vec3 n;
+	double d;
+
+	plane3() : n(vec3()), d(0.0) {}
+	plane3(vec3 nin, double din) : n{ nin }, d{ din }{}
+	plane3(poly3 a);
+	
+	bool is_infront(vert3 a);
+	bool does_Straddle(vert3 a, vert3 b) { if (this->is_infront(a) != this->is_infront(b)) return true; else return false; }
+
+	bool can_intersect(vert3 a, vec3 b);
+
+	vert3 intesect_line(line3 a);
+
+};
+
+
+
+
+
+class node3{ //3-Dimetional possition class
 
 private:
 
@@ -359,11 +509,11 @@ public:
 	glzMatrix m;
 
 
-	pos3() : pos(vert3()), dir(vec3()), r(glzQuaternion()), rs(glzQuaternion()), scale(vec3(1.0,1.0,1.0)) {}
-	pos3(vert3 posin, vec3 dirin, glzQuaternion rin, glzQuaternion rsin) : pos{ posin }, dir{ dirin }, r{ rin }, rs{ rsin }, scale(vec3(1.0, 1.0, 1.0)){}
-	pos3(vert3 posin) : pos{ posin }, dir(vec3()), r(glzQuaternion()), rs(glzQuaternion()), scale(vec3(1.0, 1.0, 1.0)) {}
+	node3() : pos(vert3()), dir(vec3()), r(glzQuaternion()), rs(glzQuaternion()), scale(vec3(1.0, 1.0, 1.0)) {}
+	node3(vert3 posin, vec3 dirin, glzQuaternion rin, glzQuaternion rsin) : pos{ posin }, dir{ dirin }, r{ rin }, rs{ rsin }, scale(vec3(1.0, 1.0, 1.0)){}
+	node3(vert3 posin) : pos{ posin }, dir(vec3()), r(glzQuaternion()), rs(glzQuaternion()), scale(vec3(1.0, 1.0, 1.0)) {}
 
-	void tick(double seconds) { pos += dir*seconds;	r *= rs*seconds; m.LoadIdentity();	m.translate(pos); m.scale(scale); m.loadQuanternion(r);	}
+	void tick(double seconds) 	{ pos += dir*seconds;	r *= rs*seconds;	m.LoadIdentity();	m.translate(pos);	m.scale(scale);	m.loadQuanternion(r); }
 
 
 	/*
@@ -375,18 +525,35 @@ public:
 
 };
 
+
+
+
+class glzCamera2D{
+
+private:
+public:
+	vert3 pos;
+	vec3 scale;
+	double angle;
+	glzMatrix m;
+
+};
+
+
+
+
 class glzRidgidSimple{ //basic physics class
 
 private:
 
 
 public:
-	pos3 p;
+	node3 p;
 	double weight;
 
 
-	glzRidgidSimple() : p(pos3()), weight(1.0) {}
-	glzRidgidSimple(pos3 pin, double weightin) : p{ pin }, weight{ weightin } {}
+	glzRidgidSimple() : p(node3()), weight(1.0) {}
+	glzRidgidSimple(node3 pin, double weightin) : p{ pin }, weight{ weightin } {}
 /*	pos3(vert3 posin) : pos{ posin }, dir(vec3()), r(glzQuaternion()), rs(glzQuaternion()), scale(vec3(1.0, 1.0, 1.0)) {}
 
 	void tick(double seconds) { pos += dir*seconds;	r *= rs*seconds; m.LoadIdentity();	m.translate(pos); m.scale(scale); m.loadQuanternion(r); }
@@ -427,6 +594,7 @@ public:
 	glzAtlassprite(unsigned int xdim, unsigned int ydim, unsigned int atlas, double depthin); // grid atlas initialization
 
 	void make_polygons(vector<poly3> *pdata, double x, double y, double width, double height, int group, int atlas);
+	void make_polygons(vector<poly3> *pdata, double x, double y, double width, double height, int group, int atlas, glzMatrix m);
 };
 
 

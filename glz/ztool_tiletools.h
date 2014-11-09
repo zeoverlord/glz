@@ -43,11 +43,11 @@ public:
 	img_head imghdr;
 	unsigned char *data;
 	unsigned int tex;
-	char img_filename[255];
+	string img_filename;
 	bool tex_changed;
 	bool data_changed;
 	
-	void load(char filename[255], glzTileType intype);
+	void load(string const filename, glzTileType intype);
 
 	void update_texture(void);
 	void save(void);
