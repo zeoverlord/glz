@@ -308,7 +308,7 @@ void glzMatrix::ortho(double left, double right, double bottom, double top, doub
 void glzMatrix::ortho2D(double left, double right, double bottom, double top)
 {
 
-	double Znear = -1.0f, Zfar = 1.0f;
+	double Znear = -100.0f, Zfar = 100.0f;
 	glzMatrix b;
 
 	b.m[0] = 2 / (right - left);
@@ -575,10 +575,10 @@ void poly3::tempAddNormalToVertex()
 
 
 
-glzAtlassprite::glzAtlassprite(unsigned int xdim, unsigned int ydim, unsigned int atlas, double depthin) // grid atlas initialization
+glzSprite::glzSprite(unsigned int xdim, unsigned int ydim, unsigned int atlas, double depthin) // grid atlas initialization
 {
 
-	glzAtlassprite quad = glzAtlasQuad(xdim, ydim, atlas, glzOrigin::BOTTOM_LEFT);
+	glzSprite quad = glzAtlasQuad(xdim, ydim, atlas, glzOrigin::BOTTOM_LEFT);
 	a = quad.a;
 	b = quad.b;
 	c = quad.c;
@@ -587,7 +587,7 @@ glzAtlassprite::glzAtlassprite(unsigned int xdim, unsigned int ydim, unsigned in
 
 }
 
-void glzAtlassprite::make_polygons(vector<poly3> *pdata, double x, double y, double width, double height, int group, int atlas)
+void glzSprite::make_polygons(vector<poly3> *pdata, double x, double y, double width, double height, int group, int atlas)
 {
 
 	poly3 p1, p2;
@@ -630,7 +630,7 @@ void glzAtlassprite::make_polygons(vector<poly3> *pdata, double x, double y, dou
 }
 
 
-void glzAtlassprite::make_polygons(vector<poly3> *pdata, double x, double y, double width, double height, int group, int atlas, glzMatrix m)
+void glzSprite::make_polygons(vector<poly3> *pdata, double x, double y, double width, double height, int group, int atlas, glzMatrix m)
 {
 
 	poly3 p1, p2;

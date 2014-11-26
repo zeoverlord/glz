@@ -37,6 +37,7 @@
 #include "..\glz\ztool-geo-2d.h"
 #include "..\glz\ztool-geo-generate.h"
 #include "..\glz\ztool-particle.h"
+#include "..\glz\ztool-2d-graph.h"
 
 using namespace std;										
 
@@ -315,11 +316,16 @@ void Update (float seconds)								// Perform Motion Updates Here
 	{
 		ToggleFullscreen (g_window);							// Toggle Fullscreen Mode
 	}
+	
+	angle += seconds*10;						// Update angle Based On The Clock
+		
+	if (angle>360) angle=0;
+
+
 
 	if (gamestate==1)
 	{
-		angle += seconds*10;						// Update angle Based On The Clock
-		if (angle>360) angle=0;
+
 
 
 		vert3 testa(2.0, 2.0, 2.0);
@@ -680,28 +686,57 @@ void Draw (void)
 
 		glBindTexture(GL_TEXTURE_2D, texture[1]);
 	
-		glzDirectSpriteRender(m, texture[1], 0, 0, 0, 100, 100, 1, 0, 1.0, 1.0, glzOrigin::TOP_LEFT);
-		glzDirectSpriteRender(m, texture[1], 0, 0, 0, 100, 100, 1, 0, 1.0, 1.0, glzOrigin::BOTTOM_LEFT);
+	//	glzDirectSpriteRender(m, texture[1], 0, 0, 0, 100, 100, 1, 0, 1.0, 1.0, glzOrigin::TOP_LEFT);
+	//	glzDirectSpriteRender(m, texture[1], 0, 0, 0, 100, 100, 1, 0, 1.0, 1.0, glzOrigin::BOTTOM_LEFT);
 		
-		glzDirectSpriteRender(m, texture[1], 0, 0, 0, 100, 100, 1, 0, 1.0, 1.0, glzOrigin::BOTTOM_RIGHT);
-		glzDirectSpriteRender(m, texture[1], 0, 0, 0, 100, 100, 1, 0, 1.0, 1.0, glzOrigin::TOP_RIGHT);
+	//	glzDirectSpriteRender(m, texture[1], 0, 0, 0, 100, 100, 1, 0, 1.0, 1.0, glzOrigin::BOTTOM_RIGHT);
+	//	glzDirectSpriteRender(m, texture[1], 0, 0, 0, 100, 100, 1, 0, 1.0, 1.0, glzOrigin::TOP_RIGHT);
+
+		glzSprite spr;
+		//spr.depth = -1.0;
+
+		glzMatrix mspr;
+		mspr.LoadIdentity();
+		mspr.scale(100, 100, 100);
+
+		//glzDirectSpriteRender(mspr, texture[1], spr, glzOrigin::TOP_RIGHT);
+
+
+		glzMatrix mt;
+		mt.LoadIdentity();
+
+		mt.transferMatrix(&mtemp[0]);
+		glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
+
+
+		glzCamera2D cam;
+		cam.setsize(800, 500);
+		cam.moveSnap(vert3(0.0,100.0,0.0));
+		
+		node3 n;
+		n.rs.rotate(angle, 0.0, 0.0,1.0);
+		n.tick(1.0);
+
+
+		obj2d_Sprite spr2(spr, &cam, &n, texture[1], 100.0);
+		spr2.draw();
 
 		glBlendFunc(GL_ONE, GL_ONE);
 		glBlendFunc(GL_CONSTANT_COLOR, GL_ONE_MINUS_CONSTANT_COLOR);
 		glBlendColor(1, 0, 1, 1.0f);
 		glEnable(GL_BLEND);
 
-		glzDrawTexture(texture[3], 0, 0, 0, 200, 200, 0, 0, 0, 1, 1);
+		//glzDrawTexture(texture[3], 0, 0, 0, 200, 200, 0, 0, 0, 1, 1);
 
 		glDisable(GL_BLEND);
 
 		glBindTexture(GL_TEXTURE_2D, texture[3]);
 
 		//glUniform4f(loc3, 1.0f, 0.0f, 1.0f, 1.0f);
-		glzDirectSpriteRenderAtlas(0, 0, 0, 100, 100, 4, 4, 14, glzOrigin::CENTERED);
+		//glzDirectSpriteRenderAtlas(0, 0, 0, 100, 100, 4, 4, 14, glzOrigin::CENTERED);
 
-		glzDirectSpriteRenderAtlasPixelPerfect(192, 192, 1, 64, 64, 4, 4, 1, glzOrigin::BOTTOM_LEFT);
-		glzDirectSpriteRenderAtlasPixelPerfectQuantized(208, 192, 1, 64, 64, 4, 4, 1, 16.0f, glzOrigin::BOTTOM_LEFT);
+		//glzDirectSpriteRenderAtlasPixelPerfect(192, 192, 1, 64, 64, 4, 4, 1, glzOrigin::BOTTOM_LEFT);
+		//glzDirectSpriteRenderAtlasPixelPerfectQuantized(208, 192, 1, 64, 64, 4, 4, 1, 16.0f, glzOrigin::BOTTOM_LEFT);
 
 		
 		

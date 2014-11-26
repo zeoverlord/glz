@@ -121,7 +121,7 @@ void glzRemapToRangeArray(float curmin,float curmax, float rmin, float rmax, flo
 void glzCubicCurve(float pos, float l, float p1[3], float v1[3], float p2[3], float v2[3], float *ret);
 void glzAtlasQuad(unsigned int xres, unsigned int yres, unsigned int atlas, glzOrigin origin, float *uvOut);
 void glzAtlasAniQuad(unsigned int xres, unsigned int yres, float time, glzOrigin origin, float *uvout);
-glzAtlassprite glzAtlasQuad(unsigned int xres, unsigned int yres, unsigned int atlas, glzOrigin origin);
+glzSprite glzAtlasQuad(unsigned int xres, unsigned int yres, unsigned int atlas, glzOrigin origin);
 void glzAtlasUVarrayRemap(unsigned int atlas, unsigned int num, unsigned int aw, unsigned int ah, glzOrigin origin, float *uv);
 void glzAtlasUVarrayRemap(unsigned int atlas, unsigned int aw, unsigned int ah, glzOrigin origin, vector<poly3> *p, int group);
 void glzAtlasUVarrayRemap(unsigned int atlas, unsigned int aw, unsigned int ah, glzOrigin origin, vector<poly3> *p, int group, int side);

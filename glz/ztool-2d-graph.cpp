@@ -18,3 +18,24 @@
 // visit http://www.flashbang.se or contact me at overlord@flashbang.se
 // the entire toolkit should exist in it's entirety at github
 // https://github.com/zeoverlord/glz.git
+
+
+#include "ztool-2d-graph.h"
+#include "ztool-geo-2d.h"
+#include "ztool-type.h"
+
+
+void obj2d_Sprite::draw()
+{
+
+	glzMatrix m;
+
+	m.LoadIdentity();
+	m *= camera->m;
+	m *= n->m;
+	m.scale(scale, scale, scale);
+
+	glzDirectSpriteRender(m, texture,  sprite, glzOrigin::CENTERED);
+
+	return;
+}

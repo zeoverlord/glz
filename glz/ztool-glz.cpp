@@ -1054,14 +1054,14 @@ void glzAtlasQuad(unsigned int xres, unsigned int yres, unsigned int atlas, glzO
 
 }
 
-glzAtlassprite glzAtlasQuad(unsigned int xres, unsigned int yres, unsigned int atlas, glzOrigin origin)
+glzSprite glzAtlasQuad(unsigned int xres, unsigned int yres, unsigned int atlas, glzOrigin origin)
 {
 	// generates 4 float[2] coordinates that corresponds to the sub image of an images atlas
 
 	float xwidth = float(1.0f / xres);
 	float ywidth = float(1.0f / yres);
 
-	glzAtlassprite atlasquad;
+	glzSprite atlasquad;
 
 	unsigned int x = 0, y = 0;
 

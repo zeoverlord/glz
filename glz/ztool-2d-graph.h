@@ -20,43 +20,6 @@
 // https://github.com/zeoverlord/glz.git
 
 
-// overall
-	//rendering
-	//messaging
-	//ticks
-
-
-
-// data
-	//position  -  should this be in it's own struct?
-	//orientation
-	//speed
-
-	//type -which type of object is this
-
-
-	// colision data
-		//xy offset
-		//shape
-		//size
-
-	//render data
-		//origin
-		//atlas or uv data
-		//Texture reference?
-
-	//health
-	//armorvalue - essencially a health loss multiplier
-
-	// internal additional data - float[16]
-
-
-	// message- vector<message> - needs type, data and so on
-
-
-// actions
-	//run
-	//render
 
 #include "ztool-type.h"
 #include "ztool-vectormath.h"
@@ -71,7 +34,8 @@ class Object2D {
 
 public:
 
-	node3 n;
+	
+	node3 *n;
 	glzCamera2D *camera;
 	virtual void draw() { return; }
 
@@ -79,11 +43,22 @@ public:
 
 class obj2d_Sprite : public Object2D
 {
-
-	glzAtlassprite sprite;
+	unsigned int texture;
+	double scale;
+	glzSprite sprite;
 
 public:
-	obj2d_Sprite() : sprite(glzAtlassprite()) {}
+
+	void draw() override;
+	obj2d_Sprite() : sprite(glzSprite()), texture({ 0 }), scale({ 1.0 }) {}
+	obj2d_Sprite(glzSprite spritein, glzCamera2D *camerain, node3 *nin, unsigned int tex, double scalein)
+	{
+		sprite=spritein; 
+		camera=camerain;
+		texture = tex;
+		n = nin;
+		scale = scalein;
+	}
 
 };
 

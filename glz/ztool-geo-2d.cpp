@@ -301,7 +301,7 @@ void glzPrimTextVector(char *text, float k, vector<poly3> *pdata, int group, int
 	typedef struct
 	{
 
-		glzAtlassprite charsprite;
+		glzSprite charsprite;
 		float frontkern;
 		float backkern;
 		
@@ -647,6 +647,25 @@ void glzDirectSpriteRender(glzMatrix m, unsigned int texture, float X, float Y, 
 
 	return;
 }
+
+void glzDirectSpriteRender(glzMatrix m, unsigned int texture, glzSprite sprite, glzOrigin origin)
+{
+	unsigned int localVAO;
+	vector<poly3> p;
+		
+	sprite.make_polygons(&p, 0.0, 0.0, 1.0, 1.0, 0, 1, m);
+	
+	glzVAOMakeFromVector(p, &localVAO, glzVAOType::AUTO);
+
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glzDrawVAO(0, p.size() * 3, localVAO, GL_TRIANGLES);
+	glzKillVAO(localVAO);
+	
+	return;
+}
+
+
+
 
 void glzDirectSpriteRender(float X, float Y, float Z, float W, float H, float spriteX, float spriteY, float spriteW, float spriteH, glzOrigin origin)
 {
