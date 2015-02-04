@@ -25,7 +25,7 @@ using namespace std;
 #include "ztool-glz.h"
 #include "ztool-vectormath.h"
 
-double vert3::distance(vert3 a) 
+float vert3::distance(vert3 a)
 { 
 	//double r;
 	vec3 d = this->vectorTo(a);
@@ -142,7 +142,7 @@ void glzMatrix::transferMatrix(float *b)
 		b[i] = (float)m[i];
 }
 
-void glzMatrix::translate(double x, double y, double z)
+void glzMatrix::translate(float x, float y, float z)
 {
 	glzMatrix b;
 
@@ -174,7 +174,7 @@ void glzMatrix::translate(double x, double y, double z)
 
 
 
-void glzMatrix::scale(double x, double y, double z)
+void glzMatrix::scale(float x, float y, float z)
 {
 	{
 
@@ -210,7 +210,7 @@ void glzMatrix::scale(double x, double y, double z)
 
 }
 
-void glzMatrix::rotate(double a, double x, double y, double z)
+void glzMatrix::rotate(float a, float x, float y, float z)
 {
 
 	double angle = a*PI_OVER_180;
@@ -241,7 +241,7 @@ void glzMatrix::rotate(double a, double x, double y, double z)
 	return;
 }
 
-void glzMatrix::perspective(double fov, double aspect, double zNear, double zFar)
+void glzMatrix::perspective(float fov, float aspect, float zNear, float zFar)
 {
 	const double h = 1.0f / tan(fov*PI_OVER_360);
 	double neg_depth = zNear - zFar;
@@ -274,7 +274,7 @@ void glzMatrix::perspective(double fov, double aspect, double zNear, double zFar
 
 }
 
-void glzMatrix::ortho(double left, double right, double bottom, double top, double Znear, double Zfar)
+void glzMatrix::ortho(float left, float right, float bottom, float top, float Znear, float Zfar)
 {
 
 	glzMatrix b;
@@ -305,7 +305,7 @@ void glzMatrix::ortho(double left, double right, double bottom, double top, doub
 }
 
 
-void glzMatrix::ortho2D(double left, double right, double bottom, double top)
+void glzMatrix::ortho2D(float left, float right, float bottom, float top)
 {
 
 	double Znear = -100.0f, Zfar = 100.0f;
@@ -575,7 +575,7 @@ void poly3::tempAddNormalToVertex()
 
 
 
-glzSprite::glzSprite(unsigned int xdim, unsigned int ydim, unsigned int atlas, double depthin) // grid atlas initialization
+glzSprite::glzSprite(unsigned int xdim, unsigned int ydim, unsigned int atlas, float depthin) // grid atlas initialization
 {
 
 	glzSprite quad = glzAtlasQuad(xdim, ydim, atlas, glzOrigin::BOTTOM_LEFT);
@@ -587,7 +587,7 @@ glzSprite::glzSprite(unsigned int xdim, unsigned int ydim, unsigned int atlas, d
 
 }
 
-void glzSprite::make_polygons(vector<poly3> *pdata, double x, double y, double width, double height, int group, int atlas)
+void glzSprite::make_polygons(vector<poly3> *pdata, float x, float y, float width, float height, int group, int atlas)
 {
 
 	poly3 p1, p2;
@@ -630,7 +630,7 @@ void glzSprite::make_polygons(vector<poly3> *pdata, double x, double y, double w
 }
 
 
-void glzSprite::make_polygons(vector<poly3> *pdata, double x, double y, double width, double height, int group, int atlas, glzMatrix m)
+void glzSprite::make_polygons(vector<poly3> *pdata, float x, float y, float width, float height, int group, int atlas, glzMatrix m)
 {
 
 	poly3 p1, p2;

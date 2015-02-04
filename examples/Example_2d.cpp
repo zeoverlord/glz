@@ -65,7 +65,12 @@ float texttimer=0;
 float spriteframetimer=0;
 int spriteframe=0;
 
-int gamestate=1;
+int gamestate=8;
+
+
+glzCamera2D cam;
+Object2DGraph tempgraph(&cam);
+node3 n;
 
 
 GLhandleARB  ProgramObject, ProgramObjectFT, ProgramObjectFSQ, ProgramObjectFSQ_glitch;
@@ -97,7 +102,7 @@ int WINDOW_WIDTH;
 void preInitialize(void)
 {
 	glzAppinitialization app;
-	app.set_title(L"ZeoBase GL Frameworkx");	
+	app.set_title(L"ZeoBase GL Framework");	
 	//app.data.START_WINDOWED = false;
 	//app.data.SHOW_FRAME = false;
 	app.data.ALLOW_RESIZE = true;
@@ -281,6 +286,38 @@ BOOL Initialize (GL_Window* window, Keys* keys)					// Any GL Init Code & User I
 
 
 	
+	cam.setsize(800, 500);
+	cam.moveTo(vert3(0.0,100.0, 0.0));
+	cam.moveSpeed(30);
+
+
+	n.rs.rotate(20, 0.0, 0.0, 1.0);
+
+	n.pos = vert3(200.0,-130.0,0.0);
+	
+	
+	tempgraph.add(obj2d_Sprite(glzSprite(8, 4, 16, 0.0), nullptr, node3(), texture[2], 100.0));
+	//tempgraph.objects.push_back(make_shared<obj2d_Sprite>(glzSprite(), &n, node3(), texture[1], 100.0));
+
+	tempgraph.add(obj2d_Sprite(glzSprite(), &n, node3(), texture[1], 100.0));
+
+
+	vector<glzSprite> expl_sprite;
+
+	int i = 0;
+	
+	while (i < 32)  
+	{
+		expl_sprite.push_back(glzSprite(8, 4, i, 0.0));
+		i++;
+	}
+
+	tempgraph.add(obj2d_Sprite_Animated(expl_sprite, nullptr, node3(vert3(102.0, 0.0, 0.0)), texture[2], 100.0,0.04f));
+
+
+
+
+
 
 
 	return TRUE;												// Return TRUE (Initialization Successful)
@@ -306,6 +343,7 @@ void Update (float seconds)								// Perform Motion Updates Here
 		glzMatrix mt;
 		mt.LoadIdentity();
 		mt.scale(0.17f,0.17f,0.17f);
+		cam.update(seconds);
 
 	if (g_keys->keyDown [VK_ESCAPE] == TRUE)					// Is ESC Being Pressed?
 	{
@@ -362,6 +400,7 @@ if (gamestate == 6)
 	ps.set_clamp(false, false, false);
 
 
+
 	if (g_keys->keyDown[VK_SPACE] == TRUE)
 	{
 	
@@ -391,7 +430,9 @@ if (gamestate == 6)
 	ps.tick();
 
 }
-	
+
+	n.tick(seconds);
+	tempgraph.update(seconds);
 
 	if (g_keys->keyDown['1'] == TRUE) gamestate = 1;
 	if (g_keys->keyDown['2'] == TRUE) gamestate = 2;
@@ -400,6 +441,7 @@ if (gamestate == 6)
 	if (g_keys->keyDown['5'] == TRUE) gamestate = 5;
 	if (g_keys->keyDown['6'] == TRUE) gamestate = 6;
 	if (g_keys->keyDown['7'] == TRUE) gamestate = 7;
+	if (g_keys->keyDown['8'] == TRUE) gamestate = 8;
 
 }
 
@@ -686,20 +728,18 @@ void Draw (void)
 
 		glBindTexture(GL_TEXTURE_2D, texture[1]);
 	
-	//	glzDirectSpriteRender(m, texture[1], 0, 0, 0, 100, 100, 1, 0, 1.0, 1.0, glzOrigin::TOP_LEFT);
-	//	glzDirectSpriteRender(m, texture[1], 0, 0, 0, 100, 100, 1, 0, 1.0, 1.0, glzOrigin::BOTTOM_LEFT);
+		glzDirectSpriteRender(m, texture[1], 0, 0, 0, 100, 100, 1, 0, 1.0, 1.0, glzOrigin::TOP_LEFT);
+		glzDirectSpriteRender(m, texture[1], 0, 0, 0, 100, 100, 1, 0, 1.0, 1.0, glzOrigin::BOTTOM_LEFT);
 		
-	//	glzDirectSpriteRender(m, texture[1], 0, 0, 0, 100, 100, 1, 0, 1.0, 1.0, glzOrigin::BOTTOM_RIGHT);
-	//	glzDirectSpriteRender(m, texture[1], 0, 0, 0, 100, 100, 1, 0, 1.0, 1.0, glzOrigin::TOP_RIGHT);
+		glzDirectSpriteRender(m, texture[1], 0, 0, 0, 100, 100, 1, 0, 1.0, 1.0, glzOrigin::BOTTOM_RIGHT);
+		glzDirectSpriteRender(m, texture[1], 0, 0, 0, 100, 100, 1, 0, 1.0, 1.0, glzOrigin::TOP_RIGHT);
 
-		glzSprite spr;
-		//spr.depth = -1.0;
 
 		glzMatrix mspr;
 		mspr.LoadIdentity();
 		mspr.scale(100, 100, 100);
 
-		//glzDirectSpriteRender(mspr, texture[1], spr, glzOrigin::TOP_RIGHT);
+		//glzDirectSpriteRender(mspr, texture[1], glzSprite(), glzOrigin::TOP_RIGHT);
 
 
 		glzMatrix mt;
@@ -707,36 +747,32 @@ void Draw (void)
 
 		mt.transferMatrix(&mtemp[0]);
 		glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
-
-
-		glzCamera2D cam;
-		cam.setsize(800, 500);
-		cam.moveSnap(vert3(0.0,100.0,0.0));
 		
-		node3 n;
-		n.rs.rotate(angle, 0.0, 0.0,1.0);
-		n.tick(1.0);
+		
+
+		tempgraph.draw();
 
 
-		obj2d_Sprite spr2(spr, &cam, &n, texture[1], 100.0);
-		spr2.draw();
+		m.transferMatrix(&mtemp[0]);
+		glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
+
 
 		glBlendFunc(GL_ONE, GL_ONE);
 		glBlendFunc(GL_CONSTANT_COLOR, GL_ONE_MINUS_CONSTANT_COLOR);
 		glBlendColor(1, 0, 1, 1.0f);
 		glEnable(GL_BLEND);
 
-		//glzDrawTexture(texture[3], 0, 0, 0, 200, 200, 0, 0, 0, 1, 1);
+		glzDrawTexture(texture[3], 0, 0, 0, 200, 200, 0, 0, 0, 1, 1);
 
 		glDisable(GL_BLEND);
 
 		glBindTexture(GL_TEXTURE_2D, texture[3]);
 
-		//glUniform4f(loc3, 1.0f, 0.0f, 1.0f, 1.0f);
-		//glzDirectSpriteRenderAtlas(0, 0, 0, 100, 100, 4, 4, 14, glzOrigin::CENTERED);
-
-		//glzDirectSpriteRenderAtlasPixelPerfect(192, 192, 1, 64, 64, 4, 4, 1, glzOrigin::BOTTOM_LEFT);
-		//glzDirectSpriteRenderAtlasPixelPerfectQuantized(208, 192, 1, 64, 64, 4, 4, 1, 16.0f, glzOrigin::BOTTOM_LEFT);
+	
+		glzDirectSpriteRenderAtlas(0, 0, 0, 100, 100, 4, 4, 14, glzOrigin::CENTERED);
+	glUniform4f(loc3, 1.0f, 0.0f, 1.0f, 1.0f);
+		glzDirectSpriteRenderAtlasPixelPerfect(192, 192, 1, 64, 64, 4, 4, 1, glzOrigin::BOTTOM_LEFT);
+		glzDirectSpriteRenderAtlasPixelPerfectQuantized(208, 192, 1, 64, 64, 4, 4, 1, 16.0f, glzOrigin::BOTTOM_LEFT);
 
 		
 		
@@ -790,6 +826,30 @@ void Draw (void)
 		glEnable(GL_BLEND);
 	//	draw_backdrop2(texture[1], mi, col); // the derpy phirana
 		glDisable(GL_BLEND);
+
+
+		draw_text(-3.9f, 1.9f, 9, 2, ProgramObject, COL_BLACK);
+		draw_text(1.7f, -1.8f, 15, 2, ProgramObject, COL_BLACK);
+
+
+	}
+
+	if (gamestate == 8)
+	{
+
+		
+		glzMatrix mt;
+		mt.LoadIdentity();
+
+		mt.transferMatrix(&mtemp[0]);
+		glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
+
+
+		glBlendFunc(GL_ONE, GL_ONE);
+		glEnable(GL_BLEND);
+		tempgraph.draw();
+		glDisable(GL_BLEND);
+
 
 
 		draw_text(-3.9f, 1.9f, 9, 2, ProgramObject, COL_BLACK);

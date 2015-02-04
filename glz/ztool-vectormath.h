@@ -139,42 +139,42 @@ class vec2{ //vector2 class
 
 
 public:
-	double x, y;
+	float x, y;
 	vec2() : x(0.0), y(0.0) {}
-	vec2(double xin, double yin) : x{ xin }, y{ yin }{}
+	vec2(float xin, float yin) : x{ xin }, y{ yin }{}
 	vec2 vec2::operator+ (vec2 b) { return vec2(x + b.x, y + b.y); }
-	vec2 vec2::operator+ (double b) { return vec2(x + b, y + b); }
+	vec2 vec2::operator+ (float b) { return vec2(x + b, y + b); }
 	vec2 vec2::operator+= (vec2 b) { x += b.x; y += b.y; return *this; }
-	vec2 vec2::operator+= (double b) { x += b; y += b; return *this; }
+	vec2 vec2::operator+= (float b) { x += b; y += b; return *this; }
 
 	vec2 vec2::operator- (vec2 b) { return vec2(x - b.x, y - b.y); }
-	vec2 vec2::operator- (double b) { return vec2(x - b, y - b); }
+	vec2 vec2::operator- (float b) { return vec2(x - b, y - b); }
 	vec2 vec2::operator-= (vec2 b) { x -= b.x; y -= b.y; return *this; }
-	vec2 vec2::operator-= (double b) { x -= b; y -= b; return *this; }
+	vec2 vec2::operator-= (float b) { x -= b; y -= b; return *this; }
 
 	vec2 vec2::operator* (vec2 b) { return vec2(x * b.x, y * b.y); }
-	vec2 vec2::operator* (double b) { return vec2(x * b, y * b); }
+	vec2 vec2::operator* (float b) { return vec2(x * b, y * b); }
 	vec2 vec2::operator*= (vec2 b) { x *= b.x; y *= b.y; return *this; }
-	vec2 vec2::operator*= (double b) { x *= b; y *= b; return *this; }
+	vec2 vec2::operator*= (float b) { x *= b; y *= b; return *this; }
 
 	vec2 vec2::operator/ (vec2 b) { return vec2(x / b.x, y / b.y); }
-	vec2 vec2::operator/ (double b) { return vec2(x / b, y / b); }
+	vec2 vec2::operator/ (float b) { return vec2(x / b, y / b); }
 	vec2 vec2::operator/= (vec2 b) { x /= b.x; y /= b.y; return *this; }
-	vec2 vec2::operator/= (double b) { x /= b; y /= b; return *this; }
+	vec2 vec2::operator/= (float b) { x /= b; y /= b; return *this; }
 	
 
-	double magnitude(void) { return sqrt((x * x) + (y * y)); }
-	double dot(vec2 a) { return x*a.x + y*a.y; }
-	void normalize(double l) { if (!this->magnitude()) return; double m = l / this->magnitude(); x *= m; y *= m; }
+	float magnitude(void) { return sqrt((x * x) + (y * y)); }
+	float dot(vec2 a) { return x*a.x + y*a.y; }
+	void normalize(float l) { if (!this->magnitude()) return; float m = l / this->magnitude(); x *= m; y *= m; }
 
 
 
 };
 
-inline vec2 operator+ (double b, vec2 a) { return vec2(a.x + b, a.y + b); }
-inline vec2 operator- (double b, vec2 a) { return vec2(a.x - b, a.y - b); }
-inline vec2 operator* (double b, vec2 a) { return vec2(a.x * b, a.y * b); }
-inline vec2 operator/ (double b, vec2 a) { return vec2(b / a.x, b / a.y); }
+inline vec2 operator+ (float b, vec2 a) { return vec2(a.x + b, a.y + b); }
+inline vec2 operator- (float b, vec2 a) { return vec2(a.x - b, a.y - b); }
+inline vec2 operator* (float b, vec2 a) { return vec2(a.x * b, a.y * b); }
+inline vec2 operator/ (float b, vec2 a) { return vec2(b / a.x, b / a.y); }
 
 /*
 typedef struct vertex2 {
@@ -186,48 +186,54 @@ class vec3{ //vector3 class
 
 
 public:
-	double x, y, z;
+	float x, y, z;
 	vec3() : x(0.0), y(0.0), z(0.0) {}
-	vec3(double xin, double yin, double zin) : x{ xin }, y{ yin }, z{ zin } {}
+//	vec3(float xin, float yin, float zin) : x{ xin }, y{ yin }, z{ zin } {}
+	vec3(double xin, double yin, double zin)
+	{
+		x = xin;
+		y = yin;
+		z = zin;
+	}
 
 	vec3 vec3::operator+ (vec3 b) { return vec3(x + b.x, y + b.y, z + b.z); }
-	vec3 vec3::operator+ (double b) { return vec3(x + b, y + b, z + b); }
+	vec3 vec3::operator+ (float b) { return vec3(x + b, y + b, z + b); }
 	vec3 vec3::operator+= (vec3 b) { x += b.x; y += b.y; z += b.z; return *this; }
-	vec3 vec3::operator+= (double b) { x += b; y += b; z += b; return *this; }
+	vec3 vec3::operator+= (float b) { x += b; y += b; z += b; return *this; }
 
 	vec3 vec3::operator- (vec3 b) { return vec3(x - b.x, y - b.y, z - b.z); }
-	vec3 vec3::operator- (double b) { return vec3(x - b, y - b, z - b); }
+	vec3 vec3::operator- (float b) { return vec3(x - b, y - b, z - b); }
 	vec3 vec3::operator-= (vec3 b) { x -= b.x; y -= b.y; z -= b.z; return *this; }
-	vec3 vec3::operator-= (double b) { x -= b; y -= b; z -= b; return *this; }
+	vec3 vec3::operator-= (float b) { x -= b; y -= b; z -= b; return *this; }
 
 	//vec3 vec3::operator* (vert3 b) { x *= b.x; y *= b.y; z *= b.z; return *this; }
 	vec3 vec3::operator* (vec3 b) { return vec3(x * b.x, y * b.y, z * b.z); }
-	vec3 vec3::operator* (double b) { return vec3(x * b, y * b, z * b); }
+	vec3 vec3::operator* (float b) { return vec3(x * b, y * b, z * b); }
 	//vec3 vec3::operator*= (vert3 b) { a.x *= b.x; a.y *= b.y; a.z *= b.z; return *this; }
 	vec3 vec3::operator*= (vec3 b) { x *= b.x; y *= b.y; z *= b.z; return *this; }
-	vec3 vec3::operator*= (double b) { x *= b; y *= b; z *= b; return *this; }
+	vec3 vec3::operator*= (float b) { x *= b; y *= b; z *= b; return *this; }
 
 	vec3 vec3::operator/ (vec3 b) { return vec3(x / b.x, y / b.y, z / b.z); }
-	vec3 vec3::operator/ (double b) { return vec3(x / b, y / b, z / b); }
+	vec3 vec3::operator/ (float b) { return vec3(x / b, y / b, z / b); }
 	vec3 vec3::operator/= (vec3 b) { x /= b.x; y /= b.y; z /= b.z; return *this; }
-	vec3 vec3::operator/= (double b) { x /= b; y /= b; z /= b; return *this; }
+	vec3 vec3::operator/= (float b) { x /= b; y /= b; z /= b; return *this; }
 
-	double magnitude(void) { return sqrt((abs(x) * abs(x)) + (abs(y) * abs(y)) + (abs(z)* abs(z))); }
-	double dot(vec3 a) { return x*a.x + y*a.y + z*a.z; }
+	float magnitude(void) { return sqrt((abs(x) * abs(x)) + (abs(y) * abs(y)) + (abs(z)* abs(z))); }
+	float dot(vec3 a) { return x*a.x + y*a.y + z*a.z; }
 	vec3 inverse() { return vec3(-1 * x, -1 * y, -1 * z); }
 	void reflect(vec3 b);
 	void absolute(void) { x = abs(x); y = abs(y); z = abs(z); }
-	void normalize(double l) { if (!this->magnitude()) return; double m = l / this->magnitude(); x *= m; y *= m; z *= m; }
+	void normalize(float l) { if (!this->magnitude()) return; float m = l / this->magnitude(); x *= m; y *= m; z *= m; }
 	void crossproduct(vec3 a, vec3 b) { x = b.y * a.z - a.y * b.z; y = b.z * a.x - a.z * b.x; z = b.x * a.y - a.x * b.y; }
 	void project(glzMatrix m);
 
 
 };
 
-inline vec3 operator+ (double b, vec3 a) { return vec3(a.x + b, a.y + b, a.z + b); }
-inline vec3 operator- (double b, vec3 a) { return vec3(a.x - b, a.y - b, a.z - b); }
-inline vec3 operator* (double b, vec3 a) { return vec3(a.x * b, a.y * b, a.z * b); }
-inline vec3 operator/ (double b, vec3 a) { return vec3(b / a.x, b / a.y, b / a.z); }
+inline vec3 operator+ (float b, vec3 a) { return vec3(a.x + b, a.y + b, a.z + b); }
+inline vec3 operator- (float b, vec3 a) { return vec3(a.x - b, a.y - b, a.z - b); }
+inline vec3 operator* (float b, vec3 a) { return vec3(a.x * b, a.y * b, a.z * b); }
+inline vec3 operator/ (float b, vec3 a) { return vec3(b / a.x, b / a.y, b / a.z); }
 
 
 
@@ -236,12 +242,22 @@ inline vec3 operator/ (double b, vec3 a) { return vec3(b / a.x, b / a.y, b / a.z
 class vert3{ //vertex3 class
 
 private:
-	double magnitude(void) { return sqrt((x * x) + (y * y) + (z * z)); }
+	float magnitude(void) { return sqrt((x * x) + (y * y) + (z * z)); }
 
 public:
-	double x, y, z;
+	float x, y, z;
 	vert3() : x(0.0), y(0.0), z(0.0) {}
-	vert3(double xin, double yin, double zin) : x{ xin }, y{ yin }, z{ zin } {}
+	//vert3(float xin, float yin, float zin) : x{ xin }, y{ yin }, z{ zin } {}
+	vert3(double xin, double yin, double zin)
+	{
+		x = xin;
+		y = yin;
+		z = zin;
+	}
+
+
+
+
 	vert3 vert3::operator+ (vec3 b) { return vert3(x + b.x, y + b.y, z + b.z); }
 	vert3 vert3::operator+= (vec3 b) { x += b.x; y += b.y; z += b.z; return *this; }
 	vert3 vert3::operator- (vec3 b) { return vert3(x-b.x,y-b.y,z-b.z); }
@@ -255,21 +271,21 @@ public:
 
 	vert3 vert3::operator* (vert3 b) { return vert3(x * b.x, y * b.y, z * b.z); }
 	vert3 vert3::operator* (vec3 b) { return vert3(x * b.x, y * b.y, z * b.z); }
-	vert3 vert3::operator* (double b) { return vert3(x * b, y * b, z * b); }
+	vert3 vert3::operator* (float b) { return vert3(x * b, y * b, z * b); }
 	vert3 vert3::operator*= (vert3 b) { x *= b.x; y *= b.y; z *= b.z; return *this; }
 	vert3 vert3::operator*= (vec3 b) { x *= b.x; y *= b.y; z *= b.z; return *this; }
-	vert3 vert3::operator*= (double b) { x *= b; y *= b; z *= b; return *this; }
+	vert3 vert3::operator*= (float b) { x *= b; y *= b; z *= b; return *this; }
 
 	vert3 vert3::operator/ (vert3 b) { return vert3(x / b.x, y / b.y, z / b.z); }
 	vert3 vert3::operator/ (vec3 b) { return vert3(x / b.x, y / b.y, z / b.z); }
-	vert3 vert3::operator/ (double b) { return vert3(x / b, y / b, z / b); }
+	vert3 vert3::operator/ (float b) { return vert3(x / b, y / b, z / b); }
 	vert3 vert3::operator/= (vert3 b) { x /= b.x; y /= b.y; z /= b.z; return *this; }
 	vert3 vert3::operator/= (vec3 b) { x /= b.x; y /= b.y; z /= b.z; return *this; }
-	vert3 vert3::operator/= (double b) { x /= b; y/= b; z /= b; return *this; }
+	vert3 vert3::operator/= (float b) { x /= b; y /= b; z /= b; return *this; }
 
 
-	double distance(vert3 a);
-	void normalizeOrigin(double l) { if (!this->magnitude()) return; double m = l / this->magnitude(); x *= m; y *= m; z *= m; }
+	float distance(vert3 a);
+	void normalizeOrigin(float l) { if (!this->magnitude()) return; float m = l / this->magnitude(); x *= m; y *= m; z *= m; }
 	vec3 vectorTo(vert3 b);
 	vec3 vectorPointsTo(vert3 b);	
 	void project(glzMatrix m);
@@ -282,33 +298,35 @@ public:
 class tex2{ //texture coordinate class
 
 public:
-	double u, v;
+	float u, v;
 	tex2() : u(0.0), v(0.0) {}
 	tex2(double uin, double vin) : u{ uin }, v{ vin }{}
+
+	
 	tex2 tex2::operator+ (tex2 b) { return tex2(u + b.u, v + b.v); }
-	tex2 tex2::operator+ (double b) { return tex2(u + b, v + b); }
+	tex2 tex2::operator+ (float b) { return tex2(u + b, v + b); }
 	tex2 tex2::operator+= (tex2 b) { u += b.u; v += b.v; return *this; }
-	tex2 tex2::operator+= (double b) { u += b; v += b; return *this; }
+	tex2 tex2::operator+= (float b) { u += b; v += b; return *this; }
 
 	tex2 tex2::operator- (tex2 b) { return tex2(u - b.u, v - b.v); }
-	tex2 tex2::operator- (double b) { return tex2(u - b, v - b); }
+	tex2 tex2::operator- (float b) { return tex2(u - b, v - b); }
 	tex2 tex2::operator-= (tex2 b) { u -= b.u; v -= b.v; return *this; }
-	tex2 tex2::operator-= (double b) { u -= b; v -= b; return *this; }
+	tex2 tex2::operator-= (float b) { u -= b; v -= b; return *this; }
 
 	tex2 tex2::operator* (tex2 b) { return tex2(u * b.u, v * b.v); }
-	tex2 tex2::operator* (double b) { return tex2(u * b, v * b); }
+	tex2 tex2::operator* (float b) { return tex2(u * b, v * b); }
 	tex2 tex2::operator*= (tex2 b) { u *= b.u; v *= b.v; return *this; }
-	tex2 tex2::operator*= (double b) { u *= b; v *= b; return *this; }
+	tex2 tex2::operator*= (float b) { u *= b; v *= b; return *this; }
 
 	tex2 tex2::operator/ (tex2 b) { return tex2(u / b.u, v / b.v); }
-	tex2 tex2::operator/ (double b) { return tex2(u / b, v / b); }
+	tex2 tex2::operator/ (float b) { return tex2(u / b, v / b); }
 	tex2 tex2::operator/= (tex2 b) { u /= b.u; v /= b.v; return *this; }
-	tex2 tex2::operator/= (double b) { u /= b; v /= b; return *this; }
+	tex2 tex2::operator/= (float b) { u /= b; v /= b; return *this; }
 
 
-	double magnitude(void) { return sqrt((abs(u*u)) + (abs(v*v))); }
-	double distance(tex2 a) { return sqrt((abs(u - a.u) * abs(u - a.u)) + (abs(v - a.v) * abs(v - a.v))); }
-	void normalize(double l) { if (!this->magnitude()) return; double m = l / this->magnitude(); u *= m; v *= m; }
+	float magnitude(void) { return sqrt((abs(u*u)) + (abs(v*v))); }
+	float distance(tex2 a) { return sqrt((abs(u - a.u) * abs(u - a.u)) + (abs(v - a.v) * abs(v - a.v))); }
+	void normalize(float l) { if (!this->magnitude()) return; float m = l / this->magnitude(); u *= m; v *= m; }
 };
 
 
@@ -335,17 +353,17 @@ public:
 
 	//glzMatrix glzMatrix::operator*= (glzMatrix c, glzQuaternion b);
 	// movements
-	void translate(double x, double y, double z);// {m[12] += x; m[13] += y;  m[14] += z; }
+	void translate(float x, float y, float z);// {m[12] += x; m[13] += y;  m[14] += z; }
 	void translate(vert3 p) { this->translate(p.x, p.y, p.z); }
-	void scale(double x, double y, double z);
+	void scale(float x, float y, float z);
 	void scale(vec3 s) { this->scale(s.x, s.y, s.z); }
-	void rotate(double a, double x, double y, double z);
+	void rotate(float a, float x, float y, float z);
 	void loadQuanternion(float q[4]);
 	void loadQuanternion(glzQuaternion b);
 	// views
-	void perspective(double fov, double aspect, double zNear, double zFar);
-	void ortho(double left, double right, double bottom, double top, double Znear, double Zfar);
-	void ortho2D(double left, double right, double bottom, double top);
+	void perspective(float fov, float aspect, float zNear, float zFar);
+	void ortho(float left, float right, float bottom, float top, float Znear, float Zfar);
+	void ortho2D(float left, float right, float bottom, float top);
 	void ortho2DPixelspace(int x, int y, glzOrigin origin);
 
 };
@@ -476,10 +494,10 @@ private:
 
 public:
 	vec3 n;
-	double d;
+	float d;
 
 	plane3() : n(vec3()), d(0.0) {}
-	plane3(vec3 nin, double din) : n{ nin }, d{ din }{}
+	plane3(vec3 nin, float din) : n{ nin }, d{ din }{}
 	plane3(poly3 a);
 	
 	bool is_infront(vert3 a);
@@ -499,6 +517,13 @@ class node3{ //3-Dimetional possition class
 
 private:
 
+	void update_matrix()
+	{
+		m.LoadIdentity();
+		m.translate(pos);
+		m.scale(scale);
+		m.loadQuanternion(r);
+	}
 
 public:
 	vert3 pos;
@@ -509,11 +534,31 @@ public:
 	glzMatrix m;
 
 
-	node3() : pos(vert3()), dir(vec3()), r(glzQuaternion()), rs(glzQuaternion()), scale(vec3(1.0, 1.0, 1.0)) {}
-	node3(vert3 posin, vec3 dirin, glzQuaternion rin, glzQuaternion rsin) : pos{ posin }, dir{ dirin }, r{ rin }, rs{ rsin }, scale(vec3(1.0, 1.0, 1.0)){}
-	node3(vert3 posin) : pos{ posin }, dir(vec3()), r(glzQuaternion()), rs(glzQuaternion()), scale(vec3(1.0, 1.0, 1.0)) {}
+	node3() : pos(vert3()), dir(vec3()), r(glzQuaternion()), rs(glzQuaternion()), scale(vec3(1.0, 1.0, 1.0)) { update_matrix(); }
+	node3(vert3 posin, vec3 dirin, glzQuaternion rin, glzQuaternion rsin) : pos{ posin }, dir{ dirin }, r{ rin }, rs{ rsin }, scale(vec3(1.0, 1.0, 1.0)){update_matrix(); }
+	node3(vert3 posin) : pos{ posin }, dir(vec3()), r(glzQuaternion()), rs(glzQuaternion()), scale(vec3(1.0, 1.0, 1.0)) {update_matrix(); }
 
-	void tick(double seconds) 	{ pos += dir*seconds;	r *= rs*seconds;	m.LoadIdentity();	m.translate(pos);	m.scale(scale);	m.loadQuanternion(r); }
+	node3(vert3 posin, glzQuaternion rin) : pos{ posin }, dir(vec3()), r(rin), rs(glzQuaternion()), scale(vec3(1.0, 1.0, 1.0)) {update_matrix(); }
+
+	node3(vert3 posin, float angle, float scalein)
+	{
+		pos = posin;
+		scale= vec3(scalein, scalein, scalein);
+		r.rotate(angle, 0.0, 0.0, 1.0);
+		update_matrix();
+	}
+
+	void tick(float seconds)
+		{ 
+			pos += dir*seconds;
+
+			glzQuaternion rt;
+			rt *= rs;
+			rt *= seconds;
+
+			r *= rt;
+			update_matrix();
+	}
 
 
 	/*
@@ -533,13 +578,13 @@ class glzCamera2D{
 private:
 	vert3 pos;
 	vert3 moveto_pos;
-	double zoom;
-	double zoomto;
-	double angle;
-	double angleto;
-	double move_speed;
-	double zoom_speed;
-	double angle_speed;
+	float zoom;
+	float zoomto;
+	float angle;
+	float angleto;
+	float move_speed;
+	float zoom_speed;
+	float angle_speed;
 	int width, height;
 
 	void resetCamera()
@@ -578,16 +623,16 @@ public:
 	}
 
 	void moveTo(vert3 p) { moveto_pos = p; }
-	void zoomTo(double z) { zoomto = z; }
-	void angleTo(double a) { angleto = a; }
+	void zoomTo(float z) { zoomto = z; }
+	void angleTo(float a) { angleto = a; }
 
 	void moveSnap(vert3 p) { pos = p; moveto_pos = p; resetCamera(); }
-	void ZoomSnap(double z) { zoom = z; zoomto = z; resetCamera(); }
-	void angleSnap(double a) { angle = a; angleto = a; resetCamera(); }
+	void ZoomSnap(float z) { zoom = z; zoomto = z; resetCamera(); }
+	void angleSnap(float a) { angle = a; angleto = a; resetCamera(); }
 
-	void moveSpeed(double m) { move_speed = m; }
-	void zoomSpeed(double z) { zoom_speed = z; }
-	void angleSpeed(double a) { angle_speed = a; }
+	void moveSpeed(float m) { move_speed = m; }
+	void zoomSpeed(float z) { zoom_speed = z; }
+	void angleSpeed(float a) { angle_speed = a; }
 
 	void update(float seconds)
 	{
@@ -652,11 +697,11 @@ private:
 
 public:
 	node3 p;
-	double weight;
+	float weight;
 
 
 	glzRidgidSimple() : p(node3()), weight(1.0) {}
-	glzRidgidSimple(node3 pin, double weightin) : p{ pin }, weight{ weightin } {}
+	glzRidgidSimple(node3 pin, float weightin) : p{ pin }, weight{ weightin } {}
 /*	pos3(vert3 posin) : pos{ posin }, dir(vec3()), r(glzQuaternion()), rs(glzQuaternion()), scale(vec3(1.0, 1.0, 1.0)) {}
 
 	void tick(double seconds) { pos += dir*seconds;	r *= rs*seconds; m.LoadIdentity();	m.translate(pos); m.scale(scale); m.loadQuanternion(r); }
@@ -688,16 +733,16 @@ public:
 	// with a being 0,0 and d is 1,1
 
 	tex2 a, b, c, d;
-	double depth;
+	float depth;
 
 	glzSprite() : a(tex2(0.0, 0.0)), b(tex2(1.0, 0.0)), c(tex2(0.0, 1.0)), d(tex2(1.0, 1.0)), depth(0.0){} // default numbers
-	glzSprite(tex2 ain, tex2 bin, tex2 cin, tex2 din, double depthin) : a{ ain }, b{ bin }, c{ cin }, d{ din }, depth{ depthin }{} // direct initialization
+	glzSprite(tex2 ain, tex2 bin, tex2 cin, tex2 din, float depthin) : a{ ain }, b{ bin }, c{ cin }, d{ din }, depth{ depthin }{} // direct initialization
 	glzSprite(tex2 pos, tex2 dim, double depthin) : a{ tex2(pos.u, pos.v) }, b{ tex2(pos.u + dim.u, pos.v) }, c{ tex2(pos.u, pos.v + dim.v) }, d{ tex2(pos.u + dim.u, pos.v + dim.v) }, depth{ depthin }{} // simpler initialization
 
-	glzSprite(unsigned int xdim, unsigned int ydim, unsigned int atlas, double depthin); // grid atlas initialization
+	glzSprite(unsigned int xdim, unsigned int ydim, unsigned int atlas, float depthin); // grid atlas initialization
 
-	void make_polygons(vector<poly3> *pdata, double x, double y, double width, double height, int group, int atlas);
-	void make_polygons(vector<poly3> *pdata, double x, double y, double width, double height, int group, int atlas, glzMatrix m);
+	void make_polygons(vector<poly3> *pdata, float x, float y, float width, float height, int group, int atlas);
+	void make_polygons(vector<poly3> *pdata, float x, float y, float width, float height, int group, int atlas, glzMatrix m);
 };
 
 

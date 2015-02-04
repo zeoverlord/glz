@@ -25,17 +25,61 @@
 #include "ztool-type.h"
 
 
-void obj2d_Sprite::draw()
+
+void obj2d_Sprite::draw(glzCamera2D *camera)
 {
 
 	glzMatrix m;
 
 	m.LoadIdentity();
 	m *= camera->m;
-	m *= n->m;
+	if (n_parent != nullptr)
+		m *= n_parent->m;
+	m *= n_local.m;
 	m.scale(scale, scale, scale);
 
-	glzDirectSpriteRender(m, texture,  sprite, glzOrigin::CENTERED);
+	glzDirectSpriteRender(m, texture, sprite, glzOrigin::CENTERED);
+
+	return;
+}
+
+void obj2d_Sprite::update(float seconds)
+{
+	return;
+}
+
+
+
+
+void obj2d_Sprite_Animated::draw(glzCamera2D *camera)
+{
+
+	glzMatrix m;
+
+	m.LoadIdentity();
+	
+	m *= camera->m;
+	if (n_parent != nullptr)
+		m *= n_parent->m;
+	m *= n_local.m;
+	m.scale(scale, scale, scale);
+
+	glzDirectSpriteRender(m, texture, sprite.at(current_frame), glzOrigin::CENTERED);
+
+	return;
+}
+
+void obj2d_Sprite_Animated::update(float seconds)
+{
+
+	int maxframes = sprite.size();
+	
+	frametime += seconds;
+
+
+	while (frametime >= framespeed) { current_frame++; frametime -= framespeed; }
+
+	while (current_frame >= maxframes) current_frame -= maxframes;
 
 	return;
 }
