@@ -73,7 +73,7 @@ glzQuaternion q2;
 glzQuaternion q3;
 glzQuaternion qn;
 
-pos3 tankpos(vert3(0, -2, -17));
+node3 tankpos(vert3(0, -2, -17));
 
 int gamestate=4;
 

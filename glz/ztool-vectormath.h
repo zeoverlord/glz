@@ -746,7 +746,7 @@ public:
 };
 
 
-class glzAtlasMap{ //atlassprite class
+class glzSpriteList{ //atlassprite class
 
 private:
 
@@ -757,8 +757,8 @@ public:
 	vector<glzSprite> map;
 
 	//glzAtlassprite() {} // default numbers
-	glzAtlasMap(glzSprite a) { map.push_back(a); } // direct initialization
-	glzAtlasMap(int w, int h); // direct initialization with preset
+	glzSpriteList(glzSprite a) { map.push_back(a); } // direct initialization
+	glzSpriteList(int w, int h); // direct initialization with preset
 
 
 	void addsprite(glzSprite a) { map.push_back(a); }

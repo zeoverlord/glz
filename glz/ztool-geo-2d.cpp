@@ -317,7 +317,7 @@ void glzPrimTextVector(char *text, float k, vector<poly3> *pdata, int group, int
 		// get the uv coordinates
 
 
-		textkern[i].charsprite = glzAtlasQuad(16, 16, i, origin);
+		textkern[i].charsprite = glzSprite(16, 16, i, 0.0);
 
 		// get the pre and post spacing
 		switch (i)

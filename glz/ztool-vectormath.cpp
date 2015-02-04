@@ -675,8 +675,17 @@ void glzSprite::make_polygons(vector<poly3> *pdata, float x, float y, float widt
 
 }
 
-glzAtlasMap::glzAtlasMap(int w, int h) // direct initialization with preset
+glzSpriteList::glzSpriteList(int w, int h) // direct initialization with preset
 {
 	int i = 0;
-	while (i < w*h) { map.push_back(glzAtlasQuad(w, h, i, glzOrigin::BOTTOM_LEFT));	i++; }
+
+	while (i < w*h)
+	{
+		map.push_back(glzSprite(w, h, i, 0.0));
+		i++;
+	}
+
+
+
+	//while (i < w*h) { map.push_back(glzAtlasQuad(w, h, i, glzOrigin::BOTTOM_LEFT));	i++; }
 }
