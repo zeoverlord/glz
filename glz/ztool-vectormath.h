@@ -517,13 +517,7 @@ class node3{ //3-Dimetional possition class
 
 private:
 
-	void update_matrix()
-	{
-		m.LoadIdentity();
-		m.translate(pos);
-		m.scale(scale);
-		m.loadQuanternion(r);
-	}
+	
 
 public:
 	vert3 pos;
@@ -546,6 +540,14 @@ public:
 		scale= vec3(scalein, scalein, scalein);
 		r.rotate(angle, 0.0, 0.0, 1.0);
 		update_matrix();
+	}
+
+	void update_matrix()
+	{
+		m.LoadIdentity();
+		m.translate(pos);
+		m.scale(scale);
+		m.loadQuanternion(r);
 	}
 
 	void tick(float seconds)
@@ -756,15 +758,43 @@ public:
 
 	vector<glzSprite> map;
 
-	//glzAtlassprite() {} // default numbers
+	glzSpriteList() {} // default numbers
 	glzSpriteList(glzSprite a) { map.push_back(a); } // direct initialization
 	glzSpriteList(int w, int h); // direct initialization with preset
 
 
 	void addsprite(glzSprite a) { map.push_back(a); }
 
+	glzSprite get_sprite(int frame)
+	{
+		return map.at(frame);
+	}
+
 };
 
+
+class glzSpriteanimationList{ //atlassprite class
+
+private:
+
+
+public:
+
+	vector<glzSpriteList> map;
+
+	glzSpriteanimationList() {} // default numbers
+	glzSpriteanimationList(glzSpriteList a) { map.push_back(a); } // direct initialization
+//	glzSpriteanimationList(int w, int h); // direct initialization with preset
+
+
+	void addsprite(glzSpriteList a) { map.push_back(a); }
+
+	glzSprite get_sprite(int animation, int frame)
+	{
+		return map.at(animation).get_sprite(frame);
+	}
+
+};
 
 
 #endif /* __glzvectormath__ */

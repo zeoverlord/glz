@@ -53,7 +53,7 @@ void glztiles::update_texture(void)
 
 void glztiles::save(void)
 {
-	if (data_changed) glzSaveTGA(img_filename, imghdr.m_width, imghdr.m_height, 0, glzTexCompression::COMPRESSED, imghdr.m_type, data);
+	if (data_changed) glzSaveTGA(img_filename, imghdr.m_width, imghdr.m_height, glzTexCompression::COMPRESSED, imghdr.m_type, data);
 }
 
 char glztiles::get_pixel(int x, int y, int layer)

@@ -296,27 +296,47 @@ BOOL Initialize (GL_Window* window, Keys* keys)					// Any GL Init Code & User I
 	n.pos = vert3(200.0,-130.0,0.0);
 	
 	
-	tempgraph.add(obj2d_Sprite(glzSprite(8, 4, 16, 0.0), nullptr, node3(), texture[2], 100.0));
+	tempgraph.add(obj2d_Sprite(343, glzSprite(8, 4, 16, 0.0), nullptr, node3(), texture[2], 100.0));
 	//tempgraph.objects.push_back(make_shared<obj2d_Sprite>(glzSprite(), &n, node3(), texture[1], 100.0));
 
-	tempgraph.add(obj2d_Sprite(glzSprite(), &n, node3(), texture[1], 100.0));
+	tempgraph.add(obj2d_Sprite(-1, glzSprite(), &n, node3(), texture[1], 100.0));
 
 
-	vector<glzSprite> expl_sprite;
+	glzSpriteList expl_spritelist;
+	glzSpriteanimationList expl_spritelist_vector;
 
 	int i = 0;
 	
 	while (i < 32)  
 	{
-		expl_sprite.push_back(glzSprite(8, 4, i, 0.0));
+		expl_spritelist.map.push_back(glzSprite(8, 4, i, 0.0));
 		i++;
 	}
 
-	tempgraph.add(obj2d_Sprite_Animated(expl_sprite, nullptr, node3(vert3(102.0, 0.0, 0.0)), texture[2], 100.0,0.04f));
+	expl_spritelist_vector.map.push_back(expl_spritelist);
 
+	expl_spritelist.map.clear();
+	while (i > 0)
+	{
+		expl_spritelist.map.push_back(glzSprite(8, 4, i, 0.0));
+		i--;
+	}
 
+	expl_spritelist_vector.map.push_back(expl_spritelist);
 
+	tempgraph.add(obj2d_Sprite_Animated(111, expl_spritelist_vector, nullptr, node3(vert3(102.0, 0.0, 0.0)), texture[2], 100.0, 0.04f));
 
+	tempgraph.set(343, glzOBject2DSetvar::SCALE, 200.0f);
+	tempgraph.set(111, glzOBject2DSetvar::BLEND, glzBlendingMode::ADDITIVE);
+
+	//obj2d_Sprite tobj;
+//	tobj = tempgraph.objects.at(0)->;
+	//tobj = tempgraph.find(343);
+//	tobj->n_local.pos.x = -100;
+//	tobj->n_local.update_matrix();
+
+	
+		
 
 
 

@@ -366,10 +366,10 @@ return img.m_id;
 
 void glzScreenShot(string filename, int x, int y, glzTexCompression type)
 {
-	glzScreenShotADV(filename,0,0,x,y,0,type);
+	glzScreenShotADV(filename,0,0,x,y,type);
 }
 
-void glzScreenShotADV(string filename, int xoffset, int yoffset, int x, int y, int lossy, glzTexCompression type)
+void glzScreenShotADV(string filename, int xoffset, int yoffset, int x, int y, glzTexCompression type)
 {
 if(!isinited_tex) ini_tex();
 
@@ -432,23 +432,6 @@ while (yline<y)
 		if(data[dpos+(i*3)+0]!=data[dpos+(i*3)+3]) rlec=0;
 		if(data[dpos+(i*3)+1]!=data[dpos+(i*3)+4]) rlec=0;
 		if(data[dpos+(i*3)+2]!=data[dpos+(i*3)+5]) rlec=0;
-		if(!lossy){
-		if(data[dpos+(i*3)+0]!=data[dpos+(i*3)+6]) rlec=0;
-		if(data[dpos+(i*3)+1]!=data[dpos+(i*3)+7]) rlec=0;
-		if(data[dpos+(i*3)+2]!=data[dpos+(i*3)+8]) rlec=0;
-		}
-		/*if(data[dpos+(i*3)+0]!=data[dpos+(i*3)+9]) rlec=0;
-		if(data[dpos+(i*3)+1]!=data[dpos+(i*3)+10]) rlec=0;
-		if(data[dpos+(i*3)+2]!=data[dpos+(i*3)+11]) rlec=0;
-		if(data[dpos+(i*3)+0]!=data[dpos+(i*3)+12]) rlec=0;
-		if(data[dpos+(i*3)+1]!=data[dpos+(i*3)+13]) rlec=0;
-		if(data[dpos+(i*3)+2]!=data[dpos+(i*3)+14]) rlec=0;
-		if(data[dpos+(i*3)+0]!=data[dpos+(i*3)+15]) rlec=0;
-		if(data[dpos+(i*3)+1]!=data[dpos+(i*3)+16]) rlec=0;
-		if(data[dpos+(i*3)+2]!=data[dpos+(i*3)+17]) rlec=0;
-		if(data[dpos+(i*3)+0]!=data[dpos+(i*3)+18]) rlec=0;
-		if(data[dpos+(i*3)+1]!=data[dpos+(i*3)+19]) rlec=0;
-		if(data[dpos+(i*3)+2]!=data[dpos+(i*3)+20]) rlec=0;*/
 		}
 
 		// of rlec is still 1 then yes
@@ -463,26 +446,12 @@ while (yline<y)
 			while (same)
 			{
 			rlelength++;
-
-			if(!lossy)
-			{
+						
 			// non destructive encoding
 		    if(data[dpos+(i*3)+0+3]!=data[dpos+((i+rlelength+1)*3)+0]) same=0;
 			if(data[dpos+(i*3)+1+3]!=data[dpos+((i+rlelength+1)*3)+1]) same=0;
 			if(data[dpos+(i*3)+2+3]!=data[dpos+((i+rlelength+1)*3)+2]) same=0;
-			}
-
-			else
-			{
-			// destructive encoding
-			if(data[dpos+(i*3)+0+3]<(data[dpos+((i+rlelength+1)*3)+0]-lossy)) same=0;
-			if(data[dpos+(i*3)+1+3]<(data[dpos+((i+rlelength+1)*3)+1]-lossy)) same=0;
-			if(data[dpos+(i*3)+2+3]<(data[dpos+((i+rlelength+1)*3)+2]-lossy)) same=0;
-
-			if(data[dpos+(i*3)+0+3]>(data[dpos+((i+rlelength+1)*3)+0]+lossy)) same=0;
-			if(data[dpos+(i*3)+1+3]>(data[dpos+((i+rlelength+1)*3)+1]+lossy)) same=0;
-			if(data[dpos+(i*3)+2+3]>(data[dpos+((i+rlelength+1)*3)+2]+lossy)) same=0;
-			}
+						
 
 			if(i+rlelength>=x) same=0;
 			if(rlelength>=127) same=0;
@@ -551,7 +520,7 @@ data=NULL;
 
 
 
-void glzSaveTGA(string filename, int x, int y, int lossy, glzTexCompression type, unsigned int tex_type, unsigned char *in_data)
+void glzSaveTGA(string filename, int x, int y, glzTexCompression type, unsigned int tex_type, unsigned char *in_data)
 {
 	if (!isinited_tex) ini_tex();
 
@@ -634,44 +603,23 @@ void glzSaveTGA(string filename, int x, int y, int lossy, glzTexCompression type
 				rlec = 0;
 				if (i <= x)  // it's not if it's at the end of the line
 				{
+
+					// if the next pixel is the same use the rle compressed segment, otherwise use an uncompressed segment
 					rlec = 1;
 					if (!has_alpha)
-					{
+					{						
 						if (data[dpos + (i * 3) + 0] != data[dpos + (i * 3) + 3]) rlec = 0;
 						if (data[dpos + (i * 3) + 1] != data[dpos + (i * 3) + 4]) rlec = 0;
-						if (data[dpos + (i * 3) + 2] != data[dpos + (i * 3) + 5]) rlec = 0;
-						if (!lossy){
-							if (data[dpos + (i * 3) + 0] != data[dpos + (i * 3) + 6]) rlec = 0;
-							if (data[dpos + (i * 3) + 1] != data[dpos + (i * 3) + 7]) rlec = 0;
-							if (data[dpos + (i * 3) + 2] != data[dpos + (i * 3) + 8]) rlec = 0;
-						}
+						if (data[dpos + (i * 3) + 2] != data[dpos + (i * 3) + 5]) rlec = 0;						
 					}
 					else
-					{
+					{				
 						if (data[dpos + (i * 4) + 0] != data[dpos + (i * 4) + 4]) rlec = 0;
 						if (data[dpos + (i * 4) + 1] != data[dpos + (i * 4) + 5]) rlec = 0;
 						if (data[dpos + (i * 4) + 2] != data[dpos + (i * 4) + 6]) rlec = 0;
 						if (data[dpos + (i * 4) + 3] != data[dpos + (i * 4) + 7]) rlec = 0;
-						if (!lossy){
-
-							if (data[dpos + (i * 4) + 0] != data[dpos + (i * 4) + 8]) rlec = 0;
-							if (data[dpos + (i * 4) + 1] != data[dpos + (i * 4) + 9]) rlec = 0;
-							if (data[dpos + (i * 4) + 2] != data[dpos + (i * 4) + 10]) rlec = 0;
-							if (data[dpos + (i * 4) + 3] != data[dpos + (i * 4) + 11]) rlec = 0;
-						}
 					}
-					/*if(data[dpos+(i*3)+0]!=data[dpos+(i*3)+9]) rlec=0;
-					if(data[dpos+(i*3)+1]!=data[dpos+(i*3)+10]) rlec=0;
-					if(data[dpos+(i*3)+2]!=data[dpos+(i*3)+11]) rlec=0;
-					if(data[dpos+(i*3)+0]!=data[dpos+(i*3)+12]) rlec=0;
-					if(data[dpos+(i*3)+1]!=data[dpos+(i*3)+13]) rlec=0;
-					if(data[dpos+(i*3)+2]!=data[dpos+(i*3)+14]) rlec=0;
-					if(data[dpos+(i*3)+0]!=data[dpos+(i*3)+15]) rlec=0;
-					if(data[dpos+(i*3)+1]!=data[dpos+(i*3)+16]) rlec=0;
-					if(data[dpos+(i*3)+2]!=data[dpos+(i*3)+17]) rlec=0;
-					if(data[dpos+(i*3)+0]!=data[dpos+(i*3)+18]) rlec=0;
-					if(data[dpos+(i*3)+1]!=data[dpos+(i*3)+19]) rlec=0;
-					if(data[dpos+(i*3)+2]!=data[dpos+(i*3)+20]) rlec=0;*/
+
 				}
 
 				// of rlec is still 1 then yes
@@ -687,9 +635,7 @@ void glzSaveTGA(string filename, int x, int y, int lossy, glzTexCompression type
 					{
 						rlelength++;
 
-						if (!lossy)
-						{
-							// non destructive encoding
+						// non destructive encoding
 							if (!has_alpha)
 							{
 
@@ -704,36 +650,7 @@ void glzSaveTGA(string filename, int x, int y, int lossy, glzTexCompression type
 								if (data[dpos + (i * 4) + 2 + 4] != data[dpos + ((i + rlelength + 1) * 4) + 2]) same = 0;
 								if (data[dpos + (i * 4) + 3 + 4] != data[dpos + ((i + rlelength + 1) * 4) + 3]) same = 0;
 
-							}
-
-						}
-
-						else
-						{
-							// destructive encoding
-							if (!has_alpha)
-							{
-								if (data[dpos + (i * 3) + 0 + 3]<(data[dpos + ((i + rlelength + 1) * 3) + 0] - lossy)) same = 0;
-								if (data[dpos + (i * 3) + 1 + 3]<(data[dpos + ((i + rlelength + 1) * 3) + 1] - lossy)) same = 0;
-								if (data[dpos + (i * 3) + 2 + 3]<(data[dpos + ((i + rlelength + 1) * 3) + 2] - lossy)) same = 0;
-
-								if (data[dpos + (i * 3) + 0 + 3]>(data[dpos + ((i + rlelength + 1) * 3) + 0] + lossy)) same = 0;
-								if (data[dpos + (i * 3) + 1 + 3]>(data[dpos + ((i + rlelength + 1) * 3) + 1] + lossy)) same = 0;
-								if (data[dpos + (i * 3) + 2 + 3]>(data[dpos + ((i + rlelength + 1) * 3) + 2] + lossy)) same = 0;
-							}
-							else
-							{
-								if (data[dpos + (i * 4) + 0 + 4]<(data[dpos + ((i + rlelength + 1) * 4) + 0] - lossy)) same = 0;
-								if (data[dpos + (i * 4) + 1 + 4]<(data[dpos + ((i + rlelength + 1) * 4) + 1] - lossy)) same = 0;
-								if (data[dpos + (i * 4) + 2 + 4]<(data[dpos + ((i + rlelength + 1) * 4) + 2] - lossy)) same = 0;
-								if (data[dpos + (i * 4) + 3 + 4]<(data[dpos + ((i + rlelength + 1) * 4) + 3] - lossy)) same = 0;
-
-								if (data[dpos + (i * 4) + 0 + 4]>(data[dpos + ((i + rlelength + 1) * 4) + 0] + lossy)) same = 0;
-								if (data[dpos + (i * 4) + 1 + 4]>(data[dpos + ((i + rlelength + 1) * 4) + 1] + lossy)) same = 0;
-								if (data[dpos + (i * 4) + 2 + 4]>(data[dpos + ((i + rlelength + 1) * 4) + 2] + lossy)) same = 0;
-								if (data[dpos + (i * 4) + 3 + 4]>(data[dpos + ((i + rlelength + 1) * 4) + 3] + lossy)) same = 0;
-							}
-						}
+							}				
 
 						if (i + rlelength >= x) same = 0;
 						if (rlelength >= 127) same = 0;

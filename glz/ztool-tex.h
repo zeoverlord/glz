@@ -56,8 +56,8 @@ unsigned int glzLoadTexture(string filename, glzTexFilter filter);  // type is h
 
 
 void glzScreenShot(string filename, int x, int y, glzTexCompression type);  // auto saves a compressed file
-void glzScreenShotADV(string filename, int xoffset, int yoffset, int x, int y, int lossy, glzTexCompression type);
-void glzSaveTGA(string filename, int x, int y, int lossy, glzTexCompression type, unsigned int tex_type, unsigned char *in_data);
+void glzScreenShotADV(string filename, int xoffset, int yoffset, int x, int y, glzTexCompression type);
+void glzSaveTGA(string filename, int x, int y, glzTexCompression type, unsigned int tex_type, unsigned char *in_data);
 
 
 /*

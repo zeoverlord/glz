@@ -15,7 +15,7 @@
 // 4. Please do include me in your credits
 
 // glz 2d scenegraph base class - i think it's usefull
-// visit http://www.flashbang.se or contact me at overlord@flashbang.se
+// visit http://www.flashbang.se or contact me at overlord@flashbang.se 
 // the entire toolkit should exist in it's entirety at github
 // https://github.com/zeoverlord/glz.git
 
@@ -29,7 +29,8 @@
 #ifndef __2dscenegraphbase__
 #define __2dscenegraphbase__
 
-
+enum class glzBlendingMode { NONE, ADDITIVE, ALPHA };
+enum class glzOBject2DSetvar { NONE, ALPHA, SCALE, BLEND, TEXTURE, SPRITE, CURRENT_ANIMATION,CURRENT_FRAME, FRAMESPEED, NODE_LOCAL, NODE_PARENT};
 
 class Object2D {
 	// position, orientation, speed and such	
@@ -39,6 +40,19 @@ public:
 	
 	node3 *n_parent;
 	node3 n_local;
+	int label;
+	glzBlendingMode blend;
+	float alpha;
+
+	Object2D()
+	{
+		n_parent = nullptr;
+		label = -1;
+		n_local = node3();
+		blend = glzBlendingMode::NONE;
+		alpha = 1.0f;
+	}
+	
 	virtual void draw(glzCamera2D *camera) 
 	{ 
 		return;
@@ -49,21 +63,47 @@ public:
 		return;
 	}
 
+	
+	virtual void set_i(glzOBject2DSetvar type, int v)
+	{
+		return;
+	}
+
+	virtual void set_f(glzOBject2DSetvar type, float v)
+	{
+		return;
+	}
+
+
+
 };
 
 class obj2d_Sprite : public Object2D
 {
 	unsigned int texture;
-	double scale;
+	float scale;
 	glzSprite sprite;
 
 public:
 
 	virtual void draw(glzCamera2D *camera) override;
 	virtual void update(float seconds) override;
-	obj2d_Sprite() : sprite(glzSprite()), texture({ 0 }), scale({ 1.0 }) {}
-	obj2d_Sprite(glzSprite spritein, node3 *nin, node3 nLin, unsigned int tex, double scalein)
+
+	
+	virtual void set_i(glzOBject2DSetvar type, int v) override;
+	virtual void set_f(glzOBject2DSetvar type, float v) override;
+
+	obj2d_Sprite()
 	{
+		sprite = glzSprite();		
+		texture = 0;
+		scale = 1.0;
+
+	}
+		
+	obj2d_Sprite(int labelin, glzSprite spritein, node3 *nin, node3 nLin, unsigned int tex, double scalein)
+	{
+		label = labelin;
 		sprite=spritein; 		
 		texture = tex;
 		n_parent = nin;
@@ -76,9 +116,10 @@ public:
 class obj2d_Sprite_Animated : public Object2D
 {
 	unsigned int texture;
-	double scale;
-	vector<glzSprite> sprite;
-	int current_frame;
+	float scale;
+	glzSpriteanimationList sprite;
+	int current_animation;
+	int current_frame;	
 	float framespeed;
 	float frametime;
 
@@ -86,25 +127,31 @@ public:
 
 	virtual void draw(glzCamera2D *camera) override;
 	virtual void update(float seconds) override;
+	virtual void set_i(glzOBject2DSetvar type, int v) override;
+	virtual void set_f(glzOBject2DSetvar type, float v) override;
+	
+
 	obj2d_Sprite_Animated()
 	{
-		sprite.push_back(glzSprite());
 		texture = 0;
 		scale = 1.0;
+		current_animation = 0;
 		current_frame = 0;
 		framespeed = 1.0;
 		frametime = 0.0;
 	}
 
 
-	obj2d_Sprite_Animated(vector<glzSprite> spritein, node3 *nin, node3 nLin, unsigned int tex, double scalein, float framespeedin)
+	obj2d_Sprite_Animated(int labelin, glzSpriteanimationList spritein, node3 *nin, node3 nLin, unsigned int tex, double scalein, float framespeedin)
 	{
+		label = labelin;
 		sprite = spritein;
 		texture = tex;
 		n_parent = nin;
 		n_local = nLin;
 		scale = scalein;
 
+		current_animation = 0;
 		current_frame=0;
 		framespeed = framespeedin;
 		frametime=0.0f;
@@ -153,6 +200,70 @@ public:
 		return;
 	}
 
+
+	void set(int l, glzOBject2DSetvar type, int v)
+	{
+
+		for (auto &a : objects)
+			if (a->label == l)
+			switch (type)
+			{
+				case glzOBject2DSetvar::TEXTURE:
+				case glzOBject2DSetvar::CURRENT_ANIMATION:
+				case glzOBject2DSetvar::CURRENT_FRAME:
+					a->set_i(type, v);
+					break;
+			}
+		return;
+	}
+
+
+	void set(int l, glzOBject2DSetvar type, float v)
+	{
+
+		for (auto &a : objects)
+			if (a->label == l)
+			switch (type)
+			{
+			case glzOBject2DSetvar::ALPHA:
+				a->alpha = v;
+				break;
+
+			case glzOBject2DSetvar::SCALE:
+			case glzOBject2DSetvar::FRAMESPEED:								
+				a->set_f(type, v);
+				break;
+
+			}
+		return;
+	}
+
+	void set(int l, glzOBject2DSetvar type, glzBlendingMode v)
+	{
+		for (auto &a : objects)
+			if ((a->label == l) && (type == glzOBject2DSetvar::BLEND)) 
+				a->blend = v;
+		return;
+	}
+
+	void set(int l, glzOBject2DSetvar type, node3 v)
+	{
+		for (auto &a : objects)
+			if ((a->label == l) && (type == glzOBject2DSetvar::NODE_LOCAL))
+				a->n_local = v;
+		return;
+	}
+
+	void set(int l, glzOBject2DSetvar type, node3 *v)
+	{
+		for (auto &a : objects)
+			if ((a->label == l) && (type == glzOBject2DSetvar::NODE_PARENT))
+				a->n_parent = v;
+		return;
+	}
+
+
+	
 
 };
 
