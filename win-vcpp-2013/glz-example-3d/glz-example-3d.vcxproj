@@ -111,6 +111,7 @@
     <ClInclude Include="..\..\glz\ztool-geo-generate.h" />
     <ClInclude Include="..\..\glz\ztool-geo.h" />
     <ClInclude Include="..\..\glz\ztool-glz.h" />
+    <ClInclude Include="..\..\glz\ztool-shader-programs.h" />
     <ClInclude Include="..\..\glz\ztool-shader.h" />
     <ClInclude Include="..\..\glz\ztool-tex.h" />
     <ClInclude Include="..\..\glz\ztool-type.h" />

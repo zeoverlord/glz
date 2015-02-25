@@ -783,7 +783,10 @@ void Draw(void)
 
 
 		m.transferMatrix(&mtemp[0]);
-		glUniformMatrix4fv(loc4, 1, GL_FALSE, mtemp);
+		//glUniformMatrix4fv(loc4, 1, GL_FALSE, mtemp);
+
+		//unsigned int loc4 = glGetUniformLocation(ProgramObjectAtlas, "projMat");
+		glzUniformMatrix4fv(ProgramObjectAtlas, "projMat", m);
 
 
 

@@ -22,11 +22,13 @@
 #include <fstream>
 #include <string.h>
 #include "ztool-shader.h"
+#include "ztool-shader-programs.h"
 #include <stdio.h>
 #include <windows.h>													// Header File For The Windows Library
 #include <gl/gl.h>														// Header File For The OpenGL32 Library
 #include <gl/glu.h>														// Header File For The GLu32 Library
 #include <gl/glext.h>
+
 using namespace std;
 
 
@@ -48,22 +50,22 @@ static PFNGLUSEPROGRAMPROC						glUseProgram;
 static PFNGLVALIDATEPROGRAMPROC                 glValidateProgram;
 
 
-static PFNGLUNIFORM1FARBPROC                       glUniform1fARB;
-static PFNGLUNIFORM2FARBPROC                       glUniform2fARB;
-static PFNGLUNIFORM3FARBPROC                       glUniform3fARB;
-static PFNGLUNIFORM4FARBPROC                       glUniform4fARB;
-static PFNGLUNIFORM1IARBPROC                       glUniform1iARB;
-static PFNGLUNIFORM2IARBPROC                       glUniform2iARB;
-static PFNGLUNIFORM3IARBPROC                       glUniform3iARB;
-static PFNGLUNIFORM4IARBPROC                       glUniform4iARB;
-static PFNGLUNIFORM1FVARBPROC                      glUniform1fvARB;
-static PFNGLUNIFORM2FVARBPROC                      glUniform2fvARB;
-static PFNGLUNIFORM3FVARBPROC                      glUniform3fvARB;
-static PFNGLUNIFORM4FVARBPROC                      glUniform4fvARB;
-static PFNGLUNIFORM1IVARBPROC                      glUniform1ivARB;
-static PFNGLUNIFORM2IVARBPROC                      glUniform2ivARB;
-static PFNGLUNIFORM3IVARBPROC                      glUniform3ivARB;
-static PFNGLUNIFORM4IVARBPROC                      glUniform4ivARB;
+static PFNGLUNIFORM1FARBPROC                       glUniform1f;
+static PFNGLUNIFORM2FARBPROC                       glUniform2f;
+static PFNGLUNIFORM3FARBPROC                       glUniform3f;
+static PFNGLUNIFORM4FARBPROC                       glUniform4f;
+static PFNGLUNIFORM1IARBPROC                       glUniform1i;
+static PFNGLUNIFORM2IARBPROC                       glUniform2i;
+static PFNGLUNIFORM3IARBPROC                       glUniform3i;
+static PFNGLUNIFORM4IARBPROC                       glUniform4i;
+static PFNGLUNIFORM1FVARBPROC                      glUniform1fv;
+static PFNGLUNIFORM2FVARBPROC                      glUniform2fv;
+static PFNGLUNIFORM3FVARBPROC                      glUniform3fv;
+static PFNGLUNIFORM4FVARBPROC                      glUniform4fv;
+static PFNGLUNIFORM1IVARBPROC                      glUniform1iv;
+static PFNGLUNIFORM2IVARBPROC                      glUniform2iv;
+static PFNGLUNIFORM3IVARBPROC                      glUniform3iv;
+static PFNGLUNIFORM4IVARBPROC                      glUniform4iv;
 static PFNGLUNIFORMMATRIX2FVPROC                glUniformMatrix2fv;
 static PFNGLUNIFORMMATRIX3FVPROC                glUniformMatrix3fv;
 static PFNGLUNIFORMMATRIX4FVPROC                glUniformMatrix4fv;
@@ -78,34 +80,17 @@ static PFNGLGETSHADERSOURCEPROC                 glGetShaderSource;
 
 static bool isinited_shd;
 
-static unsigned int passtroughprogram;
+static bool passtrough_program_inited;
+static unsigned int passtrough_program;
 
+static bool basic_program_inited;
+static unsigned int basic_program;
 
-//Position.xyz
-string const vertexpasstrough ={
+static bool tilemap_program_inited;
+static unsigned int tilemap_program;
 
-"#version 140\r\n"
-""
-"in vec3 Position;"
-"in vec2 TexCoord;"
-"out vec4 tc;"
-"void main() {"
-"	gl_Position = vec4(Position.xyz, 1.0);"
-"	tc = vec4(TexCoord.xy, 0.0, 1.0);"
-"}"
-""};
+static GLint tempprogram;
 
-string const fragmentpasstrough = {
-"#version 140\r\n"
-""
-"in vec4 tc;"
-"out vec4 fragment_color;"
-"uniform sampler2D texunit0;"
-"void main() {"
-	"vec4 base = texture2D(texunit0, tc.xy);"
-	"fragment_color = base;"
-"}"
-""};
 
 
 // now i made all of these static, so you shouldn't have to initialize them again
@@ -136,32 +121,58 @@ void ini_shd(void)
 	glGetUniformiv				= (PFNGLGETUNIFORMIVPROC) wglGetProcAddress("glGetUniformiv");
 	glGetShaderSource			= (PFNGLGETSHADERSOURCEPROC) wglGetProcAddress("glGetShaderSource");
                                                                      
-	glUniform1fARB= (PFNGLUNIFORM1FARBPROC) wglGetProcAddress("glUniform1fARB");
-	glUniform2fARB= (PFNGLUNIFORM2FARBPROC) wglGetProcAddress("glUniform2fARB");
-	glUniform3fARB= (PFNGLUNIFORM3FARBPROC) wglGetProcAddress("glUniform3fARB");
-	glUniform4fARB= (PFNGLUNIFORM4FARBPROC) wglGetProcAddress("glUniform4fARB");
-	glUniform1iARB= (PFNGLUNIFORM1IARBPROC) wglGetProcAddress("glUniform1iARB");
-	glUniform2iARB= (PFNGLUNIFORM2IARBPROC) wglGetProcAddress("glUniform2iARB");
-	glUniform3iARB= (PFNGLUNIFORM3IARBPROC) wglGetProcAddress("glUniform3iARB");
-	glUniform4iARB= (PFNGLUNIFORM4IARBPROC) wglGetProcAddress("glUniform4iARB");
-	glUniform1fvARB= (PFNGLUNIFORM1FVARBPROC) wglGetProcAddress("glUniform1fvARB");
-	glUniform2fvARB= (PFNGLUNIFORM2FVARBPROC) wglGetProcAddress("glUniform2fvARB");
-	glUniform3fvARB= (PFNGLUNIFORM3FVARBPROC) wglGetProcAddress("glUniform3fvARB");
-	glUniform4fvARB= (PFNGLUNIFORM4FVARBPROC) wglGetProcAddress("glUniform4fvARB");
-	glUniform1ivARB= (PFNGLUNIFORM1IVARBPROC) wglGetProcAddress("glUniform1ivARB");
-	glUniform2ivARB= (PFNGLUNIFORM2IVARBPROC) wglGetProcAddress("glUniform2ivARB");
-	glUniform3ivARB= (PFNGLUNIFORM3IVARBPROC) wglGetProcAddress("glUniform3ivARB");
-	glUniform4ivARB= (PFNGLUNIFORM4IVARBPROC) wglGetProcAddress("glUniform4ivARB");
+	glUniform1f= (PFNGLUNIFORM1FARBPROC) wglGetProcAddress("glUniform1fARB");
+	glUniform2f= (PFNGLUNIFORM2FARBPROC) wglGetProcAddress("glUniform2fARB");
+	glUniform3f= (PFNGLUNIFORM3FARBPROC) wglGetProcAddress("glUniform3fARB");
+	glUniform4f= (PFNGLUNIFORM4FARBPROC) wglGetProcAddress("glUniform4fARB");
+	glUniform1i= (PFNGLUNIFORM1IARBPROC) wglGetProcAddress("glUniform1iARB");
+	glUniform2i= (PFNGLUNIFORM2IARBPROC) wglGetProcAddress("glUniform2iARB");
+	glUniform3i= (PFNGLUNIFORM3IARBPROC) wglGetProcAddress("glUniform3iARB");
+	glUniform4i= (PFNGLUNIFORM4IARBPROC) wglGetProcAddress("glUniform4iARB");
+	glUniform1fv= (PFNGLUNIFORM1FVARBPROC) wglGetProcAddress("glUniform1fvARB");
+	glUniform2fv= (PFNGLUNIFORM2FVARBPROC) wglGetProcAddress("glUniform2fvARB");
+	glUniform3fv= (PFNGLUNIFORM3FVARBPROC) wglGetProcAddress("glUniform3fvARB");
+	glUniform4fv= (PFNGLUNIFORM4FVARBPROC) wglGetProcAddress("glUniform4fvARB");
+	glUniform1iv= (PFNGLUNIFORM1IVARBPROC) wglGetProcAddress("glUniform1ivARB");
+	glUniform2iv= (PFNGLUNIFORM2IVARBPROC) wglGetProcAddress("glUniform2ivARB");
+	glUniform3iv= (PFNGLUNIFORM3IVARBPROC) wglGetProcAddress("glUniform3ivARB");
+	glUniform4iv= (PFNGLUNIFORM4IVARBPROC) wglGetProcAddress("glUniform4ivARB");
 	glUniformMatrix2fv= (PFNGLUNIFORMMATRIX2FVPROC) wglGetProcAddress("glUniformMatrix2fv");
 	glUniformMatrix3fv= (PFNGLUNIFORMMATRIX3FVPROC) wglGetProcAddress("glUniformMatrix3fv");
 	glUniformMatrix4fv= (PFNGLUNIFORMMATRIX4FVPROC) wglGetProcAddress("glUniformMatrix4fv");
 
+	if (!passtrough_program_inited) {
+		passtrough_program = glzShaderLoadString(passtrough_vertex, passtrough_fragment, glzVAOType::AUTO);
+		glzShaderLink(passtrough_program);
+		passtrough_program_inited = true;
+	}
 
-	passtroughprogram = glzShaderLoadString(vertexpasstrough, fragmentpasstrough, glzVAOType::AUTO);
-	glzShaderLink(passtroughprogram);
+	if (!basic_program_inited) {
+		basic_program = glzShaderLoadString(basic_vertex, basic_fragment, glzVAOType::AUTO);
+		glzShaderLink(basic_program);
+		basic_program_inited = true;
 
+	}
+
+	if (!tilemap_program_inited) {
+		tilemap_program = glzShaderLoadString(tilemap_vertex, tilemap_fragment, glzVAOType::AUTO);
+		glzShaderLink(tilemap_program);
+		tilemap_program_inited = true;
+
+	}
 	
 }
+
+void glzShaderProgramPush()
+{
+	glGetIntegerv(GL_CURRENT_PROGRAM, &tempprogram);
+}
+
+void glzShaderProgramPop()
+{
+	glUseProgram(tempprogram);
+}
+
 
 
 
@@ -387,10 +398,100 @@ return;
 
 
 void glzShaderUsePasstrough(void)
-{
-	glUseProgram(passtroughprogram);
+{	glUseProgram(passtrough_program);
 	return;
 }
+
+void glzShaderUseBasic(void)
+{
+	glUseProgram(basic_program);
+	return;
+}
+
+void glzShaderUseTilemap(void)
+{
+	glUseProgram(tilemap_program);
+	return;
+}
+
+
+unsigned int glzShaderReurnPasstrough(void)
+{
+	return passtrough_program;
+}
+
+unsigned int glzShaderReurnBasic(void)
+{
+	return basic_program;
+}
+
+unsigned int glzShaderReurnTilemap(void)
+{
+	return tilemap_program;
+}
+
+
+
+// uniforms
+
+void glzUniform1i(unsigned int ProgramObject, const string name, int v)
+{
+	unsigned int loc = glGetUniformLocation(ProgramObject, (GLchar*)&name);
+	//glUseProgram(ProgramObject);
+	glUniform1i(loc, v);
+}
+
+void glzUniform1f(unsigned int ProgramObject, const string name, float v)
+{
+	unsigned int loc = glGetUniformLocation(ProgramObject, (GLchar*)&name);
+	//glUseProgram(ProgramObject);
+	glUniform1f(loc, v);
+}
+
+void glzUniform4f(unsigned int ProgramObject, const string name, float v1, float v2, float v3, float v4)
+{
+	unsigned int loc = glGetUniformLocation(ProgramObject, (GLchar*)&name);
+	//glUseProgram(ProgramObject);
+	glUniform4f(loc, v1, v2, v3, v4);
+}
+
+void glzUniformMatrix4fv(unsigned int ProgramObject, const string name, float v[16])
+{
+	unsigned int loc = glGetUniformLocation(ProgramObject, (GLchar*)&name);
+	//glUseProgram(ProgramObject);
+	glUniformMatrix4fv(loc, 1, GL_FALSE, v);
+}
+
+
+void glzUniformMatrix4fv(unsigned int ProgramObject, const string name, double a[16])
+{
+	float b[16];
+
+	int v[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
+	for (auto i : v)
+		b[i] = (float)a[i];
+
+	unsigned int loc = glGetUniformLocation(ProgramObject, (GLchar*)&name);
+	//glUseProgram(ProgramObject);
+	glUniformMatrix4fv(loc, 1, GL_FALSE, b);
+}
+
+
+void glzUniformMatrix4fv(unsigned int ProgramObject, const string name, glzMatrix m)
+{
+
+	float mtemp[16];
+	m.transferMatrix(&mtemp[0]);
+
+	unsigned int loc = glGetUniformLocation(ProgramObject, (GLchar*)&name);
+//	glUseProgram(ProgramObject);
+	glUniformMatrix4fv(loc, 1, GL_FALSE, mtemp);
+}
+
+
+
+
+
 
 
 // now this is all pretty basic stuff but here is a list of things i like to add later on

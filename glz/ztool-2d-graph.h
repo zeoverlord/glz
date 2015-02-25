@@ -23,26 +23,31 @@
 
 #include "ztool-type.h"
 #include "ztool-vectormath.h"
+#include "ztool_tiletools.h"
+#include "ztool-shader.h"
 #include <vector>
 #include <memory>
 
 #ifndef __2dscenegraphbase__
 #define __2dscenegraphbase__
 
-enum class glzBlendingMode { NONE, ADDITIVE, ALPHA };
-enum class glzOBject2DSetvar { NONE, ALPHA, SCALE, BLEND, TEXTURE, SPRITE, CURRENT_ANIMATION,CURRENT_FRAME, FRAMESPEED, NODE_LOCAL, NODE_PARENT};
+enum class glzBlendingMode { NONE, ADDITIVE, ALPHA, MULTIPLY };
+enum class glzOBject2DSetvar { NONE, ALPHA, SCALE, BLEND, WIDTH, HEIGHT, TEXTURE, SPRITE, CURRENT_ANIMATION,CURRENT_FRAME, FRAMESPEED, NODE_LOCAL, NODE_PARENT};
 
 class Object2D {
 	// position, orientation, speed and such	
 
 public:
 
-	
+	unsigned int texture;
 	node3 *n_parent;
 	node3 n_local;
 	int label;
 	glzBlendingMode blend;
 	float alpha;
+	float width;
+	float height;
+	float scale;
 
 	Object2D()
 	{
@@ -51,6 +56,10 @@ public:
 		n_local = node3();
 		blend = glzBlendingMode::NONE;
 		alpha = 1.0f;
+		width = 100.0f;
+		height = 100.0f;
+		scale = 1.0f;
+		texture = 0;
 	}
 	
 	virtual void draw(glzCamera2D *camera) 
@@ -80,8 +89,6 @@ public:
 
 class obj2d_Sprite : public Object2D
 {
-	unsigned int texture;
-	float scale;
 	glzSprite sprite;
 
 public:
@@ -116,7 +123,6 @@ public:
 class obj2d_Sprite_Animated : public Object2D
 {
 	unsigned int texture;
-	float scale;
 	glzSpriteanimationList sprite;
 	int current_animation;
 	int current_frame;	
@@ -161,7 +167,124 @@ public:
 };
 
 
+class obj2d_Fullscreen : public Object2D
+{
+	glzSprite sprite;
 
+public:
+
+	virtual void draw(glzCamera2D *camera) override;
+	virtual void update(float seconds) override;
+
+
+	virtual void set_i(glzOBject2DSetvar type, int v) override;
+	virtual void set_f(glzOBject2DSetvar type, float v) override;
+
+	obj2d_Fullscreen()
+	{
+		sprite = glzSprite();
+		texture = 0;
+		scale = 1.0;
+
+	}
+
+	obj2d_Fullscreen(int labelin, glzSprite spritein, unsigned int tex)
+	{
+		label = labelin;
+		sprite = spritein;
+		texture = tex;
+
+	}
+	obj2d_Fullscreen(int labelin, glzSprite spritein, glzBlendingMode b, unsigned int tex)
+	{
+		label = labelin;
+		blend = b;
+		sprite = spritein;
+		texture = tex;
+
+	}
+
+	obj2d_Fullscreen(int labelin, unsigned int tex)
+	{
+		label = labelin;
+		sprite = glzSprite();
+		texture = tex;
+
+	}
+
+	obj2d_Fullscreen(int labelin, glzBlendingMode b, unsigned int tex)
+	{
+		label = labelin;
+		blend = b;
+		sprite = glzSprite();
+		texture = tex;
+
+	}
+
+};
+
+
+class obj2d_Tiles : public Object2D
+{
+	glztiles *map;
+	int current_frame;
+	float framespeed;
+	float frametime;
+	int layer;	
+	int tileWidth;
+	int tileHeight;
+
+public:
+
+	virtual void draw(glzCamera2D *camera) override;
+	virtual void update(float seconds) override;
+	virtual void set_i(glzOBject2DSetvar type, int v) override;
+	virtual void set_f(glzOBject2DSetvar type, float v) override;
+
+
+	obj2d_Tiles()
+	{
+		texture = 0;
+		scale = 1.0;
+		map = nullptr;
+		current_frame = 0;
+		framespeed = 1.0;
+		frametime = 0.0;
+		layer=0;		
+		tileWidth = 16;
+		tileHeight = 16;
+		blend = glzBlendingMode::ALPHA;
+		
+	}
+
+
+	obj2d_Tiles(int labelin, glztiles *mapin, int layerin, int tilewidthin, int tileheightin, float framespeedin, node3 *nin, node3 nLin, unsigned int tex, int spritesize, double scalein)
+	{
+		label = labelin;		
+		texture = tex;
+		map = mapin;
+		n_parent = nin;
+		n_local = nLin;
+		scale = scalein;
+		layer = layerin;		
+		tileWidth = tilewidthin;
+		tileHeight = tileheightin;
+		current_frame = 0;
+		framespeed = framespeedin;
+		frametime = 0.0f;
+		blend = glzBlendingMode::ALPHA;
+		width = map->width*(spritesize / tilewidthin);
+		height = map->height*(spritesize / tileheightin);
+	
+	}
+
+};
+
+
+
+
+
+// ************************** OBject 2D graph **********************************
 
 
 
@@ -184,9 +307,12 @@ public:
 
 	void draw()
 	{
+		glzShaderProgramPush();
 
 		for (auto a : objects)
 			a->draw(camera);
+
+		glzShaderProgramPop();
 
 		return;
 	}
@@ -209,6 +335,9 @@ public:
 			switch (type)
 			{
 				case glzOBject2DSetvar::TEXTURE:
+					a->texture = v;
+					break;
+
 				case glzOBject2DSetvar::CURRENT_ANIMATION:
 				case glzOBject2DSetvar::CURRENT_FRAME:
 					a->set_i(type, v);
@@ -230,8 +359,17 @@ public:
 				break;
 
 			case glzOBject2DSetvar::SCALE:
+				a->scale = v;
+				break;
+
 			case glzOBject2DSetvar::FRAMESPEED:								
 				a->set_f(type, v);
+				break;
+			case glzOBject2DSetvar::WIDTH:
+				a->width = v;
+				break;
+			case glzOBject2DSetvar::HEIGHT:
+				a->height = v;
 				break;
 
 			}
@@ -268,6 +406,26 @@ public:
 };
 
 
+
+
+/*
+obj2d_Sprite
+obj2d_Sprite_Animated
+obj2d_Fullscreen
+obj2d_Tiles
+
+
+unimplemented
+
+
+obj2d_Background - takes a sprite and tiles it across the screen including a paralax factor
+obj2d_Sidescroll - similar to the above but only repeats in x
+---- these use a new shader called "repeating texmap" or something equally daft
+
+
+obj2d_Particles - takes a pointer to a glzSimpleParticleSystem or similar and a glzSpriteanimationList
+
+*/
 
 
 

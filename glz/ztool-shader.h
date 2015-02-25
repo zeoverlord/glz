@@ -20,8 +20,10 @@
 // https://github.com/zeoverlord/glz.git
 
 #include "ztool-type.h"
+#include "ztool-vectormath.h"
 
-
+#ifndef __glz_shader__
+#define __glz_shader__
 
 		//type signifies the type of data to choose from, if set at GLZ_AUTO it chooses the default settings
 
@@ -31,7 +33,28 @@ unsigned int glzShaderLoad(string const file_vert, string const file_geo, string
 unsigned int glzShaderLoad(string const file_vert, string const file_frag, glzVAOType type);
 unsigned int glzShaderLoadString(string const vert, string const frag, glzVAOType type);
 void glzShaderLink(unsigned int program);
+
+void glzShaderProgramPush();
+void glzShaderProgramPop();
+
+// fixed shaders
 void glzShaderUsePasstrough(void);
+void glzShaderUseBasic(void);
+void glzShaderUseTilemap(void);
+
+unsigned int glzShaderReurnPasstrough(void);
+unsigned int glzShaderReurnBasic(void);
+unsigned int glzShaderReurnTilemap(void);
+
+//uniform
+
+void glzUniform1i(unsigned int ProgramObject, const string name, int v);
+void glzUniform1f(unsigned int ProgramObject, const string name, float v);
+void glzUniform4f(unsigned int ProgramObject, const string name, float v1, float v2, float v3, float v4);
+
+void glzUniformMatrix4fv(unsigned int ProgramObject, const string name, float v[16]);
+void glzUniformMatrix4fv(unsigned int ProgramObject, const string name, double a[16]);
+void glzUniformMatrix4fv(unsigned int ProgramObject, const string name, glzMatrix m);
 
 // make sure this replaces all uses of the openGL set uniform functions
 //void glzSetuniform(int type, int location, GLsizei count, GLboolean transpose, const GLfloat *value)
@@ -40,7 +63,7 @@ void glzShaderUsePasstrough(void);
 
 
 
-
+#endif /* __glz_shader__ */
 
 
 

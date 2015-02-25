@@ -664,6 +664,22 @@ void glzDirectSpriteRender(glzMatrix m, unsigned int texture, glzSprite sprite, 
 	return;
 }
 
+void glzDirectSpriteRender(glzMatrix m, unsigned int texture, glzSprite sprite, float width, float height, glzOrigin origin)
+{
+	unsigned int localVAO;
+	vector<poly3> p;
+
+	sprite.make_polygons(&p, 0.0, 0.0, width, height, 0, 1, m);
+
+	glzVAOMakeFromVector(p, &localVAO, glzVAOType::AUTO);
+
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glzDrawVAO(0, p.size() * 3, localVAO, GL_TRIANGLES);
+	glzKillVAO(localVAO);
+
+	return;
+}
+
 
 
 

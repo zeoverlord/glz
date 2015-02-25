@@ -113,6 +113,9 @@
     <ClInclude Include="..\..\glz\ztool-2d-graph.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\glz\ztool-shader-programs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\examples\small.ico">

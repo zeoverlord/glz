@@ -110,6 +110,7 @@
     <ClInclude Include="..\..\examples\stdafx.h" />
     <ClInclude Include="..\..\examples\targetver.h" />
     <ClInclude Include="..\..\examples\zeobase2.h" />
+    <ClInclude Include="..\..\glz\ztool-shader-programs.h" />
     <ClInclude Include="..\..\glz\ztool_appbase.h" />
     <ClInclude Include="..\..\glz\ztool_tiletools.h" />
     <ClInclude Include="..\..\glz\ztool-geo-2d.h" />

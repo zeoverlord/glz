@@ -27,6 +27,9 @@
 #include "ztool-2d-graph.h"
 #include "ztool-geo-2d.h"
 #include "ztool-type.h"
+#include "ztool-shader.h"
+
+static PFNGLACTIVETEXTUREPROC					glActiveTexture;
 
 
 void setblendingmode(glzBlendingMode bmode)
@@ -45,6 +48,11 @@ void setblendingmode(glzBlendingMode bmode)
 	case glzBlendingMode::ALPHA:
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		break;
+
+	case glzBlendingMode::MULTIPLY:
+		glBlendFunc(GL_DST_COLOR, GL_ZERO);
+		break;
+		
 	}
 	
 	glEnable(GL_BLEND);
@@ -58,16 +66,25 @@ void obj2d_Sprite::draw(glzCamera2D *camera)
 {
 
 	glzMatrix m;
+	glzMatrix mt;
+	
 	setblendingmode(blend);
+	glzShaderUseBasic();
+	
 
 	m.LoadIdentity();
+	mt.LoadIdentity();	
 	m *= camera->m;
+	
 	if (n_parent != nullptr)
 		m *= n_parent->m;
 	m *= n_local.m;
-	m.scale(scale, scale, scale);
 
-	glzDirectSpriteRender(m, texture, sprite, glzOrigin::CENTERED);
+	unsigned int basic_program = glzShaderReurnBasic();
+
+	glzUniformMatrix4fv(basic_program, "projMat", mt);
+	glzUniform1i(basic_program, "texunit0", 0);
+	glzDirectSpriteRender(m, texture, sprite, width*scale, height*scale, glzOrigin::CENTERED);
 
 	glDisable(GL_BLEND);
 	return;
@@ -94,14 +111,12 @@ void obj2d_Sprite::set_f(glzOBject2DSetvar type, float v)
 	switch (type)
 	{
 
-	case glzOBject2DSetvar::SCALE:
-		scale = v;
-		break;
+//	case glzOBject2DSetvar::SCALE:
+//		scale = v;
+//		break;
 	}
 	return;
 }
-
-
 
 
 //*** obj2d_Sprite_Animated ***
@@ -112,17 +127,29 @@ void obj2d_Sprite_Animated::draw(glzCamera2D *camera)
 {
 
 	glzMatrix m;
+	glzMatrix mt;
 	setblendingmode(blend);
+	
 
 	m.LoadIdentity();
+	mt.LoadIdentity();
 	
 	m *= camera->m;
 	if (n_parent != nullptr)
 		m *= n_parent->m;
 	m *= n_local.m;
-	m.scale(scale, scale, scale);
 
-	glzDirectSpriteRender(m, texture, sprite.get_sprite(current_animation, current_frame), glzOrigin::CENTERED);
+	unsigned int basic_program = glzShaderReurnBasic();
+
+
+
+
+	glzUniformMatrix4fv(basic_program, "projMat", mt);
+	glzUniform1i(basic_program, "texunit0", 0);
+
+	glzShaderUseBasic();
+
+	glzDirectSpriteRender(m, texture, sprite.get_sprite(current_animation, current_frame), width*scale, height*scale, glzOrigin::CENTERED);
 	glDisable(GL_BLEND);
 	return;
 }
@@ -164,13 +191,173 @@ void obj2d_Sprite_Animated::set_f(glzOBject2DSetvar type, float v)
 {
 	switch (type)
 	{
-	case glzOBject2DSetvar::SCALE:
-		scale = v;
-		break;
+
 	case glzOBject2DSetvar::FRAMESPEED:
 		framespeed = v;
 		break;
 	}
 	return;
 }
+
+
+
+//*** obj2d_Fullscreen ***
+
+void obj2d_Fullscreen::draw(glzCamera2D *camera)
+{
+
+	glzMatrix m;
+	glzMatrix mt;
+
+	setblendingmode(blend);
+	glzShaderUseBasic();
+
+
+	m.LoadIdentity();
+	mt.LoadIdentity();
+//	m *= camera->m;
+
+//	if (n_parent != nullptr)
+//		m *= n_parent->m;
+//	m *= n_local.m;
+
+
+
+	mt.translate(-1.0, -1.0, 0.0);
+
+	mt.scale(2.0, 2.0, 1.0);
+	unsigned int basic_program = glzShaderReurnBasic();
+
+	glzUniformMatrix4fv(basic_program, "projMat", mt);
+	glzUniform1i(basic_program, "texunit0", 0);
+	glzDirectSpriteRender(m, texture, sprite, glzOrigin::CENTERED);
+
+	glDisable(GL_BLEND);
+	return;
+}
+
+void obj2d_Fullscreen::update(float seconds)
+{
+	return;
+}
+
+void obj2d_Fullscreen::set_i(glzOBject2DSetvar type, int v)
+{
+	switch (type)
+	{
+	case glzOBject2DSetvar::TEXTURE:
+		texture = v;
+		break;
+	}
+	return;
+}
+
+void obj2d_Fullscreen::set_f(glzOBject2DSetvar type, float v)
+{
+	switch (type)
+	{
+
+		//	case glzOBject2DSetvar::SCALE:
+		//		scale = v;
+		//		break;
+	}
+	return;
+}
+
+
+
+//*** obj2d_Tiles ***
+
+void obj2d_Tiles::draw(glzCamera2D *camera)
+{
+
+	glzMatrix m;
+	glzMatrix mt;
+	setblendingmode(blend);
+
+	glzShaderUseTilemap();
+
+	m.LoadIdentity();
+	mt.LoadIdentity();
+
+	m *= camera->m;
+
+	if (n_parent != nullptr)
+		m *= n_parent->m;
+	m *= n_local.m;
+
+	glActiveTexture = (PFNGLACTIVETEXTUREPROC)wglGetProcAddress("glActiveTexture");
+
+	unsigned int atlas_program = glzShaderReurnTilemap();
+
+	glzUniformMatrix4fv(atlas_program, "projMat", mt);
+	glzUniform1i(atlas_program, "texunit0", 0);
+	glzUniform1i(atlas_program, "texunit1", 1);
+
+	glzUniform1i(atlas_program, "layer", layer);
+	glzUniform1i(atlas_program, "anim", current_frame);
+	glzUniform1i(atlas_program, "width", map->width);
+	glzUniform1i(atlas_program, "height", map->height);
+	glzUniform1i(atlas_program, "a_width", tileWidth);
+	glzUniform1i(atlas_program, "a_height", tileHeight);
+	glzUniform1i(atlas_program, "extr", 0);
+
+
+
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, map->tex);
+
+
+	glzSprite sprite;
+
+
+
+	glzDirectSpriteRender(m, map->tex, sprite, width*scale, height*scale, glzOrigin::CENTERED);
+
+
+	glDisable(GL_BLEND);
+	return;
+}
+
+void obj2d_Tiles::update(float seconds)
+{
+
+	const int maxframes = 4;
+
+	frametime += seconds;
+
+
+	while (frametime >= framespeed) { current_frame++; frametime -= framespeed; }
+
+	while (current_frame >= maxframes) current_frame -= maxframes;
+
+
+	return;
+}
+
+void obj2d_Tiles::set_i(glzOBject2DSetvar type, int v)
+{
+	switch (type)
+	{
+	case glzOBject2DSetvar::TEXTURE:
+		texture = v;
+		break;
+	}
+	return;
+}
+
+void obj2d_Tiles::set_f(glzOBject2DSetvar type, float v)
+{
+	switch (type)
+	{
+
+//	case glzOBject2DSetvar::SCALE:
+//		scale = v;
+//		break;
+	}
+	return;
+}
+
 

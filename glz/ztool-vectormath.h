@@ -578,6 +578,7 @@ public:
 class glzCamera2D{
 
 private:
+
 	vert3 pos;
 	vert3 moveto_pos;
 	float zoom;
@@ -588,17 +589,21 @@ private:
 	float zoom_speed;
 	float angle_speed;
 	int width, height;
+	
 
 	void resetCamera()
 	{
 		m.LoadIdentity();
 		m.ortho(-width*0.5, width*0.5, -height*0.5, height*0.5, -100, 100);
+		//m.ortho(-0.5, 0.5, -0.5, 0.5, -100, 100);
 		m.scale(zoom, zoom, 1);
 		m.translate(pos);
 		m.rotate(angle, 0.0, 0.0, 1.0);
 	}
 
-public:
+public:	
+
+	float aspect;
 	glzMatrix m;
 
 	glzCamera2D()
@@ -609,8 +614,8 @@ public:
 		angleto = 0.0;
 
 		move_speed = 1.0;
-		zoom_speed = 1.0;
-		angle_speed = 1.0;
+		zoom_speed = 5.0;
+		angle_speed = 10.0;
 
 		width = 100;
 		height = 100;	
@@ -621,14 +626,18 @@ public:
 	{
 		width = w;
 		height = h;
+		aspect = w / h;
 		resetCamera();
 	}
 
 	void moveTo(vert3 p) { moveto_pos = p; }
+	void moveToRel(vert3 p) { moveto_pos += p; }
 	void zoomTo(float z) { zoomto = z; }
 	void angleTo(float a) { angleto = a; }
+	
 
 	void moveSnap(vert3 p) { pos = p; moveto_pos = p; resetCamera(); }
+	void moveSnapRel(vert3 p) { pos = moveto_pos; moveto_pos += p; resetCamera(); }
 	void ZoomSnap(float z) { zoom = z; zoomto = z; resetCamera(); }
 	void angleSnap(float a) { angle = a; angleto = a; resetCamera(); }
 
@@ -649,34 +658,40 @@ public:
 
 		if (zoom < zoomto)
 		{
-			if ((zoomto - zoom) < (zoom_speed*seconds)) 
+			if ((zoomto - zoom) < (zoom_speed*(seconds*2.0)))
 				zoom = zoomto;
-			else zoom += zoom_speed*seconds;
-		}
-		else 
-		{
-			if ((zoom - zoomto ) < (zoom_speed*seconds)) 
-				zoom = zoomto;
-			else zoom -= zoom_speed*seconds;
-		}
-
-		if (abs(angle - angleto) < angle_speed*seconds) angle = angleto;
-		if (abs((angle + 360) - angleto) < angle_speed*seconds) angle = angleto;
-
-		if (angle < angleto) {
-			if (abs(angle - angleto)<180.0)
-				angle += angle_speed*seconds;
-			else angle -= angle_speed*seconds;
+			else zoom += zoom_speed*seconds*zoom;
 		}
 		else
 		{
-			if (abs(angle - angleto)<180.0)
-				angle -= angle_speed*seconds; 
-			else angle += angle_speed*seconds;
+			if ((zoom - zoomto) < (zoom_speed*(seconds*2.0)))
+				zoom = zoomto;
+			else zoom -= zoom_speed*seconds*zoom;
+		}
+
+		bool anglecentered = false;
+
+		if (abs(angle - angleto) < angle_speed*seconds) { angle = angleto; anglecentered = true; }
+		if (abs((angle + 360) - angleto) < angle_speed*seconds) { angle = angleto; anglecentered = true; }
+
+		if (!anglecentered)
+		{ 
+			if (angle < angleto) {
+				if (abs(angle - angleto)<180.0)
+					angle += angle_speed*seconds;
+				else angle -= angle_speed*seconds;
+			}
+			else
+			{
+				if (abs(angle - angleto)<180.0)
+					angle -= angle_speed*seconds; 
+				else angle += angle_speed*seconds;
+			}
 		}
 
 		while (angle < 0.0) angle += 360.0;
-		while (angle >= 360.0) angle -= 360.0;			
+		while (angle >= 360.0) angle -= 360.0;		
+		
 
 		resetCamera();
 
@@ -761,6 +776,8 @@ public:
 	glzSpriteList() {} // default numbers
 	glzSpriteList(glzSprite a) { map.push_back(a); } // direct initialization
 	glzSpriteList(int w, int h); // direct initialization with preset
+
+	glzSpriteList(int w, int h, int v[], int n); // direct initialization with preset
 
 
 	void addsprite(glzSprite a) { map.push_back(a); }

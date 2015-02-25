@@ -56,7 +56,7 @@ Keys*		g_keys;
 float		angle=0,width,height;												// Used To Rotate The Triangles
 unsigned int vao[16],vao_num[16],textvao[16],textvao_num[16];
 glzMatrix m;
-unsigned int texture[5],fonttexture[15];
+unsigned int texture[15],fonttexture[15];
 
 
 char tbuffer[160];
@@ -72,11 +72,12 @@ glzCamera2D cam;
 Object2DGraph tempgraph(&cam);
 node3 n;
 
+glztiles tilemap;
+glztiles tilemap2;
+
 
 GLhandleARB  ProgramObject, ProgramObjectFT, ProgramObjectFSQ, ProgramObjectFSQ_glitch;
 texture_transform text_tt;
-
-
 
 glzSimpleParticleSystem ps;
 
@@ -240,6 +241,8 @@ BOOL Initialize (GL_Window* window, Keys* keys)					// Any GL Init Code & User I
 
 
 
+
+
 	primitive_gen prim_fsq_pg[1];	
 	prim_fsq_pg[0] = glzMakePGDefault(glzPrimitive::FSQ);
 	prim_fsq_pg[0].tt=glzMakeTTDefault();
@@ -284,50 +287,52 @@ BOOL Initialize (GL_Window* window, Keys* keys)					// Any GL Init Code & User I
 	texture[4] = glzLoadTexture("data\\blob.tga", glzTexFilter::NEAREST);
 	texture[5] = glzLoadTexture("data\\cv90-1080p-04.tga", glzTexFilter::LINEAR);
 
+	texture[6] = glzLoadTexture("data\\tileset.tga", glzTexFilter::NEAREST); // sprite layers
+
 
 	
 	cam.setsize(800, 500);
-	cam.moveTo(vert3(0.0,100.0, 0.0));
-	cam.moveSpeed(30);
+//	cam.moveTo(vert3(0.0,100.0, 0.0));
+	cam.moveSpeed(100);
 
 
 	n.rs.rotate(20, 0.0, 0.0, 1.0);
 
 	n.pos = vert3(200.0,-130.0,0.0);
 	
-	
-	tempgraph.add(obj2d_Sprite(343, glzSprite(8, 4, 16, 0.0), nullptr, node3(), texture[2], 100.0));
-	//tempgraph.objects.push_back(make_shared<obj2d_Sprite>(glzSprite(), &n, node3(), texture[1], 100.0));
+	tempgraph.add(obj2d_Fullscreen(-1, texture[5]));
 
-	tempgraph.add(obj2d_Sprite(-1, glzSprite(), &n, node3(), texture[1], 100.0));
+	// load the tilemap
+	tilemap.load("data\\supertiles1.tga", glzTileType::DOUBLE_LAYER);
+	tilemap2.load("data\\supertiles2.tga", glzTileType::DOUBLE_LAYER);
+
+	tempgraph.add(obj2d_Tiles(42, &tilemap, 0, 16, 16, 1.0, nullptr, node3(vert3(-512, -256.0, 0.0)), texture[6], 128, 1.0f));
+	tempgraph.add(obj2d_Tiles(42, &tilemap, 1, 16, 16, 1.0, nullptr, node3(vert3(-512, -256.0, 0.0)), texture[6], 128, 1.0f));
+	tempgraph.add(obj2d_Tiles(42, &tilemap2, 0, 16, 16, 1.0, nullptr, node3(vert3(-512, -256.0, 0.0)), texture[6], 128, 1.0f));
+	tempgraph.add(obj2d_Tiles(42, &tilemap2, 1, 16, 16, 1.0, nullptr, node3(vert3(-512, -256.0, 0.0)), texture[6], 128, 1.0f));
+
+
+
+
+	tempgraph.add(obj2d_Sprite(343, glzSprite(8, 4, 16, 0.0), nullptr, node3(), texture[2], 1.0));
+	tempgraph.add(obj2d_Sprite(-1, glzSprite(), &n, node3(), texture[1], 1.0));
 
 
 	glzSpriteList expl_spritelist;
 	glzSpriteanimationList expl_spritelist_vector;
 
-	int i = 0;
+
+	expl_spritelist_vector.map.push_back(glzSpriteList(8,4));
 	
-	while (i < 32)  
-	{
-		expl_spritelist.map.push_back(glzSprite(8, 4, i, 0.0));
-		i++;
-	}
 
-	expl_spritelist_vector.map.push_back(expl_spritelist);
+	int v[] = { 31,30,29,28,27,26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0 };
+	expl_spritelist_vector.map.push_back(glzSpriteList(8, 4, v, 32));
 
-	expl_spritelist.map.clear();
-	while (i > 0)
-	{
-		expl_spritelist.map.push_back(glzSprite(8, 4, i, 0.0));
-		i--;
-	}
+	tempgraph.add(obj2d_Sprite_Animated(111, expl_spritelist_vector, nullptr, node3(vert3(100.0, 0.0, 0.0)), texture[2], 1.0, 0.04f));
 
-	expl_spritelist_vector.map.push_back(expl_spritelist);
-
-	tempgraph.add(obj2d_Sprite_Animated(111, expl_spritelist_vector, nullptr, node3(vert3(102.0, 0.0, 0.0)), texture[2], 100.0, 0.04f));
-
-	tempgraph.set(343, glzOBject2DSetvar::SCALE, 200.0f);
+	tempgraph.set(343, glzOBject2DSetvar::SCALE, 1.0f);
 	tempgraph.set(111, glzOBject2DSetvar::BLEND, glzBlendingMode::ADDITIVE);
+	tempgraph.set(111, glzOBject2DSetvar::CURRENT_ANIMATION, 0);
 
 	//obj2d_Sprite tobj;
 //	tobj = tempgraph.objects.at(0)->;
@@ -335,6 +340,9 @@ BOOL Initialize (GL_Window* window, Keys* keys)					// Any GL Init Code & User I
 //	tobj->n_local.pos.x = -100;
 //	tobj->n_local.update_matrix();
 
+	
+
+	tempgraph.add(obj2d_Fullscreen(-1, glzBlendingMode::ADDITIVE, texture[6]));
 	
 		
 
@@ -363,7 +371,7 @@ void Update (float seconds)								// Perform Motion Updates Here
 		glzMatrix mt;
 		mt.LoadIdentity();
 		mt.scale(0.17f,0.17f,0.17f);
-		cam.update(seconds);
+
 
 	if (g_keys->keyDown [VK_ESCAPE] == TRUE)					// Is ESC Being Pressed?
 	{
@@ -451,6 +459,22 @@ if (gamestate == 6)
 
 }
 
+if (gamestate == 8)
+{
+
+
+	if (g_keys->keyDown['A'] == TRUE) cam.moveToRel(vert3(seconds * -100, 0.0, 0.0));
+	if (g_keys->keyDown['D'] == TRUE) cam.moveToRel(vert3(seconds * 100, 0.0, 0.0));
+	if (g_keys->keyDown['W'] == TRUE) cam.moveToRel(vert3(0.0, seconds * 100, 0.0));
+	if (g_keys->keyDown['S'] == TRUE) cam.moveToRel(vert3(0.0, seconds * -100, 0.0));
+	if (g_keys->keyDown[VK_SPACE] == TRUE) cam.zoomTo(5.0f);
+		else cam.zoomTo(1.0f);
+
+	cam.update(seconds);
+}
+
+
+
 	n.tick(seconds);
 	tempgraph.update(seconds);
 
@@ -462,6 +486,8 @@ if (gamestate == 6)
 	if (g_keys->keyDown['6'] == TRUE) gamestate = 6;
 	if (g_keys->keyDown['7'] == TRUE) gamestate = 7;
 	if (g_keys->keyDown['8'] == TRUE) gamestate = 8;
+
+	
 
 }
 

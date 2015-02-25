@@ -689,3 +689,18 @@ glzSpriteList::glzSpriteList(int w, int h) // direct initialization with preset
 
 	//while (i < w*h) { map.push_back(glzAtlasQuad(w, h, i, glzOrigin::BOTTOM_LEFT));	i++; }
 }
+
+glzSpriteList::glzSpriteList(int w, int h, int v[], int n) // direct initialization with preset
+{
+	int i = 0;
+
+	while (i < n)
+	{
+		map.push_back(glzSprite(w, h, v[i], 0.0));
+		i++;
+	}
+
+
+
+	//while (i < w*h) { map.push_back(glzAtlasQuad(w, h, i, glzOrigin::BOTTOM_LEFT));	i++; }
+}
