@@ -41,15 +41,19 @@ void glzShaderProgramPop();
 void glzShaderUsePasstrough(void);
 void glzShaderUseBasic(void);
 void glzShaderUseTilemap(void);
+void glzShaderUseTiledSprite(void);
 
 unsigned int glzShaderReurnPasstrough(void);
 unsigned int glzShaderReurnBasic(void);
 unsigned int glzShaderReurnTilemap(void);
+unsigned int glzShaderReurnTiledSprite(void);
+
 
 //uniform
 
 void glzUniform1i(unsigned int ProgramObject, const string name, int v);
 void glzUniform1f(unsigned int ProgramObject, const string name, float v);
+void glzUniform2f(unsigned int ProgramObject, const string name, float v1, float v2);
 void glzUniform4f(unsigned int ProgramObject, const string name, float v1, float v2, float v3, float v4);
 
 void glzUniformMatrix4fv(unsigned int ProgramObject, const string name, float v[16]);

@@ -62,74 +62,15 @@ void setblendingmode(glzBlendingMode bmode)
 
 //*** obj2d_Sprite ***
 
+
+
 void obj2d_Sprite::draw(glzCamera2D *camera)
 {
 
 	glzMatrix m;
 	glzMatrix mt;
-	
 	setblendingmode(blend);
 	glzShaderUseBasic();
-	
-
-	m.LoadIdentity();
-	mt.LoadIdentity();	
-	m *= camera->m;
-	
-	if (n_parent != nullptr)
-		m *= n_parent->m;
-	m *= n_local.m;
-
-	unsigned int basic_program = glzShaderReurnBasic();
-
-	glzUniformMatrix4fv(basic_program, "projMat", mt);
-	glzUniform1i(basic_program, "texunit0", 0);
-	glzDirectSpriteRender(m, texture, sprite, width*scale, height*scale, glzOrigin::CENTERED);
-
-	glDisable(GL_BLEND);
-	return;
-}
-
-void obj2d_Sprite::update(float seconds)
-{
-	return;
-}
-
-void obj2d_Sprite::set_i(glzOBject2DSetvar type, int v)
-{
-	switch (type)
-	{
-	case glzOBject2DSetvar::TEXTURE:
-		texture = v;
-		break;
-	}
-	return;
-}
-
-void obj2d_Sprite::set_f(glzOBject2DSetvar type, float v)
-{
-	switch (type)
-	{
-
-//	case glzOBject2DSetvar::SCALE:
-//		scale = v;
-//		break;
-	}
-	return;
-}
-
-
-//*** obj2d_Sprite_Animated ***
-
-
-
-void obj2d_Sprite_Animated::draw(glzCamera2D *camera)
-{
-
-	glzMatrix m;
-	glzMatrix mt;
-	setblendingmode(blend);
-	
 
 	m.LoadIdentity();
 	mt.LoadIdentity();
@@ -141,60 +82,77 @@ void obj2d_Sprite_Animated::draw(glzCamera2D *camera)
 
 	unsigned int basic_program = glzShaderReurnBasic();
 
-
-
-
 	glzUniformMatrix4fv(basic_program, "projMat", mt);
-	glzUniform1i(basic_program, "texunit0", 0);
-
-	glzShaderUseBasic();
+	glzUniform1i(basic_program, "texunit0", 0);	
 
 	glzDirectSpriteRender(m, texture, sprite.get_sprite(current_animation, current_frame), width*scale, height*scale, glzOrigin::CENTERED);
 	glDisable(GL_BLEND);
 	return;
 }
 
-void obj2d_Sprite_Animated::update(float seconds)
+
+void obj2d_Sprite::update(float seconds)
 {
 
+	if ((framespeed == 0.0) || (animationstate == glzOBject2DAnimationstate::STOPPED)) return;
+
+
 	int maxframes = sprite.map.at(current_animation).map.size();
+
 	
-	frametime += seconds;
+	frametime += seconds*framespeed;
 
 
-	while (frametime >= framespeed) { current_frame++; frametime -= framespeed; }
+	while (frametime >= 1.0f) 
+	{ 
+		current_frame++; frametime -= 1.0f;
 
-	while (current_frame >= maxframes) current_frame -= maxframes;
+
+		if (current_frame >= maxframes)
+		{
+						
+			if (animationstate == glzOBject2DAnimationstate::PLAYINGONCE)
+			{
+				current_frame = maxframes - 1;	
+				animationstate == glzOBject2DAnimationstate::STOPPED;
+			}
+
+
+			else if(animationstate == glzOBject2DAnimationstate::PLAYING)
+			{
+				current_frame -= maxframes;
+			}
+			
+		}	
+	
+	}
+
+	//while (current_frame >= maxframes) current_frame -= maxframes;
 
 	return;
 }
 
 
-void obj2d_Sprite_Animated::set_i(glzOBject2DSetvar type, int v)
+void obj2d_Sprite::set_i(glzOBject2DSetvar type, int v)
 {
 	switch (type)
 	{
-	case glzOBject2DSetvar::TEXTURE:
-		texture = v;
-		break;
-	case glzOBject2DSetvar::CURRENT_ANIMATION:
-		current_animation = v;
-		break;
-	case glzOBject2DSetvar::CURRENT_FRAME:
-		current_frame = v;
-		break;
+	//case glzOBject2DSetvar::TEXTURE:
+//		texture = v;
+	//	break;
+	
 	}
 	return;
 }
 
-void obj2d_Sprite_Animated::set_f(glzOBject2DSetvar type, float v)
+void obj2d_Sprite::set_f(glzOBject2DSetvar type, float v)
 {
 	switch (type)
 	{
 
-	case glzOBject2DSetvar::FRAMESPEED:
-		framespeed = v;
-		break;
+//	case glzOBject2DSetvar::FRAMESPEED:
+//		framespeed = v;
+//		break;
 	}
 	return;
 }
@@ -265,6 +223,158 @@ void obj2d_Fullscreen::set_f(glzOBject2DSetvar type, float v)
 }
 
 
+//*** obj2d_Background ***
+
+void obj2d_Background::draw(glzCamera2D *camera)
+{
+
+	glzMatrix m;
+	glzMatrix mt;
+
+	setblendingmode(blend);
+	glzShaderUseTiledSprite();
+
+
+	m.LoadIdentity();
+	mt.LoadIdentity();
+
+	vert3 offset;
+
+	offset += n_local.pos;
+	offset.project(camera->m);
+
+	mt.translate(-1.0, -1.0, 0.0);
+
+	mt.scale(2.0, 2.0, 1.0);
+	unsigned int tile_program = glzShaderReurnTiledSprite();
+
+
+	glzSprite tsprite = sprite.get_sprite(current_animation, current_frame);
+
+
+
+	glzUniformMatrix4fv(tile_program, "projMat", mt);
+	glzUniform1i(tile_program, "texunit0", 0);
+
+	glzUniform2f(tile_program, "spritepos", tsprite.a.u, tsprite.a.v);
+	glzUniform2f(tile_program, "spritesize", tsprite.d.u - tsprite.a.u, tsprite.d.v - tsprite.a.v);
+	glzUniform2f(tile_program, "spriteoffset", -offset.x*0.5*paralax, -offset.y*0.5*paralax);
+	glzUniform2f(tile_program, "spritescale", scale,scale);
+	
+
+	glzDirectSpriteRender(m, texture, glzSprite(), glzOrigin::CENTERED);
+
+	glDisable(GL_BLEND);
+	return;
+}
+
+void obj2d_Background::update(float seconds)
+{
+
+	if ((framespeed == 0.0) || (animationstate == glzOBject2DAnimationstate::STOPPED)) return;
+
+	int maxframes = sprite.map.at(current_animation).map.size();
+
+	frametime += seconds*framespeed;
+
+	while (frametime >= 1.0f)
+	{
+		current_frame++; frametime -= 1.0f;
+
+
+		if (current_frame >= maxframes)
+		{
+
+			if (animationstate == glzOBject2DAnimationstate::PLAYINGONCE)
+			{
+				current_frame = maxframes - 1;
+				animationstate == glzOBject2DAnimationstate::STOPPED;
+			}
+
+
+			else if (animationstate == glzOBject2DAnimationstate::PLAYING)
+			{
+				current_frame -= maxframes;
+			}
+
+		}
+
+	}
+
+	return;
+
+}
+
+void obj2d_Background::set_i(glzOBject2DSetvar type, int v)
+{
+	switch (type)
+	{
+//	case glzOBject2DSetvar::TEXTURE:
+//		texture = v;
+//		break;
+	
+	}
+	return;
+}
+
+void obj2d_Background::set_f(glzOBject2DSetvar type, float v)
+{
+	switch (type)
+	{
+
+//	case glzOBject2DSetvar::FRAMESPEED:
+//		framespeed = v;
+//		break;
+	}
+	return;
+}
+
+
+//*** obj2d_Clear ***
+
+void obj2d_Clear::draw(glzCamera2D *camera)
+{
+	glClearColor(blendcolor.r, blendcolor.g, blendcolor.b, blendcolor.a);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
+	return;
+}
+
+void obj2d_Clear::update(float seconds)
+{
+	return;
+}
+
+//*** obj2d_Object2DGraph ***
+
+ void obj2d_Object2DGraph::draw(glzCamera2D *camera)
+{	
+		 if (rendergraph!=nullptr)
+				rendergraph->draw();
+	return;
+}
+
+ void obj2d_Object2DGraph::update(float seconds)
+{
+	return;
+}
+
+
+
+ void obj2d_Object2DGraph::set_r(glzOBject2DSetvar type, Object2DGraph *v)
+ {
+		 switch (type)
+		 {
+
+		 case glzOBject2DSetvar::RENDEREGRAPH:
+			 rendergraph = v;
+			 		break;
+		 }
+		 return;
+ }
+
+
+
 
 //*** obj2d_Tiles ***
 
@@ -324,16 +434,39 @@ void obj2d_Tiles::draw(glzCamera2D *camera)
 void obj2d_Tiles::update(float seconds)
 {
 
+	if ((framespeed == 0.0) || (animationstate == glzOBject2DAnimationstate::STOPPED)) return;
+
+
 	const int maxframes = 4;
 
-	frametime += seconds;
+
+	frametime += seconds*framespeed;
 
 
-	while (frametime >= framespeed) { current_frame++; frametime -= framespeed; }
+	while (frametime >= 1.0f)
+	{
+		current_frame++; frametime -= 1.0f;
 
-	while (current_frame >= maxframes) current_frame -= maxframes;
+
+		if (current_frame >= maxframes)
+		{
+
+			if (animationstate == glzOBject2DAnimationstate::PLAYINGONCE)
+			{
+				current_frame = maxframes - 1;
+				animationstate == glzOBject2DAnimationstate::STOPPED;
+			}
 
 
+			else if (animationstate == glzOBject2DAnimationstate::PLAYING)
+			{
+				current_frame -= maxframes;
+			}
+
+		}
+
+	}
+	
 	return;
 }
 

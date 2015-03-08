@@ -89,7 +89,12 @@ static unsigned int basic_program;
 static bool tilemap_program_inited;
 static unsigned int tilemap_program;
 
-static GLint tempprogram;
+static bool tiledSprite_program_inited;
+static unsigned int tiledSprite_program;
+
+
+
+static vector<GLint> tempprogram;
 
 
 
@@ -160,17 +165,38 @@ void ini_shd(void)
 		tilemap_program_inited = true;
 
 	}
+
+	if (!tiledSprite_program_inited) {
+		tiledSprite_program = glzShaderLoadString(tiledSprite_vertex, tiledSprite_fragment, glzVAOType::AUTO);
+		glzShaderLink(tiledSprite_program);
+		tiledSprite_program_inited = true;
+
+	}
+	
+
 	
 }
 
 void glzShaderProgramPush()
 {
-	glGetIntegerv(GL_CURRENT_PROGRAM, &tempprogram);
+	GLint tp;
+	glGetIntegerv(GL_CURRENT_PROGRAM, &tp);
+	tempprogram.push_back(tp);
+
 }
 
 void glzShaderProgramPop()
 {
-	glUseProgram(tempprogram);
+
+	//glUseProgram(tempprogram);
+
+	if (!tempprogram.empty())
+	{
+		glUseProgram(tempprogram.back());	
+		tempprogram.pop_back();
+	}
+
+
 }
 
 
@@ -414,6 +440,14 @@ void glzShaderUseTilemap(void)
 	return;
 }
 
+void glzShaderUseTiledSprite(void)
+{
+	glUseProgram(tiledSprite_program);
+	return;
+}
+
+
+
 
 unsigned int glzShaderReurnPasstrough(void)
 {
@@ -429,6 +463,12 @@ unsigned int glzShaderReurnTilemap(void)
 {
 	return tilemap_program;
 }
+
+unsigned int glzShaderReurnTiledSprite(void)
+{
+	return tiledSprite_program;
+}
+
 
 
 
@@ -446,6 +486,13 @@ void glzUniform1f(unsigned int ProgramObject, const string name, float v)
 	unsigned int loc = glGetUniformLocation(ProgramObject, (GLchar*)&name);
 	//glUseProgram(ProgramObject);
 	glUniform1f(loc, v);
+}
+
+void glzUniform2f(unsigned int ProgramObject, const string name, float v1, float v2)
+{
+	unsigned int loc = glGetUniformLocation(ProgramObject, (GLchar*)&name);
+	//glUseProgram(ProgramObject);
+	glUniform2f(loc, v1, v2);
 }
 
 void glzUniform4f(unsigned int ProgramObject, const string name, float v1, float v2, float v3, float v4)

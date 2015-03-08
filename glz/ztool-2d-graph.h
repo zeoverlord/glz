@@ -25,6 +25,7 @@
 #include "ztool-vectormath.h"
 #include "ztool_tiletools.h"
 #include "ztool-shader.h"
+#include <algorithm>
 #include <vector>
 #include <memory>
 
@@ -32,7 +33,11 @@
 #define __2dscenegraphbase__
 
 enum class glzBlendingMode { NONE, ADDITIVE, ALPHA, MULTIPLY };
-enum class glzOBject2DSetvar { NONE, ALPHA, SCALE, BLEND, WIDTH, HEIGHT, TEXTURE, SPRITE, CURRENT_ANIMATION,CURRENT_FRAME, FRAMESPEED, NODE_LOCAL, NODE_PARENT};
+enum class glzOBject2DSetvar { NONE, ALPHA, SCALE, BLEND, WIDTH, HEIGHT, TEXTURE, SPRITE, CURRENT_ANIMATION, CURRENT_FRAME, FRAMESPEED, NODE_LOCAL, NODE_PARENT, KILL, Z_LEVEL, RENDEREGRAPH, ANIMATIONSTOP, ANIMATIONPLAY, ANIMATIONPLAYONCE };
+enum class glzOBject2DAnimationstate { STOPPED, PLAYING, PLAYINGONCE };
+
+
+class Object2DGraph;
 
 class Object2D {
 	// position, orientation, speed and such	
@@ -44,10 +49,18 @@ public:
 	node3 n_local;
 	int label;
 	glzBlendingMode blend;
+	glzColor blendcolor;
 	float alpha;
 	float width;
 	float height;
 	float scale;
+	bool tobekilled;
+	float z_order;
+	glzOBject2DAnimationstate animationstate;
+	int current_animation;
+	int current_frame;
+	float framespeed;
+	float frametime;
 
 	Object2D()
 	{
@@ -55,11 +68,19 @@ public:
 		label = -1;
 		n_local = node3();
 		blend = glzBlendingMode::NONE;
+		blendcolor = glzColor();
 		alpha = 1.0f;
 		width = 100.0f;
 		height = 100.0f;
 		scale = 1.0f;
 		texture = 0;
+		tobekilled = false;
+		z_order = 0.0;
+		animationstate = glzOBject2DAnimationstate::STOPPED;
+		current_animation = 0;
+		current_frame = 0;
+		framespeed = 0.0;
+		frametime = 0.0;
 	}
 	
 	virtual void draw(glzCamera2D *camera) 
@@ -83,72 +104,64 @@ public:
 		return;
 	}
 
+	virtual void set_r(glzOBject2DSetvar type, Object2DGraph *v)
+	{
+		return;
+	}
+
 
 
 };
 
+
 class obj2d_Sprite : public Object2D
 {
-	glzSprite sprite;
+	glzSpriteanimationList sprite;
+
 
 public:
 
 	virtual void draw(glzCamera2D *camera) override;
 	virtual void update(float seconds) override;
-
-	
 	virtual void set_i(glzOBject2DSetvar type, int v) override;
 	virtual void set_f(glzOBject2DSetvar type, float v) override;
+	
+
+	
+
 
 	obj2d_Sprite()
 	{
-		sprite = glzSprite();		
 		texture = 0;
 		scale = 1.0;
-
-	}
+		sprite = glzSpriteanimationList(glzSprite());
+		animationstate = glzOBject2DAnimationstate::STOPPED;
+		current_animation = 0;
+		current_frame = 0;
+		framespeed = 0.0f;
+		frametime = 0.0f;
 		
+	} 
+
+
 	obj2d_Sprite(int labelin, glzSprite spritein, node3 *nin, node3 nLin, unsigned int tex, double scalein)
 	{
 		label = labelin;
-		sprite=spritein; 		
+		sprite = glzSpriteanimationList(spritein);
 		texture = tex;
 		n_parent = nin;
 		n_local = nLin;
 		scale = scalein;
-	}
 
-};
-
-class obj2d_Sprite_Animated : public Object2D
-{
-	unsigned int texture;
-	glzSpriteanimationList sprite;
-	int current_animation;
-	int current_frame;	
-	float framespeed;
-	float frametime;
-
-public:
-
-	virtual void draw(glzCamera2D *camera) override;
-	virtual void update(float seconds) override;
-	virtual void set_i(glzOBject2DSetvar type, int v) override;
-	virtual void set_f(glzOBject2DSetvar type, float v) override;
-	
-
-	obj2d_Sprite_Animated()
-	{
-		texture = 0;
-		scale = 1.0;
 		current_animation = 0;
 		current_frame = 0;
-		framespeed = 1.0;
-		frametime = 0.0;
+		framespeed = 0.0f;
+		frametime = 0.0f;
+		animationstate = glzOBject2DAnimationstate::STOPPED;
 	}
 
 
-	obj2d_Sprite_Animated(int labelin, glzSpriteanimationList spritein, node3 *nin, node3 nLin, unsigned int tex, double scalein, float framespeedin)
+	obj2d_Sprite(int labelin, glzSpriteanimationList spritein, node3 *nin, node3 nLin, unsigned int tex, double scalein, float framespeedin)
 	{
 		label = labelin;
 		sprite = spritein;
@@ -160,9 +173,10 @@ public:
 		current_animation = 0;
 		current_frame=0;
 		framespeed = framespeedin;
-		frametime=0.0f;
-
+		frametime=0.0f;	
+		animationstate = glzOBject2DAnimationstate::PLAYING;
 	}
+
 
 };
 
@@ -224,12 +238,112 @@ public:
 };
 
 
+class obj2d_Background : public Object2D
+{
+	glzSpriteanimationList sprite;
+	float paralax;
+
+
+
+public:
+
+
+
+	virtual void draw(glzCamera2D *camera) override;
+	virtual void update(float seconds) override;
+
+
+	virtual void set_i(glzOBject2DSetvar type, int v) override;
+	virtual void set_f(glzOBject2DSetvar type, float v) override;
+
+	obj2d_Background()
+	{
+		sprite = glzSprite();
+		texture = 0;
+		scale = 1.0;
+		paralax = 1.0;
+		current_animation = 0;
+		current_frame = 0;
+		framespeed = 1.0;
+		frametime = 0.0;
+	}
+	
+
+	obj2d_Background(int labelin, unsigned int tex)
+	{
+		label = labelin;
+		texture = tex;
+		current_animation = 0;
+		current_frame = 0;
+		framespeed = 1.0;
+		frametime = 0.0;
+	}
+
+
+	obj2d_Background(int labelin, glzSprite spritein, float scalein, unsigned int tex)
+	{
+		label = labelin;
+		sprite = glzSpriteanimationList(spritein);
+		texture = tex;
+		scale = scalein;
+		current_animation = 0;
+		current_frame = 0;
+		framespeed = 0.0;
+		frametime = 0.0;
+	}
+
+
+	obj2d_Background(int labelin, glzSpriteanimationList spritein, float scalein, float framespeedin, unsigned int tex)
+	{
+		label = labelin;
+		sprite = spritein;
+		texture = tex;
+		scale = scalein;
+		current_animation = 0;
+		current_frame = 0;
+		framespeed = framespeedin;
+		if (framespeedin) animationstate = glzOBject2DAnimationstate::PLAYING;
+		frametime =0.0;
+	}
+
+
+
+	obj2d_Background(int labelin, glzSprite spritein, glzBlendingMode b, float scalein, float paralaxin, unsigned int tex)
+	{
+		label = labelin;
+		blend = b;
+		sprite = glzSpriteanimationList(spritein);
+		texture = tex;
+		scale = scalein;
+		paralax = paralaxin;
+		current_animation = 0;
+		current_frame = 0;
+		framespeed = 0.0;
+		frametime = 0.0;
+
+	}
+
+	obj2d_Background(int labelin, glzSpriteanimationList spritein, glzBlendingMode b, float scalein, float framespeedin, float paralaxin, unsigned int tex)
+	{
+		label = labelin;
+		blend = b;
+		sprite = spritein;
+		texture = tex;
+		scale = scalein;
+		paralax = paralaxin;
+		current_animation = 0;
+		current_frame = 0;
+		framespeed = framespeedin;
+		if (framespeedin) animationstate = glzOBject2DAnimationstate::PLAYING;
+		frametime = 0.0;
+
+	}
+
+};
+
 class obj2d_Tiles : public Object2D
 {
 	glztiles *map;
-	int current_frame;
-	float framespeed;
-	float frametime;
 	int layer;	
 	int tileWidth;
 	int tileHeight;
@@ -248,7 +362,7 @@ public:
 		scale = 1.0;
 		map = nullptr;
 		current_frame = 0;
-		framespeed = 1.0;
+		framespeed = 0.0;
 		frametime = 0.0;
 		layer=0;		
 		tileWidth = 16;
@@ -271,6 +385,7 @@ public:
 		tileHeight = tileheightin;
 		current_frame = 0;
 		framespeed = framespeedin;
+		if (framespeedin) animationstate = glzOBject2DAnimationstate::PLAYING;
 		frametime = 0.0f;
 		blend = glzBlendingMode::ALPHA;
 		width = map->width*(spritesize / tilewidthin);
@@ -282,6 +397,75 @@ public:
 
 
 
+class obj2d_Clear : public Object2D
+{
+	
+
+public:
+
+	virtual void draw(glzCamera2D *camera) override;
+	virtual void update(float seconds) override;
+
+
+	//virtual void set_i(glzOBject2DSetvar type, int v) override;
+//	virtual void set_f(glzOBject2DSetvar type, float v) override;
+
+	obj2d_Clear()
+	{
+		blendcolor = glzColor();		
+	}
+
+	obj2d_Clear(glzColor c)
+	{
+		blendcolor = c;
+	}
+
+	obj2d_Clear(int labelin)
+	{
+		label = labelin;
+		blendcolor = glzColor();
+	}
+
+	obj2d_Clear(int labelin, glzColor c)
+	{
+		label = labelin;
+		blendcolor = c;
+	}
+	
+};
+
+class obj2d_Object2DGraph : public Object2D
+{
+	
+private:
+	Object2DGraph *rendergraph;
+
+public:
+
+	virtual void draw(glzCamera2D *camera) override;
+	virtual void update(float seconds) override;
+
+	
+	virtual void set_r(glzOBject2DSetvar type, Object2DGraph *v) override;
+	//virtual void set_i(glzOBject2DSetvar type, int v) override;
+	//	virtual void set_f(glzOBject2DSetvar type, float v) override;
+
+	obj2d_Object2DGraph()
+	{
+		rendergraph = nullptr;
+	}
+
+	obj2d_Object2DGraph(int labelin, Object2DGraph *c)
+	{
+		label = labelin;
+		rendergraph = c;
+	}
+
+	
+
+};
+
+
 
 
 // ************************** OBject 2D graph **********************************
@@ -291,18 +475,24 @@ public:
 class Object2DGraph {
 	// position, orientation, speed and such	
 
+private:
+
+	
+
 public:
 
 
 	vector<shared_ptr<Object2D>> objects;
 	glzCamera2D *camera;
+	bool sort_z;
 	
-	Object2DGraph(glzCamera2D *cam) { camera = cam; }
+	Object2DGraph(glzCamera2D *cam) { camera = cam; sort_z = false; }
 
 	template<typename T> // fun with templates
 	void add(T obj)
 	{
 		objects.push_back(make_shared<T>(obj));
+		
 	}
 
 	void draw()
@@ -323,9 +513,82 @@ public:
 		for (auto a : objects)
 			a->update(seconds);
 
+		if (sort_z)
+			sort(objects.begin(), objects.end(), [](const shared_ptr<Object2D>& a, const shared_ptr<Object2D>& b) {	return a.get()->z_order < b.get()->z_order;	});
+	
+
+		
+		int i2 = 0;
+
+		auto i = objects.begin();
+
+		// o yes this is way uggly, but i think it works
+		while (i < objects.end()) {
+
+			if (objects[i2]->tobekilled)
+			{
+				i = objects.erase(i);
+			}
+			else {
+				++i;
+				i2++;
+			}
+		}
+
 		return;
 	}
 
+
+	
+
+	void set(int l, glzOBject2DSetvar type)
+	{
+
+		for (auto &a : objects)
+			if (a->label == l)
+				switch (type)
+			{
+				case glzOBject2DSetvar::ANIMATIONPLAY:
+					a->current_frame = 0;
+					a->frametime = 0.0f;
+					a->animationstate = glzOBject2DAnimationstate::PLAYING;
+					break;	
+
+				case glzOBject2DSetvar::ANIMATIONSTOP:
+					a->animationstate = glzOBject2DAnimationstate::STOPPED;
+					break;
+
+				case glzOBject2DSetvar::ANIMATIONPLAYONCE:
+					a->current_frame = 0;
+					a->frametime = 0.0f;
+					a->animationstate = glzOBject2DAnimationstate::PLAYINGONCE;
+					break;
+
+
+			}
+	}
+
+
+	void set(int l, glzOBject2DSetvar type, bool v)
+	{
+
+		for (auto &a : objects)
+			if (a->label == l)
+				switch (type)
+			{
+				case glzOBject2DSetvar::KILL:
+					a->tobekilled = v;
+					break;
+			
+					break;
+					
+			}
+
+
+
+
+		return;
+	}
 
 	void set(int l, glzOBject2DSetvar type, int v)
 	{
@@ -339,8 +602,11 @@ public:
 					break;
 
 				case glzOBject2DSetvar::CURRENT_ANIMATION:
+					a->current_animation = v;
+					break;
+
 				case glzOBject2DSetvar::CURRENT_FRAME:
-					a->set_i(type, v);
+					a->current_frame = v;
 					break;
 			}
 		return;
@@ -352,30 +618,35 @@ public:
 
 		for (auto &a : objects)
 			if (a->label == l)
-			switch (type)
+				switch (type)
 			{
-			case glzOBject2DSetvar::ALPHA:
-				a->alpha = v;
-				break;
+				case glzOBject2DSetvar::ALPHA:
+					a->alpha = v;
+					break;
 
-			case glzOBject2DSetvar::SCALE:
-				a->scale = v;
-				break;
+				case glzOBject2DSetvar::SCALE:
+					a->scale = v;
+					break;
 
-			case glzOBject2DSetvar::FRAMESPEED:								
-				a->set_f(type, v);
-				break;
-			case glzOBject2DSetvar::WIDTH:
-				a->width = v;
-				break;
-			case glzOBject2DSetvar::HEIGHT:
-				a->height = v;
-				break;
-
-			}
+				case glzOBject2DSetvar::FRAMESPEED:
+					a->framespeed = v;
+					break;
+				case glzOBject2DSetvar::WIDTH:
+					a->width = v;
+					break;
+				case glzOBject2DSetvar::HEIGHT:
+					a->height = v;
+					break;
+				case glzOBject2DSetvar::Z_LEVEL:
+					a->z_order = v;
+					break;
+			}		
+		
 		return;
 	}
 
+
+	
 	void set(int l, glzOBject2DSetvar type, glzBlendingMode v)
 	{
 		for (auto &a : objects)
@@ -400,6 +671,26 @@ public:
 		return;
 	}
 
+	void set(int l, glzOBject2DSetvar type, Object2DGraph *v)
+	{
+		for (auto &a : objects)
+			if ((a->label == l) && (type == glzOBject2DSetvar::RENDEREGRAPH))
+				a->set_r(type, v);
+		return;
+	}
+	
+
+
+	void kill(int l)
+	{
+
+		for (auto &a : objects)
+			if (a->label == l)
+				a->tobekilled = true;
+		return;
+	}
+
+
 
 	
 
@@ -412,18 +703,36 @@ public:
 obj2d_Sprite
 obj2d_Sprite_Animated
 obj2d_Fullscreen
+obj2d_Background 
 obj2d_Tiles
+obj2d_Clear
 
 
-unimplemented
+unimplemented 
 
 
-obj2d_Background - takes a sprite and tiles it across the screen including a paralax factor
-obj2d_Sidescroll - similar to the above but only repeats in x
+
+obj2d_Isomesh
+obj2d_Hexmesh
+------ these generate a bunch of sprites that are z sorted, but the object never render itself.
+
+
+obj2d_Sidescroll - similar to the above but is restricted in it's dimentions
 ---- these use a new shader called "repeating texmap" or something equally daft
 
 
 obj2d_Particles - takes a pointer to a glzSimpleParticleSystem or similar and a glzSpriteanimationList
+
+obj2d_Object2DGraph -- i know it's a bit self referetial but it could be useful
+
+// non obvious objects
+
+
+obj2d_colorOverlay
+
+
+// non rendering objects
+
 
 */
 

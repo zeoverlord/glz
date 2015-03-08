@@ -573,6 +573,46 @@ public:
 };
 
 
+class glzColor {
+public:
+	float r, g, b, a;
+	
+
+	glzColor() : r(0.0), g(0.0), b(0.0), a(1.0) {}
+	//color() : r(0.0), g(0.0), b(0.0) {}
+	glzColor(float rin, float gin, float bin, float ain) : r(rin), g(gin), b(bin), a(ain) {}
+
+	// these shouldn't really be used for blending
+
+
+	glzColor glzColor::operator+ (glzColor c) { return glzColor(r + c.r, g + c.g, b + c.b, a + c.a); }
+	glzColor glzColor::operator+= (glzColor c) { r += c.r; g += c.g; b += c.b; a += c.a; return *this; }
+	glzColor glzColor::operator+ (float c) { return glzColor(r + c, g + c, b + c, a); }
+	glzColor glzColor::operator+= (float c) { r += c; g += c; b += c;  return *this; }
+
+	glzColor glzColor::operator- (glzColor c) { return glzColor(r - c.r, g - c.g, b - c.b, a - c.a); }
+	glzColor glzColor::operator-= (glzColor c) { r -= c.r; g -= c.g; b -= c.b; a -= c.a; return *this; }
+	glzColor glzColor::operator- (float c) { return glzColor(r - c, g - c, b - c, a); }
+	glzColor glzColor::operator-= (float c) { r -= c; g -= c; b -= c; return *this; }
+
+	glzColor glzColor::operator* (glzColor c) { return glzColor(r * c.r, g * c.g, b * c.b, a * c.a); }
+	glzColor glzColor::operator*= (glzColor c) { r *= c.r; g *= c.g; b *= c.b; a *= c.a; return *this; }
+	glzColor glzColor::operator* (float c) { return glzColor(r * c, g * c, b * c, a * c); }
+	glzColor glzColor::operator*= (float c) { r *= c; g *= c; b *= c; return *this; }
+
+	glzColor glzColor::operator/ (glzColor c) { return glzColor(r / c.r, g / c.g, b / c.b, a / c.a); }
+	glzColor glzColor::operator/= (glzColor c) { r /= c.r; g /= c.g; b /= c.b; a /= c.a; return *this; }
+	glzColor glzColor::operator/ (float c) { return glzColor(r / c, g / c, b / c, a); }
+	glzColor glzColor::operator/= (float c) { r /= c; g /= c; b /= c; return *this; }
+};
+
+
+inline glzColor operator+ (float c, glzColor a) { return glzColor(a.r + c, a.g + c, a.b + c, a.a); }
+inline glzColor operator- (float c, glzColor a) { return glzColor(a.r - c, a.g - c, a.b - c, a.a); }
+inline glzColor operator* (float c, glzColor a) { return glzColor(a.r * c, a.g * c, a.b * c, a.a * c); }
+inline glzColor operator/ (float c, glzColor a) { return glzColor(c / a.r, c / a.g, c / a.b, a.a); }
+
+
 
 
 class glzCamera2D{
@@ -801,6 +841,7 @@ public:
 
 	glzSpriteanimationList() {} // default numbers
 	glzSpriteanimationList(glzSpriteList a) { map.push_back(a); } // direct initialization
+	glzSpriteanimationList(glzSprite a) { glzSpriteList b(a); map.push_back(b); } // direct initialization
 //	glzSpriteanimationList(int w, int h); // direct initialization with preset
 
 

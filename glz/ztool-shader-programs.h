@@ -205,3 +205,42 @@ string const tilemap_fragment = {
 	"fragment_color = am;\r\n"
 	"}"
 	"" };
+
+	string const tiledSprite_vertex = {
+
+		"#version 140\r\n"
+		""
+		"in vec3 Position;"
+	//	"in vec2 TexCoord;"
+		"uniform mat4 projMat;"
+		"uniform vec2 spritepos;"
+		"uniform vec2 spritesize;"
+		"uniform vec2 spriteoffset;"
+		"uniform vec2 spritescale;"
+		"out vec4 tc;"
+		"void main() {"
+		"vec4 pos=vec4(Position.xyz,1.0);"
+		"gl_Position = projMat*pos;"
+		"	tc = vec4((Position.xy*spritesize.xy*spritescale.xy)+(spriteoffset.xy*spritesize.xy*spritescale.xy), 0.0, 1.0);"
+		"}"
+		"" };
+
+	string const tiledSprite_fragment = {
+		"#version 140\r\n"
+		""
+		"in vec4 tc;"
+		"out vec4 fragment_color;"
+		"uniform sampler2D texunit0;"
+		"uniform vec2 spritepos;"
+		"uniform vec2 spritesize;"
+		"uniform vec2 spritescale;"
+		"void main() {"
+		"float sx = mod(tc.x, spritesize.x);\r\n"
+		"float sy = mod(tc.y, spritesize.y);\r\n"
+		"vec4 base = texture2D(texunit0,  vec2(sx,sy)+spritepos.xy);"
+		"fragment_color = base;"
+		"}"
+		"" };
+
+
+	

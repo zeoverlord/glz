@@ -70,6 +70,7 @@ int gamestate=8;
 
 glzCamera2D cam;
 Object2DGraph tempgraph(&cam);
+//Object2DGraph tempgraph2(&cam);
 node3 n;
 
 glztiles tilemap;
@@ -300,6 +301,10 @@ BOOL Initialize (GL_Window* window, Keys* keys)					// Any GL Init Code & User I
 
 	n.pos = vert3(200.0,-130.0,0.0);
 	
+	
+
+	tempgraph.add(obj2d_Clear());
+
 	tempgraph.add(obj2d_Fullscreen(-1, texture[5]));
 
 	// load the tilemap
@@ -328,21 +333,21 @@ BOOL Initialize (GL_Window* window, Keys* keys)					// Any GL Init Code & User I
 	int v[] = { 31,30,29,28,27,26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0 };
 	expl_spritelist_vector.map.push_back(glzSpriteList(8, 4, v, 32));
 
-	tempgraph.add(obj2d_Sprite_Animated(111, expl_spritelist_vector, nullptr, node3(vert3(100.0, 0.0, 0.0)), texture[2], 1.0, 0.04f));
+	tempgraph.add(obj2d_Sprite(111, expl_spritelist_vector, nullptr, node3(vert3(100.0, 0.0, 0.0)), texture[2], 1.0, 30.0f));
 
-	tempgraph.set(343, glzOBject2DSetvar::SCALE, 1.0f);
+	tempgraph.set(343, glzOBject2DSetvar::SCALE, 2.0f);
 	tempgraph.set(111, glzOBject2DSetvar::BLEND, glzBlendingMode::ADDITIVE);
 	tempgraph.set(111, glzOBject2DSetvar::CURRENT_ANIMATION, 0);
-
-	//obj2d_Sprite tobj;
-//	tobj = tempgraph.objects.at(0)->;
-	//tobj = tempgraph.find(343);
-//	tobj->n_local.pos.x = -100;
-//	tobj->n_local.update_matrix();
-
+	tempgraph.set(111, glzOBject2DSetvar::ANIMATIONSTOP);
+	tempgraph.set(343, glzOBject2DSetvar::Z_LEVEL, 2.0f);
+//	tempgraph.sort_z = true;
 	
 
-	tempgraph.add(obj2d_Fullscreen(-1, glzBlendingMode::ADDITIVE, texture[6]));
+//	tempgraph2.add(obj2d_Clear(66, glzColor(0.5, 0.0, 0.0, 0.5)));
+	//tempgraph.add(obj2d_Clear(66,glzColor(0.0,0.0,0.0,0.5)));
+//	tempgraph.add(obj2d_Object2DGraph(67, &tempgraph2));
+	
+	tempgraph.add(obj2d_Background(-1, expl_spritelist_vector, glzBlendingMode::ADDITIVE, 2.0, 30.0f, 1.0, texture[2]));
 	
 		
 
@@ -467,8 +472,10 @@ if (gamestate == 8)
 	if (g_keys->keyDown['D'] == TRUE) cam.moveToRel(vert3(seconds * 100, 0.0, 0.0));
 	if (g_keys->keyDown['W'] == TRUE) cam.moveToRel(vert3(0.0, seconds * 100, 0.0));
 	if (g_keys->keyDown['S'] == TRUE) cam.moveToRel(vert3(0.0, seconds * -100, 0.0));
-	if (g_keys->keyDown[VK_SPACE] == TRUE) cam.zoomTo(5.0f);
-		else cam.zoomTo(1.0f);
+	if (g_keys->keyDown[VK_SPACE] == TRUE) { cam.zoomTo(5.0f); 	}
+	else cam.zoomTo(1.0f);
+
+	if (g_keys->keyDown['P'] == TRUE) tempgraph.set(111, glzOBject2DSetvar::ANIMATIONPLAYONCE);
 
 	cam.update(seconds);
 }
@@ -659,6 +666,7 @@ void draw_backdrop_glitch(unsigned int bgtexture, unsigned int bgtexture2)
 
 void Draw (void)
 {
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		// Clear Screen And Depth Buffer
 	
 
@@ -803,7 +811,7 @@ void Draw (void)
 		glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
 
 
-		glBlendFunc(GL_ONE, GL_ONE);
+	//	glBlendFunc(GL_ONE, GL_ONE);
 		glBlendFunc(GL_CONSTANT_COLOR, GL_ONE_MINUS_CONSTANT_COLOR);
 		glBlendColor(1, 0, 1, 1.0f);
 		glEnable(GL_BLEND);
