@@ -40,11 +40,15 @@ void glzShaderProgramPop();
 // fixed shaders
 void glzShaderUsePasstrough(void);
 void glzShaderUseBasic(void);
+void glzShaderUseColorTint(void);
 void glzShaderUseTilemap(void);
 void glzShaderUseTiledSprite(void);
 
+
+
 unsigned int glzShaderReurnPasstrough(void);
 unsigned int glzShaderReurnBasic(void);
+unsigned int glzShaderReurnColorTint(void);
 unsigned int glzShaderReurnTilemap(void);
 unsigned int glzShaderReurnTiledSprite(void);
 

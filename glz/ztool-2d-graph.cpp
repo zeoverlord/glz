@@ -494,3 +494,37 @@ void obj2d_Tiles::set_f(glzOBject2DSetvar type, float v)
 }
 
 
+//*** obj2d_ColorTint ***
+
+void obj2d_ColorTint::draw(glzCamera2D *camera)
+{
+
+	glzMatrix m;
+	glzMatrix mt;
+
+	setblendingmode(blend);
+	glzShaderUseColorTint();
+
+
+	m.LoadIdentity();
+	mt.LoadIdentity();
+
+	mt.translate(-1.0, -1.0, 0.0);
+
+	mt.scale(2.0, 2.0, 1.0);
+	unsigned int colortint_program = glzShaderReurnColorTint();
+
+	glzUniformMatrix4fv(colortint_program, "projMat", mt);
+	glzUniform4f(colortint_program, "color", blendcolor.r, blendcolor.g, blendcolor.b, blendcolor.a);
+	glzDirectSpriteRender(m, texture, glzSprite(), glzOrigin::CENTERED);
+
+	glDisable(GL_BLEND);
+	return;
+}
+
+void obj2d_ColorTint::update(float seconds)
+{
+	return;
+}
+
+

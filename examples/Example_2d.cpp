@@ -341,13 +341,18 @@ BOOL Initialize (GL_Window* window, Keys* keys)					// Any GL Init Code & User I
 	tempgraph.set(111, glzOBject2DSetvar::ANIMATIONSTOP);
 	tempgraph.set(343, glzOBject2DSetvar::Z_LEVEL, 2.0f);
 //	tempgraph.sort_z = true;
+
 	
 
 //	tempgraph2.add(obj2d_Clear(66, glzColor(0.5, 0.0, 0.0, 0.5)));
 	//tempgraph.add(obj2d_Clear(66,glzColor(0.0,0.0,0.0,0.5)));
 //	tempgraph.add(obj2d_Object2DGraph(67, &tempgraph2));
 	
-	tempgraph.add(obj2d_Background(-1, expl_spritelist_vector, glzBlendingMode::ADDITIVE, 2.0, 30.0f, 1.0, texture[2]));
+	//tempgraph.add(obj2d_Background(-1, expl_spritelist_vector, glzBlendingMode::ADDITIVE, 2.0, 30.0f, 1.0, texture[2]));
+
+
+	tempgraph.add(obj2d_ColorTint(66, glzBlendingMode::MULTIPLY, glzColor(1.0, 0.2, 0.0, 1.0)));
+	
 	
 		
 

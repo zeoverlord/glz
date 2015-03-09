@@ -86,12 +86,14 @@ static unsigned int passtrough_program;
 static bool basic_program_inited;
 static unsigned int basic_program;
 
+static bool colortint_program_inited;
+static unsigned int colortint_program;
+
 static bool tilemap_program_inited;
 static unsigned int tilemap_program;
 
 static bool tiledSprite_program_inited;
 static unsigned int tiledSprite_program;
-
 
 
 static vector<GLint> tempprogram;
@@ -158,6 +160,14 @@ void ini_shd(void)
 		basic_program_inited = true;
 
 	}
+
+	if (!colortint_program_inited) {
+		colortint_program = glzShaderLoadString(colortint_vertex, colortint_fragment, glzVAOType::AUTO);
+		glzShaderLink(colortint_program);
+		basic_program_inited = true;
+
+	}
+	
 
 	if (!tilemap_program_inited) {
 		tilemap_program = glzShaderLoadString(tilemap_vertex, tilemap_fragment, glzVAOType::AUTO);
@@ -434,6 +444,13 @@ void glzShaderUseBasic(void)
 	return;
 }
 
+void glzShaderUseColorTint(void)
+{
+	glUseProgram(colortint_program);
+	return;
+}
+
+
 void glzShaderUseTilemap(void)
 {
 	glUseProgram(tilemap_program);
@@ -457,6 +474,11 @@ unsigned int glzShaderReurnPasstrough(void)
 unsigned int glzShaderReurnBasic(void)
 {
 	return basic_program;
+}
+
+unsigned int glzShaderReurnColorTint(void)
+{
+	return colortint_program;
 }
 
 unsigned int glzShaderReurnTilemap(void)

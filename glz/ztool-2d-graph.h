@@ -33,7 +33,7 @@
 #define __2dscenegraphbase__
 
 enum class glzBlendingMode { NONE, ADDITIVE, ALPHA, MULTIPLY };
-enum class glzOBject2DSetvar { NONE, ALPHA, SCALE, BLEND, WIDTH, HEIGHT, TEXTURE, SPRITE, CURRENT_ANIMATION, CURRENT_FRAME, FRAMESPEED, NODE_LOCAL, NODE_PARENT, KILL, Z_LEVEL, RENDEREGRAPH, ANIMATIONSTOP, ANIMATIONPLAY, ANIMATIONPLAYONCE };
+enum class glzOBject2DSetvar { NONE, ALPHA, SCALE, BLEND, BLENDCOLOR, WIDTH, HEIGHT, TEXTURE, SPRITE, CURRENT_ANIMATION, CURRENT_FRAME, FRAMESPEED, NODE_LOCAL, NODE_PARENT, KILL, Z_LEVEL, RENDEREGRAPH, ANIMATIONSTOP, ANIMATIONPLAY, ANIMATIONPLAYONCE,VISIBLE};
 enum class glzOBject2DAnimationstate { STOPPED, PLAYING, PLAYINGONCE };
 
 
@@ -51,6 +51,7 @@ public:
 	glzBlendingMode blend;
 	glzColor blendcolor;
 	float alpha;
+	bool visible;
 	float width;
 	float height;
 	float scale;
@@ -81,6 +82,7 @@ public:
 		current_frame = 0;
 		framespeed = 0.0;
 		frametime = 0.0;
+		visible = true;
 	}
 	
 	virtual void draw(glzCamera2D *camera) 
@@ -140,6 +142,7 @@ public:
 		current_frame = 0;
 		framespeed = 0.0f;
 		frametime = 0.0f;
+		visible = true;
 		
 	} 
 
@@ -152,6 +155,7 @@ public:
 		n_parent = nin;
 		n_local = nLin;
 		scale = scalein;
+		visible = true;
 
 		current_animation = 0;
 		current_frame = 0;
@@ -169,6 +173,7 @@ public:
 		n_parent = nin;
 		n_local = nLin;
 		scale = scalein;
+		visible = true;
 
 		current_animation = 0;
 		current_frame=0;
@@ -199,6 +204,7 @@ public:
 		sprite = glzSprite();
 		texture = 0;
 		scale = 1.0;
+		visible = true;
 
 	}
 
@@ -207,6 +213,7 @@ public:
 		label = labelin;
 		sprite = spritein;
 		texture = tex;
+		visible = true;
 
 	}
 	obj2d_Fullscreen(int labelin, glzSprite spritein, glzBlendingMode b, unsigned int tex)
@@ -215,6 +222,7 @@ public:
 		blend = b;
 		sprite = spritein;
 		texture = tex;
+		visible = true;
 
 	}
 
@@ -223,6 +231,7 @@ public:
 		label = labelin;
 		sprite = glzSprite();
 		texture = tex;
+		visible = true;
 
 	}
 
@@ -232,6 +241,7 @@ public:
 		blend = b;
 		sprite = glzSprite();
 		texture = tex;
+		visible = true;
 
 	}
 
@@ -266,6 +276,7 @@ public:
 		current_frame = 0;
 		framespeed = 1.0;
 		frametime = 0.0;
+		visible = true;
 	}
 	
 
@@ -277,6 +288,7 @@ public:
 		current_frame = 0;
 		framespeed = 1.0;
 		frametime = 0.0;
+		visible = true;
 	}
 
 
@@ -290,6 +302,7 @@ public:
 		current_frame = 0;
 		framespeed = 0.0;
 		frametime = 0.0;
+		visible = true;
 	}
 
 
@@ -304,6 +317,7 @@ public:
 		framespeed = framespeedin;
 		if (framespeedin) animationstate = glzOBject2DAnimationstate::PLAYING;
 		frametime =0.0;
+		visible = true;
 	}
 
 
@@ -320,6 +334,7 @@ public:
 		current_frame = 0;
 		framespeed = 0.0;
 		frametime = 0.0;
+		visible = true;
 
 	}
 
@@ -336,6 +351,7 @@ public:
 		framespeed = framespeedin;
 		if (framespeedin) animationstate = glzOBject2DAnimationstate::PLAYING;
 		frametime = 0.0;
+		visible = true;
 
 	}
 
@@ -368,6 +384,7 @@ public:
 		tileWidth = 16;
 		tileHeight = 16;
 		blend = glzBlendingMode::ALPHA;
+		visible = true;
 		
 	}
 
@@ -390,6 +407,7 @@ public:
 		blend = glzBlendingMode::ALPHA;
 		width = map->width*(spritesize / tilewidthin);
 		height = map->height*(spritesize / tileheightin);
+		visible = true;
 	
 	}
 
@@ -434,6 +452,40 @@ public:
 	
 };
 
+
+class obj2d_ColorTint : public Object2D
+{
+
+public:
+
+	virtual void draw(glzCamera2D *camera) override;
+	virtual void update(float seconds) override;
+
+
+
+	obj2d_ColorTint()
+	{
+		
+		texture = 0;
+		scale = 1.0;
+		visible = true;
+
+	}
+
+
+
+	obj2d_ColorTint(int labelin,  glzBlendingMode b, glzColor c)
+	{
+		label = labelin;
+		blend = b;
+		blendcolor = c;
+		visible = true;
+
+	}
+	
+};
+
+
 class obj2d_Object2DGraph : public Object2D
 {
 	
@@ -453,12 +505,14 @@ public:
 	obj2d_Object2DGraph()
 	{
 		rendergraph = nullptr;
+		visible = true;
 	}
 
 	obj2d_Object2DGraph(int labelin, Object2DGraph *c)
 	{
 		label = labelin;
 		rendergraph = c;
+		visible = true;
 	}
 
 	
@@ -500,7 +554,11 @@ public:
 		glzShaderProgramPush();
 
 		for (auto a : objects)
-			a->draw(camera);
+		{
+			if (a->visible)
+				a->draw(camera);
+		}
+			
 
 		glzShaderProgramPop();
 
@@ -579,9 +637,11 @@ public:
 				case glzOBject2DSetvar::KILL:
 					a->tobekilled = v;
 					break;
-			
+
+				case glzOBject2DSetvar::VISIBLE:
+					a->visible = v;
 					break;
-					
+
 			}
 
 
@@ -679,7 +739,16 @@ public:
 		return;
 	}
 	
+	void set(int l, glzOBject2DSetvar type, glzColor v)
+	{
+		for (auto &a : objects)
+			if ((a->label == l) && (type == glzOBject2DSetvar::BLENDCOLOR))
+				a->blendcolor = v;
+		return;
+	}
 
+
+	
 
 	void kill(int l)
 	{

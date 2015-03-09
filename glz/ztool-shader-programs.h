@@ -80,6 +80,31 @@ string const basic_fragment = {
 	"}"
 	"" };
 
+string const colortint_vertex = {
+
+	"#version 140\r\n"
+	""
+	"in vec3 Position;"
+	"uniform  mat4 projMat;"
+	"void main() {"
+	"vec4 pos=vec4(Position.xyz,1.0);"
+	"gl_Position = projMat*pos;"
+	"}"
+	"" };
+
+string const colortint_fragment = {
+	"#version 140\r\n"
+	""
+	"uniform  vec4 color;"
+	"out vec4 fragment_color;"
+	"uniform sampler2D texunit0;"
+	"void main() {"
+	"fragment_color = color;"
+	"}"
+	"" };
+
+
+
 string const tilemap_vertex = {
 	"#version 140\r\n"
 	""
