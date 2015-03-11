@@ -1707,6 +1707,7 @@ double glzScanVectorArray(vector<poly3> pdata, int group, glzBoundingScan scan)
 
 	double r = 0, r2 = 0, r3 = 0;
 
+	if (!pdata.size()) return 0.0;
 
 	// set initial conditiona
 
@@ -1718,9 +1719,9 @@ double glzScanVectorArray(vector<poly3> pdata, int group, glzBoundingScan scan)
 	case glzBoundingScan::WIDTH:
 	case glzBoundingScan::CENTER_X:
 
-		r = pdata[0].a.v.x;
-		r2 = pdata[0].a.v.x;
-		r3 = pdata[0].a.v.x;
+		r = pdata.at(0).a.v.x;
+		r2 = pdata.at(0).a.v.x;
+		r3 = pdata.at(0).a.v.x;
 
 		break;
 
@@ -1730,9 +1731,9 @@ double glzScanVectorArray(vector<poly3> pdata, int group, glzBoundingScan scan)
 	case glzBoundingScan::HEIGHT:
 	case glzBoundingScan::CENTER_Y:
 
-		r = pdata[0].a.v.y;
-		r2 = pdata[0].a.v.y;
-		r3 = pdata[0].a.v.y;
+		r = pdata.at(0).a.v.y;
+		r2 = pdata.at(0).a.v.y;
+		r3 = pdata.at(0).a.v.y;
 
 		break;
 
@@ -1900,6 +1901,72 @@ double glzScanVectorArray(vector<poly3> pdata, int group, glzBoundingScan scan)
 	}
 	return r;
 }
+
+
+void glzRecenterVectorArray(vector<poly3> *pdata, int group, glzOrigin origin)
+{
+
+	glzMatrix m;
+	m.LoadIdentity();
+
+	if (!pdata->size()) return;
+
+	float left = glzScanVectorArray(*pdata, group, glzBoundingScan::LEFT);
+	float right = glzScanVectorArray(*pdata, group, glzBoundingScan::RIGHT);
+
+	float top = glzScanVectorArray(*pdata, group, glzBoundingScan::TOP);
+	float bottom = glzScanVectorArray(*pdata, group, glzBoundingScan::BOTTOM);
+
+	float center_x = glzScanVectorArray(*pdata, group, glzBoundingScan::CENTER_X);
+	float center_y = glzScanVectorArray(*pdata, group, glzBoundingScan::CENTER_Y);
+
+	float shiftx = 0.0f;
+	float shifty = 0.0f;
+
+			switch (origin)
+			{
+			case glzOrigin::TOP_LEFT:
+				shiftx = right;
+				shifty = bottom;
+				break;
+
+			case glzOrigin::BOTTOM_LEFT:
+				shiftx = right;
+				shifty = top;
+				break;
+
+			case glzOrigin::BOTTOM_RIGHT:
+				shiftx = left;
+				shifty = top;
+				break;
+
+			case glzOrigin::TOP_RIGHT:
+				shiftx = left;
+				shifty = bottom;
+				break;
+
+			case glzOrigin::CENTERED:
+				shiftx = (left +right)*0.5;
+				shifty = (top + bottom)*0.5;
+				break;
+			}
+
+
+		//	shiftx = left;
+		//	shifty = bottom;
+
+				m.translate(-shiftx, -shifty, 0);
+	
+
+			glzProjectVertexArray(pdata, m, group);
+
+	return;
+}
+
+
+
+
+
 
 void glzMultMatrix(float *MatrixB,float  MatrixA[16])
 {

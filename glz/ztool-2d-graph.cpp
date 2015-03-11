@@ -53,6 +53,8 @@ void setblendingmode(glzBlendingMode bmode)
 		glBlendFunc(GL_DST_COLOR, GL_ZERO);
 		break;
 		
+
+
 	}
 	
 	glEnable(GL_BLEND);
@@ -84,8 +86,9 @@ void obj2d_Sprite::draw(glzCamera2D *camera)
 
 	glzUniformMatrix4fv(basic_program, "projMat", mt);
 	glzUniform1i(basic_program, "texunit0", 0);	
+	glzUniform4f(basic_program, "color", blendcolor.r, blendcolor.g, blendcolor.b, blendcolor.a);
 
-	glzDirectSpriteRender(m, texture, sprite.get_sprite(current_animation, current_frame), width*scale, height*scale, glzOrigin::CENTERED);
+	glzDirectSpriteRender(m, texture, sprite.get_sprite(current_animation, current_frame), width*scale, height*scale, origin);
 	glDisable(GL_BLEND);
 	return;
 }
@@ -181,13 +184,14 @@ void obj2d_Fullscreen::draw(glzCamera2D *camera)
 
 
 
-	mt.translate(-1.0, -1.0, 0.0);
+	mt.translate(-0.0, -0.0, 0.0);
 
 	mt.scale(2.0, 2.0, 1.0);
 	unsigned int basic_program = glzShaderReurnBasic();
 
 	glzUniformMatrix4fv(basic_program, "projMat", mt);
 	glzUniform1i(basic_program, "texunit0", 0);
+	glzUniform4f(basic_program, "color", blendcolor.r, blendcolor.g, blendcolor.b, blendcolor.a);
 	glzDirectSpriteRender(m, texture, sprite, glzOrigin::CENTERED);
 
 	glDisable(GL_BLEND);
@@ -243,7 +247,7 @@ void obj2d_Background::draw(glzCamera2D *camera)
 	offset += n_local.pos;
 	offset.project(camera->m);
 
-	mt.translate(-1.0, -1.0, 0.0);
+	mt.translate(0.0, 0.0, 0.0);
 
 	mt.scale(2.0, 2.0, 1.0);
 	unsigned int tile_program = glzShaderReurnTiledSprite();
@@ -255,6 +259,7 @@ void obj2d_Background::draw(glzCamera2D *camera)
 
 	glzUniformMatrix4fv(tile_program, "projMat", mt);
 	glzUniform1i(tile_program, "texunit0", 0);
+	glzUniform4f(tile_program, "color", blendcolor.r, blendcolor.g, blendcolor.b, blendcolor.a);
 
 	glzUniform2f(tile_program, "spritepos", tsprite.a.u, tsprite.a.v);
 	glzUniform2f(tile_program, "spritesize", tsprite.d.u - tsprite.a.u, tsprite.d.v - tsprite.a.v);
@@ -403,6 +408,7 @@ void obj2d_Tiles::draw(glzCamera2D *camera)
 	glzUniformMatrix4fv(atlas_program, "projMat", mt);
 	glzUniform1i(atlas_program, "texunit0", 0);
 	glzUniform1i(atlas_program, "texunit1", 1);
+	glzUniform4f(atlas_program, "color", blendcolor.r, blendcolor.g, blendcolor.b, blendcolor.a);
 
 	glzUniform1i(atlas_program, "layer", layer);
 	glzUniform1i(atlas_program, "anim", current_frame);
@@ -424,7 +430,7 @@ void obj2d_Tiles::draw(glzCamera2D *camera)
 
 
 
-	glzDirectSpriteRender(m, map->tex, sprite, width*scale, height*scale, glzOrigin::CENTERED);
+	glzDirectSpriteRender(m, map->tex, sprite, width*scale, height*scale, origin);
 
 
 	glDisable(GL_BLEND);
@@ -489,6 +495,66 @@ void obj2d_Tiles::set_f(glzOBject2DSetvar type, float v)
 //	case glzOBject2DSetvar::SCALE:
 //		scale = v;
 //		break;
+	}
+	return;
+}
+
+
+
+
+
+//*** obj2d_Text ***
+
+void obj2d_Text::draw(glzCamera2D *camera)
+{
+
+	glzMatrix m;
+	glzMatrix mt;
+	setblendingmode(blend);
+
+	glzShaderUseBasic();
+
+	m.LoadIdentity();
+	mt.LoadIdentity();
+
+	m *= camera->m;
+
+	if (n_parent != nullptr)
+		m *= n_parent->m;
+	m *= n_local.m;
+	//m.scale(scale, scale, scale);
+
+	glActiveTexture = (PFNGLACTIVETEXTUREPROC)wglGetProcAddress("glActiveTexture");
+
+	unsigned int basic_program = glzShaderReurnBasic();
+
+	glzUniformMatrix4fv(basic_program, "projMat", m);
+	glzUniform1i(basic_program, "texunit0", 0);
+	glzUniform4f(basic_program, "color", blendcolor.r, blendcolor.g, blendcolor.b, blendcolor.a);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+
+	glzDirectDrawText(text, scale, aspect, kern, origin);
+
+	glDisable(GL_BLEND);
+	return;
+}
+
+void obj2d_Text::update(float seconds)
+{
+
+	
+
+	return;
+}
+
+void obj2d_Text::set_s(glzOBject2DSetvar type, string v)
+{
+	switch (type)
+	{
+	case glzOBject2DSetvar::TEXT:
+		text = v;
+		break;
 	}
 	return;
 }

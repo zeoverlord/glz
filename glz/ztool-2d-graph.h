@@ -32,8 +32,8 @@
 #ifndef __2dscenegraphbase__
 #define __2dscenegraphbase__
 
-enum class glzBlendingMode { NONE, ADDITIVE, ALPHA, MULTIPLY };
-enum class glzOBject2DSetvar { NONE, ALPHA, SCALE, BLEND, BLENDCOLOR, WIDTH, HEIGHT, TEXTURE, SPRITE, CURRENT_ANIMATION, CURRENT_FRAME, FRAMESPEED, NODE_LOCAL, NODE_PARENT, KILL, Z_LEVEL, RENDEREGRAPH, ANIMATIONSTOP, ANIMATIONPLAY, ANIMATIONPLAYONCE,VISIBLE};
+enum class glzBlendingMode { NONE, ADDITIVE, ALPHA, MULTIPLY};
+enum class glzOBject2DSetvar { NONE, ALPHA, SCALE, BLEND, BLENDCOLOR, WIDTH, HEIGHT, TEXTURE, TEXT, SPRITE, CURRENT_ANIMATION, CURRENT_FRAME, FRAMESPEED, NODE_LOCAL, NODE_PARENT, KILL, Z_LEVEL, RENDEREGRAPH, ANIMATIONSTOP, ANIMATIONPLAY, ANIMATIONPLAYONCE, VISIBLE, ORIGIN};
 enum class glzOBject2DAnimationstate { STOPPED, PLAYING, PLAYINGONCE };
 
 
@@ -62,6 +62,7 @@ public:
 	int current_frame;
 	float framespeed;
 	float frametime;
+	glzOrigin origin;
 
 	Object2D()
 	{
@@ -69,7 +70,7 @@ public:
 		label = -1;
 		n_local = node3();
 		blend = glzBlendingMode::NONE;
-		blendcolor = glzColor();
+		blendcolor = glzColor(1.0,1.0,1.0,1.0);
 		alpha = 1.0f;
 		width = 100.0f;
 		height = 100.0f;
@@ -83,6 +84,8 @@ public:
 		framespeed = 0.0;
 		frametime = 0.0;
 		visible = true;
+
+		 origin = glzOrigin::BOTTOM_LEFT;
 	}
 	
 	virtual void draw(glzCamera2D *camera) 
@@ -111,6 +114,10 @@ public:
 		return;
 	}
 
+	virtual void set_s(glzOBject2DSetvar type, string v)
+	{
+		return;
+	}
 
 
 };
@@ -412,6 +419,60 @@ public:
 	}
 
 };
+
+
+
+class obj2d_Text : public Object2D
+{
+	string text;
+	float aspect;
+	float kern;
+	
+
+
+public:
+
+	virtual void draw(glzCamera2D *camera) override;
+	virtual void update(float seconds) override;
+//	virtual void set_i(glzOBject2DSetvar type, int v) override;
+//	virtual void set_f(glzOBject2DSetvar type, float v) override;
+	virtual void set_s(glzOBject2DSetvar type, string v) override;
+
+	
+
+
+	obj2d_Text()
+	{
+		texture = 0;
+		scale = 1.0;
+		blend = glzBlendingMode::ALPHA;
+		visible = true;
+
+	}
+
+
+	obj2d_Text(int labelin, string textin, node3 *nin, node3 nLin, unsigned int tex, double scalein, float aspectin, float kernin, glzOrigin originin)
+	{
+		label = labelin;
+		texture = tex;
+		text = textin;
+		n_parent = nin;
+		n_local = nLin;
+		scale = scalein;
+		current_frame = 0;
+		animationstate = glzOBject2DAnimationstate::STOPPED;
+		blend = glzBlendingMode::ALPHA;
+		visible = true;
+
+		aspect = aspectin;
+		kern = kernin;
+		origin = originin;
+
+	}
+
+};
+
+
 
 
 
@@ -744,6 +805,22 @@ public:
 		for (auto &a : objects)
 			if ((a->label == l) && (type == glzOBject2DSetvar::BLENDCOLOR))
 				a->blendcolor = v;
+		return;
+	}
+
+	void set(int l, glzOBject2DSetvar type, glzOrigin v)
+	{
+		for (auto &a : objects)
+			if ((a->label == l) && (type == glzOBject2DSetvar::ORIGIN))
+				a->origin = v;
+		return;
+	}
+
+	void set(int l, glzOBject2DSetvar type, string v)
+	{
+		for (auto &a : objects)
+			if ((a->label == l) && (type == glzOBject2DSetvar::TEXT))
+				a->set_s(type, v);
 		return;
 	}
 

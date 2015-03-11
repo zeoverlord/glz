@@ -72,11 +72,12 @@ string const basic_fragment = {
 	"#version 140\r\n"
 	""
 	"in vec4 tc;"
+	"uniform  vec4 color;"
 	"out vec4 fragment_color;"
 	"uniform sampler2D texunit0;"
 	"void main() {"
 	"vec4 base = texture2D(texunit0, tc.xy);"
-	"fragment_color = base;"
+	"fragment_color = base*color;"
 	"}"
 	"" };
 
@@ -127,6 +128,7 @@ string const tilemap_fragment = {
 	"#version 140\r\n"
 	""
 	"in vec4 txcoord;\r\n"
+	"uniform  vec4 color;\r\n"
 	"out vec4 fragment_color;\r\n"
 	""
 	"uniform sampler2D texunit0; // atlas reference map\r\n"
@@ -227,7 +229,7 @@ string const tilemap_fragment = {
 		""
 	"vec4 am = texture2D(texunit1, newtx.xy);\r\n"
 	""
-	"fragment_color = am;\r\n"
+	"fragment_color = am*color;\r\n"
 	"}"
 	"" };
 
@@ -254,6 +256,7 @@ string const tilemap_fragment = {
 		"#version 140\r\n"
 		""
 		"in vec4 tc;"
+		"uniform  vec4 color;\r\n"
 		"out vec4 fragment_color;"
 		"uniform sampler2D texunit0;"
 		"uniform vec2 spritepos;"
@@ -263,7 +266,7 @@ string const tilemap_fragment = {
 		"float sx = mod(tc.x, spritesize.x);\r\n"
 		"float sy = mod(tc.y, spritesize.y);\r\n"
 		"vec4 base = texture2D(texunit0,  vec2(sx,sy)+spritepos.xy);"
-		"fragment_color = base;"
+		"fragment_color = base*color;"
 		"}"
 		"" };
 

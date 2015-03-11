@@ -204,40 +204,40 @@ BOOL Initialize (GL_Window* window, Keys* keys)					// Any GL Init Code & User I
 
 
 // text screen
-	textvao_num[0] = glzVAOMakeText("Normal text", mt, 1.0f, text_tt, glzOrigin::TOP_LEFT, &textvao[0]);
-	textvao_num[1] = glzVAOMakeText("Tabs and endlines work just as well\nTab\t\t\t\\t\nEndline \t\t\\n", mt, 1.0f, text_tt, glzOrigin::TOP_LEFT, &textvao[1]);
-	textvao_num[2] = glzVAOMakeText("fast changing text:0000", mt, 1.0f, text_tt, glzOrigin::TOP_LEFT, &textvao[2]);
-	textvao_num[3] = glzVAOMakeText("slow changing text:0000", mt, 1.0f, text_tt, glzOrigin::TOP_LEFT, &textvao[3]);
-	textvao_num[4] = glzVAOMakeText("You can also play with the kerning if you want", mt, 0.7f, text_tt, glzOrigin::TOP_LEFT, &textvao[4]);
-	textvao_num[5] = glzVAOMakeText("Using", mt, 1.0f, text_tt, glzOrigin::TOP_LEFT, &textvao[5]);
-	textvao_num[6] = glzVAOMakeText("all kinds", mt, 1.0f, text_tt, glzOrigin::TOP_LEFT, &textvao[6]);
-	textvao_num[7] = glzVAOMakeText("of fonts", mt, 1.0f, text_tt, glzOrigin::TOP_LEFT, &textvao[7]);
-	textvao_num[8] = glzVAOMakeText("Fancy text is fancy", mt2, 1.0f, text_tt, glzOrigin::TOP_LEFT, &textvao[8]);
+	textvao_num[0] = glzVAOMakeText("Normal text", mt, 1.0f, glzOrigin::TOP_LEFT, &textvao[0]);
+	textvao_num[1] = glzVAOMakeText("Tabs and endlines work just as well\nTab\t\t\t\\t\nEndline \t\t\\n", mt, 1.0f, glzOrigin::TOP_LEFT, &textvao[1]);
+	textvao_num[2] = glzVAOMakeText("fast changing text:0000", mt, 1.0f, glzOrigin::TOP_LEFT, &textvao[2]);
+	textvao_num[3] = glzVAOMakeText("slow changing text:0000", mt, 1.0f, glzOrigin::TOP_LEFT, &textvao[3]);
+	textvao_num[4] = glzVAOMakeText("You can also play with the kerning if you want", mt, 0.7f, glzOrigin::TOP_LEFT, &textvao[4]);
+	textvao_num[5] = glzVAOMakeText("Using", mt, 1.0f, glzOrigin::TOP_LEFT, &textvao[5]);
+	textvao_num[6] = glzVAOMakeText("all kinds", mt, 1.0f, glzOrigin::TOP_LEFT, &textvao[6]);
+	textvao_num[7] = glzVAOMakeText("of fonts", mt, 1.0f, glzOrigin::TOP_LEFT, &textvao[7]);
+	textvao_num[8] = glzVAOMakeText("Fancy text is fancy", mt2, 1.0f, glzOrigin::TOP_LEFT, &textvao[8]);
 
 // fsq screen
 
-	textvao_num[9] = glzVAOMakeText("Full screen quads", mt, 1.0f, text_tt, glzOrigin::TOP_LEFT, &textvao[9]);
+	textvao_num[9] = glzVAOMakeText("Full screen quads", mt, 1.0f, glzOrigin::TOP_LEFT, &textvao[9]);
 	
 // Sprite screen
 
-	textvao_num[10] = glzVAOMakeText("Sprites", mt, 1.0f, text_tt, glzOrigin::TOP_LEFT, &textvao[10]);
+	textvao_num[10] = glzVAOMakeText("Sprites", mt, 1.0f, glzOrigin::TOP_LEFT, &textvao[10]);
 
 // grid screen
 
-	textvao_num[11] = glzVAOMakeText("Atlas grid", mt, 1.0f, text_tt, glzOrigin::TOP_LEFT, &textvao[11]);
+	textvao_num[11] = glzVAOMakeText("Atlas grid", mt, 1.0f, glzOrigin::TOP_LEFT, &textvao[11]);
 
 // sprite screen
 
-	textvao_num[12] = glzVAOMakeText("Direct draw sprites in various modes", mt, 1.0f, text_tt, glzOrigin::TOP_LEFT, &textvao[12]);
+	textvao_num[12] = glzVAOMakeText("Direct draw sprites in various modes", mt, 1.0f, glzOrigin::TOP_LEFT, &textvao[12]);
 
 	// sprite screen
 
-	textvao_num[13] = glzVAOMakeText("Simple 2D particle system, easy to use, not hard to master", mt, 1.0f, text_tt, glzOrigin::TOP_LEFT, &textvao[13]);
+	textvao_num[13] = glzVAOMakeText("Simple 2D particle system, easy to use, not hard to master", mt, 1.0f, glzOrigin::TOP_LEFT, &textvao[13]);
 
 
 
 // all screens
-	textvao_num[15] = glzVAOMakeText("Switch screens with 1, 2, 3, 4, 5, 6", mt3, 1.0f, text_tt, glzOrigin::TOP_LEFT, &textvao[15]);
+	textvao_num[15] = glzVAOMakeText("Switch screens with 1, 2, 3, 4, 5, 6", mt3, 1.0f, glzOrigin::TOP_LEFT, &textvao[15]);
 
 
 
@@ -320,8 +320,9 @@ BOOL Initialize (GL_Window* window, Keys* keys)					// Any GL Init Code & User I
 
 
 	tempgraph.add(obj2d_Sprite(343, glzSprite(8, 4, 16, 0.0), nullptr, node3(), texture[2], 1.0));
-	tempgraph.add(obj2d_Sprite(-1, glzSprite(), &n, node3(), texture[1], 1.0));
 
+	tempgraph.add(obj2d_Sprite(62, glzSprite(), &n, node3(), texture[1], 1.0));
+	
 
 	glzSpriteList expl_spritelist;
 	glzSpriteanimationList expl_spritelist_vector;
@@ -342,7 +343,7 @@ BOOL Initialize (GL_Window* window, Keys* keys)					// Any GL Init Code & User I
 	tempgraph.set(343, glzOBject2DSetvar::Z_LEVEL, 2.0f);
 //	tempgraph.sort_z = true;
 
-	
+	tempgraph.set(62, glzOBject2DSetvar::ORIGIN, glzOrigin::CENTERED);
 
 //	tempgraph2.add(obj2d_Clear(66, glzColor(0.5, 0.0, 0.0, 0.5)));
 	//tempgraph.add(obj2d_Clear(66,glzColor(0.0,0.0,0.0,0.5)));
@@ -351,7 +352,11 @@ BOOL Initialize (GL_Window* window, Keys* keys)					// Any GL Init Code & User I
 	//tempgraph.add(obj2d_Background(-1, expl_spritelist_vector, glzBlendingMode::ADDITIVE, 2.0, 30.0f, 1.0, texture[2]));
 
 
-	tempgraph.add(obj2d_ColorTint(66, glzBlendingMode::MULTIPLY, glzColor(1.0, 0.2, 0.0, 1.0)));
+	//tempgraph.add(obj2d_ColorTint(66, glzBlendingMode::MULTIPLY, glzColor(1.0, 0.2, 0.0, 1.0)));
+
+	tempgraph.add(obj2d_Text(99, "testing text", nullptr, node3(vert3(-400.0, -250.0, 0.0)), fonttexture[0], 40.0, 1.0, 1.0, glzOrigin::BOTTOM_LEFT));
+	tempgraph.set(99, glzOBject2DSetvar::BLENDCOLOR, glzColor(1.0,0.5,0.0,1.0));
+	
 	
 	
 		
@@ -412,12 +417,12 @@ void Update (float seconds)								// Perform Motion Updates Here
 
 		
 		sprintf_s(tbuffer, 160, "fast changing text:%f", testc);
-		textvao_num[2] = glzVAOMakeText(tbuffer, mt, 1.0f, text_tt, glzOrigin::TOP_LEFT, &textvao[2]);  // this updates text once every frame
+		textvao_num[2] = glzVAOMakeText(tbuffer, mt, 1.0f, glzOrigin::TOP_LEFT, &textvao[2]);  // this updates text once every frame
 
 		if (texttimer>1.0)
 		{
 			sprintf_s(tbuffer2, 160, "slow changing text:%f", testc);
-			textvao_num[3] = glzVAOMakeText(tbuffer2, mt, 1.0f, text_tt, glzOrigin::TOP_LEFT, &textvao[3]);  // this updates text once every second
+			textvao_num[3] = glzVAOMakeText(tbuffer2, mt, 1.0f, glzOrigin::TOP_LEFT, &textvao[3]);  // this updates text once every second
 			texttimer=0.0f;
 		}
 		texttimer+=seconds;
@@ -536,7 +541,7 @@ void draw_text(float x, float y, int text, int font, unsigned int po, unsigned i
 
 }
 
-void draw_text2(char text[255], float x, float y, float scale, float kern, int font, unsigned int po, unsigned int col)
+void draw_text2(string text, float x, float y, float scale, float kern, int font, unsigned int po, unsigned int col)
 {
 	glUseProgram(po);
 
@@ -859,7 +864,7 @@ void Draw (void)
 		ps.render_out();
 
 
-		draw_text2("abcdefghijklmnopqrstuvxyz\nABCDEFGHIJKLMNOPQRSTUVXYZ\n1234567890", 1.0f,210.0f, 32.0f, 1.0f, 2, ProgramObject, COL_WHITE);
+		draw_text2("abcdefghijklmnopqrstuvxyz\nABCDEFGHIJKLMNOPQRSTUVXYZ\n1234567890", 1.0f,10.0f, 32.0f, 1.0f, 2, ProgramObject, COL_WHITE);
 
 
 		draw_text(-3.9f, 1.9f, 13, 2, ProgramObject, COL_WHITE);

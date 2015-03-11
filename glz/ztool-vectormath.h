@@ -796,10 +796,13 @@ public:
 	glzSprite(tex2 ain, tex2 bin, tex2 cin, tex2 din, float depthin) : a{ ain }, b{ bin }, c{ cin }, d{ din }, depth{ depthin }{} // direct initialization
 	glzSprite(tex2 pos, tex2 dim, double depthin) : a{ tex2(pos.u, pos.v) }, b{ tex2(pos.u + dim.u, pos.v) }, c{ tex2(pos.u, pos.v + dim.v) }, d{ tex2(pos.u + dim.u, pos.v + dim.v) }, depth{ depthin }{} // simpler initialization
 
+	glzSprite(glzOrigin origin);
 	glzSprite(unsigned int xdim, unsigned int ydim, unsigned int atlas, float depthin); // grid atlas initialization
+	glzSprite(unsigned int xdim, unsigned int ydim, unsigned int atlas, float depthin, glzOrigin origin);  // grid atlas initialization with origin
 
 	void make_polygons(vector<poly3> *pdata, float x, float y, float width, float height, int group, int atlas);
 	void make_polygons(vector<poly3> *pdata, float x, float y, float width, float height, int group, int atlas, glzMatrix m);
+	void make_polygons(vector<poly3> *pdata, float x, float y, float width, float height, int group, int atlas, glzOrigin origin, glzMatrix m);
 };
 
 

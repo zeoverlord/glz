@@ -95,7 +95,7 @@ long glzCountPrimText(char *text)
 // glzPrimText is only the first itteration of this, i pan on adding support for more modern font texture generators, currently the function is compattible with "bitmap font builder" since this is
 // a leftover from the old NeHe days, eventually i allso plan on adding things like truetype and things like that
 
-long glzPrimText(char *text, float k, float *v, float *t, float *n, glzOrigin origin)
+long glzPrimText(string text, float k, float *v, float *t, float *n, glzOrigin origin)
 {
 	
 	float  const kern = k*0.2500f;
@@ -160,7 +160,7 @@ long glzPrimText(char *text, float k, float *v, float *t, float *n, glzOrigin or
 
 	i = 0;
 
-	while (c<strlen(text))
+	while (c<text.size())
 	{
 
 		if (text[c] == '\n') { yp -= 1; xp = 0; newline = true; c++; }
@@ -286,7 +286,7 @@ long glzPrimText(char *text, float k, float *v, float *t, float *n, glzOrigin or
 	return i * 6;
 }
 
-void glzPrimTextVector(char *text, float k, vector<poly3> *pdata, int group, int atlas, glzOrigin origin)
+void glzPrimTextVector(string text, float k, vector<poly3> *pdata, int group, int atlas)
 {
 
 	float const kern = k*0.2500f;
@@ -358,9 +358,16 @@ void glzPrimTextVector(char *text, float k, vector<poly3> *pdata, int group, int
 	
 	i = 0;
 
-	while (c<strlen(text))
+	//string tx("teststring");
+
+	//char txx= tx[3];
+	//text[1] = txx;
+
+	//while (c<strlen(text))
+	while (c < text.size())
 	{
 
+		//text[c] = txx;
 		if (text[c] == '\n') { yp -= 1; xp = 0; newline = true; c++; }
 		else if (text[c] == '\t')
 		{
@@ -377,6 +384,7 @@ void glzPrimTextVector(char *text, float k, vector<poly3> *pdata, int group, int
 			newline = false;
 
 			textkern[text[c]].charsprite.make_polygons(pdata, x + xp, y + yp, 1.0, 1.0, group, atlas);
+
 
 			xp += textkern[text[c]].backkern;
 
@@ -396,7 +404,7 @@ void glzPrimTextVector(char *text, float k, vector<poly3> *pdata, int group, int
 
 
 
-long glzVAOMakeText(char text[255], glzMatrix matrix, float kern, texture_transform tt, glzOrigin textorigin, unsigned int *vao)
+long glzVAOMakeText(string text, glzMatrix matrix, float kern, glzOrigin textorigin, unsigned int *vao)
 {
 	if (!isinited_geo_2d) ini_geo_2d();
 
@@ -410,7 +418,7 @@ long glzVAOMakeText(char text[255], glzMatrix matrix, float kern, texture_transf
 	vector<poly3> p;
 
 
-	glzPrimTextVector(text, kern, &p, 0, 0, tt.origin);
+	glzPrimTextVector(text, kern, &p, 0, 0);
 
 	// text always generate with top_left origin in bottom_left space the folowing code fixes that
 
@@ -450,8 +458,9 @@ long glzVAOMakeText(char text[255], glzMatrix matrix, float kern, texture_transf
 		break;
 	}
 
-	m *= matrix;
+	
 	glzProjectVertexArray(&p, m, 0);
+	glzProjectVertexArray(&p, matrix, 0);
 
 	glzVAOMakeFromVector(p, vao, glzVAOType::AUTO);
 
@@ -461,7 +470,7 @@ long glzVAOMakeText(char text[255], glzMatrix matrix, float kern, texture_transf
 
 }
 
-long glzVAOMakeText2d(char text[255], float scale, float aspect, float kern, texture_transform tt, glzOrigin textorigin, unsigned int *vao)
+long glzVAOMakeText2d(string text, float scale, float aspect, float kern,  glzOrigin textorigin, unsigned int *vao)
 {
 	glzMatrix m;
 
@@ -469,14 +478,14 @@ long glzVAOMakeText2d(char text[255], float scale, float aspect, float kern, tex
 	m.scale(scale, scale*aspect, 1.0f);
 
 
-	return glzVAOMakeText(text, m, kern, tt, textorigin, vao);
+	return glzVAOMakeText(text, m, kern, textorigin, vao);
 
 }
 
-void glzDirectDrawText(char text[255], float scale, float aspect, float kern, glzOrigin textorigin)
+void glzDirectDrawText(string text, float scale, float aspect, float kern, glzOrigin textorigin)
 {
 	unsigned int localVAO;
-	long const verts = glzVAOMakeText2d(text, scale, aspect, kern, glzMakeTTAtlas(16, 16, 0, glzOrigin::BOTTOM_LEFT), textorigin, &localVAO);
+	long const verts = glzVAOMakeText2d(text, scale, aspect, kern, textorigin, &localVAO);
 	glzDrawVAO(0, verts, localVAO, GL_TRIANGLES);
 	glzKillVAO(localVAO);
 
@@ -653,7 +662,9 @@ void glzDirectSpriteRender(glzMatrix m, unsigned int texture, glzSprite sprite, 
 	unsigned int localVAO;
 	vector<poly3> p;
 		
-	sprite.make_polygons(&p, 0.0, 0.0, 1.0, 1.0, 0, 1, m);
+	sprite.make_polygons(&p, 0.0, 0.0, 1.0, 1.0, 0, 1, origin, m);
+
+	
 	
 	glzVAOMakeFromVector(p, &localVAO, glzVAOType::AUTO);
 
@@ -669,7 +680,8 @@ void glzDirectSpriteRender(glzMatrix m, unsigned int texture, glzSprite sprite, 
 	unsigned int localVAO;
 	vector<poly3> p;
 
-	sprite.make_polygons(&p, 0.0, 0.0, width, height, 0, 1, m);
+	sprite.make_polygons(&p, 0.0, 0.0, width, height, 0, 1, origin, m);
+	//glzRecenterVectorArray(&p, 0, origin);
 
 	glzVAOMakeFromVector(p, &localVAO, glzVAOType::AUTO);
 
