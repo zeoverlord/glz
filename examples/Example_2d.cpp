@@ -316,6 +316,8 @@ BOOL Initialize (GL_Window* window, Keys* keys)					// Any GL Init Code & User I
 	tempgraph.add(obj2d_Tiles(42, &tilemap2, 0, 16, 16, 1.0, nullptr, node3(vert3(-512, -256.0, 0.0)), texture[6], 128, 1.0f));
 	tempgraph.add(obj2d_Tiles(42, &tilemap2, 1, 16, 16, 1.0, nullptr, node3(vert3(-512, -256.0, 0.0)), texture[6], 128, 1.0f));
 
+	//tempgraph.set(42, glzOBject2DSetvar::SPRITE, glzSprite(2, 2, 2, 0.0));
+
 
 
 

@@ -424,11 +424,7 @@ void obj2d_Tiles::draw(glzCamera2D *camera)
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, map->tex);
-
-
-	glzSprite sprite;
-
-
+	
 
 	glzDirectSpriteRender(m, map->tex, sprite, width*scale, height*scale, origin);
 
@@ -495,6 +491,18 @@ void obj2d_Tiles::set_f(glzOBject2DSetvar type, float v)
 //	case glzOBject2DSetvar::SCALE:
 //		scale = v;
 //		break;
+	}
+	return;
+}
+
+void obj2d_Tiles::set_sp(glzOBject2DSetvar type, glzSprite v)
+{
+	switch (type)
+	{
+
+			case glzOBject2DSetvar::SPRITE:
+				sprite = v;
+				break;
 	}
 	return;
 }

@@ -119,6 +119,11 @@ public:
 		return;
 	}
 
+	virtual void set_sp(glzOBject2DSetvar type, glzSprite v)
+	{
+		return;
+	}
+
 
 };
 
@@ -370,6 +375,7 @@ class obj2d_Tiles : public Object2D
 	int layer;	
 	int tileWidth;
 	int tileHeight;
+	glzSprite sprite;
 
 public:
 
@@ -377,10 +383,12 @@ public:
 	virtual void update(float seconds) override;
 	virtual void set_i(glzOBject2DSetvar type, int v) override;
 	virtual void set_f(glzOBject2DSetvar type, float v) override;
+	virtual void set_sp(glzOBject2DSetvar type, glzSprite v) override;
 
 
 	obj2d_Tiles()
 	{
+		sprite = glzSprite();
 		texture = 0;
 		scale = 1.0;
 		map = nullptr;
@@ -412,6 +420,7 @@ public:
 		if (framespeedin) animationstate = glzOBject2DAnimationstate::PLAYING;
 		frametime = 0.0f;
 		blend = glzBlendingMode::ALPHA;
+
 		width = map->width*(spritesize / tilewidthin);
 		height = map->height*(spritesize / tileheightin);
 		visible = true;
@@ -821,6 +830,15 @@ public:
 		for (auto &a : objects)
 			if ((a->label == l) && (type == glzOBject2DSetvar::TEXT))
 				a->set_s(type, v);
+		return;
+	}
+
+
+	void set(int l, glzOBject2DSetvar type, glzSprite v)
+	{
+		for (auto &a : objects)
+			if ((a->label == l) && (type == glzOBject2DSetvar::SPRITE))
+				a->set_sp(type, v);
 		return;
 	}
 
