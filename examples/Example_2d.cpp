@@ -38,6 +38,7 @@
 #include "..\glz\ztool-geo-generate.h"
 #include "..\glz\ztool-particle.h"
 #include "..\glz\ztool-2d-graph.h"
+#include "..\glz\ztool-resourcemanager.h"
 
 using namespace std;										
 
@@ -116,6 +117,8 @@ BOOL Initialize (GL_Window* window, Keys* keys)					// Any GL Init Code & User I
 {
 	g_window	= window;
 	g_keys		= keys;
+
+	glzResourcemanager rm;
 
 	GetFocus();
 	GetAsyncKeyState(WM_KEYUP);
@@ -275,23 +278,55 @@ BOOL Initialize (GL_Window* window, Keys* keys)					// Any GL Init Code & User I
 	glzShaderLink(ProgramObjectFSQ);
 	glzShaderLink(ProgramObjectFSQ_glitch);
 	// load the textures
-	fonttexture[0] = glzLoadTexture("data\\fonts\\arial.tga", glzTexFilter::LINEAR);
+
+	rm.createTexture("default", "data\\derpy_phirana.tga", glzTexFilter::LINEAR);
+
+	rm.createTexture("font.arial", "data\\fonts\\arial.tga", glzTexFilter::LINEAR,2);
+	rm.createTexture("font.minya_m", "data\\fonts\\minya_m.tga", glzTexFilter::LINEAR);
+	rm.createTexture("font.ms_gothic", "data\\fonts\\ms_gothic.tga", glzTexFilter::LINEAR);
+	rm.createTexture("font.digitalstrip_l", "data\\fonts\\digitalstrip_l.tga", glzTexFilter::LINEAR);
+	rm.createTexture("font.morpheus_l", "data\\fonts\\morpheus_l.tga", glzTexFilter::LINEAR);
+
+	/*fonttexture[0] = glzLoadTexture("data\\fonts\\arial.tga", glzTexFilter::LINEAR);
 	fonttexture[1] = glzLoadTexture("data\\fonts\\minya_m.tga", glzTexFilter::LINEAR);
 	fonttexture[2] = glzLoadTexture("data\\fonts\\ms_gothic.tga", glzTexFilter::LINEAR);
 	fonttexture[3] = glzLoadTexture("data\\fonts\\digitalstrip_l.tga", glzTexFilter::LINEAR);
-	fonttexture[4] = glzLoadTexture("data\\fonts\\morpheus_l.tga", glzTexFilter::LINEAR);
-
-	texture[0] = glzLoadTexture("data\\back.tga", glzTexFilter::LINEAR);
-	texture[1] = glzLoadTexture("data\\derpy_phirana.tga", glzTexFilter::LINEAR);  // the derpy phirana is not an actual logo but just an example on how you can put it there
-	texture[2] = glzLoadTexture("data\\explotion128a.tga", glzTexFilter::NEAREST);
-	texture[3] = glzLoadTexture("data\\tinytiles.tga", glzTexFilter::NEAREST);
-	texture[4] = glzLoadTexture("data\\blob.tga", glzTexFilter::NEAREST);
-	texture[5] = glzLoadTexture("data\\cv90-1080p-04.tga", glzTexFilter::LINEAR);
-
-	texture[6] = glzLoadTexture("data\\tileset.tga", glzTexFilter::NEAREST); // sprite layers
+	fonttexture[4] = glzLoadTexture("data\\fonts\\morpheus_l.tga", glzTexFilter::LINEAR);*/
 
 
 	
+	rm.createTexture("background.back", "data\\back.tga", glzTexFilter::LINEAR);
+	rm.createTexture("background.cv90", "data\\cv90-1080p-04.tga", glzTexFilter::LINEAR,1);
+
+	rm.createTexture("sprite.derpy_phirana", "data\\derpy_phirana.tga", glzTexFilter::LINEAR,2);
+	rm.createTexture("sprite.explotion128a", "data\\explotion128a.tga", glzTexFilter::NEAREST,3);
+	rm.createTexture("sprite.blob", "data\\blob.tga", glzTexFilter::NEAREST);
+
+	rm.createTexture("atlas.tinytiles", "data\\tinytiles.tga", glzTexFilter::NEAREST);
+	rm.createTexture("atlas.tileset", "data\\tileset.tga", glzTexFilter::NEAREST);
+
+	//texture[0] = glzLoadTexture("data\\back.tga", glzTexFilter::LINEAR);
+//	texture[1] = glzLoadTexture("data\\derpy_phirana.tga", glzTexFilter::LINEAR);  // the derpy phirana is not an actual logo but just an example on how you can put it there
+//	texture[2] = glzLoadTexture("data\\explotion128a.tga", glzTexFilter::NEAREST);
+//	texture[3] = glzLoadTexture("data\\tinytiles.tga", glzTexFilter::NEAREST);
+	//texture[4] = glzLoadTexture("data\\blob.tga", glzTexFilter::NEAREST);
+	//texture[5] = glzLoadTexture("data\\cv90-1080p-04.tga", glzTexFilter::LINEAR);
+
+//	texture[6] = glzLoadTexture("data\\tileset.tga", glzTexFilter::NEAREST); // sprite layers
+
+
+	
+	unsigned int tx;
+	texturecontainer *txx;
+	//rm.createTexture("default", "data\\cv90-1080p-04.tga", glzTexFilter::LINEAR);
+	//rm.load_all();
+	rm.load_all();
+	//rm.manipulate("default");
+
+
+
+
+
 	cam.setsize(800, 500);
 //	cam.moveTo(vert3(0.0,100.0, 0.0));
 	cam.moveSpeed(100);
@@ -305,25 +340,30 @@ BOOL Initialize (GL_Window* window, Keys* keys)					// Any GL Init Code & User I
 
 	tempgraph.add(obj2d_Clear());
 
-	tempgraph.add(obj2d_Fullscreen(-1, texture[5]));
+	tempgraph.add(obj2d_Fullscreen(-1, rm.gettexture("background.cv90")));
+	//tempgraph.add(obj2d_Fullscreen(-1, txx->handle));
 
 	// load the tilemap
 	tilemap.load("data\\supertiles1.tga", glzTileType::DOUBLE_LAYER);
 	tilemap2.load("data\\supertiles2.tga", glzTileType::DOUBLE_LAYER);
 
-	tempgraph.add(obj2d_Tiles(42, &tilemap, 0, 16, 16, 1.0, nullptr, node3(vert3(-512, -256.0, 0.0)), texture[6], 128, 1.0f));
-	tempgraph.add(obj2d_Tiles(42, &tilemap, 1, 16, 16, 1.0, nullptr, node3(vert3(-512, -256.0, 0.0)), texture[6], 128, 1.0f));
-	tempgraph.add(obj2d_Tiles(42, &tilemap2, 0, 16, 16, 1.0, nullptr, node3(vert3(-512, -256.0, 0.0)), texture[6], 128, 1.0f));
-	tempgraph.add(obj2d_Tiles(42, &tilemap2, 1, 16, 16, 1.0, nullptr, node3(vert3(-512, -256.0, 0.0)), texture[6], 128, 1.0f));
+	tempgraph.add(obj2d_Tiles(42, &tilemap, 0, 16, 16, 1.0, nullptr, node3(vert3(-512, -256.0, 0.0)), rm.gettexture("atlas.tileset"), 128, 1.0f));
+	tempgraph.add(obj2d_Tiles(42, &tilemap, 1, 16, 16, 1.0, nullptr, node3(vert3(-512, -256.0, 0.0)), rm.gettexture("atlas.tileset"), 128, 1.0f));
+	tempgraph.add(obj2d_Tiles(42, &tilemap2, 0, 16, 16, 1.0, nullptr, node3(vert3(-512, -256.0, 0.0)), rm.gettexture("atlas.tileset"), 128, 1.0f));
+	tempgraph.add(obj2d_Tiles(42, &tilemap2, 1, 16, 16, 1.0, nullptr, node3(vert3(-512, -256.0, 0.0)), rm.gettexture("atlas.tileset"), 128, 1.0f));
 
 	//tempgraph.set(42, glzOBject2DSetvar::SPRITE, glzSprite(2, 2, 2, 0.0));
 
+	
+
+	
 
 
+	tempgraph.add(obj2d_Sprite(343, glzSprite(8, 4, 16, 0.0), nullptr, node3(), rm.gettexture("sprite.explotion128a"), 1.0));
+	
 
-	tempgraph.add(obj2d_Sprite(343, glzSprite(8, 4, 16, 0.0), nullptr, node3(), texture[2], 1.0));
-
-	tempgraph.add(obj2d_Sprite(62, glzSprite(), &n, node3(), texture[1], 1.0));
+	//tempgraph.add(obj2d_Sprite(62, glzSprite(), &n, node3(), texture[1], 1.0));
+	tempgraph.add(obj2d_Sprite(62, glzSprite(), &n, node3(), rm.gettexture("default"), 1.0));
 	
 
 	glzSpriteList expl_spritelist;
@@ -336,7 +376,10 @@ BOOL Initialize (GL_Window* window, Keys* keys)					// Any GL Init Code & User I
 	int v[] = { 31,30,29,28,27,26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0 };
 	expl_spritelist_vector.map.push_back(glzSpriteList(8, 4, v, 32));
 
-	tempgraph.add(obj2d_Sprite(111, expl_spritelist_vector, nullptr, node3(vert3(100.0, 0.0, 0.0)), texture[2], 1.0, 30.0f));
+
+
+
+	tempgraph.add(obj2d_Sprite(111, expl_spritelist_vector, nullptr, node3(vert3(100.0, 0.0, 0.0)), rm.gettexture("sprite.explotion128a"), 1.0, 30.0f));
 
 	tempgraph.set(343, glzOBject2DSetvar::SCALE, 2.0f);
 	tempgraph.set(111, glzOBject2DSetvar::BLEND, glzBlendingMode::ADDITIVE);
@@ -351,12 +394,12 @@ BOOL Initialize (GL_Window* window, Keys* keys)					// Any GL Init Code & User I
 	//tempgraph.add(obj2d_Clear(66,glzColor(0.0,0.0,0.0,0.5)));
 //	tempgraph.add(obj2d_Object2DGraph(67, &tempgraph2));
 	
-	//tempgraph.add(obj2d_Background(-1, expl_spritelist_vector, glzBlendingMode::ADDITIVE, 2.0, 30.0f, 1.0, texture[2]));
+//	tempgraph.add(obj2d_Background(-1, expl_spritelist_vector, glzBlendingMode::ADDITIVE, 200.0, 30.0f, 1.0, texture[2]));
 
 
 	//tempgraph.add(obj2d_ColorTint(66, glzBlendingMode::MULTIPLY, glzColor(1.0, 0.2, 0.0, 1.0)));
 
-	tempgraph.add(obj2d_Text(99, "testing text", nullptr, node3(vert3(-400.0, -250.0, 0.0)), fonttexture[0], 40.0, 1.0, 1.0, glzOrigin::BOTTOM_LEFT));
+	tempgraph.add(obj2d_Text(99, "testing text", nullptr, node3(vert3(-400.0, -250.0, 0.0)), rm.gettexture("font.arial"), 40.0, 1.0, 1.0, glzOrigin::BOTTOM_LEFT));
 	tempgraph.set(99, glzOBject2DSetvar::BLENDCOLOR, glzColor(1.0,0.5,0.0,1.0));
 	
 	
@@ -388,6 +431,11 @@ void Update (float seconds)								// Perform Motion Updates Here
 		glzMatrix mt;
 		mt.LoadIdentity();
 		mt.scale(0.17f,0.17f,0.17f);
+
+
+		glzResourcemanager rm;
+		rm.load_one();
+
 
 
 	if (g_keys->keyDown [VK_ESCAPE] == TRUE)					// Is ESC Being Pressed?
@@ -513,6 +561,7 @@ if (gamestate == 8)
 
 void draw_text(float x, float y, int text, int font, unsigned int po, unsigned int col)
 {
+	glzResourcemanager rm;
 	glUseProgram(po);
 	
 	unsigned int loc1 = glGetUniformLocation(po,"projMat");
@@ -535,7 +584,7 @@ void draw_text(float x, float y, int text, int font, unsigned int po, unsigned i
 //glzShaderUsePasstrough();
 	
 
-	glBindTexture(GL_TEXTURE_2D,fonttexture[font]);
+	glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("font.arial"));
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 	glzDrawVAO(textvao_num[text],textvao[text],GL_TRIANGLES);
@@ -545,6 +594,7 @@ void draw_text(float x, float y, int text, int font, unsigned int po, unsigned i
 
 void draw_text2(string text, float x, float y, float scale, float kern, int font, unsigned int po, unsigned int col)
 {
+	glzResourcemanager rm;
 	glUseProgram(po);
 
 	unsigned int loc1 = glGetUniformLocation(po, "projMat");
@@ -567,7 +617,7 @@ void draw_text2(string text, float x, float y, float scale, float kern, int font
 	float aspect = (float)WINDOW_WIDTH / (float)WINDOW_HEIGHT;
 
 	glDisable(GL_DEPTH_TEST);
-	glBindTexture(GL_TEXTURE_2D, fonttexture[font]);
+	glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("font.arial"));
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 	glzDirectDrawText(text, scale, aspect, kern, glzOrigin::BOTTOM_LEFT);
@@ -581,6 +631,7 @@ void draw_text2(string text, float x, float y, float scale, float kern, int font
 // custom sprite rendering function, if you have a lot of sprites then one of these is probably usefull
 void draw_sprite(float x, float y, float s, int sprite, int tx, int offset, unsigned int po, float col[4])
 {
+	glzResourcemanager rm;
 	glUseProgram(po);
 
 	unsigned int loc1 = glGetUniformLocation(po,"projMat");
@@ -597,7 +648,7 @@ void draw_sprite(float x, float y, float s, int sprite, int tx, int offset, unsi
 
 	glUniform4f(loc3, col[0],col[1],col[2],col[3]);
 
-	glBindTexture(GL_TEXTURE_2D,texture[tx]);
+	glBindTexture(GL_TEXTURE_2D,tx);
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 	glzDrawVAO(offset*6,6,vao[sprite],GL_TRIANGLES);
@@ -681,7 +732,7 @@ void Draw (void)
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		// Clear Screen And Depth Buffer
 	
-
+	glzResourcemanager rm;
 
 	float mtemp[16];
 	glEnable(GL_TEXTURE_2D);
@@ -724,7 +775,7 @@ void Draw (void)
 
 	if (gamestate==2)
 	{
-		draw_backdrop(texture[0]);
+		draw_backdrop(rm.gettextureHandle("background.back"));
 
 		glzMatrix mi;
 		mi.LoadIdentity();
@@ -736,7 +787,7 @@ void Draw (void)
 
 		glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_BLEND);	
-		draw_backdrop2(texture[1],mi,col); // the derpy phirana
+		draw_backdrop2(rm.gettextureHandle("sprite.derpy_phirana"), mi, col); // the derpy phirana
 		glDisable(GL_BLEND);
 
 		
@@ -751,7 +802,7 @@ void Draw (void)
 	{	
 		
 		float col[4]={1.0,1.0,1.0,1.0};
-		draw_sprite(0,0,2.0f,1,2,spriteframe,ProgramObject,col);
+		draw_sprite(0, 0, 2.0f, 1, rm.gettextureHandle("sprite.explotion128a"), spriteframe, ProgramObject, col);
 
 		draw_text(-3.9f, 1.9f,10,2,ProgramObject,COL_WHITE);
 		draw_text(1.7f, -1.8f,15,2,ProgramObject,COL_WHITE);
@@ -772,7 +823,7 @@ void Draw (void)
 
 
 
-	glBindTexture(GL_TEXTURE_2D,texture[3]);
+	glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("atlas.tinytiles"));
 	glzDrawVAO(vao_num[2],vao[2],GL_TRIANGLES);
 
 
@@ -792,7 +843,7 @@ void Draw (void)
 		m.transferMatrix(&mtemp[0]);
 		glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
 
-		glBindTexture(GL_TEXTURE_2D, texture[1]);
+		glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("sprite.derpy_phirana"));
 	
 		glzDirectSpriteRender(m, texture[1], 0, 0, 0, 100, 100, 1, 0, 1.0, 1.0, glzOrigin::TOP_LEFT);
 		glzDirectSpriteRender(m, texture[1], 0, 0, 0, 100, 100, 1, 0, 1.0, 1.0, glzOrigin::BOTTOM_LEFT);
@@ -828,11 +879,11 @@ void Draw (void)
 		glBlendColor(1, 0, 1, 1.0f);
 		glEnable(GL_BLEND);
 
-		glzDrawTexture(texture[3], 0, 0, 0, 200, 200, 0, 0, 0, 1, 1);
+		glzDrawTexture(rm.gettextureHandle("atlas.tinytiles"), 0, 0, 0, 200, 200, 0, 0, 0, 1, 1);
 
 		glDisable(GL_BLEND);
 
-		glBindTexture(GL_TEXTURE_2D, texture[3]);
+		glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("atlas.tinytiles"));
 
 	
 		glzDirectSpriteRenderAtlas(0, 0, 0, 100, 100, 4, 4, 14, glzOrigin::CENTERED);
@@ -859,7 +910,7 @@ void Draw (void)
 		m.transferMatrix(&mtemp[0]);
 		glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
 
-		glBindTexture(GL_TEXTURE_2D, texture[0]);
+		glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("background.back"));
 
 
 		glPointSize(3.0f);
@@ -878,7 +929,7 @@ void Draw (void)
 	if (gamestate == 7)
 	{
 	
-		draw_backdrop_glitch(texture[5], texture[4]);
+		draw_backdrop_glitch(rm.gettextureHandle("background.cv90"), rm.gettextureHandle("sprite.blob"));
 
 		glzMatrix mi;
 		mi.LoadIdentity();

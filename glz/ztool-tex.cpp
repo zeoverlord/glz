@@ -135,6 +135,44 @@ void chooseFilter(glzTexFilter filter)
 
 
 
+
+unsigned int glzGetDefaultTextturehandle(void)
+{
+	if (!isinited_tex) ini_tex();
+
+
+	GLubyte checkImage[32][32][4];
+	unsigned int id;
+
+	int i, j, c;
+
+	for (i = 0; i < 32; i++) {
+		for (j = 0; j < 32; j++) {
+			c = ((((i & 0x8) == 0) ^ ((j & 0x8)) == 0)) * 255;
+			checkImage[i][j][0] = (GLubyte)c;
+			checkImage[i][j][1] = (GLubyte)c;
+			checkImage[i][j][2] = (GLubyte)c;
+			checkImage[i][j][3] = (GLubyte)255;
+		}
+	}
+
+
+	chooseFilter(glzTexFilter::LINEAR);
+
+	glGenTextures(1, &id);
+	glBindTexture(GL_TEXTURE_2D, id);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, filter_max);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, filter_min);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, filter_wrap);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, filter_wrap);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 32, 32, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
+
+	//glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 2,2, GL_RGBA, GL_UNSIGNED_BYTE, data);
+	return id;
+}
+
+
 // this function will only read the head of a tga file and report back things like size dimetions and color channels
 // it is mainly used to get the size of the data buffer you need to load this image, it is in img.imageSize for ease of use later on
 void glzReadTgaHead(img_head *img, string filename)

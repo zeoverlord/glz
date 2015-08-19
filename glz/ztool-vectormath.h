@@ -21,6 +21,7 @@
 
 #include "ztool-type.h"
 
+
 using namespace std;
 
 
@@ -29,6 +30,7 @@ using namespace std;
 
 
 enum class glzLinkStates { VAR, LINK, BOTH };
+enum class glzCurvetype {CONSTANT,LINEAR,BEIZER,CUBIC};
 
 
 template<typename T>
@@ -123,6 +125,7 @@ inline Link<T1> operator*(Link<T1> lhs, T2 rhs) { lhs.value *= rhs;	return lhs; 
 
 template<typename T1, typename T2>
 inline Link<T1> operator/(Link<T1> lhs, T2 rhs) { lhs.value /= rhs;	return lhs; }
+
 
 
 
@@ -430,6 +433,129 @@ typedef struct polygon3 {
 } poly3;*/
 
 
+/*
+
+class glzCurvenode
+{
+public:
+
+	float time;
+	float position;
+	glzCurvetype type;
+	vec2 intangent;
+	vec2 outtangent;
+
+
+	glzCurvenode() : time(0.0f), float(0.0f), type(glzCurvetype::CONSTANT), intangent(vec2()), outtangent(vec2()) {}
+//	glzCurvenode(float timein, float possitionin, glzCurvetype ctin) : time{ timein }, position{ possitionin }, type{ ctin } {}
+//	glzCurvenode(float timein, float possitionin, glzCurvetype ctin, vec2 intin, vec2 outtin) : time{ timein }, position{ possitionin }, type{ ctin } intangent{ intin } outtangent{ outtin } {}
+
+};
+
+
+class glzCurve{
+
+private:
+	float t;
+	float v;
+	float pretime;
+	float posttime;
+	float predata;
+	float postdata;
+
+	void ordernodes(void)
+	{
+		sort(curvenodes.begin(), curvenodes.end(), [](glzCurvenode a, glzCurvenode b) {	return a.time > b.time;	});
+
+		pretime = curvenodes.at(0).time;
+		posttime = pretime;
+
+		predata = curvenodes.at(0).position;
+		postdata = predata;
+
+		// get the highest and lowest keyframe times
+		for (auto a : curvenodes)
+		{
+			if (a.time < pretime) { pretime = a.time; predata = a.position; }
+			if (a.time > posttime) { posttime = a.time; postdata = a.position; }
+		}
+
+	}
+
+	void resolve()
+	{	
+		glzCurvenode a_n, b_n;
+		if (t < pretime) { v = predata; return; }
+		if (t > posttime) { v = postdata; return; }
+
+		int i=0;
+		for (auto a : curvenodes)
+		{
+			if (a.time < t) { i++; }
+		}
+
+		a_n = curvenodes.at(i-1);
+		b_n = curvenodes.at(i);
+
+		switch (a_n.type)
+		{
+			case glzCurvetype::CONSTANT:
+				v = a_n.position;
+				break;
+
+			case glzCurvetype::LINEAR:
+			//	v = glzLerpRange(a_n.time, t, ba_n.time, a_n.position, b_n.position)
+				break;
+		}
+
+
+
+
+	}
+
+public:
+	glzCurvetype preinf;
+	glzCurvetype postinf;
+	vector<glzCurvenode> curvenodes;
+
+	glzCurve() : t(0.0f), pretime(0.0f), posttime(0.0f), preinf(glzCurvetype::CONSTANT), postinf(glzCurvetype::CONSTANT) {}
+
+	glzCurve(glzCurvenode n) 
+	{ 
+		t = 0.0f; 
+		pretime=0.0f; 
+		posttime = 0.0f; 
+		curvenodes.push_back(n); 
+		preinf = glzCurvetype::CONSTANT; 
+		postinf = glzCurvetype::CONSTANT; 
+
+		pretime = curvenodes.at(0).time;
+		posttime = pretime;
+
+		predata = curvenodes.at(0).position;
+		postdata = predata;
+
+		v = curvenodes.at(0).position;
+
+	}
+
+	void addNode(glzCurvenode n) 
+	{
+		curvenodes.push_back(n); 
+		ordernodes();
+		resolve();
+	}
+
+
+	void settime(float time) { t = time; return };
+};
+
+
+
+*/
+
+
+
 class point3{ //polygon3 class
 
 private:
@@ -621,15 +747,15 @@ private:
 
 	vert3 pos;
 	vert3 moveto_pos;
-	float zoom;
+
 	float zoomto;
 	float angle;
 	float angleto;
 	float move_speed;
 	float zoom_speed;
 	float angle_speed;
-	int width, height;
-	
+
+
 
 	void resetCamera()
 	{
@@ -641,8 +767,10 @@ private:
 		m.rotate(angle, 0.0, 0.0, 1.0);
 	}
 
-public:	
+public:
 
+	float zoom;
+	int width, height;
 	float aspect;
 	glzMatrix m;
 
@@ -658,7 +786,7 @@ public:
 		angle_speed = 10.0;
 
 		width = 100;
-		height = 100;	
+		height = 100;
 		resetCamera();
 	}
 
@@ -674,7 +802,7 @@ public:
 	void moveToRel(vert3 p) { moveto_pos += p; }
 	void zoomTo(float z) { zoomto = z; }
 	void angleTo(float a) { angleto = a; }
-	
+
 
 	void moveSnap(vert3 p) { pos = p; moveto_pos = p; resetCamera(); }
 	void moveSnapRel(vert3 p) { pos = moveto_pos; moveto_pos += p; resetCamera(); }
@@ -715,7 +843,7 @@ public:
 		if (abs((angle + 360) - angleto) < angle_speed*seconds) { angle = angleto; anglecentered = true; }
 
 		if (!anglecentered)
-		{ 
+		{
 			if (angle < angleto) {
 				if (abs(angle - angleto)<180.0)
 					angle += angle_speed*seconds;
@@ -724,21 +852,21 @@ public:
 			else
 			{
 				if (abs(angle - angleto)<180.0)
-					angle -= angle_speed*seconds; 
+					angle -= angle_speed*seconds;
 				else angle += angle_speed*seconds;
 			}
 		}
 
 		while (angle < 0.0) angle += 360.0;
-		while (angle >= 360.0) angle -= 360.0;		
-		
+		while (angle >= 360.0) angle -= 360.0;
+
 
 		resetCamera();
 
 	}
-		
 
-		
+
+
 
 
 

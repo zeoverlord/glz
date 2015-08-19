@@ -43,6 +43,8 @@ typedef struct
 
 //loading
 
+unsigned int glzGetDefaultTextturehandle(void);
+
 // segmented loading, for if you want to load a texture into the cpu
 void glzReadTgaHead(img_head *img,string filename);
 void glzLoadTga(img_head *img, string filename, unsigned char *data);

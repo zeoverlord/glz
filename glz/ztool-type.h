@@ -20,6 +20,7 @@
 // https://github.com/zeoverlord/glz.git
 
 #include <vector>
+#include <algorithm>
 
 
 using namespace std;
@@ -77,7 +78,31 @@ enum class glzSceneGraphSubMessage {
 
 };
 
+class texturecontainer{
 
+public:
+	unsigned int uid;
+	string objectname;
+	unsigned int width;
+	unsigned int height;
+	unsigned int handle;
+	unsigned int type;
+	bool loaded;
+
+	texturecontainer() 
+	{
+		uid = 0;
+		objectname = "NULL";
+		width = 1;
+		height = 1;
+		handle = 0;
+		type = 3;
+		loaded = false;
+	}
+
+
+	texturecontainer(string objn) : objectname(objn), width(1), height(1), handle(0), type(3), loaded(false) {}
+};
 
 
 

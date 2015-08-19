@@ -22,6 +22,7 @@
 
 
 #include "ztool-type.h"
+#include "ztool-resourcemanager.h"
 #include "ztool-vectormath.h"
 #include "ztool_tiletools.h"
 #include "ztool-shader.h"
@@ -44,7 +45,7 @@ class Object2D {
 
 public:
 
-	unsigned int texture;
+	texturecontainer *texture;
 	node3 *n_parent;
 	node3 n_local;
 	int label;
@@ -159,7 +160,7 @@ public:
 	} 
 
 
-	obj2d_Sprite(int labelin, glzSprite spritein, node3 *nin, node3 nLin, unsigned int tex, double scalein)
+	obj2d_Sprite(int labelin, glzSprite spritein, node3 *nin, node3 nLin, texturecontainer *tex, double scalein)
 	{
 		label = labelin;
 		sprite = glzSpriteanimationList(spritein);
@@ -177,7 +178,7 @@ public:
 	}
 
 
-	obj2d_Sprite(int labelin, glzSpriteanimationList spritein, node3 *nin, node3 nLin, unsigned int tex, double scalein, float framespeedin)
+	obj2d_Sprite(int labelin, glzSpriteanimationList spritein, node3 *nin, node3 nLin, texturecontainer *tex, double scalein, float framespeedin)
 	{
 		label = labelin;
 		sprite = spritein;
@@ -220,7 +221,7 @@ public:
 
 	}
 
-	obj2d_Fullscreen(int labelin, glzSprite spritein, unsigned int tex)
+	obj2d_Fullscreen(int labelin, glzSprite spritein, texturecontainer *tex)
 	{
 		label = labelin;
 		sprite = spritein;
@@ -228,7 +229,7 @@ public:
 		visible = true;
 
 	}
-	obj2d_Fullscreen(int labelin, glzSprite spritein, glzBlendingMode b, unsigned int tex)
+	obj2d_Fullscreen(int labelin, glzSprite spritein, glzBlendingMode b, texturecontainer *tex)
 	{
 		label = labelin;
 		blend = b;
@@ -238,7 +239,7 @@ public:
 
 	}
 
-	obj2d_Fullscreen(int labelin, unsigned int tex)
+	obj2d_Fullscreen(int labelin, texturecontainer *tex)
 	{
 		label = labelin;
 		sprite = glzSprite();
@@ -247,7 +248,7 @@ public:
 
 	}
 
-	obj2d_Fullscreen(int labelin, glzBlendingMode b, unsigned int tex)
+	obj2d_Fullscreen(int labelin, glzBlendingMode b, texturecontainer *tex)
 	{
 		label = labelin;
 		blend = b;
@@ -292,7 +293,7 @@ public:
 	}
 	
 
-	obj2d_Background(int labelin, unsigned int tex)
+	obj2d_Background(int labelin, texturecontainer *tex)
 	{
 		label = labelin;
 		texture = tex;
@@ -304,7 +305,7 @@ public:
 	}
 
 
-	obj2d_Background(int labelin, glzSprite spritein, float scalein, unsigned int tex)
+	obj2d_Background(int labelin, glzSprite spritein, float scalein, texturecontainer *tex)
 	{
 		label = labelin;
 		sprite = glzSpriteanimationList(spritein);
@@ -318,7 +319,7 @@ public:
 	}
 
 
-	obj2d_Background(int labelin, glzSpriteanimationList spritein, float scalein, float framespeedin, unsigned int tex)
+	obj2d_Background(int labelin, glzSpriteanimationList spritein, float scalein, float framespeedin, texturecontainer *tex)
 	{
 		label = labelin;
 		sprite = spritein;
@@ -334,7 +335,7 @@ public:
 
 
 
-	obj2d_Background(int labelin, glzSprite spritein, glzBlendingMode b, float scalein, float paralaxin, unsigned int tex)
+	obj2d_Background(int labelin, glzSprite spritein, glzBlendingMode b, float scalein, float paralaxin, texturecontainer *tex)
 	{
 		label = labelin;
 		blend = b;
@@ -350,7 +351,7 @@ public:
 
 	}
 
-	obj2d_Background(int labelin, glzSpriteanimationList spritein, glzBlendingMode b, float scalein, float framespeedin, float paralaxin, unsigned int tex)
+	obj2d_Background(int labelin, glzSpriteanimationList spritein, glzBlendingMode b, float scalein, float framespeedin, float paralaxin, texturecontainer *tex)
 	{
 		label = labelin;
 		blend = b;
@@ -404,7 +405,7 @@ public:
 	}
 
 
-	obj2d_Tiles(int labelin, glztiles *mapin, int layerin, int tilewidthin, int tileheightin, float framespeedin, node3 *nin, node3 nLin, unsigned int tex, int spritesize, double scalein)
+	obj2d_Tiles(int labelin, glztiles *mapin, int layerin, int tilewidthin, int tileheightin, float framespeedin, node3 *nin, node3 nLin, texturecontainer *tex, int spritesize, double scalein)
 	{
 		label = labelin;		
 		texture = tex;
@@ -460,7 +461,7 @@ public:
 	}
 
 
-	obj2d_Text(int labelin, string textin, node3 *nin, node3 nLin, unsigned int tex, double scalein, float aspectin, float kernin, glzOrigin originin)
+	obj2d_Text(int labelin, string textin, node3 *nin, node3 nLin, texturecontainer *tex, double scalein, float aspectin, float kernin, glzOrigin originin)
 	{
 		label = labelin;
 		texture = tex;
@@ -728,7 +729,7 @@ public:
 			switch (type)
 			{
 				case glzOBject2DSetvar::TEXTURE:
-					a->texture = v;
+					//a->texture = v;
 					break;
 
 				case glzOBject2DSetvar::CURRENT_ANIMATION:
