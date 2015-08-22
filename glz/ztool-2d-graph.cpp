@@ -207,9 +207,9 @@ void obj2d_Fullscreen::set_i(glzOBject2DSetvar type, int v)
 {
 	switch (type)
 	{
-	case glzOBject2DSetvar::TEXTURE:
+	//case glzOBject2DSetvar::TEXTURE:
 		//texture->handle = v;
-		break;
+		//break;
 	}
 	return;
 }
@@ -476,9 +476,9 @@ void obj2d_Tiles::set_i(glzOBject2DSetvar type, int v)
 {
 	switch (type)
 	{
-	case glzOBject2DSetvar::TEXTURE:
+	//case glzOBject2DSetvar::TEXTURE:
 		//texture = v;
-		break;
+		//break;
 	}
 	return;
 }

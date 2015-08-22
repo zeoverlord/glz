@@ -124,8 +124,6 @@ public:
 	{
 		return;
 	}
-
-
 };
 
 
@@ -728,9 +726,6 @@ public:
 			if (a->label == l)
 			switch (type)
 			{
-				case glzOBject2DSetvar::TEXTURE:
-					//a->texture = v;
-					break;
 
 				case glzOBject2DSetvar::CURRENT_ANIMATION:
 					a->current_animation = v;
@@ -845,6 +840,15 @@ public:
 
 
 	
+
+	void set_tx(int l, glzOBject2DSetvar type, texturecontainer *v)
+	{
+			for (auto &a : objects)
+				if ((a->label == l) && (type == glzOBject2DSetvar::TEXTURE))
+					a->texture=v;
+			return;
+	}
+
 
 	void kill(int l)
 	{
