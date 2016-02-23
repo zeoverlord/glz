@@ -14,67 +14,59 @@
 // 3. If you make something comersiol or at least something you release publicly that relies on this code then i would like to know and maybe use in my CV
 // 4. Please do include me in your credits
 
-// glz 2d scenegraph base class - i think it's usefull
+// tile helper functions
 // visit http://www.flashbang.se or contact me at overlord@flashbang.se
 // the entire toolkit should exist in it's entirety at github
 // https://github.com/zeoverlord/glz.git
 
 
-// overall
-	//rendering
-	//messaging
-	//ticks
 
+#include "type.h"
+#include "..\image\tex.h"
+#include "glz.h"
+#include <windows.h>											// Header File For Windows
+#include <gl\gl.h>												// Header File For The OpenGL32 Library
+#include <gl\glu.h>												// Header File For The GLu32 Library
+#include <gl\glext.h>
 
+#ifndef __glztiletool__
+#define global __glztiletool__
 
-// data
-	//position  -  should this be in it's own struct?
-	//orientation
-	//speed
+enum class glzTileType { DOUBLE_LAYER, QUAD_LAYER };
 
-	//type -which type of object is this
-
-
-	// colision data
-		//xy offset
-		//shape
-		//size
-
-	//render data
-		//origin
-		//atlas or uv data
-		//Texture reference?
-
-	//health
-	//armorvalue - essencially a health loss multiplier
-
-	// internal additional data - float[16]
-
-
-	// message- vector<message> - needs type, data and so on
-
-
-// actions
-	//run
-	//render
-
-#include "ztool-type.h"
-
-#ifndef __2dscenegraphbase__
-#define __2dscenegraphbase__
-
-
-
-class Object2D {
-	// position, orientation, speed and such
-	float x_pos, y_pos, z_pos;
-	float x_speed, yspeed;
-	float orientation;
-	unsigned int origin;
-
+class glztiles{
 public:
+	
+	int width;
+	int height;
+	glzTileType type;
+	img_head imghdr;
+	unsigned char *data;
+	unsigned int tex;
+	string img_filename;
+	bool tex_changed;
+	bool data_changed;
+	
+	void load(string const filename, glzTileType intype);
+
+	void update_texture(void);
+	void save(void);
+
+	// helper functions to read an write data
+	char get_pixel(int x, int y, int layer);
+	void put_pixel(int x, int y, int layer, char value);
+
+
+	void paint_pixel(int x, int y, int px, int py, bool animate, bool flip, int layer);
+	void put_extra_bit(int x, int y, bool bitdata, int layer);
+
+	bool getTilecolision(float x, float y, int layer, bool flip_y);
+
+	~glztiles();
 
 };
 
 
-#endif /* __2dscenegraphbase__ */
+
+
+#endif /* __glztiletool__ */

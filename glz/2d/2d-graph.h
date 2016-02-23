@@ -21,11 +21,11 @@
 
 
 
-#include "ztool-type.h"
-#include "ztool-resourcemanager.h"
-#include "ztool-vectormath.h"
-#include "ztool_tiletools.h"
-#include "ztool-shader.h"
+#include "..\utilities\type.h"
+#include "..\utilities\resourcemanager.h"
+#include "..\utilities\vectormath.h"
+#include "..\utilities\tiletools.h"
+#include "..\shader\shader.h"
 #include <algorithm>
 #include <vector>
 #include <memory>

@@ -24,10 +24,10 @@
 #include <gl\gl.h>												// Header File For The OpenGL32 Library
 #include <gl\glu.h>												// Header File For The GLu32 Library
 #include <gl\glext.h>
-#include "ztool-2d-graph.h"
-#include "ztool-geo-2d.h"
-#include "ztool-type.h"
-#include "ztool-shader.h"
+#include "2d-graph.h"
+#include "geo-2d.h"
+#include "..\utilities\type.h"
+#include "..\shader\shader.h"
 
 static PFNGLACTIVETEXTUREPROC					glActiveTexture;
 

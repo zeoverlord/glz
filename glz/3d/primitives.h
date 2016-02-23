@@ -29,7 +29,7 @@
 
 using namespace std;
 
-#include "ztool-type.h"
+#include "..\utilities\type.h"
 
 #ifndef __glzprimitive__
 #define __glzprimitive__

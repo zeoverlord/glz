@@ -22,8 +22,8 @@
 
 using namespace std;
 
-#include "ztool-type.h"
-#include "ztool-vectormath.h"
+#include "..\utilities\type.h"
+#include "..\utilities\vectormath.h"
 #include <vector>
 
 

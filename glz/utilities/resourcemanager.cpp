@@ -23,7 +23,7 @@
 #include <fstream>
 #include <string.h>
 #include <stdlib.h>
-#include "ztool-resourcemanager.h"
+#include "resourcemanager.h"
 #include <stdio.h>
 #include <vector>
 

@@ -19,7 +19,7 @@
 // the entire toolkit should exist in it's entirety at github
 // https://github.com/zeoverlord/glz.git
 
-#include "ztool-type.h"
+#include "type.h"
 
 
 using namespace std;

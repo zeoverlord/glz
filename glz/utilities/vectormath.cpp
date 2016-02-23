@@ -21,9 +21,9 @@
 
 using namespace std;
 
-#include "ztool-type.h"
-#include "ztool-glz.h"
-#include "ztool-vectormath.h"
+#include "type.h"
+#include "glz.h"
+#include "vectormath.h"
 
 float vert3::distance(vert3 a)
 { 

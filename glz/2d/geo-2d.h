@@ -22,8 +22,8 @@
 
 using namespace std;
 
-#include "ztool-type.h"
-#include "ztool-geo.h"
+#include "..\utilities\type.h"
+#include "..\3d\geo.h"
 
 #ifndef __glz_geo2d__
 #define __glz_geo2d__

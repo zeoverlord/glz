@@ -23,11 +23,11 @@
 #include <fstream>
 #include <math.h>
 #include <string.h>
-#include "ztool-glz.h"
-#include "ztool-geo.h"
-#include "ztool-geo-2d.h"
-#include "ztool-shader.h"
-#include "ztool-vectormath.h"
+#include "..\utilities\glz.h"
+#include "..\3d\geo.h"
+#include "geo-2d.h"
+#include "..\shader\shader.h"
+#include "..\utilities\vectormath.h"
 #include <stdio.h>
 #include <windows.h>													// Header File For The Windows Library
 #include <gl/gl.h>														// Header File For The OpenGL32 Library

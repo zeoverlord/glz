@@ -21,8 +21,8 @@
 
 #include <fstream>
 #include <string.h>
-#include "ztool-shader.h"
-#include "ztool-shader-programs.h"
+#include "shader.h"
+#include "shader-programs.h"
 #include <stdio.h>
 #include <windows.h>													// Header File For The Windows Library
 #include <gl/gl.h>														// Header File For The OpenGL32 Library

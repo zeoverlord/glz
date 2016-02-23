@@ -19,8 +19,8 @@
 // the entire toolkit should exist in it's entirety at github
 // https://github.com/zeoverlord/glz.git
 
-#include "ztool-type.h"
-#include "ztool-vectormath.h"
+#include "..\utilities\type.h"
+#include "..\utilities\vectormath.h"
 
 #ifndef __glz_shader__
 #define __glz_shader__

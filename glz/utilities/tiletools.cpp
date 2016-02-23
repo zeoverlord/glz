@@ -20,7 +20,7 @@
 // https://github.com/zeoverlord/glz.git
 
 
-#include "ztool_tiletools.h"
+#include "tiletools.h"
 
 
 

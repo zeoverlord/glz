@@ -22,10 +22,10 @@
 
 using namespace std;
 
-#include "ztool-type.h"
-#include "ztool-particle.h"
-#include "ztool-glz.h"
-#include "ztool-geo.h"
+#include "..\utilities\type.h"
+#include "particle.h"
+#include "..\utilities\glz.h"
+#include "..\3d\geo.h"
 
 
 

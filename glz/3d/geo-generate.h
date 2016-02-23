@@ -19,9 +19,9 @@
 
 using namespace std;
 
-#include "ztool-type.h"
-#include "ztool-geo.h"
-#include "ztool-vectormath.h"
+#include "..\utilities\type.h"
+#include "geo.h"
+#include "..\utilities\vectormath.h"
 
 #ifndef __glz_geogenerate__
 #define __glz_geogenerate__

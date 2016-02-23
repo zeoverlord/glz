@@ -20,7 +20,7 @@
 // https://github.com/zeoverlord/glz.git
 
 #include <vector>
-#include "ztool-vectormath.h"
+#include "..\utilities\vectormath.h"
 
 
 using namespace std;

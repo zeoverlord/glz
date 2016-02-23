@@ -20,7 +20,7 @@
 // https://github.com/zeoverlord/glz.git
 
 
-#include "ztool-type.h"
+#include "..\utilities\type.h"
 
 #ifndef __glztex__
 #define __glztex__

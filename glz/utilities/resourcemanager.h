@@ -20,8 +20,8 @@
 // https://github.com/zeoverlord/glz.git
 
 
-#include "ztool-type.h"
-#include "ztool-tex.h"
+#include "type.h"
+#include "..\image\tex.h"
 #include <windows.h>													// Header File For The Windows Library
 #include <gl/gl.h>														// Header File For The OpenGL32 Library
 #include <gl/glu.h>														// Header File For The GLu32 Library

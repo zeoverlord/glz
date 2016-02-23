@@ -23,7 +23,7 @@
 #include <math.h>
 #include <fstream>
 #include <string.h>
-#include "ztool-glz.h"
+#include "glz.h"
 #include <stdio.h>
 #include <random>
 #include <windows.h>													// Header File For The Windows Library

@@ -23,7 +23,7 @@
 #include <fstream>
 #include <string.h>
 #include <stdlib.h>
-#include "ztool-tex.h"
+#include "tex.h"
 #include <stdio.h>
 #include <windows.h>													// Header File For The Windows Library
 #include <gl/gl.h>														// Header File For The OpenGL32 Library

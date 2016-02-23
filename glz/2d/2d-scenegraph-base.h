@@ -14,14 +14,67 @@
 // 3. If you make something comersiol or at least something you release publicly that relies on this code then i would like to know and maybe use in my CV
 // 4. Please do include me in your credits
 
-// common glz typedefs
+// glz 2d scenegraph base class - i think it's usefull
 // visit http://www.flashbang.se or contact me at overlord@flashbang.se
 // the entire toolkit should exist in it's entirety at github
 // https://github.com/zeoverlord/glz.git
 
 
-using namespace std;
+// overall
+	//rendering
+	//messaging
+	//ticks
 
-#include "ztool-type.h"
-#include "ztool-glz.h"
-#include "ztool-geo.h"
+
+
+// data
+	//position  -  should this be in it's own struct?
+	//orientation
+	//speed
+
+	//type -which type of object is this
+
+
+	// colision data
+		//xy offset
+		//shape
+		//size
+
+	//render data
+		//origin
+		//atlas or uv data
+		//Texture reference?
+
+	//health
+	//armorvalue - essencially a health loss multiplier
+
+	// internal additional data - float[16]
+
+
+	// message- vector<message> - needs type, data and so on
+
+
+// actions
+	//run
+	//render
+
+#include "..\utilities\type.h"
+
+#ifndef __2dscenegraphbase__
+#define __2dscenegraphbase__
+
+
+
+class Object2D {
+	// position, orientation, speed and such
+	float x_pos, y_pos, z_pos;
+	float x_speed, yspeed;
+	float orientation;
+	unsigned int origin;
+
+public:
+
+};
+
+
+#endif /* __2dscenegraphbase__ */
