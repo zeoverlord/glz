@@ -760,7 +760,7 @@ private:
 	void resetCamera()
 	{
 		m.LoadIdentity();
-		m.ortho(-width*0.5, width*0.5, -height*0.5, height*0.5, -100, 100);
+		m.ortho(-width*0.5f, width*0.5f, -height*0.5f, height*0.5f, -100.0f, 100.0f);
 		//m.ortho(-0.5, 0.5, -0.5, 0.5, -100, 100);
 		m.scale(zoom, zoom, 1);
 		m.translate(pos);

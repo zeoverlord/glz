@@ -28,15 +28,15 @@
 #include "zeobase2.h"
 #include <fstream>
 #include <math.h>
-#include "..\glz\ztool_appbase.h"
-#include "..\glz\ztool-geo.h"
-#include "..\glz\ztool-shader.h"
-#include "..\glz\ztool-glz.h"
-#include "..\glz\ztool-vectormath.h"
-#include "..\glz\ztool-tex.h"
-#include "..\glz\ztool-geo-2d.h"
-#include "..\glz\ztool-geo-generate.h"
-#include "..\glz\ztool_tiletools.h"
+#include "..\glz\appbase.h"
+#include "..\glz\3d\geo.h"
+#include "..\glz\shader\shader.h"
+#include "..\glz\utilities\glz.h"
+#include "..\glz\utilities\vectormath.h"
+#include "..\glz\image\tex.h"
+#include "..\glz\2d\geo-2d.h"
+#include "..\glz\3d\geo-generate.h"
+#include "..\glz\utilities\tiletools.h"
 
 using namespace std;
 

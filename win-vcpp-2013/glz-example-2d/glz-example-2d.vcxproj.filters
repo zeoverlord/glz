@@ -144,7 +144,7 @@
       <Filter>utilities</Filter>
     </ClInclude>
     <ClInclude Include="..\..\glz\appbase.h">
-      <Filter>Source Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

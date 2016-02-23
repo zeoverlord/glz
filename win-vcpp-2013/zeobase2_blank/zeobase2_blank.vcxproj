@@ -92,14 +92,14 @@
     <ClCompile Include="..\..\examples\blank_base.cpp" />
     <ClCompile Include="..\..\examples\stdafx.cpp" />
     <ClCompile Include="..\..\examples\zeobase2.cpp" />
-    <ClCompile Include="..\..\glz\z-tool_appbase.cpp" />
+    <ClCompile Include="..\..\glz\appbase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\examples\Resource.h" />
     <ClInclude Include="..\..\examples\stdafx.h" />
     <ClInclude Include="..\..\examples\targetver.h" />
     <ClInclude Include="..\..\examples\zeobase2.h" />
-    <ClInclude Include="..\..\glz\z-tool_appbase.h" />
+    <ClInclude Include="..\..\glz\appbase.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\examples\small.ico" />

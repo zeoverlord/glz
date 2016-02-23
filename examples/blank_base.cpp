@@ -28,7 +28,7 @@
 #include <gl\glu.h>												// Header File For The GLu32 Library
 #include <gl\glext.h>
 #include "zeobase2.h"
-#include "..\glz\z-tool_appbase.h"
+#include "..\glz\appbase.h"
 
 //using namespace std;										
 

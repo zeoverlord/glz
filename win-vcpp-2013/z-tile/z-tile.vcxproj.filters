@@ -13,6 +13,24 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
     </Filter>
+    <Filter Include="2d">
+      <UniqueIdentifier>{0a299efe-f542-42e3-bce2-c4c9a8927623}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3d">
+      <UniqueIdentifier>{122416d4-c15e-4d82-85da-0e69f79b8cb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="image">
+      <UniqueIdentifier>{853089f4-349d-4c46-b73f-54687352f5aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="effects">
+      <UniqueIdentifier>{9e7dc87f-c4ce-48e3-8b86-5fad8352880d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shader">
+      <UniqueIdentifier>{06e323c3-9b2b-41cf-bf32-2a25e8538250}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utilities">
+      <UniqueIdentifier>{af5d2cfe-ebb4-4a67-9e01-fccc8dba4dce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\examples\stdafx.cpp">
@@ -21,44 +39,53 @@
     <ClCompile Include="..\..\examples\zeobase2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\glz\ztool-geo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\glz\ztool-glz.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\glz\ztool-shader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\glz\ztool-tex.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\glz\ztool_type.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\glz\ztool-geo-2d.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\glz\ztool-geo-generate.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\glz\ztool-vectormath.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\examples\z-tile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\glz\ztool_appbase.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\..\glz\2d\2d-graph.cpp">
+      <Filter>2d</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\glz\ztool_tiletools.cpp">
+    <ClCompile Include="..\..\glz\2d\2d-scenegraph-base.cpp">
+      <Filter>2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz\2d\geo-2d.cpp">
+      <Filter>2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz\3d\geo-generate.cpp">
+      <Filter>3d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz\3d\geo.cpp">
+      <Filter>3d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz\image\tex.cpp">
+      <Filter>image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz\effects\particle.cpp">
+      <Filter>effects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz\shader\shader.cpp">
+      <Filter>shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz\utilities\tiletools.cpp">
+      <Filter>utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz\utilities\type.cpp">
+      <Filter>utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz\utilities\vectormath.cpp">
+      <Filter>utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz\utilities\glz.cpp">
+      <Filter>utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz\utilities\resourcemanager.cpp">
+      <Filter>utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz\appbase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\glz\primitives.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\examples\Resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -71,37 +98,52 @@
     <ClInclude Include="..\..\examples\zeobase2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\ztool-geo.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\glz\2d\2d-graph.h">
+      <Filter>2d</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\ztool-glz.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\glz\2d\2d-scenegraph-base.h">
+      <Filter>2d</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\ztool-shader.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\glz\2d\geo-2d.h">
+      <Filter>2d</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\ztool-tex.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\glz\3d\geo-generate.h">
+      <Filter>3d</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\ztool-type.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\glz\3d\primitives.h">
+      <Filter>3d</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\ztool-geo-2d.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\glz\3d\geo.h">
+      <Filter>3d</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\ztool-geo-generate.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\glz\image\tex.h">
+      <Filter>image</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\ztool-vectormath.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\glz\effects\particle.h">
+      <Filter>effects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\ztool_tiletools.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\glz\shader\shader.h">
+      <Filter>shader</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\ztool_appbase.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\glz\shader\shader-programs.h">
+      <Filter>shader</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\ztool-shader-programs.h">
+    <ClInclude Include="..\..\glz\utilities\resourcemanager.h">
+      <Filter>utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz\utilities\tiletools.h">
+      <Filter>utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz\utilities\type.h">
+      <Filter>utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz\utilities\vectormath.h">
+      <Filter>utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz\utilities\glz.h">
+      <Filter>utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz\appbase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
