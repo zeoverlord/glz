@@ -427,7 +427,7 @@ void draw_text2(char text[255], float x, float y, float scale, float kern, int f
 	glBindTexture(GL_TEXTURE_2D, fonttexture[font]);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
-	glzDirectDrawText(text, scale, aspect, kern, glzOrigin::BOTTOM_LEFT);
+	glzDirectDrawText(text, scale, aspect, kern, glzOrigin::TOP_LEFT);
 	glDisable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
 
