@@ -42,9 +42,6 @@
     <ClCompile Include="..\..\glz\2d\2d-graph.cpp">
       <Filter>2d</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\glz\2d\2d-scenegraph-base.cpp">
-      <Filter>2d</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\glz\2d\geo-2d.cpp">
       <Filter>2d</Filter>
     </ClCompile>
@@ -81,6 +78,9 @@
     <ClCompile Include="..\..\glz\appbase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\glz\2d\2d-utilities.cpp">
+      <Filter>2d</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\examples\Resource.h">
@@ -96,9 +96,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\glz\2d\2d-graph.h">
-      <Filter>2d</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\glz\2d\2d-scenegraph-base.h">
       <Filter>2d</Filter>
     </ClInclude>
     <ClInclude Include="..\..\glz\2d\geo-2d.h">
@@ -142,6 +139,9 @@
     </ClInclude>
     <ClInclude Include="..\..\glz\appbase.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz\2d\2d-utilities.h">
+      <Filter>2d</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

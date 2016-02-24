@@ -38,6 +38,7 @@
 #include "..\glz\3d\geo-generate.h"
 #include "..\glz\effects\particle.h"
 #include "..\glz\2d\2d-graph.h"
+#include "..\glz\2d\2d-utilities.h"
 #include "..\glz\utilities\resourcemanager.h"
 
 using namespace std;										
@@ -66,8 +67,9 @@ float texttimer=0;
 float spriteframetimer=0;
 int spriteframe=0;
 
-int gamestate=8;
+int gamestate=2;
 
+float aspect = 1.0f;
 
 glzCamera2D cam;
 Object2DGraph tempgraph(&cam);
@@ -149,6 +151,7 @@ BOOL Initialize (GL_Window* window, Keys* keys)					// Any GL Init Code & User I
 	glBlendColor = (PFNGLBLENDCOLORPROC)wglGetProcAddress("glBlendColor");
 	glActiveTexture = (PFNGLACTIVETEXTUREPROC)wglGetProcAddress("glActiveTexture");
 
+	aspect = (float)window->x / (float)window->y;
 	
 
 
@@ -401,13 +404,6 @@ BOOL Initialize (GL_Window* window, Keys* keys)					// Any GL Init Code & User I
 
 	tempgraph.add(obj2d_Text(99, "testing text", nullptr, node3(vert3(-400.0, -250.0, 0.0)), rm.gettexture("font.arial"), 40.0, 1.0, 1.0, glzOrigin::BOTTOM_LEFT));
 	tempgraph.set(99, glzOBject2DSetvar::BLENDCOLOR, glzColor(1.0,0.5,0.0,1.0));
-	
-	
-	
-		
-
-
-
 	return TRUE;												// Return TRUE (Initialization Successful)
 }
 
@@ -656,46 +652,6 @@ void draw_sprite(float x, float y, float s, int sprite, int tx, int offset, unsi
 
 }
 
-// backdrops are usefull, if you don't have the time to write a 2D renderer then just cheat with a texture backdrop instead
-void draw_backdrop(unsigned int bgtexture)
-{
-	glUseProgram(ProgramObjectFSQ);
-	unsigned int loc1 = glGetUniformLocation(ProgramObjectFSQ,"projMat");
-	unsigned int loc2 = glGetUniformLocation(ProgramObjectFSQ,"texunit0");
-	unsigned int loc3 = glGetUniformLocation(ProgramObjectFSQ,"tint");
-	
-	m.LoadIdentity();
-
-	float mtemp[16];
-	m.transferMatrix(&mtemp[0]);
-	glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
-	glUniform1i(loc2, 0);
-	glUniform4f(loc3, 1.0f,1.0f,1.0f,1.0f);
-	glBindTexture(GL_TEXTURE_2D,bgtexture);
-	glzDrawVAO(vao_num[0],vao[0],GL_TRIANGLES);
-
-}
-
-void draw_backdrop2(unsigned int bgtexture, glzMatrix mat, float col[4])
-{
-	glUseProgram(ProgramObjectFSQ);
-	unsigned int loc1 = glGetUniformLocation(ProgramObjectFSQ, "projMat");
-	unsigned int loc2 = glGetUniformLocation(ProgramObjectFSQ, "texunit0");
-	unsigned int loc3 = glGetUniformLocation(ProgramObjectFSQ, "tint");
-
-
-
-	float mtemp[16];
-	mat.transferMatrix(&mtemp[0]);
-	glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
-
-	glUniform1i(loc2, 0);
-	glUniform4f(loc3, col[0], col[1], col[2], col[3]);
-	glBindTexture(GL_TEXTURE_2D, bgtexture);
-	glzDrawVAO(vao_num[0], vao[0], GL_TRIANGLES);
-
-}
-
 void draw_backdrop_glitch(unsigned int bgtexture, unsigned int bgtexture2)
 {
 	glUseProgram(ProgramObjectFSQ_glitch);
@@ -775,21 +731,15 @@ void Draw (void)
 
 	if (gamestate==2)
 	{
-		draw_backdrop(rm.gettextureHandle("background.back"));
+		glzBackdrop(rm.gettexture("background.back"), glzBlendingMode::NONE);
 
 		glzMatrix mi;
 		mi.LoadIdentity();
-		mi.scale(0.17f, 0.17f, 0.17f);
-		float col[4]={1.0f,1.0f,1.0f,1.0f};
+		mi.scale(0.27f*0.8, 0.27f, 0.27f);
+		mi.translate(-2.7f, -2.7f, 0.0f);
+		glzColor blendcolor(1.0, 1.0, 1.0, 1.0);
 
-		mi.translate(-4.7f, -4.7f, 0.0f);
-
-
-		glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-		glEnable(GL_BLEND);	
-		draw_backdrop2(rm.gettextureHandle("sprite.derpy_phirana"), mi, col); // the derpy phirana
-		glDisable(GL_BLEND);
-
+		glzDrawSprite(rm.gettexture("sprite.derpy_phirana"), glzBlendingMode::ALPHA, -0.5f, -0.5f, 0.5f, 1.0f);
 		
 		draw_text(-3.9f, 1.9f,9,2,ProgramObject,COL_BLACK);
 		draw_text(1.7f, -1.8f,15,2,ProgramObject,COL_BLACK);
@@ -953,8 +903,6 @@ void Draw (void)
 
 	if (gamestate == 8)
 	{
-
-		
 		glzMatrix mt;
 		mt.LoadIdentity();
 

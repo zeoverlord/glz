@@ -169,6 +169,7 @@ void glzQuaternionToMatrixf(float *m, float q[4]);
 
 // 2D colisions
 unsigned int glzPhys2DColideBox2(float x1,float y1,float r1, float x2,float y2,float r2);
+void setblendingmode(glzBlendingMode bmode);
 
 
 #endif /* __glz__ */

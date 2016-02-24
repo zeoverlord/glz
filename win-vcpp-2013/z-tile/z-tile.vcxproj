@@ -94,7 +94,7 @@
     <ClCompile Include="..\..\examples\z-tile.cpp" />
     <ClCompile Include="..\..\examples\zeobase2.cpp" />
     <ClCompile Include="..\..\glz\2d\2d-graph.cpp" />
-    <ClCompile Include="..\..\glz\2d\2d-scenegraph-base.cpp" />
+    <ClCompile Include="..\..\glz\2d\2d-utilities.cpp" />
     <ClCompile Include="..\..\glz\2d\geo-2d.cpp" />
     <ClCompile Include="..\..\glz\3d\geo-generate.cpp" />
     <ClCompile Include="..\..\glz\3d\geo.cpp" />
@@ -114,7 +114,7 @@
     <ClInclude Include="..\..\examples\targetver.h" />
     <ClInclude Include="..\..\examples\zeobase2.h" />
     <ClInclude Include="..\..\glz\2d\2d-graph.h" />
-    <ClInclude Include="..\..\glz\2d\2d-scenegraph-base.h" />
+    <ClInclude Include="..\..\glz\2d\2d-utilities.h" />
     <ClInclude Include="..\..\glz\2d\geo-2d.h" />
     <ClInclude Include="..\..\glz\3d\geo-generate.h" />
     <ClInclude Include="..\..\glz\3d\geo.h" />

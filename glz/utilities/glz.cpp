@@ -2383,6 +2383,32 @@ unsigned int glzPhys2DColideBox2(float x1,float y1,float r1, float x2,float y2,f
 	return 0; // default as in they are not touching
 }
 
+void setblendingmode(glzBlendingMode bmode)
+{
+
+	switch (bmode)
+	{
+	case glzBlendingMode::NONE:
+		glDisable(GL_BLEND);
+		return;
+		break;
+
+	case glzBlendingMode::ADDITIVE:
+		glBlendFunc(GL_ONE, GL_ONE);
+		break;
+
+	case glzBlendingMode::ALPHA:
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		break;
+
+	case glzBlendingMode::MULTIPLY:
+		glBlendFunc(GL_DST_COLOR, GL_ZERO);
+		break;
+	}
+
+	glEnable(GL_BLEND);
+}
+
 
 
 

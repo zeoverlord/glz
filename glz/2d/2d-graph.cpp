@@ -27,44 +27,14 @@
 #include "2d-graph.h"
 #include "geo-2d.h"
 #include "..\utilities\type.h"
+#include "..\utilities\glz.h"
 #include "..\shader\shader.h"
 
 static PFNGLACTIVETEXTUREPROC					glActiveTexture;
 
 
-void setblendingmode(glzBlendingMode bmode)
-{
-
-	switch (bmode)
-	{
-	case glzBlendingMode::NONE:
-		return;
-		break;
-
-	case glzBlendingMode::ADDITIVE:
-		glBlendFunc(GL_ONE, GL_ONE);
-		break;
-
-	case glzBlendingMode::ALPHA:
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		break;
-
-	case glzBlendingMode::MULTIPLY:
-		glBlendFunc(GL_DST_COLOR, GL_ZERO);
-		break;
-		
-
-
-	}
-	
-	glEnable(GL_BLEND);
-}
-
-
 
 //*** obj2d_Sprite ***
-
-
 
 void obj2d_Sprite::draw(glzCamera2D *camera)
 {
@@ -166,14 +136,12 @@ void obj2d_Sprite::set_f(glzOBject2DSetvar type, float v)
 
 void obj2d_Fullscreen::draw(glzCamera2D *camera)
 {
-
+	
 	glzMatrix m;
 	glzMatrix mt;
 
 	setblendingmode(blend);
 	glzShaderUseBasic();
-
-
 	m.LoadIdentity();
 	mt.LoadIdentity();
 //	m *= camera->m;
@@ -181,8 +149,6 @@ void obj2d_Fullscreen::draw(glzCamera2D *camera)
 //	if (n_parent != nullptr)
 //		m *= n_parent->m;
 //	m *= n_local.m;
-
-
 
 	mt.translate(-0.0, -0.0, 0.0);
 
