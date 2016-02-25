@@ -1,4 +1,4 @@
-// Copyright 2013 Peter Wallström
+// Copyright 2016 Peter Wallström
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 //
@@ -14,52 +14,57 @@
 // 3. If you make something comersiol or at least something you release publicly that relies on this code then i would like to know and maybe use in my CV
 // 4. Please do include me in your credits
 
-// tile helper functions
+// glz input - i think it's usefull
 // visit http://www.flashbang.se or contact me at overlord@flashbang.se
 // the entire toolkit should exist in it's entirety at github
 // https://github.com/zeoverlord/glz.git
 
-#pragma once
-
-#include "type.h"
-#include "..\image\tex.h"
-#include "glz.h"
 #include <windows.h>											// Header File For Windows
 #include <gl\gl.h>												// Header File For The OpenGL32 Library
 #include <gl\glu.h>												// Header File For The GLu32 Library
 #include <gl\glext.h>
+#include "input.h"
 
 
-enum class glzTileType { DOUBLE_LAYER, QUAD_LAYER };
+glzInputData::glzInputData()
+{
+	LMdown = false;
+	MMdown = false;
+	RMdown = false;
+	Mpos_x = 0;
+	Mpos_y = 0;
+	Mweel = 0;
+	Mactive = false;
+}
 
-class glztiles{
-public:
-	
-	int width;
-	int height;
-	glzTileType type;
-	img_head imghdr;
-	unsigned char *data;
-	unsigned int tex;
-	string img_filename;
-	bool tex_changed;
-	bool data_changed;
-	
-	void load(string const filename, glzTileType intype);
-
-	void update_texture(void);
-	void save(void);
-
-	// helper functions to read an write data
-	char get_pixel(int x, int y, int layer);
-	void put_pixel(int x, int y, int layer, char value);
+static glzInputData inputData;
 
 
-	void paint_pixel(int x, int y, int px, int py, bool animate, bool flip, int layer);
-	void put_extra_bit(int x, int y, bool bitdata, int layer);
+glzInput::glzInput()
+{}
 
-	bool getTilecolision(float x, float y, int layer, bool flip_y);
+glzInput::~glzInput()
+{}
 
-	~glztiles();
+// keys
+void glzInput::addKeyEvent(int key, bool keydown) { inputData.keyDown[key]=keydown; }
+bool glzInput::getKeyState(int key) { return inputData.keyDown[key]; }
 
-};
+//mouse
+
+void glzInput::SetMouseL(bool keydown) { inputData.LMdown = keydown; }
+void glzInput::SetMouseM(bool keydown) { inputData.MMdown = keydown; }
+void glzInput::SetMouseR(bool keydown) { inputData.RMdown = keydown; }
+
+bool glzInput::getMouseL(void) { return inputData.LMdown; }
+bool glzInput::getMouseM(void) { return inputData.MMdown; }
+bool glzInput::getMouseR(void) { return inputData.RMdown; }
+
+void glzInput::setMouseX(int x){ inputData.Mpos_x = x; }
+void glzInput::setMouseY(int y){ inputData.Mpos_y = y; }
+int glzInput::getMouseX(void){ return inputData.Mpos_x; }
+int glzInput::getMouseY(void){ return inputData.Mpos_y; }
+
+void glzInput::setMouseWeel(int m) { inputData.Mweel = m; }
+void glzInput::addMouseWeel(int m) { inputData.Mweel += m; }
+int glzInput::getMouseWeel(void) { return inputData.Mweel; }

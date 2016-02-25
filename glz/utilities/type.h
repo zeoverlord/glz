@@ -19,15 +19,13 @@
 // the entire toolkit should exist in it's entirety at github
 // https://github.com/zeoverlord/glz.git
 
+#pragma once
+
 #include <vector>
 #include <algorithm>
 
 
 using namespace std;
-
-
-#ifndef __glztype__
-#define __glztype__
 
 
 enum class glzVAOType {NONE, AUTO, VERTEX, VERTEX_TEXTURE, VERTEX_NORMAL, VERTEX_TEXTURE_NORMAL };
@@ -155,10 +153,3 @@ public:
 glzspeed glzlength::operator/ (glzsecond b) { glzspeed sp(L / b.get()); return sp; }
 
 */
-
-
-
-
-
-
-#endif /* __glztype__ */

@@ -29,6 +29,7 @@
 #include <gl\glext.h>
 #include "zeobase2.h"
 #include "..\glz\appbase.h"
+#include "..\glz\input\input.h"
 
 //using namespace std;										
 

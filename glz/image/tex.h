@@ -19,11 +19,10 @@
 // the entire toolkit should exist in it's entirety at github
 // https://github.com/zeoverlord/glz.git
 
+#pragma once
 
 #include "..\utilities\type.h"
 
-#ifndef __glztex__
-#define __glztex__
 
 typedef struct
 	{
@@ -75,11 +74,3 @@ void glzSaveTGA(string filename, int x, int y, glzTexCompression type, unsigned 
 * dynamic texture manager for the above, defrags a texture array to make more space.
 
 */
-
-
-
-
-#endif /* __glztex__ */
-
-
-

@@ -19,17 +19,13 @@
 // the entire toolkit should exist in it's entirety at github
 // https://github.com/zeoverlord/glz.git
 
+#pragma once
+
 #include <vector>
 #include "..\utilities\vectormath.h"
 
 
 using namespace std;
-
-
-#ifndef __glzparticle__
-#define __glzparticle__
-
-
 
 typedef struct{
 	vert3 pos;
@@ -103,7 +99,3 @@ typedef struct{
 	float attract, repulse; // repulstion is a power of two from attraction
 
 }glzMediumParticle;
-
-
-
-#endif /* __glzparticle__ */

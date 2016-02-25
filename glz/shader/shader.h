@@ -19,11 +19,10 @@
 // the entire toolkit should exist in it's entirety at github
 // https://github.com/zeoverlord/glz.git
 
+#pragma once
+
 #include "..\utilities\type.h"
 #include "..\utilities\vectormath.h"
-
-#ifndef __glz_shader__
-#define __glz_shader__
 
 		//type signifies the type of data to choose from, if set at GLZ_AUTO it chooses the default settings
 
@@ -68,10 +67,5 @@ void glzUniformMatrix4fv(unsigned int ProgramObject, const string name, glzMatri
 //void glzSetuniform(int type, int location, GLsizei count, GLboolean transpose, const GLfloat *value)
 
 // for now just call one of the two first ones with "glzVAOType::AUTO" as the type then the last one, there will be much more here in future versions
-
-
-
-#endif /* __glz_shader__ */
-
 
 

@@ -40,6 +40,7 @@
 #include "..\glz\2d\2d-graph.h"
 #include "..\glz\2d\2d-utilities.h"
 #include "..\glz\utilities\resourcemanager.h"
+#include "..\glz\input\input.h"
 
 using namespace std;										
 
@@ -52,7 +53,7 @@ using namespace std;
 
 
 GL_Window*	g_window;
-Keys*		g_keys;
+//Keys*		g_keys;
 
 // User Defined Variables
 float		angle=0,width,height;												// Used To Rotate The Triangles
@@ -115,10 +116,10 @@ void preInitialize(void)
 	WINDOW_WIDTH = app.data.WINDOW_WIDTH;
 }
 
-BOOL Initialize (GL_Window* window, Keys* keys)					// Any GL Init Code & User Initialiazation Goes Here
+BOOL Initialize (GL_Window* window)					// Any GL Init Code & User Initialiazation Goes Here
 {
 	g_window	= window;
-	g_keys		= keys;
+	//g_keys		= keys;
 
 	glzResourcemanager rm;
 
@@ -151,7 +152,7 @@ BOOL Initialize (GL_Window* window, Keys* keys)					// Any GL Init Code & User I
 	glBlendColor = (PFNGLBLENDCOLORPROC)wglGetProcAddress("glBlendColor");
 	glActiveTexture = (PFNGLACTIVETEXTUREPROC)wglGetProcAddress("glActiveTexture");
 
-	aspect = (float)window->x / (float)window->y;
+	aspect = (float)window->init.width / (float)window->init.height;
 	
 
 
@@ -422,6 +423,7 @@ void Update (float seconds)								// Perform Motion Updates Here
 {
 
 	glzAppinitialization app;
+	glzInput input;
 	WINDOW_HEIGHT = app.data.WINDOW_HEIGHT;
 	WINDOW_WIDTH = app.data.WINDOW_WIDTH;
 		glzMatrix mt;
@@ -434,12 +436,12 @@ void Update (float seconds)								// Perform Motion Updates Here
 
 
 
-	if (g_keys->keyDown [VK_ESCAPE] == TRUE)					// Is ESC Being Pressed?
+	if (input.getKeyState(VK_ESCAPE) == TRUE)					// Is ESC Being Pressed?
 	{
 		TerminateApplication (g_window);						// Terminate The Program
 	}
 
-	if (g_keys->keyDown [VK_F1] == TRUE)						// Is F1 Being Pressed?
+	if (input.getKeyState(VK_F1) == TRUE)						// Is F1 Being Pressed?
 	{
 		ToggleFullscreen (g_window);							// Toggle Fullscreen Mode
 	}
@@ -490,7 +492,7 @@ if (gamestate == 6)
 
 
 
-	if (g_keys->keyDown[VK_SPACE] == TRUE)
+	if (input.getKeyState(VK_SPACE) == TRUE)
 	{
 	
 		ps.spawn_burst(1000*seconds, vert3(0.0f, 100.0f, 0.0f), 0.1f, 2.0f, 1.0f, 0.5f, 3.0f, 0.3f, 1.0, 1.0f);
@@ -524,14 +526,14 @@ if (gamestate == 8)
 {
 
 
-	if (g_keys->keyDown['A'] == TRUE) cam.moveToRel(vert3(seconds * -100, 0.0, 0.0));
-	if (g_keys->keyDown['D'] == TRUE) cam.moveToRel(vert3(seconds * 100, 0.0, 0.0));
-	if (g_keys->keyDown['W'] == TRUE) cam.moveToRel(vert3(0.0, seconds * 100, 0.0));
-	if (g_keys->keyDown['S'] == TRUE) cam.moveToRel(vert3(0.0, seconds * -100, 0.0));
-	if (g_keys->keyDown[VK_SPACE] == TRUE) { cam.zoomTo(5.0f); 	}
+	if (input.getKeyState('A') == TRUE) cam.moveToRel(vert3(seconds * -100, 0.0, 0.0));
+	if (input.getKeyState('D') == TRUE) cam.moveToRel(vert3(seconds * 100, 0.0, 0.0));
+	if (input.getKeyState('W') == TRUE) cam.moveToRel(vert3(0.0, seconds * 100, 0.0));
+	if (input.getKeyState('S') == TRUE) cam.moveToRel(vert3(0.0, seconds * -100, 0.0));
+	if (input.getKeyState(VK_SPACE) == TRUE) { cam.zoomTo(5.0f); }
 	else cam.zoomTo(1.0f);
 
-	if (g_keys->keyDown['P'] == TRUE) tempgraph.set(111, glzOBject2DSetvar::ANIMATIONPLAYONCE);
+	if (input.getKeyState('P') == TRUE) tempgraph.set(111, glzOBject2DSetvar::ANIMATIONPLAYONCE);
 
 	cam.update(seconds);
 }
@@ -541,14 +543,14 @@ if (gamestate == 8)
 	n.tick(seconds);
 	tempgraph.update(seconds);
 
-	if (g_keys->keyDown['1'] == TRUE) gamestate = 1;
-	if (g_keys->keyDown['2'] == TRUE) gamestate = 2;
-	if (g_keys->keyDown['3'] == TRUE) gamestate = 3;
-	if (g_keys->keyDown['4'] == TRUE) gamestate = 4;
-	if (g_keys->keyDown['5'] == TRUE) gamestate = 5;
-	if (g_keys->keyDown['6'] == TRUE) gamestate = 6;
-	if (g_keys->keyDown['7'] == TRUE) gamestate = 7;
-	if (g_keys->keyDown['8'] == TRUE) gamestate = 8;
+	if (input.getKeyState('1') == TRUE) gamestate = 1;
+	if (input.getKeyState('2') == TRUE) gamestate = 2;
+	if (input.getKeyState('3') == TRUE) gamestate = 3;
+	if (input.getKeyState('4') == TRUE) gamestate = 4;
+	if (input.getKeyState('5') == TRUE) gamestate = 5;
+	if (input.getKeyState('6') == TRUE) gamestate = 6;
+	if (input.getKeyState('7') == TRUE) gamestate = 7;
+	if (input.getKeyState('8') == TRUE) gamestate = 8;
 
 	
 
@@ -739,7 +741,7 @@ void Draw (void)
 		mi.translate(-2.7f, -2.7f, 0.0f);
 		glzColor blendcolor(1.0, 1.0, 1.0, 1.0);
 
-		glzDrawSprite(rm.gettexture("sprite.derpy_phirana"), glzBlendingMode::ALPHA, -0.5f, -0.5f, 0.5f, 1.0f);
+		glzDrawSprite(rm.gettexture("sprite.derpy_phirana"), glzBlendingMode::ALPHA, -0.5f, -0.5f, 0.5f, aspect);
 		
 		draw_text(-3.9f, 1.9f,9,2,ProgramObject,COL_BLACK);
 		draw_text(1.7f, -1.8f,15,2,ProgramObject,COL_BLACK);

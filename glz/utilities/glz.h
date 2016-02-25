@@ -19,12 +19,10 @@
 // the entire toolkit should exist in it's entirety at github
 // https://github.com/zeoverlord/glz.git
 
+#pragma once
+
 #include "type.h"
 #include "vectormath.h"
-
-#ifndef __glz__
-#define __glz__
-
 
 const auto  GLZ_MIRROR_X = 1;
 const auto  GLZ_MIRROR_Y = 2;
@@ -170,10 +168,6 @@ void glzQuaternionToMatrixf(float *m, float q[4]);
 // 2D colisions
 unsigned int glzPhys2DColideBox2(float x1,float y1,float r1, float x2,float y2,float r2);
 void setblendingmode(glzBlendingMode bmode);
-
-
-#endif /* __glz__ */
-
 
 
 

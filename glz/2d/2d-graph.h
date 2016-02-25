@@ -19,7 +19,7 @@
 // the entire toolkit should exist in it's entirety at github
 // https://github.com/zeoverlord/glz.git
 
-
+#pragma once
 
 #include "..\utilities\type.h"
 #include "..\utilities\resourcemanager.h"
@@ -30,8 +30,6 @@
 #include <vector>
 #include <memory>
 
-#ifndef __2dscenegraphbase__
-#define __2dscenegraphbase__
 
 enum class glzOBject2DSetvar { NONE, ALPHA, SCALE, BLEND, BLENDCOLOR, WIDTH, HEIGHT, TEXTURE, TEXT, SPRITE, CURRENT_ANIMATION, CURRENT_FRAME, FRAMESPEED, NODE_LOCAL, NODE_PARENT, KILL, Z_LEVEL, RENDEREGRAPH, ANIMATIONSTOP, ANIMATIONPLAY, ANIMATIONPLAYONCE, VISIBLE, ORIGIN};
 enum class glzOBject2DAnimationstate { STOPPED, PLAYING, PLAYINGONCE };
@@ -905,6 +903,3 @@ obj2d_colorOverlay
 */
 
 
-
-
-#endif /* __2dscenegraphbase__ */

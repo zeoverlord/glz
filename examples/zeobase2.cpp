@@ -31,6 +31,7 @@
 #include <fstream>
 #include <windowsx.h>
 #include "..\glz\appbase.h"
+#include "..\glz\input\input.h"
 
 #pragma comment( lib, "opengl32.lib" )							// Search For OpenGL32.lib While Linking
 #pragma comment( lib, "glu32.lib" )								// Search For GLu32.lib While Linking
@@ -276,7 +277,7 @@ glzAppinitialization app;
 
 
 
-	ZeroMemory (window->keys, sizeof (Keys));							// Clear All Keys
+//	ZeroMemory (window->keys, sizeof (Keys));							// Clear All Keys
 
 	window->lastTickCount = GetTickCount ();							// Get Tick Count
 
@@ -317,6 +318,7 @@ BOOL DestroyWindowGL (GL_Window* window)								// Destroy The OpenGL Window & R
 LRESULT CALLBACK WindowProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	glzAppinitialization app;
+	glzInput input;
 
 	// Get The Window Context
 	GL_Window* window = (GL_Window*)(GetWindowLong (hWnd, GWL_USERDATA));
@@ -370,7 +372,8 @@ LRESULT CALLBACK WindowProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		case WM_KEYDOWN:												// Update Keyboard Buffers For Keys Pressed
 			if ((wParam >= 0) && (wParam <= 255))						// Is Key (wParam) In A Valid Range?
 			{
-				window->keys->keyDown [wParam] = TRUE;					// Set The Selected Key (wParam) To True
+				input.addKeyEvent(wParam,true);
+				//window->keys->keyDown [wParam] = TRUE;					// Set The Selected Key (wParam) To True
 				return 0;												// Return
 			}
 		break;															// Break
@@ -378,43 +381,53 @@ LRESULT CALLBACK WindowProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		case WM_KEYUP:													// Update Keyboard Buffers For Keys Released
 			if ((wParam >= 0) && (wParam <= 255))						// Is Key (wParam) In A Valid Range?
 			{
-				window->keys->keyDown [wParam] = FALSE;					// Set The Selected Key (wParam) To False
+				input.addKeyEvent(wParam, false);
+				//window->keys->keyDown [wParam] = FALSE;					// Set The Selected Key (wParam) To False
 				return 0;												// Return
 			}
 		break;															// Break
 
 		case WM_LBUTTONDOWN:
-			window->keys->LMdown = true;
+			input.SetMouseL(true);
+		//	window->keys->LMdown = true;
 			break;
 
 		case WM_LBUTTONUP:
-			window->keys->LMdown = false;
+			input.SetMouseL(false);
+		//	window->keys->LMdown = false;
 			break;
 
 		case WM_RBUTTONDOWN:
-			window->keys->RMdown = true;
+			input.SetMouseR(true);
+		//	window->keys->RMdown = true;
 			break;
 
 		case WM_RBUTTONUP:
-			window->keys->RMdown = false;
+			input.SetMouseR(false);
+		//	window->keys->RMdown = false;
 			break;
 
 		case WM_MBUTTONDOWN:
-			window->keys->MMdown = true;
+			input.SetMouseM(true);
+			//window->keys->MMdown = true;
 			break;
 
 		case WM_MBUTTONUP:
-			window->keys->MMdown = false;
+			input.SetMouseM(false);
+			//window->keys->MMdown = false;
 			break;
 
 		case WM_MOUSEMOVE:
-			window->keys->Mpos_x = GET_X_LPARAM(lParam);
-			window->keys->Mpos_y = GET_Y_LPARAM(lParam);
+		//	window->keys->Mpos_x = GET_X_LPARAM(lParam);
+		//	window->keys->Mpos_y = GET_Y_LPARAM(lParam);
+			input.setMouseX(GET_X_LPARAM(lParam));
+			input.setMouseY(GET_Y_LPARAM(lParam));
 
 			break;
 
 		case WM_MOUSEWHEEL:
-			window->keys->Mweel += GET_WHEEL_DELTA_WPARAM(wParam);
+		//	window->keys->Mweel += GET_WHEEL_DELTA_WPARAM(wParam);
+			input.addMouseWeel(GET_WHEEL_DELTA_WPARAM(wParam));
 			//window->keys->Mactive = true;
 			break;
 
@@ -512,7 +525,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 
 	// Fill Out Window
 	ZeroMemory (&window, sizeof (GL_Window));							// Make Sure Memory Is Zeroed
-	window.keys					= &keys;								// Window Key Structure
+//	window.keys					= &keys;								// Window Key Structure
 	window.init.application		= &application;							// Window Application
 	window.init.title = app.data.WINDOW_TITLE;							// Window Title
 	window.init.width = app.data.FULLSCREEN_WIDTH;						// Window Width
@@ -571,7 +584,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 		if (CreateWindowGL (&window) == TRUE)							// Was Window Creation Successful?
 		{
 			// At This Point We Should Have A Window That Is Setup To Render OpenGL
-			if (Initialize (&window, &keys) == FALSE)					// Call User Intialization
+			if (Initialize (&window) == FALSE)					// Call User Intialization
 			{
 				// Failure
 				TerminateApplication (&window);							// Close Window, This Will Handle The Shutdown

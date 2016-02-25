@@ -19,6 +19,7 @@
 // the entire toolkit should exist in it's entirety at github
 // https://github.com/zeoverlord/glz.git
 
+#pragma once
 
 #include "type.h"
 #include "..\image\tex.h"
@@ -26,10 +27,6 @@
 #include <gl/gl.h>														// Header File For The OpenGL32 Library
 #include <gl/glu.h>														// Header File For The GLu32 Library
 #include <gl/glext.h>
-
-#ifndef __glzresourcemanager__
-#define __glzresourcemanager__
-
 
 typedef struct
 {
@@ -98,11 +95,3 @@ public:
 	void load_all(void);
 
 };
-
-
-
-
-#endif /* __glzresourcemanager__ */
-
-
-

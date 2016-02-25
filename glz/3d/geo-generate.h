@@ -16,15 +16,13 @@
 // the entire toolkit should exist in it's entirety at github
 // https://github.com/zeoverlord/glz.git
 
+#pragma once
 
 using namespace std;
 
 #include "..\utilities\type.h"
 #include "geo.h"
 #include "..\utilities\vectormath.h"
-
-#ifndef __glz_geogenerate__
-#define __glz_geogenerate__
 
 long glzVAOMakeFromFile(string const filename, glzMatrix matrix, texture_transform tt, unsigned int *vao);
 long glzVAOMakeFromFileVector(string const filename, glzMatrix matrix, texture_transform tt, unsigned int *vao);
@@ -36,6 +34,3 @@ long glzVAOMakeHeightAtlasGrid(unsigned int x, unsigned int y, glzMatrix matrix,
 long glzVAOCountPrimitiveVerts(float varation, float resuloution, unsigned int primitive, texture_transform tt);
 long glzVAOMakePrimitive(primitive_gen pg, unsigned int *vao);
 long glzVAOMakePrimitives(int num, primitive_gen pg[], unsigned int *vao);
-
-
-#endif /* __glz_geogenerate__ */

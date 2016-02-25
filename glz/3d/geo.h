@@ -19,6 +19,7 @@
 // the entire toolkit should exist in it's entirety at github
 // https://github.com/zeoverlord/glz.git
 
+#pragma once
 
 using namespace std;
 
@@ -27,8 +28,6 @@ using namespace std;
 #include <vector>
 
 
-#ifndef __glz_geo__
-#define __glz_geo__
 
 
 		//type signifies the type of data to choose from, if set at GLZ_AUTO it chooses the default settings
@@ -136,7 +135,6 @@ texture_transform glzMakeTT(glzTTType type, float u_scale, float v_scale, float 
 	void glzDrawVAO(long offset, long enteties, unsigned int vao, unsigned int type);
 
 
-#endif /* __glz_geo__ */
 
 	/* 
 	not implemented, is subject to change

@@ -100,6 +100,7 @@
     <ClCompile Include="..\..\glz\appbase.cpp" />
     <ClCompile Include="..\..\glz\effects\particle.cpp" />
     <ClCompile Include="..\..\glz\image\tex.cpp" />
+    <ClCompile Include="..\..\glz\input\input.cpp" />
     <ClCompile Include="..\..\glz\shader\shader.cpp" />
     <ClCompile Include="..\..\glz\utilities\glz.cpp" />
     <ClCompile Include="..\..\glz\utilities\resourcemanager.cpp" />
@@ -121,6 +122,7 @@
     <ClInclude Include="..\..\glz\appbase.h" />
     <ClInclude Include="..\..\glz\effects\particle.h" />
     <ClInclude Include="..\..\glz\image\tex.h" />
+    <ClInclude Include="..\..\glz\input\input.h" />
     <ClInclude Include="..\..\glz\shader\shader-programs.h" />
     <ClInclude Include="..\..\glz\shader\shader.h" />
     <ClInclude Include="..\..\glz\utilities\glz.h" />

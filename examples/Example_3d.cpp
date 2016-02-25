@@ -37,6 +37,7 @@
 #include "..\glz\2d\geo-2d.h"
 #include "..\glz\3d\geo-generate.h"
 #include "..\glz\effects\particle.h"
+#include "..\glz\input\input.h"
 
 using namespace std;										
 

@@ -36,6 +36,7 @@
 #include "..\glz\shader\shader.h"
 #include "..\glz\utilities\glz.h"
 #include "..\glz\image\tex.h"
+#include "..\glz\input\input.h"
 
 using namespace std;										
 

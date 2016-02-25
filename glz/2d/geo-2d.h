@@ -19,14 +19,13 @@
 // the entire toolkit should exist in it's entirety at github
 // https://github.com/zeoverlord/glz.git
 
+#pragma once
 
 using namespace std;
 
 #include "..\utilities\type.h"
 #include "..\3d\geo.h"
 
-#ifndef __glz_geo2d__
-#define __glz_geo2d__
 
 long glzVAOMakeText(string text, glzMatrix matrix, float kern,  glzOrigin textorigin, unsigned int *vao);
 long glzVAOMakeText2d(string text, float scale, float aspect, float kern,  glzOrigin textorigin, unsigned int *vao);
@@ -57,4 +56,3 @@ DONE * improve text rendering
 DONE * move atlas lookup to the pre computation stage
 
 */
-#endif /* __glz_geo2d__ */

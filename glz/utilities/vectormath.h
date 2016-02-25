@@ -19,19 +19,13 @@
 // the entire toolkit should exist in it's entirety at github
 // https://github.com/zeoverlord/glz.git
 
+#pragma once
+
 #include "type.h"
-
-
 using namespace std;
-
-
-#ifndef __glzvectormath__
-#define __glzvectormath__
-
 
 enum class glzLinkStates { VAR, LINK, BOTH };
 enum class glzCurvetype {CONSTANT,LINEAR,BEIZER,CUBIC};
-
 
 template<typename T>
 class Link{
@@ -342,7 +336,7 @@ private:
 public:
 	double m[16];
 	//double inverted_m[16]; 
-	//todo:: for each operation generate the oposite inverted matrix and heep it at hand if nneded, and it will be nneded if i don't do this
+	//todo:: for each operation generate the oposite inverted matrix and keep it at hand if needed, and it will be needed if i don't do this
 
 	glzMatrix() { this->LoadIdentity(); }
 
@@ -984,6 +978,3 @@ public:
 	}
 
 };
-
-
-#endif /* __glzvectormath__ */

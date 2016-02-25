@@ -50,7 +50,7 @@ typedef struct {									// Window Creation Info
 } GL_WindowInit;									// GL_WindowInit
 
 typedef struct {									// Contains Information Vital To A Window
-	Keys*				keys;						// Key Structure
+//	Keys*				keys;						// Key Structure
 	HWND				hWnd;						// Window Handle
 	HDC					hDC;						// Device Context
 	HGLRC				hRC;						// Rendering Context
@@ -67,7 +67,7 @@ void TerminateApplication (GL_Window* window);		// Terminate The Application
 
 void ToggleFullscreen (GL_Window* window);			// Toggle Fullscreen / Windowed Mode
 
-BOOL Initialize (GL_Window* window, Keys* keys);	// Performs All Your Initialization
+BOOL Initialize (GL_Window* window);	// Performs All Your Initialization
 
 void Deinitialize (void);							// Performs All Your DeInitialization
 
