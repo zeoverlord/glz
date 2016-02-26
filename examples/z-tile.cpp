@@ -50,7 +50,7 @@ using namespace std;
 
 
 GL_Window*	g_window;
-Keys*		g_keys;
+
 
 
 enum ztUIP { NONE, BACKGROUND, PIXELMAP, SPRITESHEET, SPRITE, UIFRAME };
@@ -164,10 +164,10 @@ void preInitialize(void)
 }
 
 
-BOOL Initialize(GL_Window* window, Keys* keys)					// Any GL Init Code & User Initialiazation Goes Here
+BOOL Initialize(GL_Window* window)					// Any GL Init Code & User Initialiazation Goes Here
 {
 	g_window = window;
-	g_keys = keys;
+	
 
 	GetFocus();
 	GetAsyncKeyState(WM_KEYUP);
@@ -268,15 +268,16 @@ void Deinitialize(void)										// Any User DeInitialization Goes Here
 void Update(float seconds)								// Perform Motion Updates Here
 {
 
+	glzInput input;
 	//Ui stuff
 	GLint viewport[4];
 
 	glGetIntegerv(GL_VIEWPORT, viewport);
 
 
-	Mweel_rel = g_keys->Mweel - Mweel_old;
-	Mpos_x_rel = g_keys->Mpos_x - Mpos_x_old;
-	Mpos_y_rel = g_keys->Mpos_y - Mpos_y_old;
+	Mweel_rel = input.getMouseWeel() - Mweel_old;
+	Mpos_x_rel = input.getMouseX() - Mpos_x_old;
+	Mpos_y_rel = input.getMouseY() - Mpos_y_old;
 
 
 	glzMatrix mt;
@@ -284,25 +285,25 @@ void Update(float seconds)								// Perform Motion Updates Here
 	mt.scale(0.17f, 0.17f, 0.17f);
 
 
-	if (g_keys->keyDown[VK_ESCAPE] == TRUE)					// Is ESC Being Pressed?
+	if (input.getKeyState(VK_ESCAPE))					// Is ESC Being Pressed?
 	{
 		TerminateApplication(g_window);						// Terminate The Program
 	}
 
-	if (g_keys->keyDown[VK_F1] == TRUE)						// Is F1 Being Pressed?
+	if (input.getKeyState(VK_F1))						// Is F1 Being Pressed?
 	{
 		ToggleFullscreen(g_window);							// Toggle Fullscreen Mode
 	}
 
 	gamestate = 1;
 
-	if (g_keys->keyDown[VK_SPACE] == TRUE)
+	if (input.getKeyState(VK_SPACE))
 	{
 		gamestate = 2;
 	}
 
 
-	if (g_keys->keyDown[VK_TAB] == TRUE) dual_view = true;
+	if (input.getKeyState(VK_TAB)) dual_view = true;
 	else dual_view = false;
 
 
@@ -325,11 +326,11 @@ void Update(float seconds)								// Perform Motion Updates Here
 
 		if (keyTimer > 0.15)
 		{
-			if (g_keys->keyDown[VK_UP] == TRUE) { cursprite_y--; keyTimer = 0.0; }
-			if (g_keys->keyDown[VK_DOWN] == TRUE) { cursprite_y++; keyTimer = 0.0; }
+			if (input.getKeyState(VK_UP)) { cursprite_y--; keyTimer = 0.0; }
+			if (input.getKeyState(VK_DOWN)) { cursprite_y++; keyTimer = 0.0; }
 
-			if (g_keys->keyDown[VK_LEFT] == TRUE) { cursprite_x--; keyTimer = 0.0; }
-			if (g_keys->keyDown[VK_RIGHT] == TRUE) { cursprite_x++; keyTimer = 0.0; }
+			if (input.getKeyState(VK_LEFT)) { cursprite_x--; keyTimer = 0.0; }
+			if (input.getKeyState(VK_RIGHT)) { cursprite_x++; keyTimer = 0.0; }
 
 			//if (g_keys->keyDown[VK_UP] == TRUE) { paintarea_pixel_y--; keyTimer = 0.0; }
 			//	if (g_keys->keyDown[VK_DOWN] == TRUE) { paintarea_pixel_y++; keyTimer = 0.0; }
@@ -337,7 +338,7 @@ void Update(float seconds)								// Perform Motion Updates Here
 			//	if (g_keys->keyDown[VK_LEFT] == TRUE) { paintarea_pixel_x--; keyTimer = 0.0; }
 			//	if (g_keys->keyDown[VK_RIGHT] == TRUE) { paintarea_pixel_x++; keyTimer = 0.0; }
 
-			if (g_keys->keyDown['E'] == TRUE) { if (toggle_extra) toggle_extra = false; else toggle_extra = true; keyTimer = 0.0; }
+			if (input.getKeyState('E')) { if (toggle_extra) toggle_extra = false; else toggle_extra = true; keyTimer = 0.0; }
 
 		}
 
@@ -351,13 +352,13 @@ void Update(float seconds)								// Perform Motion Updates Here
 
 
 
-		if (g_keys->keyDown[VK_SUBTRACT] == TRUE) paintarea_Zoom -= seconds * 150;
-		if (g_keys->keyDown[VK_ADD] == TRUE) paintarea_Zoom += seconds * 150;
+		if (input.getKeyState(VK_SUBTRACT)) paintarea_Zoom -= seconds * 150;
+		if (input.getKeyState(VK_ADD)) paintarea_Zoom += seconds * 150;
 
 
 		// Todo: add if cursor points at tile surface
 
-		if ((g_keys->RMdown == TRUE) && (z_tileUI_point == ztUIP::PIXELMAP))
+		if ((input.getMouseR()) && (z_tileUI_point == ztUIP::PIXELMAP))
 		{
 			paintarea_x += Mpos_x_rel;
 			paintarea_y -= Mpos_y_rel;
@@ -372,8 +373,8 @@ void Update(float seconds)								// Perform Motion Updates Here
 
 		if (Mweel_rel>0)
 		{
-			paintarea_x -= ((g_keys->Mpos_x - viewport[2] / 2.0) / viewport[2]) * paintarea_Zoom *0.3333*aspect;
-			paintarea_y += ((g_keys->Mpos_y - viewport[3] / 2.0) / viewport[3]) * paintarea_Zoom *0.3333;
+			paintarea_x -= ((input.getMouseX() - viewport[2] / 2.0) / viewport[2]) * paintarea_Zoom *0.3333*aspect;
+			paintarea_y += ((input.getMouseY() - viewport[3] / 2.0) / viewport[3]) * paintarea_Zoom *0.3333;
 
 		}
 
@@ -388,9 +389,9 @@ void Update(float seconds)								// Perform Motion Updates Here
 
 
 
-		Mweel_old = g_keys->Mweel;
-		Mpos_x_old = g_keys->Mpos_x;
-		Mpos_y_old = g_keys->Mpos_y;
+		Mweel_old = input.getMouseWeel();
+		Mpos_x_old = input.getMouseX();
+		Mpos_y_old = input.getMouseY();
 
 
 
@@ -398,12 +399,12 @@ void Update(float seconds)								// Perform Motion Updates Here
 		z_tileUI_point = ztUIP::BACKGROUND;
 
 
-		muip.x = ((g_keys->Mpos_x - viewport[2] / 2.0) / viewport[2]);
-		muip.y = ((g_keys->Mpos_y - viewport[3] / 2.0) / viewport[3]);
+		muip.x = ((input.getMouseX() - viewport[2] / 2.0) / viewport[2]);
+		muip.y = ((input.getMouseY() - viewport[3] / 2.0) / viewport[3]);
 
 		// this took some dooing
-		mwp.x = (((g_keys->Mpos_x - viewport[2] / 2.0) / viewport[2]) / (paintarea_Zoom / (viewport[2])) - (paintarea_x / paintarea_Zoom));
-		mwp.y = ((g_keys->Mpos_y - viewport[3] / 2.0) / viewport[3]) / (paintarea_Zoom / (viewport[3])) + (paintarea_y / paintarea_Zoom);
+		mwp.x = (((input.getMouseX() - viewport[2] / 2.0) / viewport[2]) / (paintarea_Zoom / (viewport[2])) - (paintarea_x / paintarea_Zoom));
+		mwp.y = ((input.getMouseY() - viewport[3] / 2.0) / viewport[3]) / (paintarea_Zoom / (viewport[3])) + (paintarea_y / paintarea_Zoom);
 
 
 
@@ -434,7 +435,7 @@ void Update(float seconds)								// Perform Motion Updates Here
 
 		if (z_tileUI_point == ztUIP::PIXELMAP)
 		{
-			if (g_keys->LMdown == TRUE)
+			if (input.getMouseL())
 			{
 				if (curlayer == ztLeveltex::DYNAMIC_A) map_dynamic.put_pixel(paintarea_pixel_x, paintarea_pixel_y, 0, cursprite_x + (cursprite_y * 16));
 				if (curlayer == ztLeveltex::DYNAMIC_B) map_dynamic.put_pixel(paintarea_pixel_x, paintarea_pixel_y, 1, cursprite_x + (cursprite_y * 16));
@@ -449,7 +450,7 @@ void Update(float seconds)								// Perform Motion Updates Here
 
 			}
 
-			if (g_keys->keyDown['A'] == TRUE)
+			if (input.getKeyState('A'))
 			{
 				if (curlayer == ztLeveltex::L1A) map_l1.put_extra_bit(paintarea_pixel_x, paintarea_pixel_y, true, 0);
 				if (curlayer == ztLeveltex::L1B) map_l1.put_extra_bit(paintarea_pixel_x, paintarea_pixel_y, true, 2);
@@ -457,7 +458,7 @@ void Update(float seconds)								// Perform Motion Updates Here
 				if (curlayer == ztLeveltex::L2B) map_l2.put_extra_bit(paintarea_pixel_x, paintarea_pixel_y, true, 2);
 			}
 
-			if (g_keys->keyDown['Z'] == TRUE)
+			if (input.getKeyState('Z'))
 			{
 				if (curlayer == ztLeveltex::L1A) map_l1.put_extra_bit(paintarea_pixel_x, paintarea_pixel_y, false, 0);
 				if (curlayer == ztLeveltex::L1B) map_l1.put_extra_bit(paintarea_pixel_x, paintarea_pixel_y, false, 2);
@@ -465,7 +466,7 @@ void Update(float seconds)								// Perform Motion Updates Here
 				if (curlayer == ztLeveltex::L2B) map_l2.put_extra_bit(paintarea_pixel_x, paintarea_pixel_y, false, 2);
 			}
 
-			if (g_keys->keyDown['S'] == TRUE)
+			if (input.getKeyState('S'))
 			{
 				if (curlayer == ztLeveltex::L1A) map_l1.put_extra_bit(paintarea_pixel_x, paintarea_pixel_y, true, 1);
 				if (curlayer == ztLeveltex::L1B) map_l1.put_extra_bit(paintarea_pixel_x, paintarea_pixel_y, true, 3);
@@ -473,7 +474,7 @@ void Update(float seconds)								// Perform Motion Updates Here
 				if (curlayer == ztLeveltex::L2B) map_l2.put_extra_bit(paintarea_pixel_x, paintarea_pixel_y, true, 3);
 			}
 
-			if (g_keys->keyDown['X'] == TRUE)
+			if (input.getKeyState('X'))
 			{
 				if (curlayer == ztLeveltex::L1A) map_l1.put_extra_bit(paintarea_pixel_x, paintarea_pixel_y, false, 1);
 				if (curlayer == ztLeveltex::L1B) map_l1.put_extra_bit(paintarea_pixel_x, paintarea_pixel_y, false, 3);
@@ -493,15 +494,15 @@ void Update(float seconds)								// Perform Motion Updates Here
 		map_l2.update_texture();
 		map_dynamic.update_texture();
 
-		if ((g_keys->keyDown['1'] == TRUE) && (has_l1)) curlayer = ztLeveltex::L1A;
-		if ((g_keys->keyDown['2'] == TRUE) && (has_l1)) curlayer = ztLeveltex::L1B;
-		if ((g_keys->keyDown['3'] == TRUE) && (has_l2)) curlayer = ztLeveltex::L2A;
-		if ((g_keys->keyDown['4'] == TRUE) && (has_l2)) curlayer = ztLeveltex::L2B;
+		if ((input.getKeyState('1')) && (has_l1)) curlayer = ztLeveltex::L1A;
+		if ((input.getKeyState('2')) && (has_l1)) curlayer = ztLeveltex::L1B;
+		if ((input.getKeyState('3')) && (has_l2)) curlayer = ztLeveltex::L2A;
+		if ((input.getKeyState('4')) && (has_l2)) curlayer = ztLeveltex::L2B;
 
-		if ((g_keys->keyDown['5'] == TRUE) && (has_d)) curlayer = ztLeveltex::DYNAMIC_A;
-		if ((g_keys->keyDown['6'] == TRUE) && (has_d)) curlayer = ztLeveltex::DYNAMIC_B;
-		if ((g_keys->keyDown['7'] == TRUE) && (has_d)) curlayer = ztLeveltex::DYNAMIC_C;
-		if ((g_keys->keyDown['8'] == TRUE) && (has_d)) curlayer = ztLeveltex::DYNAMIC_D;
+		if ((input.getKeyState('5')) && (has_d)) curlayer = ztLeveltex::DYNAMIC_A;
+		if ((input.getKeyState('6')) && (has_d)) curlayer = ztLeveltex::DYNAMIC_B;
+		if ((input.getKeyState('7')) && (has_d)) curlayer = ztLeveltex::DYNAMIC_C;
+		if ((input.getKeyState('8')) && (has_d)) curlayer = ztLeveltex::DYNAMIC_D;
 
 
 	}
@@ -511,7 +512,7 @@ void Update(float seconds)								// Perform Motion Updates Here
 	{
 		if (z_tileUI_point == ztUIP::PIXELMAP)
 		{
-			if ((g_keys->RMdown == TRUE) && (z_tileUI_point == ztUIP::PIXELMAP))
+			if ((input.getMouseR()) && (z_tileUI_point == ztUIP::PIXELMAP))
 			{
 				paintarea_x_s += Mpos_x_rel;
 				paintarea_y_s -= Mpos_y_rel;
@@ -525,21 +526,21 @@ void Update(float seconds)								// Perform Motion Updates Here
 		}
 
 
-		Mweel_old = g_keys->Mweel;
-		Mpos_x_old = g_keys->Mpos_x;
-		Mpos_y_old = g_keys->Mpos_y;
+		Mweel_old = input.getMouseWeel();
+		Mpos_x_old = input.getMouseX();
+		Mpos_y_old = input.getMouseY();
 
 		//Ui stuff
 
 		z_tileUI_point = ztUIP::BACKGROUND;
 
 
-		muip.x = ((g_keys->Mpos_x - viewport[2] / 2.0) / viewport[2]);
-		muip.y = ((g_keys->Mpos_y - viewport[3] / 2.0) / viewport[3]);
+		muip.x = ((input.getMouseX() - viewport[2] / 2.0) / viewport[2]);
+		muip.y = ((input.getMouseY() - viewport[3] / 2.0) / viewport[3]);
 
 		// this took some dooing
-		mwp.x = ((g_keys->Mpos_x - viewport[2] / 2.0) / viewport[2]) / (paintarea_Zoom_s / (viewport[2])) - (paintarea_x_s / paintarea_Zoom_s);
-		mwp.y = ((g_keys->Mpos_y - viewport[3] / 2.0) / viewport[3]) / (paintarea_Zoom_s / (viewport[3])) + (paintarea_y_s / paintarea_Zoom_s);
+		mwp.x = ((input.getMouseX() - viewport[2] / 2.0) / viewport[2]) / (paintarea_Zoom_s / (viewport[2])) - (paintarea_x_s / paintarea_Zoom_s);
+		mwp.y = ((input.getMouseY() - viewport[3] / 2.0) / viewport[3]) / (paintarea_Zoom_s / (viewport[3])) + (paintarea_y_s / paintarea_Zoom_s);
 
 
 
@@ -556,7 +557,7 @@ void Update(float seconds)								// Perform Motion Updates Here
 
 		if ((mwp.x + 0.5 >= 0.0) && ((mwp.x + 0.5)*tiles_width < tiles_width) && (mwp.y + 0.5 >= 0.0) && ((mwp.y + 0.5)*tiles_height <= tiles_height))  z_tileUI_point = ztUIP::PIXELMAP;
 
-		if ((z_tileUI_point == ztUIP::PIXELMAP) && (g_keys->LMdown == TRUE)) { cursprite_x = paintarea_pixel_x_s; cursprite_y = paintarea_pixel_y_s; }
+		if ((z_tileUI_point == ztUIP::PIXELMAP) && (input.getMouseL() == true)) { cursprite_x = paintarea_pixel_x_s; cursprite_y = paintarea_pixel_y_s; }
 
 
 	}
@@ -564,7 +565,7 @@ void Update(float seconds)								// Perform Motion Updates Here
 
 	if (keyTimer > 0.15)
 	{
-		if (g_keys->keyDown[VK_RETURN]) {
+		if (input.getKeyState(VK_RETURN)) {
 			if (has_l1)	map_l1.save();
 			if (has_l2) map_l2.save();
 			if (has_d) map_dynamic.save();

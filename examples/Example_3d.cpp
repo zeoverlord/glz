@@ -50,7 +50,6 @@ using namespace std;
 
 
 GL_Window*	g_window;
-Keys*		g_keys;
 
 // User Defined Variables
 float		angle=0,width,height;												// Used To Rotate The Triangles
@@ -111,10 +110,9 @@ void preInitialize(void)
 }
 
 
-BOOL Initialize (GL_Window* window, Keys* keys)					// Any GL Init Code & User Initialiazation Goes Here
+BOOL Initialize (GL_Window* window)					// Any GL Init Code & User Initialiazation Goes Here
 {
 	g_window	= window;
-	g_keys		= keys;
 
 	GetFocus();
 	GetAsyncKeyState(WM_KEYUP);
@@ -286,13 +284,14 @@ void Deinitialize (void)										// Any User DeInitialization Goes Here
 
 void Update (float seconds)								// Perform Motion Updates Here
 {
+	glzInput input;
 
-	if (g_keys->keyDown [VK_ESCAPE] == TRUE)					// Is ESC Being Pressed?
+	if (input.getKeyState(VK_ESCAPE) == TRUE)					// Is ESC Being Pressed?
 	{
 		TerminateApplication (g_window);						// Terminate The Program
 	}
 
-	if (g_keys->keyDown [VK_F1] == TRUE)						// Is F1 Being Pressed?
+	if (input.getKeyState(VK_F1) == TRUE)						// Is F1 Being Pressed?
 	{
 		ToggleFullscreen (g_window);							// Toggle Fullscreen Mode
 	}
@@ -314,54 +313,50 @@ void Update (float seconds)								// Perform Motion Updates Here
 	}
 
 	if (gamestate==2)
-	{
-		
+	{	
 		
 		tankpos.rs.identity();
 
-		if (g_keys->keyDown[VK_UP] == TRUE)tankpos.rs.rotate(40, 1.0, 0.0, 0.0);
-		if (g_keys->keyDown[VK_DOWN] == TRUE)tankpos.rs.rotate(-40, 1.0, 0.0, 0.0);
+		if (input.getKeyState(VK_UP))tankpos.rs.rotate(40, 1.0, 0.0, 0.0);
+		if (input.getKeyState(VK_DOWN))tankpos.rs.rotate(-40, 1.0, 0.0, 0.0);
 
-		if (g_keys->keyDown[VK_LEFT] == TRUE)tankpos.rs.rotate(40, 0.0, 1.0, 0.0);
-		if (g_keys->keyDown[VK_RIGHT] == TRUE)tankpos.rs.rotate(-40, 0.0, 1.0, 0.0);
-
-		
+		if (input.getKeyState(VK_LEFT))tankpos.rs.rotate(40, 0.0, 1.0, 0.0);
+		if (input.getKeyState(VK_RIGHT))tankpos.rs.rotate(-40, 0.0, 1.0, 0.0);		
 
 		tankpos.pos = vert3(0, -2+(sin(angle*PI_OVER_180)*2), -17);
-		tankpos.tick(seconds);
-		
+		tankpos.tick(seconds);		
 	}
 
 
-if (gamestate==3)
+	if (gamestate==3)
 	{	
 
 		q3.rotate(seconds * 50, 0.0, 1.0, 0.0);
 	}
 
-if (gamestate == 4)
-{
+	if (gamestate == 4)
+	{
 
-	q3.rotate(seconds * 50, 0.0, 1.0, 0.0);
-	qn.rotate(seconds * 50, 0.0, 1.0, 0.0);
-}
-if (gamestate == 5)
-{
+		q3.rotate(seconds * 50, 0.0, 1.0, 0.0);
+		qn.rotate(seconds * 50, 0.0, 1.0, 0.0);
+	}
+	if (gamestate == 5)
+	{
 
-	q.rotate(seconds * 50, 0.0, 1.0, 0.0);
-	q.rotate(seconds * 40, 1.0, 0.0, 0.0);
-}
+		q.rotate(seconds * 50, 0.0, 1.0, 0.0);
+		q.rotate(seconds * 40, 1.0, 0.0, 0.0);
+	}
 
 
 
-angle += seconds * 50;
-if (angle > 360) angle -= 360;
+	angle += seconds * 50;
+	if (angle > 360) angle -= 360;
 
-	if (g_keys->keyDown['1'] == TRUE) gamestate = 1;
-	if (g_keys->keyDown['2'] == TRUE) gamestate = 2;
-	if (g_keys->keyDown['3'] == TRUE) gamestate = 3;
-	if (g_keys->keyDown['4'] == TRUE) gamestate = 4;
-	if (g_keys->keyDown['5'] == TRUE) gamestate = 5;
+	if (input.getKeyState('1')) gamestate = 1;
+	if (input.getKeyState('2')) gamestate = 2;
+	if (input.getKeyState('3')) gamestate = 3;
+	if (input.getKeyState('4')) gamestate = 4;
+	if (input.getKeyState('5')) gamestate = 5;
 
 
 

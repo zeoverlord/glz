@@ -49,7 +49,6 @@ using namespace std;
 
 
 GL_Window*	g_window;
-Keys*		g_keys;
 
 // User Defined Variables
 float		angle,width,height;												// Used To Rotate The Triangles
@@ -86,10 +85,9 @@ void preInitialize(void)
 	WINDOW_WIDTH = app.data.WINDOW_WIDTH;
 }
 
-BOOL Initialize (GL_Window* window, Keys* keys)					// Any GL Init Code & User Initialiazation Goes Here
-{
+BOOL Initialize (GL_Window* window)					// Any GL Init Code & User Initialiazation Goes Here
+{	
 	g_window	= window;
-	g_keys		= keys;
 
 	GetFocus();
 	GetAsyncKeyState(WM_KEYUP);
@@ -216,26 +214,27 @@ void Deinitialize (void)										// Any User DeInitialization Goes Here
 void Update (float seconds)								// Perform Motion Updates Here
 {
 
+	glzInput input;
 
-	if (g_keys->keyDown [VK_ESCAPE] == TRUE)					// Is ESC Being Pressed?
+	if (input.getKeyState(VK_ESCAPE))					// Is ESC Being Pressed?
 	{
-		TerminateApplication (g_window);						// Terminate The Program
+		TerminateApplication(g_window);						// Terminate The Program
 	}
 
-	if (g_keys->keyDown [VK_F1] == TRUE)						// Is F1 Being Pressed?
+	if (input.getKeyState(VK_F1))						// Is F1 Being Pressed?
 	{
-		ToggleFullscreen (g_window);							// Toggle Fullscreen Mode
+		ToggleFullscreen(g_window);							// Toggle Fullscreen Mode
 	}
 
 	angle += seconds*50;						// Update angle Based On The Clock
 	q.rotate(seconds * 50, 0.0, 1.0, 0.0);
 	q.rotate(seconds * 40, 1.0, 0.0, 0.0);
 
-	if (g_keys->keyDown[VK_UP] == TRUE)q2.rotate(seconds * 40, 1.0, 0.0, 0.0);
-	if (g_keys->keyDown[VK_DOWN] == TRUE)q2.rotate(seconds * -40, 1.0, 0.0, 0.0);
+	if (input.getKeyState(VK_UP)) q2.rotate(seconds * 40, 1.0, 0.0, 0.0);
+	if (input.getKeyState(VK_DOWN)) q2.rotate(seconds * -40, 1.0, 0.0, 0.0);
 
-	if (g_keys->keyDown[VK_LEFT] == TRUE)q2.rotate(seconds * 40, 0.0, 1.0, 0.0);
-	if (g_keys->keyDown[VK_RIGHT] == TRUE)q2.rotate(seconds * -40, 0.0, 1.0, 0.0);
+	if (input.getKeyState(VK_LEFT)) q2.rotate(seconds * 40, 0.0, 1.0, 0.0);
+	if (input.getKeyState(VK_RIGHT)) q2.rotate(seconds * -40, 0.0, 1.0, 0.0);
 
 	//now the rotations are a bit wonky in this example but that is because i dont reset the quaternion for each frame and use angles instead here
 

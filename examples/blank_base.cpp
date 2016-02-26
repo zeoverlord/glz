@@ -42,7 +42,6 @@
 
 
 GL_Window*	g_window;
-Keys*		g_keys;
 
 // User Defined Variables
 float		angle,width,height;												// Used To Rotate The Triangles
@@ -62,10 +61,9 @@ void preInitialize(void)
 
 
 
-BOOL Initialize (GL_Window* window, Keys* keys)					// Any GL Init Code & User Initialiazation Goes Here
+BOOL Initialize (GL_Window* window)					// Any GL Init Code & User Initialiazation Goes Here
 {
 	g_window	= window;
-	g_keys		= keys;
 
 	GetFocus();
 	GetAsyncKeyState(WM_KEYUP);
@@ -93,16 +91,16 @@ void Deinitialize (void)										// Any User DeInitialization Goes Here
 
 void Update (float seconds)								// Perform Motion Updates Here
 {
+	glzInput input;
 
-
-	if (g_keys->keyDown [VK_ESCAPE] == TRUE)					// Is ESC Being Pressed?
+	if (input.getKeyState(VK_ESCAPE))					// Is ESC Being Pressed?
 	{
-		TerminateApplication (g_window);						// Terminate The Program
+		TerminateApplication(g_window);						// Terminate The Program
 	}
 
-	if (g_keys->keyDown [VK_F1] == TRUE)						// Is F1 Being Pressed?
+	if (input.getKeyState(VK_F1))						// Is F1 Being Pressed?
 	{
-		ToggleFullscreen (g_window);							// Toggle Fullscreen Mode
+		ToggleFullscreen(g_window);							// Toggle Fullscreen Mode
 	}
 
 	
