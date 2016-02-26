@@ -142,11 +142,11 @@ void glzSimpleParticleSystem::collide_plane(vec3 normal, vert3 pl)
 	for (auto& v : p)
 		if (v.active)
 		
-			if ((v.dir.dot(normal) < 0.0) && (normal.dot(v.pos.vectorTo(pl)) > 0.0)) // ie. the motion vector and the plan is pointing towards each other
+			if ((v.dir.dot(normal) < 0.0f) && (normal.dot(v.pos.vectorTo(pl)) > 0.0f)) // ie. the motion vector and the plan is pointing towards each other
 			{
 			//	v.dir*=0.3;
 				v.dir.reflect(normal.inverse());
-				v.dir *= 0.6;
+				v.dir *= 0.6f;
 				if (v.dir.magnitude() < scale)
 					v.dir *= v.dir.magnitude() / scale;
 			}
@@ -154,7 +154,7 @@ void glzSimpleParticleSystem::collide_plane(vec3 normal, vert3 pl)
 		
 }
 
-void glzSimpleParticleSystem::collide_plane_y(double y, bool up)
+void glzSimpleParticleSystem::collide_plane_y(float y, bool up)
 {
 	if (!running) return;
 
@@ -163,21 +163,21 @@ void glzSimpleParticleSystem::collide_plane_y(double y, bool up)
 		if (v.active)
 
 			if (up)
-				if ((v.pos.y<y)&&(v.dir.y<0.0)) 
+				if ((v.pos.y<y)&&(v.dir.y<0.0f)) 
 				{
-					v.dir.y*=-1;
+					v.dir.y*=-1.0f;
 				}
 
 			else
-				if ((v.pos.y>y) && (v.dir.y>0.0))
+				if ((v.pos.y>y) && (v.dir.y>0.0f))
 				{
-					v.dir.y *= -0.9;
+					v.dir.y *= -0.9f;
 				}
 
 }
 
 
-void glzSimpleParticleSystem::singularity(vert3 pa, float range, double strength)
+void glzSimpleParticleSystem::singularity(vert3 pa, float range, float strength)
 // possitive values makes it an attractor, negative makes a repulsor
 {
 	for (auto& v : p)
@@ -189,8 +189,8 @@ void glzSimpleParticleSystem::singularity(vert3 pa, float range, double strength
 			b.x = pa.x - v.pos.x;
 			b.y = pa.y - v.pos.y;
 			b.z = pa.z - v.pos.z;
-			double dist = b.magnitude();
-			if (dist < 10.0) dist = 10.0;
+			float dist = b.magnitude();
+			if (dist < 10.0f) dist = 10.0f;
 			b.normalize(strength);
 
 
@@ -203,7 +203,7 @@ void glzSimpleParticleSystem::singularity(vert3 pa, float range, double strength
 			
 }
 
-void glzSimpleParticleSystem::noise(double magnitude)
+void glzSimpleParticleSystem::noise(float magnitude)
 {
 	// noise
 	for (auto& v : p)
@@ -212,28 +212,28 @@ void glzSimpleParticleSystem::noise(double magnitude)
 }
 
 
-void glzSimpleParticleSystem::drag(double magnitude)
+void glzSimpleParticleSystem::drag(float magnitude)
 {
 
 	// cause drag
 	for (auto& v : p)
 		if (v.active)
 		{
-			double speed = v.dir.magnitude();
+			float speed = v.dir.magnitude();
 			v.dir.normalize(speed - (speed*v.drag*magnitude*time));
 			
 		}
 
 }
 
-void glzSimpleParticleSystem::terminal_velocity(double magnitude)
+void glzSimpleParticleSystem::terminal_velocity(float magnitude)
 {
 	// maximum speed
 	for (auto& v : p)
 		if (v.active)
 
 		{ 
-			double speed = v.dir.magnitude();
+			float speed = v.dir.magnitude();
 			if (speed > magnitude) speed = magnitude;
 			v.dir.normalize(speed);
 		}

@@ -84,19 +84,19 @@ float glzRandf(glzDistribution D)  //produces a value between 1 and 0
 
 }
 
-double glzRandfs(void)  //produces a value between 1 and -1
+float glzRandfs(void)  //produces a value between 1 and -1
 {
-	std::uniform_real_distribution<double> dist(-1.0, 1.0);
+	std::uniform_real_distribution<float> dist(-1.0f, 1.0f);
 	return dist(mt);
 }
 
 
-double glzRandfs(glzDistribution D)  //produces a value between 1 and -1
+float glzRandfs(glzDistribution D)  //produces a value between 1 and -1
 {
-	std::uniform_real_distribution<double> dist_u(-1.0, 1.0);
-	std::normal_distribution<double> dist_n(0.0, 1.0);
-	std::gamma_distribution<double> dist_g(1.0, 1.0);
-	std::exponential_distribution<double> dist_e(1.0);
+	std::uniform_real_distribution<float> dist_u(-1.0f, 1.0f);
+	std::normal_distribution<float> dist_n(0.0f, 1.0f);
+	std::gamma_distribution<float> dist_g(1.0f, 1.0f);
+	std::exponential_distribution<float> dist_e(1.0f);
    std::uniform_int_distribution<int> dist_i(0, 1);
 
 int sign = 1;
@@ -184,36 +184,36 @@ vec3 glzRandfs_vec3(glzDistribution D)  //produces a value between 1 and -1
 
 float glzMersienneNoise(float seed)
 {
-	std::mt19937 mtx(seed);
-	std::uniform_real_distribution<float> dist_u(-1.0, 1.0);
+	std::mt19937 mtx((unsigned int)seed);
+	std::uniform_real_distribution<float> dist_u(-1.0f, 1.0f);
 	return dist_u(mtx);
 
 }
 float glzMersienneNoise(float seed, float x)
 {
-	std::mt19937 mtx(seed + x);
-	std::uniform_real_distribution<float> dist_u(-1.0, 1.0);
+	std::mt19937 mtx((unsigned int)(seed + x));
+	std::uniform_real_distribution<float> dist_u(-1.0f, 1.0f);
 	return dist_u(mtx);
 }
 
 float glzMersienneNoise(float seed, float x, float y)
 {
-	std::mt19937 mtx(seed+x);
-	std::uniform_real_distribution<float> dist_x(0.0, 374321.0);
-	std::uniform_real_distribution<float> dist_u(-1.0, 1.0);
-	std::mt19937 mty(y * dist_x(mtx));
+	std::mt19937 mtx((unsigned int)(seed + x));
+	std::uniform_real_distribution<float> dist_x(0.0f, 374321.0f);
+	std::uniform_real_distribution<float> dist_u(-1.0f, 1.0f);
+	std::mt19937 mty((unsigned int)(y * dist_x(mtx)));
 	return dist_u(mty);
 
 }
 
 float glzMersienneNoise(float seed, float x, float y, float z)
 {
-	std::mt19937 mtx(seed + x);
-	std::uniform_real_distribution<float> dist_x(0.0, 374321.0);
-	std::uniform_real_distribution<float> dist_y(0.0, 1729.0);
-	std::uniform_real_distribution<float> dist_u(-1.0, 1.0);
-	std::mt19937 mty(y * dist_x(mtx));
-	std::mt19937 mtz(z * dist_y(mty));
+	std::mt19937 mtx((unsigned int)(seed + x));
+	std::uniform_real_distribution<float> dist_x(0.0f, 374321.0f);
+	std::uniform_real_distribution<float> dist_y(0.0f, 1729.0f);
+	std::uniform_real_distribution<float> dist_u(-1.0f, 1.0f);
+	std::mt19937 mty((unsigned int)(y * dist_x(mtx)));
+	std::mt19937 mtz((unsigned int)(z * dist_y(mty)));
 	return dist_u(mtz); 
 }
 
@@ -229,7 +229,7 @@ float glzModF(float f, float m)  //float modulo function
 {
 	if (m==0.0f) return f;
 
-	if (f<0)  // negative numbers
+	if (f<0.0f)  // negative numbers
 		while(f<m) f+=abs(m);
 	else      // possitive numbers
 		while(f>m) f-=abs(m);
@@ -253,7 +253,7 @@ float quantize(float f, float s)
 	float r = 0.0f;
 	if (s <= 0.0f) return f;
 
-	if (f<0)  // negative numbers
+	if (f<0.0f)  // negative numbers
 	while (f<=r-s) r -= s;
 	else      // possitive numbers
 	while (f>=r+s) r += s;
@@ -265,7 +265,7 @@ float glzIntegral(float f)
 	float r = 0.0f;
 	if (1.0 <= 0.0f) return f;
 
-	if (f<0)  // negative numbers
+	if (f<0.0f)  // negative numbers
 	while (f <= r - 1.0) r -= 1.0;
 	else      // possitive numbers
 	while (f >= r + 1.0) r += 1.0;
@@ -1340,7 +1340,7 @@ void glzAtlasUVarrayRemapRotate(unsigned int r, unsigned int atlas, unsigned int
 {
 	// same as above except i now also rotate the original uv coordinates
 
-	double rm[4] = { 1, 0, 0, 1 };
+	float rm[4] = { 1, 0, 0, 1 };
 
 
 	if (r == 1)  //90 degrees
@@ -1368,7 +1368,7 @@ void glzAtlasUVarrayRemapRotate(unsigned int r, unsigned int atlas, unsigned int
 
 
 	auto i = p->begin();
-	double u, v;
+	float u, v;
 
 
 	i2 = 0;
@@ -1377,20 +1377,20 @@ void glzAtlasUVarrayRemapRotate(unsigned int r, unsigned int atlas, unsigned int
 		if ((p->at(i2).group == group) && (p->at(i2).atlas == side))
 		{
 
-			u = ((p->at(i2).a.t.u - 0.5)*rm[0]) + ((p->at(i2).a.t.v - 0.5)*rm[1]);
-			v = ((p->at(i2).a.t.u - 0.5)*rm[2]) + ((p->at(i2).a.t.v - 0.5)*rm[3]);
-			p->at(i2).a.t.u = u + 0.5;
-			p->at(i2).a.t.v = v + 0.5;
+			u = ((p->at(i2).a.t.u - 0.5f)*rm[0]) + ((p->at(i2).a.t.v - 0.5f)*rm[1]);
+			v = ((p->at(i2).a.t.u - 0.5f)*rm[2]) + ((p->at(i2).a.t.v - 0.5f)*rm[3]);
+			p->at(i2).a.t.u = u + 0.5f;
+			p->at(i2).a.t.v = v + 0.5f;
 
-			u = ((p->at(i2).b.t.u - 0.5)*rm[0]) + ((p->at(i2).b.t.v - 0.5)*rm[1]);
-			v = ((p->at(i2).b.t.u - 0.5)*rm[2]) + ((p->at(i2).b.t.v - 0.5)*rm[3]);
-			p->at(i2).b.t.u = u + 0.5;
-			p->at(i2).b.t.v = v + 0.5;
+			u = ((p->at(i2).b.t.u - 0.5f)*rm[0]) + ((p->at(i2).b.t.v - 0.5f)*rm[1]);
+			v = ((p->at(i2).b.t.u - 0.5f)*rm[2]) + ((p->at(i2).b.t.v - 0.5f)*rm[3]);
+			p->at(i2).b.t.u = u + 0.5f;
+			p->at(i2).b.t.v = v + 0.5f;
 
-			u = ((p->at(i2).c.t.u - 0.5)*rm[0]) + ((p->at(i2).c.t.v - 0.5)*rm[1]);
-			v = ((p->at(i2).c.t.u - 0.5)*rm[2]) + ((p->at(i2).c.t.v - 0.5)*rm[3]);
-			p->at(i2).c.t.u = u + 0.5;
-			p->at(i2).c.t.v = v + 0.5;
+			u = ((p->at(i2).c.t.u - 0.5f)*rm[0]) + ((p->at(i2).c.t.v - 0.5f)*rm[1]);
+			v = ((p->at(i2).c.t.u - 0.5f)*rm[2]) + ((p->at(i2).c.t.v - 0.5f)*rm[3]);
+			p->at(i2).c.t.u = u + 0.5f;
+			p->at(i2).c.t.v = v + 0.5f;
 
 		}
 
@@ -1454,7 +1454,7 @@ void glzProjectVertexArray(float  *vert, float Matrix[16], int num)
 
 void glzProjectVertex(poly3 *p, float Matrix[16], int group)
 {
-	double v[3];
+	float v[3];
 	if (p->group != group) return;
 	v[0] = (p->a.v.x * Matrix[0]) + (p->a.v.y * Matrix[4]) + (p->a.v.z * Matrix[8]) + Matrix[12];
 	v[1] = (p->a.v.x * Matrix[1]) + (p->a.v.y * Matrix[5]) + (p->a.v.z * Matrix[9]) + Matrix[13];
@@ -1503,7 +1503,7 @@ void glzProjectVertex(poly3 *p, glzMatrix m, int group)
 void glzProjectVertexArray(vector<poly3> *p, float Matrix[16], int group)
 {
 
-	double v[3];
+	float v[3];
 	int i2 = 0;
 
 	auto i = p->begin();
@@ -1702,10 +1702,10 @@ return r;
 }
 
 
-double glzScanVectorArray(vector<poly3> pdata, int group, glzBoundingScan scan)
+float glzScanVectorArray(vector<poly3> pdata, int group, glzBoundingScan scan)
 {
 
-	double r = 0, r2 = 0, r3 = 0;
+	float r = 0, r2 = 0, r3 = 0;
 
 	if (!pdata.size()) return 0.0;
 
@@ -1946,8 +1946,8 @@ void glzRecenterVectorArray(vector<poly3> *pdata, int group, glzOrigin origin)
 				break;
 
 			case glzOrigin::CENTERED:
-				shiftx = (left +right)*0.5;
-				shifty = (top + bottom)*0.5;
+				shiftx = (left +right)*0.5f;
+				shifty = (top + bottom)*0.5f;
 				break;
 			}
 
@@ -1955,7 +1955,7 @@ void glzRecenterVectorArray(vector<poly3> *pdata, int group, glzOrigin origin)
 		//	shiftx = left;
 		//	shifty = bottom;
 
-				m.translate(-shiftx, -shifty, 0);
+				m.translate(-shiftx, -shifty, 0.0f);
 	
 
 			glzProjectVertexArray(pdata, m, group);

@@ -24,10 +24,12 @@
 
 glzAppinitializationData::glzAppinitializationData()
 {
+
+	//const wchar_t title(L"ZeoBase GL Framework");
+	//const wchar_t log(L"z-log");
 	
 	swprintf(WINDOW_TITLE, L"ZeoBase GL Framework");
-	sprintf(LOGFILE, "z-log");
-	// WINDOW_TITLE( L"ZeoBase GL Framework"); // what name you want windows to call it, dont touch the weird L in front of it since it's unicode
+	sprintf(LOGFILE, "z-log");					// what name you want windows to call it, dont touch the weird L in front of it since it's unicode
 	DISPLAY_ERRORS = false;						// set to false if you want to suppress errors
 	SHOW_FRAME = true;							// i normally dont but usefull if you want to make a more normal app
 	ALLOW_MAAXIMIZE = true;						// adds minimize/maximize buttons again usefull for a normal app

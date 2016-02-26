@@ -220,7 +220,6 @@ unsigned long getFileLength(ifstream& file)
     file.seekg(0,ios::end);
 	unsigned long const len = file.tellg();
     file.seekg(ios::beg);
-    
     return len;
 }
 

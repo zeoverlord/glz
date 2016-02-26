@@ -119,7 +119,6 @@ void glzInput::addKeyEvent(int key, bool keydown) { inputData.keyDown[key]=keydo
 bool glzInput::getKeyState(int key) { return inputData.keyDown[key]; }
 
 //mouse
-
 void glzInput::SetMouseL(bool keydown) { inputData.LMdown = keydown; }
 void glzInput::SetMouseM(bool keydown) { inputData.MMdown = keydown; }
 void glzInput::SetMouseR(bool keydown) { inputData.RMdown = keydown; }

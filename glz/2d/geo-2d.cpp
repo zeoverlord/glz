@@ -166,7 +166,7 @@ long glzPrimText(string text, float k, float *v, float *t, float *n, glzOrigin o
 		if (text[c] == '\n') { yp -= 1; xp = 0; newline = true; c++; }
 		else if (text[c] == '\t')
 		{
-			xp = quantize(xp, 10.0 * st) + 10.0 * st;
+			xp = quantize(xp, 10.0f * st) + 10.0f * st;
 
 
 			c++;
@@ -371,7 +371,7 @@ void glzPrimTextVector(string text, float k, vector<poly3> *pdata, int group, in
 		if (text[c] == '\n') { yp -= 1; xp = 0; newline = true; c++; }
 		else if (text[c] == '\t')
 		{
-			xp = quantize(xp, 10.0 * st) + 10.0 * st;
+			xp = quantize(xp, 10.0f * st) + 10.0f * st;
 			c++;
 			newline = true;
 
@@ -574,11 +574,11 @@ void glzDirectSpriteRender(glzMatrix m, unsigned int texture, float X, float Y, 
 
 	glGetIntegerv(GL_VIEWPORT, viewport);
 	
-	X -= m.m[12];
-	Y -= m.m[13];
+	X -= (float)m.m[12];
+	Y -= (float)m.m[13];
 
-	X /= m.m[0];
-	Y /= m.m[5];
+	X /= (float)m.m[0];
+	Y /= (float)m.m[5];
 
 	// xy is now in -1 +1 space
 
@@ -592,8 +592,8 @@ void glzDirectSpriteRender(glzMatrix m, unsigned int texture, float X, float Y, 
 
 
 
-	W = (W / (m.m[0] * (viewport[2] * 0.5f)));
-	H = (H / (m.m[5] * (viewport[3] * 0.5f)));
+	W = (W / ((float)m.m[0] * (viewport[2] * 0.5f)));
+	H = (H / ((float)m.m[5] * (viewport[3] * 0.5f)));
 
 
 	float x0 = X, y0 = Y, x1 = X + W, y1 = Y + H;

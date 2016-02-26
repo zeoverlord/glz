@@ -42,7 +42,7 @@ typedef struct{
 class glzSimpleParticleSystem{
 private: 
 	
-	double time;
+	float time;
 	float scale;
 	bool running;
 	unsigned int pc;
@@ -63,13 +63,13 @@ public:
 	// aditional effects
 
 	void collide_plane(vec3 normal, vert3 pl);
-	void collide_plane_y(double y, bool up);
+	void collide_plane_y(float y, bool up);
 
-	void singularity(vert3 p, float range, double strength);
+	void singularity(vert3 p, float range, float strength);
 	
-	void noise(double magnitude);
-	void drag(double magnitude);
-	void terminal_velocity(double magnitude);
+	void noise(float magnitude);
+	void drag(float magnitude);
+	void terminal_velocity(float magnitude);
 	void gravity(vec3 gv);
 
 

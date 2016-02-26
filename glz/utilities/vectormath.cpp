@@ -61,9 +61,9 @@ vec3 vert3::vectorPointsTo(vert3 b)
 void vert3::project(glzMatrix m)
 {
 
-	double xt = (x * m.m[0]) + (y * m.m[4]) + (z * m.m[8]) + m.m[12];
-	double yt = (x * m.m[1]) + (y * m.m[5]) + (z * m.m[9]) + m.m[13];
-	double zt = (x * m.m[2]) + (y * m.m[6]) + (z * m.m[10]) + m.m[14];
+	float xt = (x * (float)m.m[0]) + (y * (float)m.m[4]) + (z * (float)m.m[8]) + (float)m.m[12];
+	float yt = (x * (float)m.m[1]) + (y * (float)m.m[5]) + (z * (float)m.m[9]) + (float)m.m[13];
+	float zt = (x * (float)m.m[2]) + (y * (float)m.m[6]) + (z * (float)m.m[10]) + (float)m.m[14];
 
 	x = xt;
 	y = yt;
@@ -84,9 +84,9 @@ void vec3::reflect(vec3 b)
 void vec3::project(glzMatrix m)
 {
 
-	double xt = (x * m.m[0]) + (y * m.m[4]) + (z * m.m[8]);
-	double yt = (x * m.m[1]) + (y * m.m[5]) + (z * m.m[9]);
-	double zt = (x * m.m[2]) + (y * m.m[6]) + (z * m.m[10]);
+	float xt = (x * (float)m.m[0]) + (y * (float)m.m[4]) + (z * (float)m.m[8]);
+	float yt = (x * (float)m.m[1]) + (y * (float)m.m[5]) + (z * (float)m.m[9]);
+	float zt = (x * (float)m.m[2]) + (y * (float)m.m[6]) + (z * (float)m.m[10]);
 
 	x = xt;
 	y = yt;
@@ -436,9 +436,9 @@ void glzQuaternion::multQuaternion(glzQuaternion b)
 	return;
 }
 
-void glzQuaternion::rotate(double a, double x, double y, double z)
+void glzQuaternion::rotate(float a, float x, float y, float z)
 {
-	double angle = -a*PI_OVER_360;
+	float angle = -a*(float)PI_OVER_360;
 	glzQuaternion q2;
 
 	q2.w = cos(angle);
@@ -478,11 +478,11 @@ void poly3::generateNormal()
 }
 
 
-void poly3::generateTexture(double scale)
+void poly3::generateTexture(float scale)
 {
 	vec3 fn(this->getFaceNormal());
 	int l = 0;
-	double largest = abs(fn.x);
+	float largest = abs(fn.x);
 	if (abs(fn.y) > largest) { l = 1; largest = abs(fn.y); }
 	if (abs(fn.z) > largest) { l = 2; largest = abs(fn.z); }
 
@@ -529,7 +529,7 @@ plane3::plane3(poly3 a)
 bool plane3::is_infront(vert3 a)
 {
 			
-	double d2 = (a.x*n.x) + (a.y*n.y) + (a.z*n.z);
+	float d2 = (a.x*n.x) + (a.y*n.y) + (a.z*n.z);
 
 	if (d2>d) return true;			
 	else return false;

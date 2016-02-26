@@ -87,7 +87,7 @@ void obj2d_Sprite::update(float seconds)
 			if (animationstate == glzOBject2DAnimationstate::PLAYINGONCE)
 			{
 				current_frame = maxframes - 1;	
-				animationstate == glzOBject2DAnimationstate::STOPPED;
+				animationstate = glzOBject2DAnimationstate::STOPPED;
 			}
 
 
@@ -229,7 +229,7 @@ void obj2d_Background::draw(glzCamera2D *camera)
 
 	glzUniform2f(tile_program, "spritepos", tsprite.a.u, tsprite.a.v);
 	glzUniform2f(tile_program, "spritesize", tsprite.d.u - tsprite.a.u, tsprite.d.v - tsprite.a.v);
-	glzUniform2f(tile_program, "spriteoffset", -offset.x*0.5*paralax, -offset.y*0.5*paralax);
+	glzUniform2f(tile_program, "spriteoffset", -offset.x*0.5f*paralax, -offset.y*0.5f*paralax);
 	glzUniform2f(tile_program, "spritescale", (camera->width / scale) / camera->zoom, (camera->height / scale) / camera->zoom);
 
 
@@ -259,7 +259,7 @@ void obj2d_Background::update(float seconds)
 			if (animationstate == glzOBject2DAnimationstate::PLAYINGONCE)
 			{
 				current_frame = maxframes - 1;
-				animationstate == glzOBject2DAnimationstate::STOPPED;
+				animationstate = glzOBject2DAnimationstate::STOPPED;
 			}
 
 
@@ -422,7 +422,7 @@ void obj2d_Tiles::update(float seconds)
 			if (animationstate == glzOBject2DAnimationstate::PLAYINGONCE)
 			{
 				current_frame = maxframes - 1;
-				animationstate == glzOBject2DAnimationstate::STOPPED;
+				animationstate = glzOBject2DAnimationstate::STOPPED;
 			}
 
 

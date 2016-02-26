@@ -155,7 +155,7 @@ public:
 	} 
 
 
-	obj2d_Sprite(int labelin, glzSprite spritein, node3 *nin, node3 nLin, texturecontainer *tex, double scalein)
+	obj2d_Sprite(int labelin, glzSprite spritein, node3 *nin, node3 nLin, texturecontainer *tex, float scalein)
 	{
 		label = labelin;
 		sprite = glzSpriteanimationList(spritein);
@@ -173,7 +173,7 @@ public:
 	}
 
 
-	obj2d_Sprite(int labelin, glzSpriteanimationList spritein, node3 *nin, node3 nLin, texturecontainer *tex, double scalein, float framespeedin)
+	obj2d_Sprite(int labelin, glzSpriteanimationList spritein, node3 *nin, node3 nLin, texturecontainer *tex, float scalein, float framespeedin)
 	{
 		label = labelin;
 		sprite = spritein;
@@ -400,7 +400,7 @@ public:
 	}
 
 
-	obj2d_Tiles(int labelin, glztiles *mapin, int layerin, int tilewidthin, int tileheightin, float framespeedin, node3 *nin, node3 nLin, texturecontainer *tex, int spritesize, double scalein)
+	obj2d_Tiles(int labelin, glztiles *mapin, int layerin, int tilewidthin, int tileheightin, float framespeedin, node3 *nin, node3 nLin, texturecontainer *tex, int spritesize, float scalein)
 	{
 		label = labelin;		
 		texture = tex;
@@ -417,8 +417,8 @@ public:
 		frametime = 0.0f;
 		blend = glzBlendingMode::ALPHA;
 
-		width = map->width*(spritesize / tilewidthin);
-		height = map->height*(spritesize / tileheightin);
+		width = (float)map->width*(spritesize / tilewidthin);
+		height = (float)map->height*(spritesize / tileheightin);
 		visible = true;
 	
 	}
@@ -456,7 +456,7 @@ public:
 	}
 
 
-	obj2d_Text(int labelin, string textin, node3 *nin, node3 nLin, texturecontainer *tex, double scalein, float aspectin, float kernin, glzOrigin originin)
+	obj2d_Text(int labelin, string textin, node3 *nin, node3 nLin, texturecontainer *tex, float scalein, float aspectin, float kernin, glzOrigin originin)
 	{
 		label = labelin;
 		texture = tex;

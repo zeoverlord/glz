@@ -54,8 +54,8 @@ const auto PI_OVER_180_REVERSE = 57.2957795131;
 // usefull stuff
 
 
-double glzRandfs(void);  //produces a value between 1 and -1
-double glzRandfs(glzDistribution D);
+float glzRandfs(void);  //produces a value between 1 and -1
+float glzRandfs(glzDistribution D);
 
 float glzRandf(void);  //produces a value between 1 and 0
 float glzRandf(glzDistribution D);
@@ -138,7 +138,7 @@ void glzProjectVertexArray(vector<poly3> *p, glzMatrix m, int group);
 
 
 float glzScanVertexArray(float  *vert, long num, glzBoundingScan scan);
-double glzScanVectorArray(vector<poly3> pdata, int group, glzBoundingScan scan);
+float glzScanVectorArray(vector<poly3> pdata, int group, glzBoundingScan scan);
 
 void glzRecenterVectorArray(vector<poly3> *pdata, int group, glzOrigin origin);
 

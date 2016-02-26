@@ -320,8 +320,8 @@ BOOL Initialize (GL_Window* window)					// Any GL Init Code & User Initialiazati
 
 
 	
-	unsigned int tx;
-	texturecontainer *txx;
+	//unsigned int tx;
+	//texturecontainer *txx;
 	//rm.createTexture("default", "data\\cv90-1080p-04.tga", glzTexFilter::LINEAR);
 	//rm.load_all();
 	rm.load_all();
@@ -494,7 +494,7 @@ if (gamestate == 6)
 
 	if (input.getKeyState(VK_SPACE))
 	{	
-		ps.spawn_burst(1000*seconds, vert3(0.0f, 100.0f, 0.0f), 0.1f, 2.0f, 1.0f, 0.5f, 3.0f, 0.3f, 1.0, 1.0f);
+		ps.spawn_burst((int)(1000*seconds), vert3(0.0f, 100.0f, 0.0f), 0.1f, 2.0f, 1.0f, 0.5f, 3.0f, 0.3f, 1.0f, 1.0f);
 		//ps.spawn_line_burst(1000*seconds, vert3(0.0f, 100.0f, 0.0f),600.0, 0.1f, 2.0f, 1.0f, 0.5f, 2.2f, 0.2f, 1.0, 1.0f);	
 	}
 
@@ -630,7 +630,6 @@ void draw_text2(string text, float x, float y, float scale, float kern, int font
 // custom sprite rendering function, if you have a lot of sprites then one of these is probably usefull
 void draw_sprite(float x, float y, float s, int sprite, int tx, int offset, unsigned int po, float col[4])
 {
-	glzResourcemanager rm;
 	glUseProgram(po);
 
 	unsigned int loc1 = glGetUniformLocation(po,"projMat");
@@ -738,7 +737,7 @@ void Draw (void)
 
 		glzMatrix mi;
 		mi.LoadIdentity();
-		mi.scale(0.27f*0.8, 0.27f, 0.27f);
+		mi.scale(0.27f*0.8f, 0.27f, 0.27f);
 		mi.translate(-2.7f, -2.7f, 0.0f);
 		glzColor blendcolor(1.0, 1.0, 1.0, 1.0);
 

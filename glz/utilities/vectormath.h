@@ -184,13 +184,13 @@ class vec3{ //vector3 class
 
 public:
 	float x, y, z;
-	vec3() : x(0.0), y(0.0), z(0.0) {}
+	vec3() : x(0.0f), y(0.0f), z(0.0f) {}
 //	vec3(float xin, float yin, float zin) : x{ xin }, y{ yin }, z{ zin } {}
 	vec3(double xin, double yin, double zin)
 	{
-		x = xin;
-		y = yin;
-		z = zin;
+		x = (float)xin;
+		y = (float)yin;
+		z = (float)zin;
 	}
 
 	vec3 vec3::operator+ (vec3 b) { return vec3(x + b.x, y + b.y, z + b.z); }
@@ -243,13 +243,13 @@ private:
 
 public:
 	float x, y, z;
-	vert3() : x(0.0), y(0.0), z(0.0) {}
+	vert3() : x(0.0f), y(0.0f), z(0.0f) {}
 	//vert3(float xin, float yin, float zin) : x{ xin }, y{ yin }, z{ zin } {}
 	vert3(double xin, double yin, double zin)
 	{
-		x = xin;
-		y = yin;
-		z = zin;
+		x = (float)xin;
+		y = (float)yin;
+		z = (float)zin;
 	}
 
 
@@ -296,8 +296,8 @@ class tex2{ //texture coordinate class
 
 public:
 	float u, v;
-	tex2() : u(0.0), v(0.0) {}
-	tex2(double uin, double vin) : u{ uin }, v{ vin }{}
+	tex2() : u(0.0f), v(0.0f) {}
+	tex2(double uin, double vin) : u{ (float)uin }, v{ (float)vin }{}
 
 	
 	tex2 tex2::operator+ (tex2 b) { return tex2(u + b.u, v + b.v); }
@@ -395,19 +395,19 @@ private:
 	void multQuaternion(glzQuaternion b);
 
 public:
-	double w, x, y, z;
+	float w, x, y, z;
 	glzQuaternion() : w(1.0), x(0.0), y(0.0), z(0.0) {}
-	glzQuaternion(double win, double xin, double yin, double zin) : w{ win }, x{ xin }, y{ yin }, z{ zin } {}
+	glzQuaternion(float win, float xin, float yin, float zin) : w{ win }, x{ xin }, y{ yin }, z{ zin } {}
 
-	glzQuaternion glzQuaternion::operator * (double a)	{ x *= a; y *= a; z *= a; this->normalize(); return *this; }
-	glzQuaternion glzQuaternion::operator *= (double a)	{ x *= a; y *= a; z *= a; this->normalize(); return *this; }
+	glzQuaternion glzQuaternion::operator * (float a)	{ x *= a; y *= a; z *= a; this->normalize(); return *this; }
+	glzQuaternion glzQuaternion::operator *= (float a)	{ x *= a; y *= a; z *= a; this->normalize(); return *this; }
 
 	glzQuaternion glzQuaternion::operator * (glzQuaternion a)	{ this->multQuaternion(a); return *this; }
 	glzQuaternion glzQuaternion::operator *= (glzQuaternion a)	{ this->multQuaternion(a); return *this; }
 
 	void identity(void) { w = 1.0; x=0.0; y=0.0; z=0.0; }
-	void normalize(void) { double n = sqrt(w * w + x * x + y * y + z * z);	w /= n;	x /= n;	y /= n;	z /= n; }
-	void rotate(double a, double x, double y, double z);
+	void normalize(void) { float n = sqrt(w * w + x * x + y * y + z * z);	w /= n;	x /= n;	y /= n;	z /= n; }
+	void rotate(float a, float x, float y, float z);
 };
 
 //inline glzMatrix operator* (glzMatrix lhs, glzQuaternion rhs) { lhs *= rhs;	return lhs; }
@@ -581,7 +581,7 @@ public:
 	poly3(point3 ain, point3 bin, point3 cin, int groupin, int atlasin) : a{ ain }, b{ bin }, c{ cin }, group{ groupin }, atlas{ atlasin }{}
 	vec3 getFaceNormal();
 	void generateNormal();
-	void generateTexture(double scale);
+	void generateTexture(float scale);
 	
 
 	void tempAddNormalToVertex();  // only for testing that normals work
@@ -764,7 +764,7 @@ private:
 public:
 
 	float zoom;
-	int width, height;
+	float width, height;
 	float aspect;
 	glzMatrix m;
 
@@ -779,12 +779,12 @@ public:
 		zoom_speed = 5.0;
 		angle_speed = 10.0;
 
-		width = 100;
-		height = 100;
+		width = 100.0f;
+		height = 100.0f;
 		resetCamera();
 	}
 
-	void setsize(double w, double h)
+	void setsize(float w, float h)
 	{
 		width = w;
 		height = h;
@@ -916,7 +916,7 @@ public:
 
 	glzSprite() : a(tex2(0.0, 0.0)), b(tex2(1.0, 0.0)), c(tex2(0.0, 1.0)), d(tex2(1.0, 1.0)), depth(0.0){} // default numbers
 	glzSprite(tex2 ain, tex2 bin, tex2 cin, tex2 din, float depthin) : a{ ain }, b{ bin }, c{ cin }, d{ din }, depth{ depthin }{} // direct initialization
-	glzSprite(tex2 pos, tex2 dim, double depthin) : a{ tex2(pos.u, pos.v) }, b{ tex2(pos.u + dim.u, pos.v) }, c{ tex2(pos.u, pos.v + dim.v) }, d{ tex2(pos.u + dim.u, pos.v + dim.v) }, depth{ depthin }{} // simpler initialization
+	glzSprite(tex2 pos, tex2 dim, float depthin) : a{ tex2(pos.u, pos.v) }, b{ tex2(pos.u + dim.u, pos.v) }, c{ tex2(pos.u, pos.v + dim.v) }, d{ tex2(pos.u + dim.u, pos.v + dim.v) }, depth{ depthin }{} // simpler initialization
 
 	glzSprite(glzOrigin origin);
 	glzSprite(unsigned int xdim, unsigned int ydim, unsigned int atlas, float depthin); // grid atlas initialization
