@@ -373,7 +373,6 @@ LRESULT CALLBACK WindowProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			if ((wParam >= 0) && (wParam <= 255))						// Is Key (wParam) In A Valid Range?
 			{
 				input.addKeyEvent(wParam,true);
-				//window->keys->keyDown [wParam] = TRUE;					// Set The Selected Key (wParam) To True
 				return 0;												// Return
 			}
 		break;															// Break
@@ -382,51 +381,40 @@ LRESULT CALLBACK WindowProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			if ((wParam >= 0) && (wParam <= 255))						// Is Key (wParam) In A Valid Range?
 			{
 				input.addKeyEvent(wParam, false);
-				//window->keys->keyDown [wParam] = FALSE;					// Set The Selected Key (wParam) To False
 				return 0;												// Return
 			}
 		break;															// Break
 
 		case WM_LBUTTONDOWN:
 			input.SetMouseL(true);
-		//	window->keys->LMdown = true;
 			break;
 
 		case WM_LBUTTONUP:
 			input.SetMouseL(false);
-		//	window->keys->LMdown = false;
 			break;
 
 		case WM_RBUTTONDOWN:
 			input.SetMouseR(true);
-		//	window->keys->RMdown = true;
 			break;
 
 		case WM_RBUTTONUP:
 			input.SetMouseR(false);
-		//	window->keys->RMdown = false;
-			break;
 
 		case WM_MBUTTONDOWN:
 			input.SetMouseM(true);
-			//window->keys->MMdown = true;
 			break;
 
 		case WM_MBUTTONUP:
 			input.SetMouseM(false);
-			//window->keys->MMdown = false;
 			break;
 
 		case WM_MOUSEMOVE:
-		//	window->keys->Mpos_x = GET_X_LPARAM(lParam);
-		//	window->keys->Mpos_y = GET_Y_LPARAM(lParam);
 			input.setMouseX(GET_X_LPARAM(lParam));
 			input.setMouseY(GET_Y_LPARAM(lParam));
 
 			break;
 
 		case WM_MOUSEWHEEL:
-		//	window->keys->Mweel += GET_WHEEL_DELTA_WPARAM(wParam);
 			input.addMouseWeel(GET_WHEEL_DELTA_WPARAM(wParam));
 			//window->keys->Mactive = true;
 			break;
@@ -504,6 +492,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 {
 
 	glzAppinitialization app;
+	glzInput input;
 	preInitialize();
 	app.pull();
 
@@ -615,13 +604,15 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 						}
 						else											// If Window Is Visible
 						{
-							// Process Application Loop
+							// Process Application Loop		
+							// all of this needs restructuring to alow for a fast input rate
 
 							// timing functions
 							tickCount = GetTickCount ();				// Get The Tick Count
 							window.deltaTime = ((float)(tickCount - window.lastTickCount))/1000;	// Update The _Delta time
 							window.lastTickCount = tickCount;			// Set Last Count To Current Count
 
+							input.updateKeys(window.deltaTime);
 						
 							Update (window.deltaTime);			// Update The Counter
 							Draw ();							// Draw Our Scene

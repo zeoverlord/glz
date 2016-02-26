@@ -31,6 +31,9 @@
     <Filter Include="utilities">
       <UniqueIdentifier>{12fb7e8c-1b05-41bb-b239-8646a353e09c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="input">
+      <UniqueIdentifier>{639be047-105c-4660-876a-5a09cb80df15}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\examples\Example_3d.cpp">
@@ -80,6 +83,9 @@
     </ClCompile>
     <ClCompile Include="..\..\glz\2d\2d-utilities.cpp">
       <Filter>2d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz\input\input.cpp">
+      <Filter>input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -142,6 +148,9 @@
     </ClInclude>
     <ClInclude Include="..\..\glz\2d\2d-utilities.h">
       <Filter>2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz\input\input.h">
+      <Filter>input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

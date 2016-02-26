@@ -26,16 +26,23 @@
 
 
 class glzInputData{
-
+	
 public:		
-		bool keyDown[256];								// Holds TRUE / FALSE For Each Key
-		bool LMdown;
-		bool MMdown;
-		bool RMdown;
-		int Mpos_x;
-		int Mpos_y;
-		int Mweel;
-		bool Mactive;
+	bool keyDown[256];								// Holds TRUE / FALSE For Each Key
+	bool LMdown;
+	bool MMdown;
+	bool RMdown;
+	int Mpos_x;
+	int Mpos_y;
+	int Mweel;
+	bool Mactive;
+	bool pulsar1;
+	bool pulsar2;
+	bool pulsar4;
+	bool pulsar8;
+	bool pulsar16;
+	float pulsartimer;
+	int pulsarcounter;
 
 	glzInputData();
 };
@@ -47,6 +54,16 @@ class glzInput{
 public:
 	glzInput(); // grab the global data on construction
 	~glzInput(); // should return data into the global
+
+
+	void updateKeys(float inSeconds);
+
+	// pulsars - these just pulse for one frame every now and then
+	bool getPulsar1(void);
+	bool getPulsar2(void);
+	bool getPulsar4(void);
+	bool getPulsar8(void);
+	bool getPulsar16(void);
 
 
 	// keys

@@ -35,6 +35,14 @@ glzInputData::glzInputData()
 	Mpos_y = 0;
 	Mweel = 0;
 	Mactive = false;
+
+	pulsar1 = false;
+	pulsar2 = false;
+	pulsar4 = false;
+	pulsar8 = false;
+	pulsar16 = false;
+	pulsartimer = 0.0f;
+	pulsarcounter = 0;
 }
 
 static glzInputData inputData;
@@ -45,6 +53,66 @@ glzInput::glzInput()
 
 glzInput::~glzInput()
 {}
+
+void glzInput::updateKeys(float inSeconds)
+{
+	const float pulsestep = 1.0f / 16.0f;
+
+	inputData.pulsartimer += inSeconds;
+
+	inputData.pulsar1 = false;
+	inputData.pulsar2 = false;
+	inputData.pulsar4 = false;
+	inputData.pulsar8 = false;
+	inputData.pulsar16 = false;
+
+	if (inputData.pulsartimer >= pulsestep)
+	{ 		
+		while (inputData.pulsartimer >= pulsestep)
+		{
+			inputData.pulsarcounter++;
+			inputData.pulsartimer -= pulsestep;
+
+			if (inputData.pulsarcounter > 15)
+			{
+				inputData.pulsarcounter -= 16;
+			}
+		}
+
+		if (inputData.pulsarcounter == 0)
+			{
+				inputData.pulsar1 = true;
+			}
+
+		if (inputData.pulsarcounter%2 == 0)
+			{
+				inputData.pulsar2 = true;
+			}
+
+		if (inputData.pulsarcounter % 4 == 0)
+			{
+				inputData.pulsar4 = true;
+			}
+
+		if (inputData.pulsarcounter % 8 == 0)
+			{
+				inputData.pulsar8 = true;
+			}
+
+		if (inputData.pulsarcounter % 16 == 0)
+			{
+				inputData.pulsar16 = true;
+			}
+	}
+	return;
+}
+
+// pulsars
+bool glzInput::getPulsar1(void) { return inputData.pulsar1; }
+bool glzInput::getPulsar2(void) { return inputData.pulsar2; }
+bool glzInput::getPulsar4(void) { return inputData.pulsar4; }
+bool glzInput::getPulsar8(void) { return inputData.pulsar8; }
+bool glzInput::getPulsar16(void) { return inputData.pulsar16; }
 
 // keys
 void glzInput::addKeyEvent(int key, bool keydown) { inputData.keyDown[key]=keydown; }

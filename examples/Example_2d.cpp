@@ -467,7 +467,7 @@ void Update (float seconds)								// Perform Motion Updates Here
 		sprintf_s(tbuffer, 160, "fast changing text:%f", testc);
 		textvao_num[2] = glzVAOMakeText(tbuffer, mt, 1.0f, glzOrigin::TOP_LEFT, &textvao[2]);  // this updates text once every frame
 
-		if (texttimer>1.0)
+		if (input.getPulsar1())
 		{
 			sprintf_s(tbuffer2, 160, "slow changing text:%f", testc);
 			textvao_num[3] = glzVAOMakeText(tbuffer2, mt, 1.0f, glzOrigin::TOP_LEFT, &textvao[3]);  // this updates text once every second
@@ -492,13 +492,14 @@ if (gamestate == 6)
 
 
 
-	if (input.getKeyState(VK_SPACE) == TRUE)
-	{
-	
+	if (input.getKeyState(VK_SPACE))
+	{	
 		ps.spawn_burst(1000*seconds, vert3(0.0f, 100.0f, 0.0f), 0.1f, 2.0f, 1.0f, 0.5f, 3.0f, 0.3f, 1.0, 1.0f);
-		//ps.spawn_line_burst(1000*seconds, vert3(0.0f, 100.0f, 0.0f),600.0, 0.1f, 2.0f, 1.0f, 0.5f, 2.2f, 0.2f, 1.0, 1.0f);
-		
-}
+		//ps.spawn_line_burst(1000*seconds, vert3(0.0f, 100.0f, 0.0f),600.0, 0.1f, 2.0f, 1.0f, 0.5f, 2.2f, 0.2f, 1.0, 1.0f);	
+	}
+
+	
+
 	vec3 ctemp(0.0,1.0,0.0);
 	ctemp.normalize(1.0);
 	vec3 ctemp2(-0.2, 1.0, 0.0);

@@ -93,6 +93,7 @@
     <ClCompile Include="..\..\examples\stdafx.cpp" />
     <ClCompile Include="..\..\examples\zeobase2.cpp" />
     <ClCompile Include="..\..\glz\appbase.cpp" />
+    <ClCompile Include="..\..\glz\input\input.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\examples\Resource.h" />
@@ -100,6 +101,7 @@
     <ClInclude Include="..\..\examples\targetver.h" />
     <ClInclude Include="..\..\examples\zeobase2.h" />
     <ClInclude Include="..\..\glz\appbase.h" />
+    <ClInclude Include="..\..\glz\input\input.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\examples\small.ico" />
