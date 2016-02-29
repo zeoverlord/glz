@@ -37,6 +37,7 @@
 #include "..\glz\2d\geo-2d.h"
 #include "..\glz\3d\geo-generate.h"
 #include "..\glz\utilities\tiletools.h"
+#include "..\glz\utilities\resourcemanager.h"
 #include "..\glz\input\input.h"
 
 using namespace std;
@@ -62,7 +63,7 @@ enum ztLeveltex { L1A, L1B, L2A, L2B, DYNAMIC_A, DYNAMIC_B, DYNAMIC_C, DYNAMIC_D
 float		angle = 0, width, height;												// Used To Rotate The Triangles
 unsigned int vao[16], vao_num[16], textvao[16], textvao_num[16];
 glzMatrix m;
-unsigned int spritetexture[10], fonttexture[15];
+//unsigned int spritetexture[10], fonttexture[15];
 
 
 char tbuffer[160];
@@ -88,7 +89,7 @@ float paintarea_pixel_x = 0.0f, paintarea_pixel_y = 0.0f;
 float paintarea_x_s = 0.0f, paintarea_y_s = 0.0f, paintarea_Zoom_s = 512;
 float paintarea_pixel_x_s = 0.0f, paintarea_pixel_y_s = 0.0f;
 
-GLhandleARB  ProgramObject, ProgramObjectFT, ProgramObjectFSQ, ProgramObjectAtlas;
+unsigned int  ProgramObject, ProgramObjectFT, ProgramObjectFSQ, ProgramObjectAtlas;
 texture_transform text_tt;
 
 
@@ -167,7 +168,7 @@ void preInitialize(void)
 BOOL Initialize(GL_Window* window)					// Any GL Init Code & User Initialiazation Goes Here
 {
 	g_window = window;
-	
+	glzResourcemanager rm;
 
 	GetFocus();
 	GetAsyncKeyState(WM_KEYUP);
@@ -210,41 +211,23 @@ BOOL Initialize(GL_Window* window)					// Any GL Init Code & User Initialiazatio
 
 	ProgramObject = glzShaderLoad("data\\glsl.vert", "data\\glsl.frag", glzVAOType::AUTO);
 	ProgramObjectAtlas = glzShaderLoad("data\\atlastexture.vert", "data\\atlastexture.frag", glzVAOType::AUTO);
-	//	ProgramObjectFT = glzShaderLoad("data\\fancytext.vert", "data\\fancytext.frag", glzVAOType::AUTO);
-	//	ProgramObjectFSQ = glzShaderLoad("data\\fsq.vert", "data\\fsq.frag", glzVAOType::AUTO);
 	glzShaderLink(ProgramObject);
 	glzShaderLink(ProgramObjectAtlas);
-	//	glzShaderLink(ProgramObjectFT);
-	//	glzShaderLink(ProgramObjectFSQ);
-	// load the textures
-	fonttexture[0] = glzLoadTexture("data\\fonts\\arial.tga", glzTexFilter::LINEAR);
-	//	fonttexture[1] = glzLoadTexture("data\\fonts\\minya_m.tga", glzTexFilter::LINEAR);
-	//	fonttexture[2] = glzLoadTexture("data\\fonts\\ms_gothic.tga", glzTexFilter::LINEAR);
-	//fonttexture[3] = glzLoadTexture("data\\fonts\\digitalstrip_l.tga", glzTexFilter::LINEAR);
-	//fonttexture[4] = glzLoadTexture("data\\fonts\\morpheus_l.tga", glzTexFilter::LINEAR);
-
-	//	texture[0] = glzLoadTexture("data\\back.tga", glzTexFilter::LINEAR);
-	//	texture[1] = glzLoadTexture("data\\derpy_phirana.tga", glzTexFilter::NEAREST);  // the derpy phirana is not an actual logo but just an example on how you can put it there
-	//	texture[2] = glzLoadTexture("data\\explotion128a.tga", glzTexFilter::NEAREST);
-
+	rm.createTexture("font.arial", "data\\fonts\\arial.tga", glzTexFilter::LINEAR, 2);
 
 	// load data
 
-	spritetexture[0] = glzLoadTexture("data\\tileset.tga", glzTexFilter::NEAREST); // sprite layers
-	spritetexture[1] = glzLoadTexture("data\\colisiontile.tga", glzTexFilter::NEAREST); // dynamics layer1
-	spritetexture[2] = glzLoadTexture("data\\tileset.tga", glzTexFilter::NEAREST); // dynamics layer2
-	spritetexture[3] = glzLoadTexture("data\\tileset.tga", glzTexFilter::NEAREST); // entity layer
-	spritetexture[4] = glzLoadTexture("data\\tileset.tga", glzTexFilter::NEAREST); // entity layer
-	spritetexture[5] = glzLoadTexture("data\\red.tga", glzTexFilter::NEAREST);
-	spritetexture[6] = glzLoadTexture("data\\cursor.tga", glzTexFilter::NEAREST);
+	rm.createTexture("spritemap.sm0", "data\\tileset.tga", glzTexFilter::NEAREST);
+	rm.createTexture("spritemap.sm1", "data\\colisiontile.tga", glzTexFilter::NEAREST);
+	rm.createTexture("spritemap.sm2", "data\\tileset.tga", glzTexFilter::NEAREST);
+	rm.createTexture("spritemap.sm3", "data\\tileset.tga", glzTexFilter::NEAREST);
+	rm.createTexture("spritemap.sm4", "data\\tileset.tga", glzTexFilter::NEAREST);
+
+	rm.createTexture("sprite.red", "data\\red.tga", glzTexFilter::NEAREST);
+	rm.createTexture("sprite.cursor", "data\\cursor.tga", glzTexFilter::NEAREST);
 
 
-
-
-
-
-
-
+	
 	if (has_l1) map_l1.load(leveltex_1_filename, glzTileType::DOUBLE_LAYER);
 	if (has_l2) map_l2.load(leveltex_2_filename, glzTileType::DOUBLE_LAYER);
 	if (has_d) map_dynamic.load(leveltex_d_filename, glzTileType::QUAD_LAYER);
@@ -269,8 +252,14 @@ void Update(float seconds)								// Perform Motion Updates Here
 {
 
 	glzInput input;
+	glzResourcemanager rm;
+	rm.load_one();
+
 	//Ui stuff
 	GLint viewport[4];
+
+
+
 
 	glGetIntegerv(GL_VIEWPORT, viewport);
 
@@ -574,143 +563,13 @@ void Update(float seconds)								// Perform Motion Updates Here
 }
 
 
-void draw_text(float x, float y, int text, int font, unsigned int po, unsigned int col)
-{
-	glUseProgram(po);
-
-	unsigned int loc1 = glGetUniformLocation(po, "projMat");
-	unsigned int loc2 = glGetUniformLocation(po, "texunit0");
-	unsigned int loc3 = glGetUniformLocation(po, "tint");
-	m.LoadIdentity();
-	m.ortho(-4, 4, -2, 2, -100, 100);
-	m.translate(x, y, 0);
-
-	float mtemp[16];
-	m.transferMatrix(&mtemp[0]);
-	glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
-
-	if (col == COL_BLACK)	glUniform4f(loc3, 0.0f, 0.0f, 0.0f, 1.0f);
-	if (col == COL_WHITE)	glUniform4f(loc3, 1.0f, 1.0f, 1.0f, 1.0f);
-	if (col == COL_RED)	glUniform4f(loc3, 1.0f, 0.0f, 0.0f, 1.0f);
-	if (col == COL_GREEN)	glUniform4f(loc3, 0.0f, 1.0f, 0.0f, 1.0f);
-	if (col == COL_BLUE)	glUniform4f(loc3, 0.0f, 0.0f, 1.0f, 1.0f);
-
-
-
-
-	glBindTexture(GL_TEXTURE_2D, fonttexture[font]);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glEnable(GL_BLEND);
-	glzDrawVAO(textvao_num[text], textvao[text], GL_TRIANGLES);
-	glDisable(GL_BLEND);
-
-}
-
-void draw_text2(char text[255], float x, float y, float scale, float kern, int font, unsigned int po, unsigned int col)
-{
-	glUseProgram(po);
-
-	unsigned int loc1 = glGetUniformLocation(po, "projMat");
-	unsigned int loc2 = glGetUniformLocation(po, "texunit0");
-	unsigned int loc3 = glGetUniformLocation(po, "tint");
-	m.LoadIdentity();
-	m.ortho2DPixelspace(WINDOW_HEIGHT, WINDOW_WIDTH, glzOrigin::BOTTOM_LEFT);
-	m.translate(x, y, 0);
-
-	float mtemp[16];
-	m.transferMatrix(&mtemp[0]);
-	glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
-
-	if (col == COL_BLACK)	glUniform4f(loc3, 0.0f, 0.0f, 0.0f, 1.0f);
-	if (col == COL_WHITE)	glUniform4f(loc3, 1.0f, 1.0f, 1.0f, 1.0f);
-	if (col == COL_RED)	glUniform4f(loc3, 1.0f, 0.0f, 0.0f, 1.0f);
-	if (col == COL_GREEN)	glUniform4f(loc3, 0.0f, 1.0f, 0.0f, 1.0f);
-	if (col == COL_BLUE)	glUniform4f(loc3, 0.0f, 0.0f, 1.0f, 1.0f);
-
-	float aspect = (float)WINDOW_WIDTH / (float)WINDOW_HEIGHT;
-
-	glDisable(GL_DEPTH_TEST);
-	glBindTexture(GL_TEXTURE_2D, fonttexture[font]);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glEnable(GL_BLEND);
-	glzDirectDrawText(text, scale, aspect, kern, glzOrigin::BOTTOM_LEFT);
-	glDisable(GL_BLEND);
-	glEnable(GL_DEPTH_TEST);
-
-}
-
-
-
-// custom sprite rendering function, if you have a lot of sprites then one of these is probably usefull
-void draw_sprite(float x, float y, float s, int sprite, int tx, int offset, unsigned int po, float col[4])
-{
-	glUseProgram(po);
-
-	unsigned int loc1 = glGetUniformLocation(po, "projMat");
-	unsigned int loc2 = glGetUniformLocation(po, "texunit0");
-	unsigned int loc3 = glGetUniformLocation(po, "tint");
-	m.LoadIdentity();
-	m.ortho(-4, 4, -2, 2, -100, 100);
-	m.translate(x, y, 0);
-	m.scale(s, s, s);
-
-	float mtemp[16];
-	m.transferMatrix(&mtemp[0]);
-	glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
-
-	glUniform4f(loc3, col[0], col[1], col[2], col[3]);
-
-	glBindTexture(GL_TEXTURE_2D, spritetexture[tx]);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glEnable(GL_BLEND);
-	glzDrawVAO(offset * 6, 6, vao[sprite], GL_TRIANGLES);
-	glDisable(GL_BLEND);
-
-}
-
-// backdrops are usefull, if you don't have the time to write a 2D renderer then just cheat with a texture backdrop instead
-void draw_backdrop(unsigned int bgtexture)
-{
-	glUseProgram(ProgramObjectFSQ);
-	unsigned int loc1 = glGetUniformLocation(ProgramObjectFSQ, "projMat");
-	unsigned int loc2 = glGetUniformLocation(ProgramObjectFSQ, "texunit0");
-	unsigned int loc3 = glGetUniformLocation(ProgramObjectFSQ, "tint");
-
-	m.LoadIdentity();
-
-	float mtemp[16];
-	m.transferMatrix(&mtemp[0]);
-	glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
-	glUniform1i(loc2, 0);
-	glUniform4f(loc3, 1.0f, 1.0f, 1.0f, 1.0f);
-	glBindTexture(GL_TEXTURE_2D, bgtexture);
-	glzDrawVAO(vao_num[0], vao[0], GL_TRIANGLES);
-
-}
-
-void draw_backdrop2(unsigned int bgtexture, glzMatrix mat, float col[4])
-{
-	glUseProgram(ProgramObjectFSQ);
-	unsigned int loc1 = glGetUniformLocation(ProgramObjectFSQ, "projMat");
-	unsigned int loc2 = glGetUniformLocation(ProgramObjectFSQ, "texunit0");
-	unsigned int loc3 = glGetUniformLocation(ProgramObjectFSQ, "tint");
-
-
-
-	float mtemp[16];
-	mat.transferMatrix(&mtemp[0]);
-	glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
-
-	glUniform1i(loc2, 0);
-	glUniform4f(loc3, col[0], col[1], col[2], col[3]);
-	glBindTexture(GL_TEXTURE_2D, bgtexture);
-	glzDrawVAO(vao_num[0], vao[0], GL_TRIANGLES);
-
-}
 
 
 void Draw(void)
 {
+
+	glzResourcemanager rm;
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		// Clear Screen And Depth Buffer
 
 	float mtemp[16];
@@ -796,7 +655,7 @@ void Draw(void)
 
 
 		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, spritetexture[0]);
+		glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("spritemap.sm0"));
 		glActiveTexture(GL_TEXTURE0);
 
 
@@ -814,10 +673,10 @@ void Draw(void)
 
 
 			glActiveTexture(GL_TEXTURE1);
-			if (curlayer == ztLeveltex::DYNAMIC_A)	{ glBindTexture(GL_TEXTURE_2D, spritetexture[1]); glUniform1i(loc7, 2); }
-			if (curlayer == ztLeveltex::DYNAMIC_B)	{ glBindTexture(GL_TEXTURE_2D, spritetexture[2]); glUniform1i(loc7, 3); }
-			if (curlayer == ztLeveltex::DYNAMIC_C)	{ glBindTexture(GL_TEXTURE_2D, spritetexture[3]); glUniform1i(loc7, 4); }
-			if (curlayer == ztLeveltex::DYNAMIC_D)	{ glBindTexture(GL_TEXTURE_2D, spritetexture[4]); glUniform1i(loc7, 5); }
+			if(curlayer == ztLeveltex::DYNAMIC_A)	{ glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("spritemap.sm1")); glUniform1i(loc7, 2); }
+			if(curlayer == ztLeveltex::DYNAMIC_B)	{ glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("spritemap.sm2")); glUniform1i(loc7, 3); }
+			if(curlayer == ztLeveltex::DYNAMIC_C)	{ glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("spritemap.sm3")); glUniform1i(loc7, 4); }
+			if(curlayer == ztLeveltex::DYNAMIC_D)	{ glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("spritemap.sm4")); glUniform1i(loc7, 5); }
 			glActiveTexture(GL_TEXTURE0);
 
 			glzDirectSpriteRender(0.0, 0.0, 2, map_l1.width / map_l1.height, 1.0, 0, 0, 1.0, 1.0, glzOrigin::CENTERED);
@@ -869,10 +728,10 @@ void Draw(void)
 			{
 
 				glActiveTexture(GL_TEXTURE1);
-				if (curlayer == ztLeveltex::DYNAMIC_A)	{ glBindTexture(GL_TEXTURE_2D, spritetexture[1]); glUniform1i(loc7, 2); }
-				if (curlayer == ztLeveltex::DYNAMIC_B)	{ glBindTexture(GL_TEXTURE_2D, spritetexture[2]); glUniform1i(loc7, 3); }
-				if (curlayer == ztLeveltex::DYNAMIC_C)	{ glBindTexture(GL_TEXTURE_2D, spritetexture[3]); glUniform1i(loc7, 4); }
-				if (curlayer == ztLeveltex::DYNAMIC_D)	{ glBindTexture(GL_TEXTURE_2D, spritetexture[4]); glUniform1i(loc7, 5); }
+				if(curlayer == ztLeveltex::DYNAMIC_A)	{ glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("spritemap.sm1")); glUniform1i(loc7, 2); }
+				if(curlayer == ztLeveltex::DYNAMIC_B)	{ glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("spritemap.sm2")); glUniform1i(loc7, 3); }
+				if(curlayer == ztLeveltex::DYNAMIC_C)	{ glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("spritemap.sm3")); glUniform1i(loc7, 4); }
+				if(curlayer == ztLeveltex::DYNAMIC_D)	{ glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("spritemap.sm4")); glUniform1i(loc7, 5); }
 				glActiveTexture(GL_TEXTURE0);
 
 				glBindTexture(GL_TEXTURE_2D, map_dynamic.tex);
@@ -890,7 +749,7 @@ void Draw(void)
 
 
 
-		glBindTexture(GL_TEXTURE_2D, spritetexture[6]);
+		glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("sprite.cursor"));
 		glUseProgram(ProgramObject);
 
 		glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
@@ -920,11 +779,11 @@ void Draw(void)
 		m.transferMatrix(&mtemp[0]);
 		glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
 
-		glBindTexture(GL_TEXTURE_2D, spritetexture[0]);
-		if (curlayer == ztLeveltex::DYNAMIC_A)	{ glBindTexture(GL_TEXTURE_2D, spritetexture[1]); }
-		if (curlayer == ztLeveltex::DYNAMIC_B)	{ glBindTexture(GL_TEXTURE_2D, spritetexture[2]); }
-		if (curlayer == ztLeveltex::DYNAMIC_C)	{ glBindTexture(GL_TEXTURE_2D, spritetexture[3]); }
-		if (curlayer == ztLeveltex::DYNAMIC_D)	{ glBindTexture(GL_TEXTURE_2D, spritetexture[4]); }
+		glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("spritemap.sm0"));
+		if(curlayer == ztLeveltex::DYNAMIC_A)	{ glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("spritemap.sm1")); }
+		if(curlayer == ztLeveltex::DYNAMIC_B)	{ glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("spritemap.sm2")); }
+		if(curlayer == ztLeveltex::DYNAMIC_C)	{ glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("spritemap.sm3")); }
+		if(curlayer == ztLeveltex::DYNAMIC_D)	{ glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("spritemap.sm4")); }
 		//glzDirectSpriteRender(viewport[2] / 2, -viewport[3] / 2, 2, 64.0, 64.0, 0, 0, 1.0, 1.0, glzOrigin::BOTTOM_RIGHT);	
 
 		// render the little sprite tile
@@ -960,18 +819,18 @@ void Draw(void)
 		glUniform1i(loc7, 0);
 
 
-		glBindTexture(GL_TEXTURE_2D, spritetexture[0]);
-		if (curlayer == ztLeveltex::DYNAMIC_A)	{ glBindTexture(GL_TEXTURE_2D, spritetexture[1]); }
-		if (curlayer == ztLeveltex::DYNAMIC_B)	{ glBindTexture(GL_TEXTURE_2D, spritetexture[2]); }
-		if (curlayer == ztLeveltex::DYNAMIC_C)	{ glBindTexture(GL_TEXTURE_2D, spritetexture[3]); }
-		if (curlayer == ztLeveltex::DYNAMIC_D)	{ glBindTexture(GL_TEXTURE_2D, spritetexture[4]); }
+		glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("spritemap.sm0"));
+		if(curlayer == ztLeveltex::DYNAMIC_A)	{ glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("spritemap.sm1")); }
+		if(curlayer == ztLeveltex::DYNAMIC_B)	{ glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("spritemap.sm2")); }
+		if(curlayer == ztLeveltex::DYNAMIC_C)	{ glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("spritemap.sm3")); }
+		if(curlayer == ztLeveltex::DYNAMIC_D)	{ glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("spritemap.sm4")); }
 
 
 		glzDirectSpriteRender(0.0, 0.0, 2, 1.0, 1.0, 0, 0, 1.0, 1.0, glzOrigin::CENTERED);
 
 
 
-		glBindTexture(GL_TEXTURE_2D, spritetexture[6]);
+		glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("sprite.cursor"));
 
 
 		glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
@@ -994,12 +853,12 @@ void Draw(void)
 		glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
 		glUniform1i(loc7, 0);
 
-		glBindTexture(GL_TEXTURE_2D, spritetexture[0]);
+		glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("spritemap.sm0"));
 
-		if (curlayer == ztLeveltex::DYNAMIC_A)	{ glBindTexture(GL_TEXTURE_2D, spritetexture[1]); }
-		if (curlayer == ztLeveltex::DYNAMIC_B)	{ glBindTexture(GL_TEXTURE_2D, spritetexture[2]); }
-		if (curlayer == ztLeveltex::DYNAMIC_C)	{ glBindTexture(GL_TEXTURE_2D, spritetexture[3]); }
-		if (curlayer == ztLeveltex::DYNAMIC_D)	{ glBindTexture(GL_TEXTURE_2D, spritetexture[4]); }
+		if(curlayer == ztLeveltex::DYNAMIC_A)	{ glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("spritemap.sm1")); }
+		if(curlayer == ztLeveltex::DYNAMIC_B)	{ glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("spritemap.sm2")); }
+		if(curlayer == ztLeveltex::DYNAMIC_C)	{ glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("spritemap.sm3")); }
+		if(curlayer == ztLeveltex::DYNAMIC_D)	{ glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("spritemap.sm4")); }
 
 		//glzDirectSpriteRender(viewport[2] / 2, -viewport[3] / 2, 2, 64.0, 64.0, 0, 0, 1.0, 1.0, glzOrigin::BOTTOM_RIGHT);
 		// render the little sprite tile

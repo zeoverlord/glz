@@ -36,6 +36,7 @@
 #include "..\glz\shader\shader.h"
 #include "..\glz\utilities\glz.h"
 #include "..\glz\image\tex.h"
+#include "..\glz\utilities\resourcemanager.h"
 #include "..\glz\input\input.h"
 
 using namespace std;										
@@ -56,7 +57,6 @@ int			rot1, rot2;											// Counter Variables
 unsigned int vao[5],vao_num[5];
 glzMatrix m;
 int e=0,e2=0;
-unsigned int texture[5],fonttexture;
 
 glzQuaternion q;
 glzQuaternion q2;
@@ -88,6 +88,8 @@ void preInitialize(void)
 BOOL Initialize (GL_Window* window)					// Any GL Init Code & User Initialiazation Goes Here
 {	
 	g_window	= window;
+
+	glzResourcemanager rm;
 
 	GetFocus();
 	GetAsyncKeyState(WM_KEYUP);
@@ -187,11 +189,12 @@ BOOL Initialize (GL_Window* window)					// Any GL Init Code & User Initialiazati
 	glzShaderLink(ProgramObjectFSQ);
 
 	// load the textures
-	texture[0] = glzLoadTexture("data\\fonts\\digitalstrip_l.tga", glzTexFilter::LINEAR);
-	texture[1] = glzLoadTexture("data\\mariobox.tga", glzTexFilter::ANSIO_MAX);
-	texture[2] = glzLoadTexture("data\\cv90base.tga", glzTexFilter::ANSIO_MAX);
-	texture[3] = glzLoadTexture("data\\atlas_testpattern.tga", glzTexFilter::NEAREST);
-	texture[4] = glzLoadTexture("data\\gridlines.tga", glzTexFilter::ANSIO_MAX);
+
+	rm.createTexture("font.digitalstrip_l", "data\\fonts\\digitalstrip_l.tga", glzTexFilter::LINEAR);
+	rm.createTexture("texture.mariobox", "data\\mariobox.tga", glzTexFilter::ANSIO_MAX, 2);
+	rm.createTexture("texture.cv90base", "data\\cv90base.tga", glzTexFilter::ANSIO_MAX, 2);
+	rm.createTexture("texture.gridlines", "data\\gridlines.tga", glzTexFilter::ANSIO_MAX, 2);
+	rm.createTexture("atlas.atlas_testpattern", "data\\atlas_testpattern.tga", glzTexFilter::NEAREST, 2);
 
 
 	delete[] data;
@@ -213,6 +216,8 @@ void Deinitialize (void)										// Any User DeInitialization Goes Here
 
 void Update (float seconds)								// Perform Motion Updates Here
 {
+	glzResourcemanager rm;
+	rm.load_one();
 
 	glzInput input;
 
@@ -245,6 +250,8 @@ void Update (float seconds)								// Perform Motion Updates Here
 
 void Draw (void)
 {
+	glzResourcemanager rm;
+
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		// Clear Screen And Depth Buffer
 	float mtemp[16];
 	glEnable(GL_TEXTURE_2D);
@@ -267,7 +274,7 @@ void Draw (void)
 	m.transferMatrix(&mtemp[0]);
 	glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
 
-    glBindTexture(GL_TEXTURE_2D,texture[1]);
+    glBindTexture(GL_TEXTURE_2D,rm.gettextureHandle("texture.mariobox"));
 	glzDrawVAO(vao_num[1],vao[1],GL_TRIANGLES);
 
 
@@ -282,7 +289,7 @@ void Draw (void)
 	m.transferMatrix(&mtemp[0]);
 	glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
 
-    glBindTexture(GL_TEXTURE_2D,texture[2]);
+	glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("texture.cv90base"));
 	glzDrawVAO(vao_num[2],vao[2],GL_TRIANGLES);
 
 	// draw grid
@@ -292,7 +299,7 @@ void Draw (void)
 	m.transferMatrix(&mtemp[0]);
 	glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
 
-    glBindTexture(GL_TEXTURE_2D,texture[3]);
+	glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("atlas.atlas_testpattern"));
 	glzDrawVAO(vao_num[3],vao[3],GL_TRIANGLES);
 
 	// draw height grid
@@ -303,7 +310,7 @@ void Draw (void)
 	m.transferMatrix(&mtemp[0]);
 	glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
 
-    glBindTexture(GL_TEXTURE_2D,texture[4]);
+	glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("texture.gridlines"));
 	glzDrawVAO(vao_num[4],vao[4],GL_TRIANGLES);
 
 
@@ -314,7 +321,7 @@ void Draw (void)
 	m.transferMatrix(&mtemp[0]);
 	glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
 
-	glBindTexture(GL_TEXTURE_2D,texture[0]);
+	glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("font.digitalstrip_l"));
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 	glzDrawVAO(vao_num[0],vao[0],GL_TRIANGLES);

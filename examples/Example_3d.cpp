@@ -37,6 +37,7 @@
 #include "..\glz\2d\geo-2d.h"
 #include "..\glz\3d\geo-generate.h"
 #include "..\glz\effects\particle.h"
+#include "..\glz\utilities\resourcemanager.h"
 #include "..\glz\input\input.h"
 
 using namespace std;										
@@ -56,7 +57,6 @@ float		angle=0,width,height;												// Used To Rotate The Triangles
 unsigned int vao[16],vao_num[16],textvao[16],textvao_num[16];
 glzMatrix m;
 glzMatrix mnew;
-unsigned int texture[5],fonttexture[15];
 
 
 char tbuffer[160];
@@ -113,6 +113,7 @@ void preInitialize(void)
 BOOL Initialize (GL_Window* window)					// Any GL Init Code & User Initialiazation Goes Here
 {
 	g_window	= window;
+	glzResourcemanager rm;
 
 	GetFocus();
 	GetAsyncKeyState(WM_KEYUP);
@@ -256,12 +257,11 @@ BOOL Initialize (GL_Window* window)					// Any GL Init Code & User Initialiazati
 	glzShaderLink(ProgramObject);
 
 	// load the textures
-	fonttexture[0] = glzLoadTexture("data\\fonts\\ms_gothic.tga", glzTexFilter::LINEAR);
-	//fonttexture[0] = glzLoadTexture("data\\fonts\\arial.tga", glzTexFilter::LINEAR);
+	rm.createTexture("font.ms_gothic", "data\\fonts\\ms_gothic.tga", glzTexFilter::LINEAR);
+	rm.createTexture("background.back", "data\\back.tga", glzTexFilter::LINEAR);
+	rm.createTexture("texture.cv90base", "data\\cv90base.tga", glzTexFilter::ANSIO_MAX, 2);
+	rm.createTexture("texture.gridlines", "data\\gridlines.tga", glzTexFilter::ANSIO_MAX, 2);
 
-	texture[0] = glzLoadTexture("data\\back.tga", glzTexFilter::ANSIO_MAX);
-	texture[2] = glzLoadTexture("data\\cv90base.tga", glzTexFilter::ANSIO_MAX);
-	texture[4] = glzLoadTexture("data\\gridlines.tga", glzTexFilter::ANSIO_MAX);
 
 //	tankpos.pos = vert3(0, -2, -17);
 	tankpos.scale = vec3(0.5, 0.5, 0.5);
@@ -285,6 +285,9 @@ void Deinitialize (void)										// Any User DeInitialization Goes Here
 void Update (float seconds)								// Perform Motion Updates Here
 {
 	glzInput input;
+
+	glzResourcemanager rm;
+	rm.load_one();
 
 	if (input.getKeyState(VK_ESCAPE) == TRUE)					// Is ESC Being Pressed?
 	{
@@ -364,7 +367,8 @@ void Update (float seconds)								// Perform Motion Updates Here
 
 
 
-void draw_text(float x, float y, int text, int font, unsigned int po, unsigned int col)
+
+void draw_text(float x, float y, int text, texturecontainer *font, unsigned int po, unsigned int col)
 {
 	glUseProgram(po);
 
@@ -379,16 +383,16 @@ void draw_text(float x, float y, int text, int font, unsigned int po, unsigned i
 	m.transferMatrix(&mtemp[0]);
 	glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
 
-	if (col == COL_BLACK)	glUniform4f(loc3, 0.0f, 0.0f, 0.0f, 1.0f);
-	if (col == COL_WHITE)	glUniform4f(loc3, 1.0f, 1.0f, 1.0f, 1.0f);
-	if (col == COL_RED)	glUniform4f(loc3, 1.0f, 0.0f, 0.0f, 1.0f);
-	if (col == COL_GREEN)	glUniform4f(loc3, 0.0f, 1.0f, 0.0f, 1.0f);
-	if (col == COL_BLUE)	glUniform4f(loc3, 0.0f, 0.0f, 1.0f, 1.0f);
+	if(col == COL_BLACK)	glUniform4f(loc3, 0.0f, 0.0f, 0.0f, 1.0f);
+	if(col == COL_WHITE)	glUniform4f(loc3, 1.0f, 1.0f, 1.0f, 1.0f);
+	if(col == COL_RED)	glUniform4f(loc3, 1.0f, 0.0f, 0.0f, 1.0f);
+	if(col == COL_GREEN)	glUniform4f(loc3, 0.0f, 1.0f, 0.0f, 1.0f);
+	if(col == COL_BLUE)	glUniform4f(loc3, 0.0f, 0.0f, 1.0f, 1.0f);
+
+	//glzShaderUsePasstrough();
 
 
-
-
-	glBindTexture(GL_TEXTURE_2D, fonttexture[font]);
+	glBindTexture(GL_TEXTURE_2D, font->handle);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 	glzDrawVAO(textvao_num[text], textvao[text], GL_TRIANGLES);
@@ -396,7 +400,7 @@ void draw_text(float x, float y, int text, int font, unsigned int po, unsigned i
 
 }
 
-void draw_text2(char text[255], float x, float y, float scale, float kern, int font, unsigned int po, unsigned int col)
+void draw_text2(char text[255], float x, float y, float scale, float kern, texturecontainer *font, unsigned int po, unsigned int col)
 {
 	glUseProgram(po);
 
@@ -420,7 +424,7 @@ void draw_text2(char text[255], float x, float y, float scale, float kern, int f
 	float aspect = (float)WINDOW_WIDTH / (float)WINDOW_HEIGHT;
 
 	glDisable(GL_DEPTH_TEST);
-	glBindTexture(GL_TEXTURE_2D, fonttexture[font]);
+	glBindTexture(GL_TEXTURE_2D, font->handle);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 	glzDirectDrawText(text, scale, aspect, kern, glzOrigin::TOP_LEFT);
@@ -429,7 +433,7 @@ void draw_text2(char text[255], float x, float y, float scale, float kern, int f
 
 }
 
-void draw_object(unsigned int tx,int prim, float x, float y)
+void draw_object(texturecontainer *tx, int prim, float x, float y)
 {
 	unsigned int loc1 = glGetUniformLocation(ProgramObject,"projMat");
 	// draw objects
@@ -443,11 +447,11 @@ void draw_object(unsigned int tx,int prim, float x, float y)
 	m.transferMatrix(&mtemp[0]);
 	glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
 
-    glBindTexture(GL_TEXTURE_2D,texture[tx]);
+	glBindTexture(GL_TEXTURE_2D, tx->handle);
 	glzDrawVAO(vao_num[prim],vao[prim],GL_TRIANGLES);
 }
 
-void draw_object2(unsigned int tx, int prim, float x, float y)
+void draw_object2(texturecontainer *tx, int prim, float x, float y)
 {
 	unsigned int loc1 = glGetUniformLocation(ProgramObject, "projMat");
 	// draw objects
@@ -462,13 +466,14 @@ void draw_object2(unsigned int tx, int prim, float x, float y)
 	glPointSize(1);
 
 
-	glBindTexture(GL_TEXTURE_2D, texture[tx]);
+	glBindTexture(GL_TEXTURE_2D, tx->handle);
 	glzDrawVAO(vao_num[prim], vao[prim], GL_POINTS);
 }
 
 
 void Draw (void)
 {
+	glzResourcemanager rm;
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		// Clear Screen And Depth Buffer
 	float mtemp[16];
 	glEnable(GL_TEXTURE_2D);
@@ -489,18 +494,18 @@ void Draw (void)
 	if (gamestate==1)  
 	{
 
-		draw_object(0,1,-2.5f,1.5f);  // the cube only looks larger, but that's just because all primitives are made to fit within 0.5 to -0.5 cube, and naturally the cube fills that space perfectly
-		draw_object(0,2,0.0f,1.5f);
-		draw_object(0,3,2.5f,1.5f);
+		draw_object(rm.gettexture("background.back"), 1, -2.5f, 1.5f);  // the cube only looks larger, but that's just because all primitives are made to fit within 0.5 to -0.5 cube, and naturally the cube fills that space perfectly
+		draw_object(rm.gettexture("background.back"), 2, 0.0f, 1.5f);
+		draw_object(rm.gettexture("background.back"), 3, 2.5f, 1.5f);
 
-		draw_object(0,4,-2.7f,-1.5f);
-		draw_object(0,5,-1.0f,-1.5f);
-		draw_object(0,6,1.0f,-1.5f);
-		draw_object(0,7,2.5f,-1.5f);
+		draw_object(rm.gettexture("background.back"), 4, -2.7f, -1.5f);
+		draw_object(rm.gettexture("background.back"), 5, -1.0f, -1.5f);
+		draw_object(rm.gettexture("background.back"), 6, 1.0f, -1.5f);
+		draw_object(rm.gettexture("background.back"), 7, 2.5f, -1.5f);
 
 
-		draw_text2("Primitives", 1.0f, 790.0f, 16.0f, 1.0f, 0, ProgramObject, COL_WHITE);
-		draw_text(1.5f, -1.7f,0,0,ProgramObject,COL_WHITE);
+		draw_text2("Primitives", 1.0f, 790.0f, 16.0f, 1.0f, rm.gettexture("font.ms_gothic"), ProgramObject, COL_WHITE);
+		draw_text(1.5f, -1.7f, 0, rm.gettexture("font.ms_gothic"), ProgramObject, COL_WHITE);
 	}
 
 
@@ -526,11 +531,11 @@ void Draw (void)
 	m.transferMatrix(&mtemp[0]);
 	glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
 
-    glBindTexture(GL_TEXTURE_2D,texture[2]);
+	glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("texture.cv90base"));
 	glzDrawVAO(vao_num[8],vao[8],GL_TRIANGLES);
 			
-		draw_text2(".obj loading, try using the arrow keys", 1.0f, 790.0f, 16.0f, 1.0f, 0, ProgramObject, COL_WHITE);
-		draw_text(1.5f, -1.7f,0,0,ProgramObject,COL_WHITE);
+	draw_text2(".obj loading, try using the arrow keys", 1.0f, 790.0f, 16.0f, 1.0f, rm.gettexture("font.ms_gothic"), ProgramObject, COL_WHITE);
+	draw_text(1.5f, -1.7f, 0, rm.gettexture("font.ms_gothic"), ProgramObject, COL_WHITE);
 	
 	}	
 
@@ -551,11 +556,11 @@ void Draw (void)
 		glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
 
 
-		glBindTexture(GL_TEXTURE_2D,texture[4]);
+		glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("texture.gridlines"));
 		glzDrawVAO(vao_num[9],vao[9],GL_TRIANGLES);
 		
-		draw_text2("Heightfield", 1.0f, 790.0f, 16.0f, 1.0f, 0, ProgramObject, COL_WHITE);
-		draw_text(1.5f, -1.7f,0,0,ProgramObject,COL_WHITE);
+		draw_text2("Heightfield", 1.0f, 790.0f, 16.0f, 1.0f, rm.gettexture("font.ms_gothic"), ProgramObject, COL_WHITE);
+		draw_text(1.5f, -1.7f, 0, rm.gettexture("font.ms_gothic"), ProgramObject, COL_WHITE);
 	}
 
 	if (gamestate == 4)
@@ -573,13 +578,13 @@ void Draw (void)
 		m.transferMatrix(&mtemp[0]);
 		glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
 
-		glBindTexture(GL_TEXTURE_2D, texture[4]);
+		glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("texture.gridlines"));
 
 		glzDirectCubeRender(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, box_tt, 1);
 		//glzDrawVAO(vao_num[9], vao[9], GL_TRIANGLES);
 
-		draw_text2("A lonely cube rotating in nothingness", 1.0f, 790.0f, 16.0f, 1.0f, 0, ProgramObject, COL_WHITE);
-		draw_text(1.5f, -1.7f, 0, 0, ProgramObject, COL_WHITE);
+		draw_text2("A lonely cube rotating in nothingness", 1.0f, 790.0f, 16.0f, 1.0f, rm.gettexture("font.ms_gothic"), ProgramObject, COL_WHITE);
+		draw_text(1.5f, -1.7f, 0, rm.gettexture("font.ms_gothic"), ProgramObject, COL_WHITE);
 	}
 
 	if (gamestate == 5)
@@ -587,10 +592,10 @@ void Draw (void)
 
 		
 
-		draw_object2(0, 10, 0.0f, 0.5f);
+		draw_object2(rm.gettexture("background.back"), 10, 0.0f, 0.5f);
 
-		draw_text2("Particle cube using random dots", 1.0f, 790.0f, 16.0f, 1.0f, 0, ProgramObject, COL_WHITE);
-		draw_text(1.5f, -1.7f, 0, 0, ProgramObject, COL_WHITE);
+		draw_text2("Particle cube using random dots", 1.0f, 790.0f, 16.0f, 1.0f, rm.gettexture("font.ms_gothic"), ProgramObject, COL_WHITE);
+		draw_text(1.5f, -1.7f, 0, rm.gettexture("font.ms_gothic"), ProgramObject, COL_WHITE);
 	}
 
 

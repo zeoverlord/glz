@@ -82,7 +82,7 @@ glztiles tilemap2;
 
 
 GLhandleARB  ProgramObject, ProgramObjectFT, ProgramObjectFSQ, ProgramObjectFSQ_glitch;
-texture_transform text_tt;
+//texture_transform text_tt;
 
 glzSimpleParticleSystem ps;
 
@@ -173,21 +173,13 @@ BOOL Initialize (GL_Window* window)					// Any GL Init Code & User Initialiazati
 						 2,2,2,1,2,2,2,2,
 						 2,2,2,1,1,1,1,1,
 						 2,2,2,2,2,2,2,2};
-
-
-
-
-
 	mt.LoadIdentity();
 	mt2.LoadIdentity();
 	mt3.LoadIdentity();
 
 	mo.LoadIdentity();
 	mg.LoadIdentity();
-	mh.LoadIdentity();
-
-
-	
+	mh.LoadIdentity();	
 	
 	//glzTranslatef(mt,-3.9f,1.9f,0);
 	mg.translate(0,0,0);	
@@ -202,13 +194,6 @@ BOOL Initialize (GL_Window* window)					// Any GL Init Code & User Initialiazati
 	mh.rotate(90,1.0f,0.0f,0.0f);
 
 	mh.translate(-8.0,8.0,0.0);
-
-	// if orientation is messed up on the tga then do this, but generally tga files have their origin set to glzOrigin::BOTTOM_LEFT
-	img_head img;
-	glzReadTgaHead(&img, "data\\fonts\\arial.tga");
-	text_tt = glzMakeTTAtlas(16, 16, 0, img.origin);
-
-
 
 // text screen
 	textvao_num[0] = glzVAOMakeText("Normal text", mt, 1.0f, glzOrigin::TOP_LEFT, &textvao[0]);
@@ -240,8 +225,6 @@ BOOL Initialize (GL_Window* window)					// Any GL Init Code & User Initialiazati
 	// sprite screen
 
 	textvao_num[13] = glzVAOMakeText("Simple 2D particle system, easy to use, not hard to master", mt, 1.0f, glzOrigin::TOP_LEFT, &textvao[13]);
-
-
 
 // all screens
 	textvao_num[15] = glzVAOMakeText("Switch screens with 1, 2, 3, 4, 5, 6", mt3, 1.0f, glzOrigin::TOP_LEFT, &textvao[15]);
@@ -284,39 +267,23 @@ BOOL Initialize (GL_Window* window)					// Any GL Init Code & User Initialiazati
 	// load the textures
 
 	rm.createTexture("default", "data\\derpy_phirana.tga", glzTexFilter::LINEAR);
-
+	//fonts
 	rm.createTexture("font.arial", "data\\fonts\\arial.tga", glzTexFilter::LINEAR,2);
 	rm.createTexture("font.minya_m", "data\\fonts\\minya_m.tga", glzTexFilter::LINEAR);
 	rm.createTexture("font.ms_gothic", "data\\fonts\\ms_gothic.tga", glzTexFilter::LINEAR);
 	rm.createTexture("font.digitalstrip_l", "data\\fonts\\digitalstrip_l.tga", glzTexFilter::LINEAR);
 	rm.createTexture("font.morpheus_l", "data\\fonts\\morpheus_l.tga", glzTexFilter::LINEAR);
-
-	/*fonttexture[0] = glzLoadTexture("data\\fonts\\arial.tga", glzTexFilter::LINEAR);
-	fonttexture[1] = glzLoadTexture("data\\fonts\\minya_m.tga", glzTexFilter::LINEAR);
-	fonttexture[2] = glzLoadTexture("data\\fonts\\ms_gothic.tga", glzTexFilter::LINEAR);
-	fonttexture[3] = glzLoadTexture("data\\fonts\\digitalstrip_l.tga", glzTexFilter::LINEAR);
-	fonttexture[4] = glzLoadTexture("data\\fonts\\morpheus_l.tga", glzTexFilter::LINEAR);*/
-
-
-	
+	//backgrounds
 	rm.createTexture("background.back", "data\\back.tga", glzTexFilter::LINEAR);
 	rm.createTexture("background.cv90", "data\\cv90-1080p-04.tga", glzTexFilter::LINEAR,1);
-
+	//sprites
 	rm.createTexture("sprite.derpy_phirana", "data\\derpy_phirana.tga", glzTexFilter::LINEAR,2);
 	rm.createTexture("sprite.explotion128a", "data\\explotion128a.tga", glzTexFilter::NEAREST,3);
 	rm.createTexture("sprite.blob", "data\\blob.tga", glzTexFilter::NEAREST);
-
+	//tilesets
 	rm.createTexture("atlas.tinytiles", "data\\tinytiles.tga", glzTexFilter::NEAREST);
 	rm.createTexture("atlas.tileset", "data\\tileset.tga", glzTexFilter::NEAREST);
 
-	//texture[0] = glzLoadTexture("data\\back.tga", glzTexFilter::LINEAR);
-//	texture[1] = glzLoadTexture("data\\derpy_phirana.tga", glzTexFilter::LINEAR);  // the derpy phirana is not an actual logo but just an example on how you can put it there
-//	texture[2] = glzLoadTexture("data\\explotion128a.tga", glzTexFilter::NEAREST);
-//	texture[3] = glzLoadTexture("data\\tinytiles.tga", glzTexFilter::NEAREST);
-	//texture[4] = glzLoadTexture("data\\blob.tga", glzTexFilter::NEAREST);
-	//texture[5] = glzLoadTexture("data\\cv90-1080p-04.tga", glzTexFilter::LINEAR);
-
-//	texture[6] = glzLoadTexture("data\\tileset.tga", glzTexFilter::NEAREST); // sprite layers
 
 
 	
@@ -558,9 +525,8 @@ if (gamestate == 8)
 }
 
 
-void draw_text(float x, float y, int text, int font, unsigned int po, unsigned int col)
+void draw_text(float x, float y, int text, texturecontainer *font, unsigned int po, unsigned int col)
 {
-	glzResourcemanager rm;
 	glUseProgram(po);
 	
 	unsigned int loc1 = glGetUniformLocation(po,"projMat");
@@ -583,7 +549,7 @@ void draw_text(float x, float y, int text, int font, unsigned int po, unsigned i
 //glzShaderUsePasstrough();
 	
 
-	glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("font.arial"));
+	glBindTexture(GL_TEXTURE_2D, font->handle);
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 	glzDrawVAO(textvao_num[text],textvao[text],GL_TRIANGLES);
@@ -710,22 +676,22 @@ void Draw (void)
 
 	if (gamestate==1)  
 	{
-		draw_text(-3.9f, 1.9f,0,2,ProgramObject,COL_WHITE);
-		draw_text(-3.9f, 1.5f,1,0,ProgramObject,COL_WHITE);
-		draw_text(-3.9f, 0.8f,2,2,ProgramObject,COL_WHITE);
-		draw_text(-3.9f, 0.5f,3,2,ProgramObject,COL_WHITE);
-		draw_text(-3.9f, 0.2f,4,2,ProgramObject,COL_WHITE);
+		draw_text(-3.9f, 1.9f, 0, rm.gettexture("font.ms_gothic") , ProgramObject, COL_WHITE);
+		draw_text(-3.9f, 1.5f, 1, rm.gettexture("font.arial"), ProgramObject, COL_WHITE);
+		draw_text(-3.9f, 0.8f, 2, rm.gettexture("font.ms_gothic"), ProgramObject, COL_WHITE);
+		draw_text(-3.9f, 0.5f, 3, rm.gettexture("font.ms_gothic"), ProgramObject, COL_WHITE);
+		draw_text(-3.9f, 0.2f, 4, rm.gettexture("font.ms_gothic"), ProgramObject, COL_WHITE);
 
-		draw_text(-3.9f, -0.2f,5,1,ProgramObject,COL_WHITE);
-		draw_text(-3.9f, -0.4f,6,3,ProgramObject,COL_WHITE);
-		draw_text(-3.9f, -0.6f,7,4,ProgramObject,COL_WHITE);
+		draw_text(-3.9f, -0.2f, 5, rm.gettexture("font.minya_m"), ProgramObject, COL_WHITE);
+		draw_text(-3.9f, -0.4f, 6, rm.gettexture("font.digitalstrip_l"), ProgramObject, COL_WHITE);
+		draw_text(-3.9f, -0.6f, 7, rm.gettexture("font.morpheus_l"), ProgramObject, COL_WHITE);
 
-		draw_text(1.7f, -1.8f,15,2,ProgramObject,COL_WHITE);
+		draw_text(1.7f, -1.8f, 15, rm.gettexture("font.ms_gothic"), ProgramObject, COL_WHITE);
 
 		glUseProgram(ProgramObjectFT);
 	
 		glUniform1i(loc5, 0);	
-		draw_text(-3.9f, -1.5f,8,0,ProgramObjectFT,COL_WHITE);
+		draw_text(-3.9f, -1.5f, 8, rm.gettexture("font.arial"), ProgramObjectFT, COL_WHITE);
 	}
 
 
@@ -743,8 +709,8 @@ void Draw (void)
 
 		glzDrawSprite(rm.gettexture("sprite.derpy_phirana"), glzBlendingMode::ALPHA, -0.5f, -0.5f, 0.5f, aspect);
 		
-		draw_text(-3.9f, 1.9f,9,2,ProgramObject,COL_BLACK);
-		draw_text(1.7f, -1.8f,15,2,ProgramObject,COL_BLACK);
+		draw_text(-3.9f, 1.9f, 9, rm.gettexture("font.ms_gothic"), ProgramObject, COL_BLACK);
+		draw_text(1.7f, -1.8f, 15, rm.gettexture("font.ms_gothic"), ProgramObject, COL_BLACK);
 
 	
 	}	
@@ -756,8 +722,8 @@ void Draw (void)
 		float col[4]={1.0,1.0,1.0,1.0};
 		draw_sprite(0, 0, 2.0f, 1, rm.gettextureHandle("sprite.explotion128a"), spriteframe, ProgramObject, col);
 
-		draw_text(-3.9f, 1.9f,10,2,ProgramObject,COL_WHITE);
-		draw_text(1.7f, -1.8f,15,2,ProgramObject,COL_WHITE);
+		draw_text(-3.9f, 1.9f, 10, rm.gettexture("font.ms_gothic"), ProgramObject, COL_WHITE);
+		draw_text(1.7f, -1.8f, 15, rm.gettexture("font.ms_gothic"), ProgramObject, COL_WHITE);
 	}
 
 	if (gamestate==4)
@@ -779,8 +745,8 @@ void Draw (void)
 	glzDrawVAO(vao_num[2],vao[2],GL_TRIANGLES);
 
 
-	draw_text(-3.9f, 1.9f,11,2,ProgramObject,COL_WHITE);
-	draw_text(1.7f, -1.8f,15,2,ProgramObject,COL_WHITE);
+	draw_text(-3.9f, 1.9f, 11, rm.gettexture("font.ms_gothic"), ProgramObject, COL_WHITE);
+	draw_text(1.7f, -1.8f, 15, rm.gettexture("font.ms_gothic"), ProgramObject, COL_WHITE);
 
 
 	}
@@ -845,8 +811,8 @@ void Draw (void)
 
 		
 		
-		draw_text(-3.9f, 1.9f, 12, 2, ProgramObject, COL_WHITE);
-		draw_text(1.7f, -1.8f, 15, 2, ProgramObject, COL_WHITE);
+		draw_text(-3.9f, 1.9f, 12, rm.gettexture("font.ms_gothic"), ProgramObject, COL_WHITE);
+		draw_text(1.7f, -1.8f, 15, rm.gettexture("font.ms_gothic"), ProgramObject, COL_WHITE);
 		
 		glEnable(GL_DEPTH_TEST);
 
@@ -872,8 +838,8 @@ void Draw (void)
 		draw_text2("abcdefghijklmnopqrstuvxyz\nABCDEFGHIJKLMNOPQRSTUVXYZ\n1234567890", 1.0f,10.0f, 32.0f, 1.0f, 2, ProgramObject, COL_WHITE);
 
 
-		draw_text(-3.9f, 1.9f, 13, 2, ProgramObject, COL_WHITE);
-		draw_text(1.7f, -1.8f, 15, 2, ProgramObject, COL_WHITE);
+		draw_text(-3.9f, 1.9f, 13, rm.gettexture("font.ms_gothic"), ProgramObject, COL_WHITE);
+		draw_text(1.7f, -1.8f, 15, rm.gettexture("font.ms_gothic"), ProgramObject, COL_WHITE);
 
 	}
 
@@ -896,10 +862,8 @@ void Draw (void)
 	//	draw_backdrop2(texture[1], mi, col); // the derpy phirana
 		glDisable(GL_BLEND);
 
-
-		draw_text(-3.9f, 1.9f, 9, 2, ProgramObject, COL_BLACK);
-		draw_text(1.7f, -1.8f, 15, 2, ProgramObject, COL_BLACK);
-
+		draw_text(-3.9f, 1.9f, 9, rm.gettexture("font.ms_gothic"), ProgramObject, COL_BLACK);
+		draw_text(1.7f, -1.8f, 15, rm.gettexture("font.ms_gothic"), ProgramObject, COL_BLACK);
 
 	}
 
@@ -911,16 +875,13 @@ void Draw (void)
 		mt.transferMatrix(&mtemp[0]);
 		glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
 
-
 		glBlendFunc(GL_ONE, GL_ONE);
 		glEnable(GL_BLEND);
 		tempgraph.draw();
 		glDisable(GL_BLEND);
 
-
-
-		draw_text(-3.9f, 1.9f, 9, 2, ProgramObject, COL_BLACK);
-		draw_text(1.7f, -1.8f, 15, 2, ProgramObject, COL_BLACK);
+		draw_text(-3.9f, 1.9f, 9, rm.gettexture("font.ms_gothic"), ProgramObject, COL_BLACK);
+		draw_text(1.7f, -1.8f, 15, rm.gettexture("font.ms_gothic"), ProgramObject, COL_BLACK);
 
 
 	}
