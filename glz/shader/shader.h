@@ -23,6 +23,7 @@
 
 #include "..\utilities\type.h"
 #include "..\utilities\vectormath.h"
+#include "..\utilities\color.h"
 
 		//type signifies the type of data to choose from, if set at GLZ_AUTO it chooses the default settings
 
@@ -58,6 +59,7 @@ void glzUniform1i(unsigned int ProgramObject, const string name, int v);
 void glzUniform1f(unsigned int ProgramObject, const string name, float v);
 void glzUniform2f(unsigned int ProgramObject, const string name, float v1, float v2);
 void glzUniform4f(unsigned int ProgramObject, const string name, float v1, float v2, float v3, float v4);
+void glzUniform4f(unsigned int ProgramObject, const string name, glzColor color);
 
 void glzUniformMatrix4fv(unsigned int ProgramObject, const string name, float v[16]);
 void glzUniformMatrix4fv(unsigned int ProgramObject, const string name, double a[16]);

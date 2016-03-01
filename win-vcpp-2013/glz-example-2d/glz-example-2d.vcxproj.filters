@@ -90,6 +90,12 @@
     <ClCompile Include="..\..\glz\input\input.cpp">
       <Filter>input</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\glz\utilities\color.cpp">
+      <Filter>utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz\utilities\sprite.cpp">
+      <Filter>utilities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\examples\Resource.h">
@@ -154,6 +160,12 @@
     </ClInclude>
     <ClInclude Include="..\..\glz\input\input.h">
       <Filter>input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz\utilities\color.h">
+      <Filter>utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz\utilities\sprite.h">
+      <Filter>utilities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

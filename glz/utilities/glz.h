@@ -23,6 +23,7 @@
 
 #include "type.h"
 #include "vectormath.h"
+#include "..\utilities\sprite.h"
 
 const auto  GLZ_MIRROR_X = 1;
 const auto  GLZ_MIRROR_Y = 2;

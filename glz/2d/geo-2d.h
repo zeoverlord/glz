@@ -24,6 +24,7 @@
 using namespace std;
 
 #include "..\utilities\type.h"
+#include "..\utilities\sprite.h"
 #include "..\3d\geo.h"
 
 

@@ -528,31 +528,29 @@ if (gamestate == 8)
 void draw_text(float x, float y, int text, texturecontainer *font, unsigned int po, unsigned int col)
 {
 	glUseProgram(po);
-	
-	unsigned int loc1 = glGetUniformLocation(po,"projMat");
-	unsigned int loc2 = glGetUniformLocation(po,"texunit0");
-	unsigned int loc3 = glGetUniformLocation(po,"tint");
+
+	unsigned int loc1 = glGetUniformLocation(po, "projMat");
+	unsigned int loc2 = glGetUniformLocation(po, "texunit0");
+	unsigned int loc3 = glGetUniformLocation(po, "tint");
 	m.LoadIdentity();
-	m.ortho( -4, 4, -2, 2, -100, 100);	
-	m.translate(x,y,0);
+	m.ortho(-4, 4, -2, 2, -100, 100);
+	m.translate(x, y, 0);
 
 	float mtemp[16];
 	m.transferMatrix(&mtemp[0]);
 	glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
 
-	if (col==COL_BLACK)	glUniform4f(loc3, 0.0f,0.0f,0.0f,1.0f);
-	if (col==COL_WHITE)	glUniform4f(loc3, 1.0f,1.0f,1.0f,1.0f);
-	if (col==COL_RED)	glUniform4f(loc3, 1.0f,0.0f,0.0f,1.0f);
-	if (col==COL_GREEN)	glUniform4f(loc3, 0.0f,1.0f,0.0f,1.0f);
-	if (col==COL_BLUE)	glUniform4f(loc3, 0.0f,0.0f,1.0f,1.0f);
+	if(col == COL_BLACK)	glUniform4f(loc3, 0.0f, 0.0f, 0.0f, 1.0f);
+	if(col == COL_WHITE)	glUniform4f(loc3, 1.0f, 1.0f, 1.0f, 1.0f);
+	if(col == COL_RED)	glUniform4f(loc3, 1.0f, 0.0f, 0.0f, 1.0f);
+	if(col == COL_GREEN)	glUniform4f(loc3, 0.0f, 1.0f, 0.0f, 1.0f);
+	if(col == COL_BLUE)	glUniform4f(loc3, 0.0f, 0.0f, 1.0f, 1.0f);
 
-//glzShaderUsePasstrough();
-	
 
 	glBindTexture(GL_TEXTURE_2D, font->handle);
-	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
-	glzDrawVAO(textvao_num[text],textvao[text],GL_TRIANGLES);
+	glzDrawVAO(textvao_num[text], textvao[text], GL_TRIANGLES);
 	glDisable(GL_BLEND);
 
 }
@@ -691,6 +689,7 @@ void Draw (void)
 		glUseProgram(ProgramObjectFT);
 	
 		glUniform1i(loc5, 0);	
+		//glzDrawText("Full screen quads", -3.9f, -1.5f, 1.0f, 1.0f, aspect, rm.gettexture("font.arial"), glzColor(1.0, 1.0, 1.0, 1.0));
 		draw_text(-3.9f, -1.5f, 8, rm.gettexture("font.arial"), ProgramObjectFT, COL_WHITE);
 	}
 
@@ -709,6 +708,9 @@ void Draw (void)
 
 		glzDrawSprite(rm.gettexture("sprite.derpy_phirana"), glzBlendingMode::ALPHA, -0.5f, -0.5f, 0.5f, aspect);
 		
+
+	//	glzDrawText("Full screen quads", -3.9f, 1.9f, 1.0f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), glzColor(0.0, 0.0, 0.0, 0.0));
+	//	glzDrawText("Switch screens with 1, 2, 3, 4, 5, 6", 1.7f, -1.8f, 1.0f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), glzColor(0.0, 0.0, 0.0, 0.0));
 		draw_text(-3.9f, 1.9f, 9, rm.gettexture("font.ms_gothic"), ProgramObject, COL_BLACK);
 		draw_text(1.7f, -1.8f, 15, rm.gettexture("font.ms_gothic"), ProgramObject, COL_BLACK);
 

@@ -108,26 +108,12 @@ void obj2d_Sprite::update(float seconds)
 
 void obj2d_Sprite::set_i(glzOBject2DSetvar type, int v)
 {
-	switch (type)
-	{
-	//case glzOBject2DSetvar::TEXTURE:
-//		texture = v;
-	//	break;
-	
-	}
-	return;
+
 }
 
 void obj2d_Sprite::set_f(glzOBject2DSetvar type, float v)
 {
-	switch (type)
-	{
 
-//	case glzOBject2DSetvar::FRAMESPEED:
-//		framespeed = v;
-//		break;
-	}
-	return;
 }
 
 
@@ -171,25 +157,12 @@ void obj2d_Fullscreen::update(float seconds)
 
 void obj2d_Fullscreen::set_i(glzOBject2DSetvar type, int v)
 {
-	switch (type)
-	{
-	//case glzOBject2DSetvar::TEXTURE:
-		//texture->handle = v;
-		//break;
-	}
-	return;
+
 }
 
 void obj2d_Fullscreen::set_f(glzOBject2DSetvar type, float v)
 {
-	switch (type)
-	{
 
-		//	case glzOBject2DSetvar::SCALE:
-		//		scale = v;
-		//		break;
-	}
-	return;
 }
 
 
@@ -278,26 +251,12 @@ void obj2d_Background::update(float seconds)
 
 void obj2d_Background::set_i(glzOBject2DSetvar type, int v)
 {
-	switch (type)
-	{
-//	case glzOBject2DSetvar::TEXTURE:
-//		texture = v;
-//		break;
-	
-	}
-	return;
+
 }
 
 void obj2d_Background::set_f(glzOBject2DSetvar type, float v)
 {
-	switch (type)
-	{
 
-//	case glzOBject2DSetvar::FRAMESPEED:
-//		framespeed = v;
-//		break;
-	}
-	return;
 }
 
 
@@ -440,25 +399,12 @@ void obj2d_Tiles::update(float seconds)
 
 void obj2d_Tiles::set_i(glzOBject2DSetvar type, int v)
 {
-	switch (type)
-	{
-	//case glzOBject2DSetvar::TEXTURE:
-		//texture = v;
-		//break;
-	}
-	return;
+
 }
 
 void obj2d_Tiles::set_f(glzOBject2DSetvar type, float v)
 {
-	switch (type)
-	{
 
-//	case glzOBject2DSetvar::SCALE:
-//		scale = v;
-//		break;
-	}
-	return;
 }
 
 void obj2d_Tiles::set_sp(glzOBject2DSetvar type, glzSprite v)

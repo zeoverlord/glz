@@ -523,6 +523,11 @@ void glzUniform4f(unsigned int ProgramObject, const string name, float v1, float
 	glUniform4f(loc, v1, v2, v3, v4);
 }
 
+void glzUniform4f(unsigned int ProgramObject, const string name, glzColor color)
+{
+	glzUniform4f(ProgramObject, name, color.r, color.g, color.b, color.a);
+}
+
 void glzUniformMatrix4fv(unsigned int ProgramObject, const string name, float v[16])
 {
 	unsigned int loc = glGetUniformLocation(ProgramObject, (GLchar*)&name);

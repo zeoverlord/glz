@@ -97,10 +97,33 @@ void glzDrawSprite(texturecontainer *texture, glzBlendingMode blend, float x, fl
 	glDisable(GL_DEPTH_TEST);
 	glzUniformMatrix4fv(basic_program, "projMat", mt);
 	glzUniform1i(basic_program, "texunit0", 0);
-	glzUniform4f(basic_program, "color", blendcolor.r, blendcolor.g, blendcolor.b, blendcolor.a);
+	glzUniform4f(basic_program, "color", blendcolor);
 	glzDirectSpriteRender(m, texture->handle, sprite, scale/aspect, scale, glzOrigin::CENTERED);
 
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
 	return;
+}
+
+
+void glzDrawText(string text, float x, float y, float scale, float kern, float aspect, texturecontainer *font, glzColor color)
+{
+	glzShaderUseBasic();
+	glzMatrix m;
+	m.LoadIdentity();
+	m.ortho(-4, 4, -2, 2, -100, 100);
+	m.translate(x, y, 0);
+
+	unsigned int basic_program = glzShaderReurnBasic();
+
+	glzUniformMatrix4fv(basic_program, "projMat", m);
+	glzUniform1i(basic_program, "texunit0", 0);
+	glzUniform4f(basic_program, "color", color);
+
+	glBindTexture(GL_TEXTURE_2D, font->handle);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_BLEND);
+	glzDirectDrawText(text, scale, aspect, kern, glzOrigin::BOTTOM_LEFT);
+	glDisable(GL_BLEND);
+
 }

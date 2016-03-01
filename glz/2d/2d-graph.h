@@ -25,6 +25,8 @@
 #include "..\utilities\resourcemanager.h"
 #include "..\utilities\vectormath.h"
 #include "..\utilities\tiletools.h"
+#include "..\utilities\sprite.h"
+#include "..\utilities\color.h"
 #include "..\shader\shader.h"
 #include <algorithm>
 #include <vector>

@@ -101,8 +101,10 @@
     <ClCompile Include="..\..\glz\image\tex.cpp" />
     <ClCompile Include="..\..\glz\input\input.cpp" />
     <ClCompile Include="..\..\glz\shader\shader.cpp" />
+    <ClCompile Include="..\..\glz\utilities\color.cpp" />
     <ClCompile Include="..\..\glz\utilities\glz.cpp" />
     <ClCompile Include="..\..\glz\utilities\resourcemanager.cpp" />
+    <ClCompile Include="..\..\glz\utilities\sprite.cpp" />
     <ClCompile Include="..\..\glz\utilities\tiletools.cpp" />
     <ClCompile Include="..\..\glz\utilities\type.cpp" />
     <ClCompile Include="..\..\glz\utilities\vectormath.cpp" />
@@ -124,8 +126,10 @@
     <ClInclude Include="..\..\glz\input\input.h" />
     <ClInclude Include="..\..\glz\shader\shader-programs.h" />
     <ClInclude Include="..\..\glz\shader\shader.h" />
+    <ClInclude Include="..\..\glz\utilities\color.h" />
     <ClInclude Include="..\..\glz\utilities\glz.h" />
     <ClInclude Include="..\..\glz\utilities\resourcemanager.h" />
+    <ClInclude Include="..\..\glz\utilities\sprite.h" />
     <ClInclude Include="..\..\glz\utilities\tiletools.h" />
     <ClInclude Include="..\..\glz\utilities\type.h" />
     <ClInclude Include="..\..\glz\utilities\vectormath.h" />

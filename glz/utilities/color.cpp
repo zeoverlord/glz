@@ -14,28 +14,13 @@
 // 3. If you make something comersiol or at least something you release publicly that relies on this code then i would like to know and maybe use in my CV
 // 4. Please do include me in your credits
 
-// glz 2d utilities - i think it's usefull
+// color class
 // visit http://www.flashbang.se or contact me at overlord@flashbang.se
 // the entire toolkit should exist in it's entirety at github
 // https://github.com/zeoverlord/glz.git
 
-#pragma once
+using namespace std;
 
-
-#include "..\utilities\type.h"
-#include "..\utilities\glz.h"
-#include "..\utilities\resourcemanager.h"
-#include "..\utilities\vectormath.h"
-#include "..\utilities\sprite.h"
-#include "..\utilities\color.h"
-#include "..\shader\shader.h"
-#include "geo-2d.h"
-
-
-void glzBackdrop(texturecontainer *texture, glzBlendingMode blend);
-void glzBackdrop(texturecontainer *texture, glzBlendingMode blend, glzColor color);
-void glzBackdrop(texturecontainer *texture, glzBlendingMode blend, glzMatrix mat, glzColor color);
-void glzDrawSprite(texturecontainer *texture, glzBlendingMode blend, float x, float y, float scale, float aspect);
-
-
-void glzDrawText(string text, float x, float y, float scale, float kern, float aspect, texturecontainer *font, glzColor color);
+#include "type.h"
+#include "glz.h"
+#include "color.h"

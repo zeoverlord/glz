@@ -300,7 +300,7 @@ void Update(float seconds)								// Perform Motion Updates Here
 
 
 	testanimTimer += seconds;
-	if (testanimTimer > 0.45) { testanim++; testanimTimer -= 0.45; }
+	if (testanimTimer > 0.45f) { testanim++; testanimTimer -= 0.45f; }
 
 	if (testanim >= 4) testanim = 0;
 
@@ -341,8 +341,8 @@ void Update(float seconds)								// Perform Motion Updates Here
 
 
 
-		if (input.getKeyState(VK_SUBTRACT)) paintarea_Zoom -= seconds * 150;
-		if (input.getKeyState(VK_ADD)) paintarea_Zoom += seconds * 150;
+		if (input.getKeyState(VK_SUBTRACT)) paintarea_Zoom -= seconds * 150.0f;
+		if (input.getKeyState(VK_ADD)) paintarea_Zoom += seconds * 150.0f;
 
 
 		// Todo: add if cursor points at tile surface
@@ -355,22 +355,22 @@ void Update(float seconds)								// Perform Motion Updates Here
 
 
 		paintarea_Zoom += Mweel_rel;
-		if (paintarea_Zoom < 120) paintarea_Zoom = 120;
+		if (paintarea_Zoom < 120.0f) paintarea_Zoom = 120.0f;
 
 
 		float aspect = map_l1.width / map_l1.height;
 
 		if (Mweel_rel>0)
 		{
-			paintarea_x -= ((input.getMouseX() - viewport[2] / 2.0) / viewport[2]) * paintarea_Zoom *0.3333*aspect;
-			paintarea_y += ((input.getMouseY() - viewport[3] / 2.0) / viewport[3]) * paintarea_Zoom *0.3333;
+			paintarea_x -= ((input.getMouseX() - viewport[2] / 2.0f) / viewport[2]) * paintarea_Zoom *0.3333f*aspect;
+			paintarea_y += ((input.getMouseY() - viewport[3] / 2.0f) / viewport[3]) * paintarea_Zoom *0.3333f;
 
 		}
 
 		if (Mweel_rel<0)
 		{
-			paintarea_x *= 0.8;
-			paintarea_y *= 0.8;
+			paintarea_x *= 0.8f;
+			paintarea_y *= 0.8f;
 
 		}
 
@@ -388,20 +388,20 @@ void Update(float seconds)								// Perform Motion Updates Here
 		z_tileUI_point = ztUIP::BACKGROUND;
 
 
-		muip.x = ((input.getMouseX() - viewport[2] / 2.0) / viewport[2]);
-		muip.y = ((input.getMouseY() - viewport[3] / 2.0) / viewport[3]);
+		muip.x = ((input.getMouseX() - viewport[2] / 2.0f) / viewport[2]);
+		muip.y = ((input.getMouseY() - viewport[3] / 2.0f) / viewport[3]);
 
 		// this took some dooing
-		mwp.x = (((input.getMouseX() - viewport[2] / 2.0) / viewport[2]) / (paintarea_Zoom / (viewport[2])) - (paintarea_x / paintarea_Zoom));
-		mwp.y = ((input.getMouseY() - viewport[3] / 2.0) / viewport[3]) / (paintarea_Zoom / (viewport[3])) + (paintarea_y / paintarea_Zoom);
+		mwp.x = (((input.getMouseX() - viewport[2] / 2.0f) / viewport[2]) / (paintarea_Zoom / (viewport[2])) - (paintarea_x / paintarea_Zoom));
+		mwp.y = ((input.getMouseY() - viewport[3] / 2.0f) / viewport[3]) / (paintarea_Zoom / (viewport[3])) + (paintarea_y / paintarea_Zoom);
 
 
 
 
 		//paintarea_pixel_x = (quantize((mwp.x*arm_width) / aspect, aspect)*aspect)+aspect;   //   (((mwp.x)*arm_width / aspect)*aspect) + (0.5*aspect);
 		//paintarea_pixel_x = glzIntegral(((mwp.x)*arm_width / aspect)*aspect) + (0.5*aspect);
-		paintarea_pixel_x = glzIntegral((mwp.x + 0.5*aspect)*map_l1.width / aspect);
-		paintarea_pixel_y = glzIntegral((mwp.y + 0.5)*map_l1.height);
+		paintarea_pixel_x = glzIntegral((mwp.x + 0.5f*aspect)*map_l1.width / aspect);
+		paintarea_pixel_y = glzIntegral((mwp.y + 0.5f)*map_l1.height);
 
 
 		//paintarea_pixel_x = glzIntegral(((mwp.x + 0.5*(arm_width / arm_height))*arm_width) / (arm_width / arm_height))*(arm_width / arm_height);
@@ -409,16 +409,16 @@ void Update(float seconds)								// Perform Motion Updates Here
 
 
 
-		if (mwp.x + 0.5 + (map_l1.width) <= 0.0) { paintarea_pixel_x = 0.0; }
-		if (mwp.y + 0.5 <= 0.0) { paintarea_pixel_y = 0.0; }
+		if (mwp.x + 0.5f + (map_l1.width) <= 0.0f) { paintarea_pixel_x = 0.0f; }
+		if (mwp.y + 0.5f <= 0.0f) { paintarea_pixel_y = 0.0f; }
 
 		if (paintarea_pixel_x > map_l1.width - 1) { paintarea_pixel_x = map_l1.width - 1; }
 		if (paintarea_pixel_y > map_l1.height - 1) { paintarea_pixel_y = map_l1.height - 1; }
 
-		if ((((mwp.x + 0.5*aspect)*map_l1.width / aspect) >= 0.0) &&
-			(((mwp.x + 0.5*aspect)*map_l1.width / aspect) < map_l1.width) &&
-			(mwp.y + 0.5 >= 0.0) &&
-			((mwp.y + 0.5)*map_l1.height <= map_l1.height)) z_tileUI_point = ztUIP::PIXELMAP;
+		if ((((mwp.x + 0.5f*aspect)*map_l1.width / aspect) >= 0.0f) &&
+			(((mwp.x + 0.5f*aspect)*map_l1.width / aspect) < map_l1.width) &&
+			(mwp.y + 0.5f >= 0.0f) &&
+			((mwp.y + 0.5f)*map_l1.height <= map_l1.height)) z_tileUI_point = ztUIP::PIXELMAP;
 
 
 
@@ -509,7 +509,7 @@ void Update(float seconds)								// Perform Motion Updates Here
 
 
 			paintarea_Zoom_s += Mweel_rel;
-			if (paintarea_Zoom_s < 120) paintarea_Zoom_s = 120;
+			if (paintarea_Zoom_s < 120.0f) paintarea_Zoom_s = 120.0f;
 
 
 		}
@@ -524,27 +524,27 @@ void Update(float seconds)								// Perform Motion Updates Here
 		z_tileUI_point = ztUIP::BACKGROUND;
 
 
-		muip.x = ((input.getMouseX() - viewport[2] / 2.0) / viewport[2]);
-		muip.y = ((input.getMouseY() - viewport[3] / 2.0) / viewport[3]);
+		muip.x = ((input.getMouseX() - viewport[2] / 2.0f) / viewport[2]);
+		muip.y = ((input.getMouseY() - viewport[3] / 2.0f) / viewport[3]);
 
 		// this took some dooing
-		mwp.x = ((input.getMouseX() - viewport[2] / 2.0) / viewport[2]) / (paintarea_Zoom_s / (viewport[2])) - (paintarea_x_s / paintarea_Zoom_s);
-		mwp.y = ((input.getMouseY() - viewport[3] / 2.0) / viewport[3]) / (paintarea_Zoom_s / (viewport[3])) + (paintarea_y_s / paintarea_Zoom_s);
+		mwp.x = ((input.getMouseX() - viewport[2] / 2.0f) / viewport[2]) / (paintarea_Zoom_s / (viewport[2])) - (paintarea_x_s / paintarea_Zoom_s);
+		mwp.y = ((input.getMouseY() - viewport[3] / 2.0f) / viewport[3]) / (paintarea_Zoom_s / (viewport[3])) + (paintarea_y_s / paintarea_Zoom_s);
 
 
 
 
-		paintarea_pixel_x_s = glzIntegral((mwp.x + 0.5)*tiles_width);
-		paintarea_pixel_y_s = glzIntegral((mwp.y + 0.5)*tiles_height);
+		paintarea_pixel_x_s = glzIntegral((mwp.x + 0.5f)*tiles_width);
+		paintarea_pixel_y_s = glzIntegral((mwp.y + 0.5f)*tiles_height);
 
 
-		if (mwp.x + 0.5 <= 0.0) { paintarea_pixel_x_s = 0.0; }
-		if (mwp.y + 0.5 <= 0.0) { paintarea_pixel_y_s = 0.0; }
+		if (mwp.x + 0.5f <= 0.0f) { paintarea_pixel_x_s = 0.0f; }
+		if (mwp.y + 0.5f <= 0.0f) { paintarea_pixel_y_s = 0.0f; }
 
 		if (paintarea_pixel_x_s > tiles_width - 1) { paintarea_pixel_x_s = tiles_width - 1; }
 		if (paintarea_pixel_y_s > tiles_height - 1) { paintarea_pixel_y_s = tiles_height - 1; }
 
-		if ((mwp.x + 0.5 >= 0.0) && ((mwp.x + 0.5)*tiles_width < tiles_width) && (mwp.y + 0.5 >= 0.0) && ((mwp.y + 0.5)*tiles_height <= tiles_height))  z_tileUI_point = ztUIP::PIXELMAP;
+		if ((mwp.x + 0.5f >= 0.0f) && ((mwp.x + 0.5f)*tiles_width < tiles_width) && (mwp.y + 0.5f >= 0.0f) && ((mwp.y + 0.5f)*tiles_height <= tiles_height))  z_tileUI_point = ztUIP::PIXELMAP;
 
 		if ((z_tileUI_point == ztUIP::PIXELMAP) && (input.getMouseL() == true)) { cursprite_x = paintarea_pixel_x_s; cursprite_y = paintarea_pixel_y_s; }
 
@@ -552,7 +552,7 @@ void Update(float seconds)								// Perform Motion Updates Here
 	}
 
 
-	if (keyTimer > 0.15)
+	if (keyTimer > 0.15f)
 	{
 		if (input.getKeyState(VK_RETURN)) {
 			if (has_l1)	map_l1.save();
@@ -634,9 +634,9 @@ void Draw(void)
 
 		glGetIntegerv(GL_VIEWPORT, viewport);
 
-		m.ortho(-viewport[2] / 2, viewport[2] / 2, -viewport[3] / 2, viewport[3] / 2, -100, 100);
-		m.translate(paintarea_x, paintarea_y, 0.0);
-		m.scale(paintarea_Zoom, paintarea_Zoom, 0.0);
+		m.ortho(-viewport[2] * 0.5f, viewport[2] * 0.5f, -viewport[3] * 0.5f, viewport[3] * 0.5f, -100.0f, 100.0f);
+		m.translate(paintarea_x, paintarea_y, 0.0f);
+		m.scale(paintarea_Zoom, paintarea_Zoom, 0.0f);
 		//glzMatrix m;
 		//m.LoadIdentity();
 		//m.ortho2DPixelspace(viewport[2], viewport[3], glzOrigin::BOTTOM_LEFT);
@@ -679,7 +679,7 @@ void Draw(void)
 			if(curlayer == ztLeveltex::DYNAMIC_D)	{ glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("spritemap.sm4")); glUniform1i(loc7, 5); }
 			glActiveTexture(GL_TEXTURE0);
 
-			glzDirectSpriteRender(0.0, 0.0, 2, map_l1.width / map_l1.height, 1.0, 0, 0, 1.0, 1.0, glzOrigin::CENTERED);
+			glzDirectSpriteRender(0.0f, 0.0f, 2.0f, map_l1.width / map_l1.height, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, glzOrigin::CENTERED);
 
 
 
@@ -688,7 +688,7 @@ void Draw(void)
 				glEnable(GL_BLEND);
 
 				glUniform1i(loc13, 1);
-				glzDirectSpriteRender(0.0, 0.0, 2, map_l1.width / map_l1.height, 1.0, 0, 0, 1.0, 1.0, glzOrigin::CENTERED);
+				glzDirectSpriteRender(0.0f, 0.0f, 2.0f, map_l1.width / map_l1.height, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, glzOrigin::CENTERED);
 				glDisable(GL_BLEND);
 			}
 
@@ -707,20 +707,20 @@ void Draw(void)
 				glBindTexture(GL_TEXTURE_2D, map_l1.tex);
 
 				glUniform1i(loc7, 0);
-				glzDirectSpriteRender(0.0, 0.0, 2, map_l1.width / map_l1.height, 1.0, 0, 0, 1.0, 1.0, glzOrigin::CENTERED);
+				glzDirectSpriteRender(0.0f, 0.0f, 2.0f, map_l1.width / map_l1.height, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, glzOrigin::CENTERED);
 
 				glUniform1i(loc7, 1);
-				glzDirectSpriteRender(0.0, 0.0, 2, map_l1.width / map_l1.height, 1.0, 0, 0, 1.0, 1.0, glzOrigin::CENTERED);
+				glzDirectSpriteRender(0.0f, 0.0f, 2.0f, map_l1.width / map_l1.height, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, glzOrigin::CENTERED);
 
 			}
 			if (has_l2)
 			{
 				glBindTexture(GL_TEXTURE_2D, map_l2.tex);
 				glUniform1i(loc7, 0);
-				glzDirectSpriteRender(0.0, 0.0, 2, map_l1.width / map_l1.height, 1.0, 0, 0, 1.0, 1.0, glzOrigin::CENTERED);
+				glzDirectSpriteRender(0.0f, 0.0f, 2.0f, map_l1.width / map_l1.height, 1.0, 0.0f, 0.0f, 1.0f, 1.0f, glzOrigin::CENTERED);
 
 				glUniform1i(loc7, 1);
-				glzDirectSpriteRender(0.0, 0.0, 2, map_l1.width / map_l1.height, 1.0, 0, 0, 1.0, 1.0, glzOrigin::CENTERED);
+				glzDirectSpriteRender(0.0f, 0.0f, 2.0f, map_l1.width / map_l1.height, 1.0, 0.0f, 0.0f, 1.0f, 1.0f, glzOrigin::CENTERED);
 
 			}
 
@@ -735,7 +735,7 @@ void Draw(void)
 				glActiveTexture(GL_TEXTURE0);
 
 				glBindTexture(GL_TEXTURE_2D, map_dynamic.tex);
-				glzDirectSpriteRender(0.0, 0.0, 2, map_l1.width / map_l1.height, 1.0, 0, 0, 1.0, 1.0, glzOrigin::CENTERED);
+				glzDirectSpriteRender(0.0f, 0.0f, 2.0f, map_l1.width / map_l1.height, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, glzOrigin::CENTERED);
 
 
 			}
@@ -759,7 +759,7 @@ void Draw(void)
 		glEnable(GL_BLEND);
 
 		// render cursor
-		if (z_tileUI_point == ztUIP::PIXELMAP) glzDirectSpriteRender(-0.5*aspect + (0.5f*aspect / map_l1.width) + (paintarea_pixel_x / map_l1.width)*aspect, -0.5 + (0.5f / map_l1.height) + ((map_l1.height - 1 - paintarea_pixel_y) / map_l1.height), 2, (1.0 / map_l1.width)*(map_l1.width / map_l1.height), 1.0 / map_l1.height, 0, 0, 1.0, 1.0, glzOrigin::CENTERED);
+		if (z_tileUI_point == ztUIP::PIXELMAP) glzDirectSpriteRender(-0.5f*aspect + (0.5f*aspect / map_l1.width) + (paintarea_pixel_x / map_l1.width)*aspect, -0.5f + (0.5f / map_l1.height) + ((map_l1.height - 1 - paintarea_pixel_y) / map_l1.height), 2, (1.0 / map_l1.width)*(map_l1.width / map_l1.height), 1.0 / map_l1.height, 0, 0, 1.0, 1.0, glzOrigin::CENTERED);
 
 		//if ((z_tileUI_point == ztUIP::PIXELMAP) && (fakelevel.getTilecolision((mwp.x + 0.5*aspect)*arm_width / aspect, (mwp.y + 0.5)*arm_height, 1))) glzDirectSpriteRender(-0.5*aspect + (0.5f*aspect / arm_width) + (paintarea_pixel_x / arm_width)*aspect, -0.5 + (0.5f / arm_height) + ((arm_height - 1 - paintarea_pixel_y) / arm_height), 2, (1.0 / arm_width)*(arm_width / arm_height), 1.0 / arm_height, 0, 0, 1.0, 1.0, glzOrigin::CENTERED);
 
@@ -773,7 +773,7 @@ void Draw(void)
 
 
 		m.LoadIdentity();
-		m.ortho(-viewport[2] / 2, viewport[2] / 2, -viewport[3] / 2, viewport[3] / 2, -100, 100);
+		m.ortho(-viewport[2] * 0.5f, viewport[2] * 0.5f, -viewport[3] * 0.5f, viewport[3] * 0.5f, -100.0f, 100.0f);
 
 
 		m.transferMatrix(&mtemp[0]);
@@ -787,7 +787,7 @@ void Draw(void)
 		//glzDirectSpriteRender(viewport[2] / 2, -viewport[3] / 2, 2, 64.0, 64.0, 0, 0, 1.0, 1.0, glzOrigin::BOTTOM_RIGHT);	
 
 		// render the little sprite tile
-		glzDirectSpriteRenderAtlas((viewport[2] / 2) - 64, (-viewport[3] / 2) + 64, 1, -64, -64, tiles_width, tiles_height, (cursprite_y* tiles_width) + (tiles_width - cursprite_x - 1), glzOrigin::BOTTOM_RIGHT);
+		glzDirectSpriteRenderAtlas((viewport[2] * 0.5f) - 64, (-viewport[3] * 0.5f) + 64, 1, -64, -64, tiles_width, tiles_height, (cursprite_y* tiles_width) + (tiles_width - cursprite_x - 1), glzOrigin::BOTTOM_RIGHT);
 
 		glEnable(GL_DEPTH_TEST);
 
@@ -805,7 +805,7 @@ void Draw(void)
 
 		glGetIntegerv(GL_VIEWPORT, viewport);
 
-		m.ortho(-viewport[2] / 2, viewport[2] / 2, -viewport[3] / 2, viewport[3] / 2, -100, 100);
+		m.ortho(-viewport[2] * 0.5f, viewport[2] * 0.5f, -viewport[3] * 0.5f, viewport[3] * 0.5f, -100.0f, 100.0f);
 		m.translate(paintarea_x_s, paintarea_y_s, 0.0);
 		m.scale(paintarea_Zoom_s, paintarea_Zoom_s, 0.0);
 		//glzMatrix m;
