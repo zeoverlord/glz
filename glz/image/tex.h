@@ -64,6 +64,7 @@ void glzSaveTGA(string filename, int x, int y, glzTexCompression type, unsigned 
 /*
 // future stuff
 
+* split texture loading and texture creation into files
 * multiple save formats
 * Multiple load formats bmp, openEXR, GTF(my own format) and maybe others
 * better image preprocessing (for cubemaps and so on)

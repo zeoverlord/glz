@@ -67,3 +67,4 @@ inline glzColor operator* (float c, glzColor a) { return glzColor(a.r * c, a.g *
 inline glzColor operator/ (float c, glzColor a) { return glzColor(c / a.r, c / a.g, c / a.b, a.a); }
 
 
+// Todo: pull in color conversion from glz
