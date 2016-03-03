@@ -79,7 +79,11 @@ void glzBackdrop(texturecontainer *texture, glzBlendingMode blend, glzMatrix mat
 
 void glzDrawSprite(texturecontainer *texture, glzBlendingMode blend, float x, float y, float scale, float aspect)
 {
-	glzSprite sprite;
+	glzDrawSprite(texture, glzSprite(), blend, x, y, scale, aspect);
+}
+
+void glzDrawSprite(texturecontainer *texture, glzSprite sprite, glzBlendingMode blend, float x, float y, float scale, float aspect)
+{
 	glzMatrix m;
 	glzMatrix mt;
 	glzColor blendcolor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -105,13 +109,17 @@ void glzDrawSprite(texturecontainer *texture, glzBlendingMode blend, float x, fl
 	return;
 }
 
-
 void glzDrawText(string text, float x, float y, float scale, float kern, float aspect, texturecontainer *font, glzColor color)
+{
+	glzDrawText(text, x, y, scale, kern, aspect, font, color, glzOrigin::TOP_LEFT);
+}
+
+void glzDrawText(string text, float x, float y, float scale, float kern, float aspect, texturecontainer *font, glzColor color, glzOrigin origin)
 {
 	glzShaderUseBasic();
 	glzMatrix m;
 	m.LoadIdentity();
-	m.ortho(-4, 4, -2, 2, -100, 100);
+	m.ortho(-aspect*0.5, aspect*0.5, -0.5, 0.5, 0.0, 1.0);
 	m.translate(x, y, 0);
 
 	unsigned int basic_program = glzShaderReurnBasic();
@@ -123,7 +131,7 @@ void glzDrawText(string text, float x, float y, float scale, float kern, float a
 	glBindTexture(GL_TEXTURE_2D, font->handle);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
-	glzDirectDrawText(text, scale, aspect, kern, glzOrigin::BOTTOM_LEFT);
+	glzDirectDrawText(text, scale, aspect, kern, origin);
 	glDisable(GL_BLEND);
 
 }

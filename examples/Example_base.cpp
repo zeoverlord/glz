@@ -38,6 +38,7 @@
 #include "..\glz\image\tex.h"
 #include "..\glz\utilities\resourcemanager.h"
 #include "..\glz\input\input.h"
+#include "..\glz\2d\2d-utilities.h"
 
 using namespace std;										
 
@@ -65,6 +66,9 @@ glzQuaternion q3;
 img_head img;
 unsigned char *data;
 
+
+float aspect = 1.0f;
+
 GLhandleARB  ProgramObject,ProgramObjectFSQ;
 
 static PFNGLUSEPROGRAMPROC						glUseProgram;
@@ -73,6 +77,12 @@ static PFNGLUNIFORMMATRIX4FVPROC                glUniformMatrix4fv;
 static PFNGLUNIFORM4FARBPROC                    glUniform4f;
 static PFNGLGETUNIFORMLOCATIONPROC              glGetUniformLocation;
 
+
+#define COL_BLACK	glzColor(0.0f, 0.0f, 0.0f, 1.0f)
+#define COL_WHITE	glzColor(1.0f, 1.0f, 1.0f, 1.0f)
+#define COL_RED		glzColor(1.0f, 0.0f, 0.0f, 1.0f)
+#define COL_GREEN	glzColor(0.0f, 1.0f, 0.0f, 1.0f)
+#define COL_BLUE	glzColor(0.0f, 0.0f, 1.0f, 1.0f)
 
 int WINDOW_HEIGHT;
 int WINDOW_WIDTH;
@@ -112,7 +122,7 @@ BOOL Initialize (GL_Window* window)					// Any GL Init Code & User Initialiazati
 	glUniform4f= (PFNGLUNIFORM4FARBPROC) wglGetProcAddress("glUniform4fARB");
 	glUniformMatrix4fv= (PFNGLUNIFORMMATRIX4FVPROC) wglGetProcAddress("glUniformMatrix4fv");
 
-
+	aspect = (float)window->init.width / (float)window->init.height;
 
 
 	glzMatrix mt;
@@ -315,17 +325,7 @@ void Draw (void)
 
 
 	// draw text
-	m.LoadIdentity();
-	m.ortho(-4, 4, -2, 2, -100, 100);
-//	m.translate(-3, y, 0);
-	m.transferMatrix(&mtemp[0]);
-	glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
-
-	glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("font.digitalstrip_l"));
-	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-	glEnable(GL_BLEND);
-	glzDrawVAO(vao_num[0],vao[0],GL_TRIANGLES);
-	glDisable(GL_BLEND);
+	glzDrawText("Geometry generation test, try the arrow keys.", -0.8f, 0.49f, 0.05f, 1.3f, aspect, rm.gettexture("font.digitalstrip_l"), COL_WHITE);
 
 
 

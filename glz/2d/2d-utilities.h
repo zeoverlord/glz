@@ -36,6 +36,8 @@ void glzBackdrop(texturecontainer *texture, glzBlendingMode blend);
 void glzBackdrop(texturecontainer *texture, glzBlendingMode blend, glzColor color);
 void glzBackdrop(texturecontainer *texture, glzBlendingMode blend, glzMatrix mat, glzColor color);
 void glzDrawSprite(texturecontainer *texture, glzBlendingMode blend, float x, float y, float scale, float aspect);
+void glzDrawSprite(texturecontainer *texture, glzSprite sprite, glzBlendingMode blend, float x, float y, float scale, float aspect);
 
 
 void glzDrawText(string text, float x, float y, float scale, float kern, float aspect, texturecontainer *font, glzColor color);
+void glzDrawText(string text, float x, float y, float scale, float kern, float aspect, texturecontainer *font, glzColor color, glzOrigin origin);
