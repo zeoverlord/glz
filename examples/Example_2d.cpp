@@ -626,7 +626,7 @@ void Draw (void)
 		
 		
 
-		tempgraph.draw();
+	//	tempgraph.draw();
 
 
 		m.transferMatrix(&mtemp[0]);
@@ -672,31 +672,15 @@ void Draw (void)
 
 
 	if (gamestate == 7)
-	{
-	
+	{	
 		draw_backdrop_glitch(rm.gettextureHandle("background.cv90"), rm.gettextureHandle("sprite.blob"));
-
 		glzDrawText("Switch screens with 1, 2, 3, 4, 5, 6", 0.8f, -0.5f, 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
-
 	}
 
 	if (gamestate == 8)
 	{
-	/*	glzMatrix mt;
-		mt.LoadIdentity();
-
-		mt.transferMatrix(&mtemp[0]);
-		glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
-
-		glBlendFunc(GL_ONE, GL_ONE);
-		glEnable(GL_BLEND);*/
 		tempgraph.draw();
-	//	glDisable(GL_BLEND);
-
 		glzDrawText("Switch screens with 1, 2, 3, 4, 5, 6", 0.8f, -0.5f, 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
-
-
-
 	}
 
 
