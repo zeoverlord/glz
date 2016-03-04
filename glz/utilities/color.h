@@ -22,9 +22,26 @@
 #pragma once
 
 #include "type.h"
+
+// todo implement http://www.color-hex.com/color-names.html colors
+// at least the main 16 colors
+
+#define COL_BLACK		glzColor(0.0f, 0.0f, 0.0f, 1.0f)
+#define COL_WHITE		glzColor(1.0f, 1.0f, 1.0f, 1.0f)
+
+#define COL_LIGHTGRAY	glzColor(0.33f, 0.33f, 0.33f, 1.0f)
+#define COL_GRAY		glzColor(0.50f, 0.50f, 0.50f, 1.0f)
+#define COL_DARKGRAY	glzColor(0.66f, 0.66f, 0.66f, 1.0f)
+
+#define COL_RED			glzColor(1.0f, 0.0f, 0.0f, 1.0f)
+#define COL_GREEN		glzColor(0.0f, 1.0f, 0.0f, 1.0f)
+#define COL_BLUE		glzColor(0.0f, 0.0f, 1.0f, 1.0f)
+#define COL_MAGENTA		glzColor(1.0f, 0.0f, 1.0f, 1.0f)
+#define COL_CYAN		glzColor(0.0f, 1.0f, 1.0f, 1.0f)
+#define COL_YELLOW		glzColor(1.0f, 1.0f, 0.0f, 1.0f)
+
+
 using namespace std;
-
-
 class glzColor {
 public:
 	float r, g, b, a;

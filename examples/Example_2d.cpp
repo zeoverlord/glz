@@ -94,14 +94,6 @@ static PFNGLGETUNIFORMLOCATIONPROC              glGetUniformLocation;
 static PFNGLBLENDCOLORPROC						glBlendColor;
 static PFNGLACTIVETEXTUREPROC					glActiveTexture;
 
-
-#define COL_BLACK	glzColor(0.0f, 0.0f, 0.0f, 1.0f)
-#define COL_WHITE	glzColor(1.0f, 1.0f, 1.0f, 1.0f)
-#define COL_RED		glzColor(1.0f, 0.0f, 0.0f, 1.0f)
-#define COL_GREEN	glzColor(0.0f, 1.0f, 0.0f, 1.0f)
-#define COL_BLUE	glzColor(0.0f, 0.0f, 1.0f, 1.0f)
-
-
 int WINDOW_HEIGHT;
 int WINDOW_WIDTH;
 
@@ -565,7 +557,7 @@ void Draw (void)
 		glzColor col(1.0,1.0,1.0,1.0);
 	//	draw_sprite(0, 0, 2.0f, 1, rm.gettextureHandle("sprite.explotion128a"), spriteframe, ProgramObject, col);
 
-		glzDrawSprite(rm.gettexture("sprite.explotion128a"), glzSprite(8, 4, spriteframe, 0.0f), glzBlendingMode::ALPHA, -0.0f, -0.0f, 2.0f, aspect);
+		glzDrawSprite(rm.gettexture("sprite.explotion128a"), glzSprite(8, 4, spriteframe, 0.0f), glzBlendingMode::ALPHA, 0.0f, 0.0f, 1.0f, aspect);
 		
 		glzDrawText("Sprites", -0.8f, 0.49f, 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
 		glzDrawText("Switch screens with 1, 2, 3, 4, 5, 6", 0.8f, -0.5f, 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);

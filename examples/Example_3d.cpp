@@ -92,14 +92,6 @@ static PFNGLUNIFORMMATRIX4DVPROC                glUniformMatrix4dv;
 static PFNGLUNIFORM4FARBPROC                    glUniform4f;
 static PFNGLGETUNIFORMLOCATIONPROC              glGetUniformLocation;
 
-
-#define COL_BLACK	glzColor(0.0f, 0.0f, 0.0f, 1.0f)
-#define COL_WHITE	glzColor(1.0f, 1.0f, 1.0f, 1.0f)
-#define COL_RED		glzColor(1.0f, 0.0f, 0.0f, 1.0f)
-#define COL_GREEN	glzColor(0.0f, 1.0f, 0.0f, 1.0f)
-#define COL_BLUE	glzColor(0.0f, 0.0f, 1.0f, 1.0f)
-
-
 int WINDOW_HEIGHT;
 int WINDOW_WIDTH;
 

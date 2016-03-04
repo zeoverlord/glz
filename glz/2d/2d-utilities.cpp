@@ -57,7 +57,6 @@ void glzBackdrop(texturecontainer *texture, glzBlendingMode blend, glzColor colo
 void glzBackdrop(texturecontainer *texture, glzBlendingMode blend, glzMatrix mat, glzColor color)
 {
 	glzSprite sprite;
-	glzColor blendcolor(1.0f, 1.0f, 1.0f, 1.0f);
 	glzMatrix m;
 
 	setblendingmode(blend);
@@ -69,7 +68,7 @@ void glzBackdrop(texturecontainer *texture, glzBlendingMode blend, glzMatrix mat
 
 	glzUniformMatrix4fv(basic_program, "projMat", mat);
 	glzUniform1i(basic_program, "texunit0", 0);
-	glzUniform4f(basic_program, "color", blendcolor.r, blendcolor.g, blendcolor.b, blendcolor.a);
+	glzUniform4f(basic_program, "color", color);
 	glzDirectSpriteRender(m, texture->handle, sprite, glzOrigin::CENTERED);
 
 	glEnable(GL_DEPTH_TEST);
@@ -119,7 +118,7 @@ void glzDrawText(string text, float x, float y, float scale, float kern, float a
 	glzShaderUseBasic();
 	glzMatrix m;
 	m.LoadIdentity();
-	m.ortho(-aspect*0.5, aspect*0.5, -0.5, 0.5, 0.0, 1.0);
+	m.ortho(-aspect*0.5f, aspect*0.5f, -0.5f, 0.5f, 0.0f, 1.0f);
 	m.translate(x, y, 0);
 
 	unsigned int basic_program = glzShaderReurnBasic();
