@@ -486,7 +486,7 @@ void glzDirectDrawText(string text, float scale, float aspect, float kern, glzOr
 {
 	unsigned int localVAO;
 	long const verts = glzVAOMakeText2d(text, scale, aspect, kern, textorigin, &localVAO);
-	glzDrawVAO(0, verts, localVAO, GL_TRIANGLES);
+	glzDrawVAO(verts, localVAO, GL_TRIANGLES);
 	glzKillVAO(localVAO);
 
 }

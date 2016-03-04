@@ -38,4 +38,5 @@ void glzBackdrop(texturecontainer *texture, glzBlendingMode blend, glzMatrix mat
 void glzDrawSprite(texturecontainer *texture, glzBlendingMode blend, float x, float y, float scale, float aspect);
 
 
+void glzDrawText(string text, float x, float y, float scale, float kern, float aspect, texturecontainer *font, glzColor color, glzOrigin origin);
 void glzDrawText(string text, float x, float y, float scale, float kern, float aspect, texturecontainer *font, glzColor color);
