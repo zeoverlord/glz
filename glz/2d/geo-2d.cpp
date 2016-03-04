@@ -475,7 +475,7 @@ long glzVAOMakeText2d(string text, float scale, float aspect, float kern,  glzOr
 	glzMatrix m;
 
 	m.LoadIdentity();
-	m.scale(scale, scale*aspect, 1.0f);
+	m.scale(scale, scale, 1.0f);
 
 
 	return glzVAOMakeText(text, m, kern, textorigin, vao);

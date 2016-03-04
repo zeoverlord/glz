@@ -35,6 +35,7 @@
 #include "..\glz\utilities\vectormath.h"
 #include "..\glz\image\tex.h"
 #include "..\glz\2d\geo-2d.h"
+#include "..\glz\2d\2d-utilities.h"
 #include "..\glz\3d\geo-generate.h"
 #include "..\glz\effects\particle.h"
 #include "..\glz\utilities\resourcemanager.h"
@@ -54,7 +55,7 @@ GL_Window*	g_window;
 
 // User Defined Variables
 float		angle=0,width,height;												// Used To Rotate The Triangles
-unsigned int vao[16],vao_num[16],textvao[16],textvao_num[16];
+unsigned int vao[16],vao_num[16];
 glzMatrix m;
 glzMatrix mnew;
 
@@ -79,6 +80,7 @@ int gamestate=4;
 img_head img;
 unsigned char *data;
 
+float aspect = 1.0f;
 
 GLhandleARB  ProgramObject,ProgramObjectFT,ProgramObjectFSQ;
 texture_transform text_tt;
@@ -91,11 +93,11 @@ static PFNGLUNIFORM4FARBPROC                    glUniform4f;
 static PFNGLGETUNIFORMLOCATIONPROC              glGetUniformLocation;
 
 
-#define COL_BLACK	0
-#define COL_WHITE	1
-#define COL_RED		2
-#define COL_GREEN	3
-#define COL_BLUE	4
+#define COL_BLACK	glzColor(0.0f, 0.0f, 0.0f, 1.0f)
+#define COL_WHITE	glzColor(1.0f, 1.0f, 1.0f, 1.0f)
+#define COL_RED		glzColor(1.0f, 0.0f, 0.0f, 1.0f)
+#define COL_GREEN	glzColor(0.0f, 1.0f, 0.0f, 1.0f)
+#define COL_BLUE	glzColor(0.0f, 0.0f, 1.0f, 1.0f)
 
 
 int WINDOW_HEIGHT;
@@ -141,7 +143,7 @@ BOOL Initialize (GL_Window* window)					// Any GL Init Code & User Initialiazati
 	glUniformMatrix4fv= (PFNGLUNIFORMMATRIX4FVPROC) wglGetProcAddress("glUniformMatrix4fv");
 	glUniformMatrix4dv = (PFNGLUNIFORMMATRIX4DVPROC)wglGetProcAddress("glUniformMatrix4dv");
 
-
+	aspect = (float)window->init.width / (float)window->init.height;
 
 
 	glzMatrix mt;
@@ -186,12 +188,6 @@ BOOL Initialize (GL_Window* window)					// Any GL Init Code & User Initialiazati
 
 	mh.translate(-8.0,8.0,0.0);
 
-	text_tt = glzMakeTTAtlas(16, 16, 0, glzOrigin::BOTTOM_LEFT);
-
-// all screens
-	textvao_num[0] = glzVAOMakeText("Switch screens with 1, 2, 3, 4, 5", mt3, 1.0f, glzOrigin::TOP_LEFT, &textvao[0]);
-
-
 	
 	primitive_gen primitives[10];	
 
@@ -219,9 +215,7 @@ BOOL Initialize (GL_Window* window)					// Any GL Init Code & User Initialiazati
 	primitives[7] = glzMakePGDefault(glzPrimitive::RANDOM_POINT);
 	primitives[7].resolution_x = 100000;
 	primitives[7].tt = glzMakeTTDefault();
-
-
-
+	
 
 	vao_num[1]=glzVAOMakePrimitive(primitives[0], &vao[1]); // change the first argument to 2 for an extra object, this is subject to some major redecorating
 	vao_num[2]=glzVAOMakePrimitive(primitives[1], &vao[2]); // change the first argument to 2 for an extra object, this is subject to some major redecorating
@@ -368,70 +362,6 @@ void Update (float seconds)								// Perform Motion Updates Here
 
 
 
-void draw_text(float x, float y, int text, texturecontainer *font, unsigned int po, unsigned int col)
-{
-	glUseProgram(po);
-
-	unsigned int loc1 = glGetUniformLocation(po, "projMat");
-	unsigned int loc2 = glGetUniformLocation(po, "texunit0");
-	unsigned int loc3 = glGetUniformLocation(po, "tint");
-	m.LoadIdentity();
-	m.ortho(-4, 4, -2, 2, -100, 100);
-	m.translate(x, y, 0);
-
-	float mtemp[16];
-	m.transferMatrix(&mtemp[0]);
-	glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
-
-	if(col == COL_BLACK)	glUniform4f(loc3, 0.0f, 0.0f, 0.0f, 1.0f);
-	if(col == COL_WHITE)	glUniform4f(loc3, 1.0f, 1.0f, 1.0f, 1.0f);
-	if(col == COL_RED)	glUniform4f(loc3, 1.0f, 0.0f, 0.0f, 1.0f);
-	if(col == COL_GREEN)	glUniform4f(loc3, 0.0f, 1.0f, 0.0f, 1.0f);
-	if(col == COL_BLUE)	glUniform4f(loc3, 0.0f, 0.0f, 1.0f, 1.0f);
-
-	//glzShaderUsePasstrough();
-
-
-	glBindTexture(GL_TEXTURE_2D, font->handle);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glEnable(GL_BLEND);
-	glzDrawVAO(textvao_num[text], textvao[text], GL_TRIANGLES);
-	glDisable(GL_BLEND);
-
-}
-
-void draw_text2(char text[255], float x, float y, float scale, float kern, texturecontainer *font, unsigned int po, unsigned int col)
-{
-	glUseProgram(po);
-
-	unsigned int loc1 = glGetUniformLocation(po, "projMat");
-	unsigned int loc2 = glGetUniformLocation(po, "texunit0");
-	unsigned int loc3 = glGetUniformLocation(po, "tint");
-	m.LoadIdentity();
-	m.ortho2DPixelspace(WINDOW_HEIGHT, WINDOW_WIDTH, glzOrigin::BOTTOM_LEFT);
-	m.translate(x, y, 0);
-
-	float mtemp[16];
-	m.transferMatrix(&mtemp[0]);
-	glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
-
-	if (col == COL_BLACK)	glUniform4f(loc3, 0.0f, 0.0f, 0.0f, 1.0f);
-	if (col == COL_WHITE)	glUniform4f(loc3, 1.0f, 1.0f, 1.0f, 1.0f);
-	if (col == COL_RED)	glUniform4f(loc3, 1.0f, 0.0f, 0.0f, 1.0f);
-	if (col == COL_GREEN)	glUniform4f(loc3, 0.0f, 1.0f, 0.0f, 1.0f);
-	if (col == COL_BLUE)	glUniform4f(loc3, 0.0f, 0.0f, 1.0f, 1.0f);
-
-	float aspect = (float)WINDOW_WIDTH / (float)WINDOW_HEIGHT;
-
-	glDisable(GL_DEPTH_TEST);
-	glBindTexture(GL_TEXTURE_2D, font->handle);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glEnable(GL_BLEND);
-	glzDirectDrawText(text, scale, aspect, kern, glzOrigin::TOP_LEFT);
-	glDisable(GL_BLEND);
-	glEnable(GL_DEPTH_TEST);
-
-}
 
 void draw_object(texturecontainer *tx, int prim, float x, float y)
 {
@@ -502,10 +432,9 @@ void Draw (void)
 		draw_object(rm.gettexture("background.back"), 5, -1.0f, -1.5f);
 		draw_object(rm.gettexture("background.back"), 6, 1.0f, -1.5f);
 		draw_object(rm.gettexture("background.back"), 7, 2.5f, -1.5f);
-
-
-		draw_text2("Primitives", 1.0f, 790.0f, 16.0f, 1.0f, rm.gettexture("font.ms_gothic"), ProgramObject, COL_WHITE);
-		draw_text(1.5f, -1.7f, 0, rm.gettexture("font.ms_gothic"), ProgramObject, COL_WHITE);
+		
+		glzDrawText("Primitives", -0.8f, 0.49f, 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
+		glzDrawText("Switch screens with 1, 2, 3, 4, 5", 0.8f, -0.5f, 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
 	}
 
 
@@ -533,10 +462,10 @@ void Draw (void)
 
 	glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("texture.cv90base"));
 	glzDrawVAO(vao_num[8],vao[8],GL_TRIANGLES);
-			
-	draw_text2(".obj loading, try using the arrow keys", 1.0f, 790.0f, 16.0f, 1.0f, rm.gettexture("font.ms_gothic"), ProgramObject, COL_WHITE);
-	draw_text(1.5f, -1.7f, 0, rm.gettexture("font.ms_gothic"), ProgramObject, COL_WHITE);
-	
+				
+	glzDrawText(".obj loading, try using the arrow keys", -0.8f, 0.49f, 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
+	glzDrawText("Switch screens with 1, 2, 3, 4, 5", 0.8f, -0.5f, 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
+
 	}	
 
 
@@ -558,9 +487,9 @@ void Draw (void)
 
 		glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("texture.gridlines"));
 		glzDrawVAO(vao_num[9],vao[9],GL_TRIANGLES);
-		
-		draw_text2("Heightfield", 1.0f, 790.0f, 16.0f, 1.0f, rm.gettexture("font.ms_gothic"), ProgramObject, COL_WHITE);
-		draw_text(1.5f, -1.7f, 0, rm.gettexture("font.ms_gothic"), ProgramObject, COL_WHITE);
+
+		glzDrawText("Heightfield", -0.8f, 0.49f, 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
+		glzDrawText("Switch screens with 1, 2, 3, 4, 5", 0.8f, -0.5f, 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
 	}
 
 	if (gamestate == 4)
@@ -583,23 +512,19 @@ void Draw (void)
 		glzDirectCubeRender(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, box_tt, 1);
 		//glzDrawVAO(vao_num[9], vao[9], GL_TRIANGLES);
 
-		draw_text2("A lonely cube rotating in nothingness", 1.0f, 790.0f, 16.0f, 1.0f, rm.gettexture("font.ms_gothic"), ProgramObject, COL_WHITE);
-		draw_text(1.5f, -1.7f, 0, rm.gettexture("font.ms_gothic"), ProgramObject, COL_WHITE);
+		glzDrawText("A lonely cube rotating in nothingness", -0.8f, 0.49f, 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
+		glzDrawText("Switch screens with 1, 2, 3, 4, 5", 0.8f, -0.5f, 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
 	}
 
 	if (gamestate == 5)
 	{
-
 		
-
 		draw_object2(rm.gettexture("background.back"), 10, 0.0f, 0.5f);
 
-		draw_text2("Particle cube using random dots", 1.0f, 790.0f, 16.0f, 1.0f, rm.gettexture("font.ms_gothic"), ProgramObject, COL_WHITE);
-		draw_text(1.5f, -1.7f, 0, rm.gettexture("font.ms_gothic"), ProgramObject, COL_WHITE);
+		glzDrawText("Particle cube using random dots", -0.8f, 0.49f, 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
+		glzDrawText("Switch screens with 1, 2, 3, 4, 5", 0.8f, -0.5f, 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
 	}
 
-
-	
 
 
 	glUseProgram(0);
