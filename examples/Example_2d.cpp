@@ -268,10 +268,6 @@ BOOL Initialize (GL_Window* window)					// Any GL Init Code & User Initialiazati
 
 	//tempgraph.set(42, glzOBject2DSetvar::SPRITE, glzSprite(2, 2, 2, 0.0));
 
-	
-
-	
-
 
 	tempgraph.add(obj2d_Sprite(343, glzSprite(8, 4, 16, 0.0), nullptr, node3(), rm.gettexture("sprite.explotion128a"), 1.0));
 	
@@ -541,7 +537,7 @@ void Draw (void)
 		mi.translate(-2.7f, -2.7f, 0.0f);
 		glzColor blendcolor(1.0, 1.0, 1.0, 1.0);
 
-		glzDrawSprite(rm.gettexture("sprite.derpy_phirana"), glzBlendingMode::ALPHA, -0.5f, -0.5f, 0.5f, aspect);
+		glzDrawSprite(rm.gettexture("sprite.derpy_phirana"), -0.5f, -0.5f, 0.5f, aspect, glzBlendingMode::ALPHA);
 		
 
 		glzDrawText("Full screen quads", -0.8f, 0.49f, 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_BLACK);
@@ -554,10 +550,7 @@ void Draw (void)
 	if (gamestate==3)
 	{	
 		
-		glzColor col(1.0,1.0,1.0,1.0);
-	//	draw_sprite(0, 0, 2.0f, 1, rm.gettextureHandle("sprite.explotion128a"), spriteframe, ProgramObject, col);
-
-		glzDrawSprite(rm.gettexture("sprite.explotion128a"), glzSprite(8, 4, spriteframe, 0.0f), glzBlendingMode::ALPHA, 0.0f, 0.0f, 1.0f, aspect);
+		glzDrawSprite(rm.gettexture("sprite.explotion128a"), glzSprite(8, 4, spriteframe, 0.0f), 0.0f, 0.0f, 1.0f, aspect, glzBlendingMode::ALPHA);
 		
 		glzDrawText("Sprites", -0.8f, 0.49f, 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
 		glzDrawText("Switch screens with 1, 2, 3, 4, 5, 6", 0.8f, -0.5f, 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);

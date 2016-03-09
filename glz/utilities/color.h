@@ -75,6 +75,8 @@ public:
 	glzColor glzColor::operator/= (glzColor c) { r /= c.r; g /= c.g; b /= c.b; a /= c.a; return *this; }
 	glzColor glzColor::operator/ (float c) { return glzColor(r / c, g / c, b / c, a); }
 	glzColor glzColor::operator/= (float c) { r /= c; g /= c; b /= c; return *this; }
+
+
 };
 
 

@@ -30,16 +30,6 @@
 
 // backdrops are usefull, if you don't have the time to write a 2D renderer then just cheat with a texture backdrop instead
 
-
-
-void glzBackdrop(texturecontainer *texture, glzBlendingMode blend)
-{
-	glzColor blendcolor(1.0, 1.0, 1.0, 1.0);
-
-	glzBackdrop(texture, blend, blendcolor);
-	return;
-}
-
 void glzBackdrop(texturecontainer *texture, glzBlendingMode blend, glzColor color)
 {
 
@@ -48,13 +38,13 @@ void glzBackdrop(texturecontainer *texture, glzBlendingMode blend, glzColor colo
 	mt.translate(0.0f, 0.0f, 0.0f);
 	mt.scale(2.0f, 2.0f, 1.0f);
 
-	glzBackdrop(texture, blend, mt, color);
+	glzBackdrop(texture, mt, blend, color);
 	return;
 }
 
 
 
-void glzBackdrop(texturecontainer *texture, glzBlendingMode blend, glzMatrix mat, glzColor color)
+void glzBackdrop(texturecontainer *texture, glzMatrix mat, glzBlendingMode blend, glzColor color)
 {
 	glzSprite sprite;
 	glzMatrix m;
@@ -76,12 +66,12 @@ void glzBackdrop(texturecontainer *texture, glzBlendingMode blend, glzMatrix mat
 	return;
 }
 
-void glzDrawSprite(texturecontainer *texture, glzBlendingMode blend, float x, float y, float scale, float aspect)
+void glzDrawSprite(texturecontainer *texture, float x, float y, float scale, float aspect, glzBlendingMode blend, glzColor color)
 {
-	glzDrawSprite(texture, glzSprite(), blend, x, y, scale, aspect);
+	glzDrawSprite(texture, glzSprite(), x, y, scale, aspect, blend, color);
 }
 
-void glzDrawSprite(texturecontainer *texture, glzSprite sprite, glzBlendingMode blend, float x, float y, float scale, float aspect)
+void glzDrawSprite(texturecontainer *texture, glzSprite sprite, float x, float y, float scale, float aspect, glzBlendingMode blend, glzColor color)
 {
 	glzMatrix m;
 	glzMatrix mt;
@@ -108,10 +98,6 @@ void glzDrawSprite(texturecontainer *texture, glzSprite sprite, glzBlendingMode 
 	return;
 }
 
-void glzDrawText(string text, float x, float y, float scale, float kern, float aspect, texturecontainer *font, glzColor color)
-{
-	glzDrawText(text, x, y, scale, kern, aspect, font, color, glzOrigin::TOP_LEFT);
-}
 
 void glzDrawText(string text, float x, float y, float scale, float kern, float aspect, texturecontainer *font, glzColor color, glzOrigin origin)
 {

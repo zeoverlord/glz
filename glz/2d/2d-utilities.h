@@ -31,13 +31,15 @@
 #include "..\shader\shader.h"
 #include "geo-2d.h"
 
+//void glzBackdrop(texturecontainer *texture);
+void glzBackdrop(texturecontainer *texture, glzBlendingMode blend = glzBlendingMode::NONE, glzColor color = COL_WHITE);
+void glzBackdrop(texturecontainer *texture, glzMatrix mat, glzBlendingMode blend = glzBlendingMode::NONE, glzColor color = COL_WHITE);
 
-void glzBackdrop(texturecontainer *texture, glzBlendingMode blend);
-void glzBackdrop(texturecontainer *texture, glzBlendingMode blend, glzColor color);
-void glzBackdrop(texturecontainer *texture, glzBlendingMode blend, glzMatrix mat, glzColor color);
-void glzDrawSprite(texturecontainer *texture, glzBlendingMode blend, float x, float y, float scale, float aspect);
-void glzDrawSprite(texturecontainer *texture, glzSprite sprite, glzBlendingMode blend, float x, float y, float scale, float aspect);
+//void glzDrawSprite(texturecontainer *texture, glzBlendingMode blend, float x, float y, float scale, float aspect);
+//void glzDrawSprite(texturecontainer *texture, glzSprite sprite, glzBlendingMode blend, float x, float y, float scale, float aspect);
 
 
-void glzDrawText(string text, float x, float y, float scale, float kern, float aspect, texturecontainer *font, glzColor color);
-void glzDrawText(string text, float x, float y, float scale, float kern, float aspect, texturecontainer *font, glzColor color, glzOrigin origin);
+void glzDrawSprite(texturecontainer *texture, float x, float y, float scale, float aspect, glzBlendingMode blend = glzBlendingMode::NONE, glzColor color = COL_WHITE);
+void glzDrawSprite(texturecontainer *texture, glzSprite sprite, float x, float y, float scale, float aspect, glzBlendingMode blend = glzBlendingMode::NONE, glzColor color = COL_WHITE);
+
+void glzDrawText(string text, float x, float y, float scale, float kern, float aspect, texturecontainer *font, glzColor color = COL_WHITE, glzOrigin origin = glzOrigin::TOP_LEFT);
