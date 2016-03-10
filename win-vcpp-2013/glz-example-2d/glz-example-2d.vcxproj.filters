@@ -34,6 +34,9 @@
     <Filter Include="input">
       <UniqueIdentifier>{f0f34452-0efe-41b8-8349-499db3a8b908}</UniqueIdentifier>
     </Filter>
+    <Filter Include="layout">
+      <UniqueIdentifier>{a27c4c44-42f5-45ff-80d1-bd9f96c06082}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\examples\Example_2d.cpp">
@@ -95,6 +98,9 @@
     </ClCompile>
     <ClCompile Include="..\..\glz\utilities\sprite.cpp">
       <Filter>utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz\layout\viewPort.cpp">
+      <Filter>layout</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -166,6 +172,9 @@
     </ClInclude>
     <ClInclude Include="..\..\glz\utilities\sprite.h">
       <Filter>utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz\layout\viewPort.h">
+      <Filter>layout</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
