@@ -101,7 +101,7 @@
     <ClCompile Include="..\..\glz\effects\particle.cpp" />
     <ClCompile Include="..\..\glz\image\tex.cpp" />
     <ClCompile Include="..\..\glz\input\input.cpp" />
-    <ClCompile Include="..\..\glz\layout\viewPort.cpp" />
+    <ClCompile Include="..\..\glz\layout\viewport.cpp" />
     <ClCompile Include="..\..\glz\shader\shader.cpp" />
     <ClCompile Include="..\..\glz\utilities\color.cpp" />
     <ClCompile Include="..\..\glz\utilities\glz.cpp" />
@@ -126,7 +126,7 @@
     <ClInclude Include="..\..\glz\effects\particle.h" />
     <ClInclude Include="..\..\glz\image\tex.h" />
     <ClInclude Include="..\..\glz\input\input.h" />
-    <ClInclude Include="..\..\glz\layout\viewPort.h" />
+    <ClInclude Include="..\..\glz\layout\viewport.h" />
     <ClInclude Include="..\..\glz\shader\shader-programs.h" />
     <ClInclude Include="..\..\glz\shader\shader.h" />
     <ClInclude Include="..\..\glz\utilities\color.h" />

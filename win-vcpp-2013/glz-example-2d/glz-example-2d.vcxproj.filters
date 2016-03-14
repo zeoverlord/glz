@@ -99,7 +99,7 @@
     <ClCompile Include="..\..\glz\utilities\sprite.cpp">
       <Filter>utilities</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\glz\layout\viewPort.cpp">
+    <ClCompile Include="..\..\glz\layout\viewport.cpp">
       <Filter>layout</Filter>
     </ClCompile>
   </ItemGroup>
@@ -173,7 +173,7 @@
     <ClInclude Include="..\..\glz\utilities\sprite.h">
       <Filter>utilities</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\layout\viewPort.h">
+    <ClInclude Include="..\..\glz\layout\viewport.h">
       <Filter>layout</Filter>
     </ClInclude>
   </ItemGroup>

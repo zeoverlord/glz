@@ -24,6 +24,7 @@
 
 #include "..\utilities\type.h"
 #include "..\utilities\glz.h"
+#include "..\utilities\sprite.h"
 #include "..\utilities\resourcemanager.h"
 #include "..\utilities\vectormath.h"
 #include <vector>
@@ -56,6 +57,26 @@ private:
 	glzOrigin ReferenceOrigin;
 
 	shared_ptr<glzViewPort> parent;
+
+private:
+
+	void copyParentView(void)
+	{
+		left = parent->left;
+		right = parent->right;
+		top = parent->top;
+		bottom = parent->bottom;
+	}
+	void pushInPaddingParent(void)
+	{
+		left += parent->paddingLeft;
+		right += parent->paddingRight;
+		top += parent->paddingTop;
+		bottom += parent->paddingBottom;
+	}
+
+	void resizeView(void);
+	
 
 public:
 
@@ -110,6 +131,9 @@ public:
 	}
 
 
+	void setOrigin(glzOrigin origin) { ReferenceOrigin = origin; update(); }
+	glzOrigin getOrigin(void) { return ReferenceOrigin; }
+
 	shared_ptr<glzViewPort> getParent()	{ return parent; }
 	float getWidth(){return width;}
 	float getHeight(){ return height; }
@@ -118,6 +142,9 @@ public:
 	float getAspect(){ return aspect; }
 
 	void update();
-	void setupRendering();
+	void setupRendering(); //set up cliping
+	void disableRendering();
+	glzMatrix returnOrthoMatrix();
+	glzSprite returnSprite();
 
 };
