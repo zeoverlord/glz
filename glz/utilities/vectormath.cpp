@@ -27,12 +27,9 @@ using namespace std;
 
 float vert3::distance(vert3 a)
 { 
-	//double r;
 	vec3 d = this->vectorTo(a);
 	d.absolute();
 	return d.magnitude();
-	//r = sqrt((d.x*d.x) + (d.y*d.y) + (d.y*d.y));
-	//return r;
 }
 
 vec3 vert3::vectorTo(vert3 b)
@@ -144,70 +141,29 @@ void glzMatrix::transferMatrix(float *b)
 
 void glzMatrix::translate(float x, float y, float z)
 {
+	
 	glzMatrix b;
 
-	b.m[0] = 1;
-	b.m[1] = 0;
-	b.m[2] = 0;
-	b.m[3] = 0;
-
-	b.m[4] = 0;
-	b.m[5] = 1;
-	b.m[6] = 0;
-	b.m[7] = 0;
-
-	b.m[8] = 0;
-	b.m[9] = 0;
-	b.m[10] = 1;
-	b.m[11] = 0;
-
-	b.m[12] = x;
-	b.m[13] = y;
-	b.m[14] = z;
-	b.m[15] = 1;
+	b.m[12] += x;
+	b.m[13] += y;
+	b.m[14] += z;
 
 	this->multThis(b);
 	return;
-
 }
-
 
 
 
 void glzMatrix::scale(float x, float y, float z)
 {
-	{
-
 		glzMatrix b;
 
-
-
 		b.m[0] = x;
-		b.m[1] = 0;
-		b.m[2] = 0;
-		b.m[3] = 0;
-
-		b.m[4] = 0;
 		b.m[5] = y;
-		b.m[6] = 0;
-		b.m[7] = 0;
-
-		b.m[8] = 0;
-		b.m[9] = 0;
 		b.m[10] = z;
-		b.m[11] = 0;
-
-		b.m[12] = 0;
-		b.m[13] = 0;
-		b.m[14] = 0;
-		b.m[15] = 1;
 
 		this->multThis(b);
-
 		return;
-
-	}
-
 }
 
 void glzMatrix::rotate(float a, float x, float y, float z)
@@ -219,25 +175,16 @@ void glzMatrix::rotate(float a, float x, float y, float z)
 	b.m[0] = 1 + (1 - cos(angle))*(x*x - 1);
 	b.m[1] = -z*sin(angle) + (1 - cos(angle))*x*y;
 	b.m[2] = y*sin(angle) + (1 - cos(angle))*x*z;
-	b.m[3] = 0;
 
 	b.m[4] = z*sin(angle) + (1 - cos(angle))*x*y;
 	b.m[5] = 1 + (1 - cos(angle))*(y*y - 1);
 	b.m[6] = -x*sin(angle) + (1 - cos(angle))*y*z;
-	b.m[7] = 0;
 
 	b.m[8] = -y*sin(angle) + (1 - cos(angle))*x*z;
 	b.m[9] = x*sin(angle) + (1 - cos(angle))*y*z;
 	b.m[10] = 1 + (1 - cos(angle))*(z*z - 1);
-	b.m[11] = 0;
-
-	b.m[12] = 0;
-	b.m[13] = 0;
-	b.m[14] = 0;
-	b.m[15] = 1;
 
 	this->multThis(b);
-
 	return;
 }
 
@@ -554,14 +501,6 @@ vert3 plane3::intesect_line(line3 a)
 
 	return a.p + (((d - nDotA) / nDotBA) * a.n);  // hope it works
 }
-
-//vert3 plane3::intesect_line(line3 a)
-//{
-
-
-//	n.x* (a.p.x + a.n.x*t) + n.y *(a.p.y - a.n.y*t) - n.z* (a.p.z + a.n.z*t) = d.
-//}
-
 
 
 void poly3::tempAddNormalToVertex()

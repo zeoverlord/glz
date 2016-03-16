@@ -513,15 +513,15 @@ void Draw (void)
 
 	if (gamestate==1)  
 	{
-		glzDrawText("Normal text", -0.8f, 0.49f, 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
-		glzDrawText("Tabs and endlines work just as well\nTab\t\t\t\\t\nEndline \t\t\\n", -0.8f, 0.42f, 0.05f, 1.0f, aspect, rm.gettexture("font.arial"), COL_WHITE);
-		glzDrawText(tbuffer, -0.8f, 0.25f, 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
-		glzDrawText(tbuffer2, -0.8f, 0.19f, 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
-		glzDrawText("You can also play with the kerning if you want", -0.8f, 0.07f, 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
-		glzDrawText("Using", -0.8f, -0.03f, 0.05f, 1.0f, aspect, rm.gettexture("font.minya_m"), COL_WHITE);
-		glzDrawText("all kinds", -0.8f, -0.1f, 0.05f, 1.0f, aspect, rm.gettexture("font.digitalstrip_l"), COL_WHITE);
-		glzDrawText("of fonts", -0.8f, -0.17f, 0.05f, 1.0f, aspect, rm.gettexture("font.morpheus_l"), COL_WHITE);
-		glzDrawText("Switch screens with 1, 2, 3, 4, 5, 6", 0.8f, -0.5f, 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
+		glzDrawText("Normal text", vert3(-0.8f, 0.49f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
+		glzDrawText("Tabs and endlines work just as well\nTab\t\t\t\\t\nEndline \t\t\\n", vert3(-0.8f, 0.42f), 0.05f, 1.0f, aspect, rm.gettexture("font.arial"), COL_WHITE);
+		glzDrawText(tbuffer, vert3(-0.8f, 0.25f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
+		glzDrawText(tbuffer2, vert3(-0.8f, 0.19f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
+		glzDrawText("You can also play with the kerning if you want", vert3(-0.8f, 0.07f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
+		glzDrawText("Using", vert3(-0.8f, -0.03f), 0.05f, 1.0f, aspect, rm.gettexture("font.minya_m"), COL_WHITE);
+		glzDrawText("all kinds", vert3(-0.8f, -0.1f), 0.05f, 1.0f, aspect, rm.gettexture("font.digitalstrip_l"), COL_WHITE);
+		glzDrawText("of fonts", vert3(-0.8f, -0.17f), 0.05f, 1.0f, aspect, rm.gettexture("font.morpheus_l"), COL_WHITE);
+		glzDrawText("Switch screens with 1, 2, 3, 4, 5, 6", vert3(0.8f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
 	}
 
 

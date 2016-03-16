@@ -69,7 +69,7 @@ unsigned char *data;
 
 float aspect = 1.0f;
 
-GLhandleARB  ProgramObject,ProgramObjectFSQ;
+GLhandleARB  ProgramObject, ProgramObjectFSQ;
 
 static PFNGLUSEPROGRAMPROC						glUseProgram;
 static PFNGLUNIFORM1IPROC                       glUniform1i;
@@ -115,6 +115,8 @@ BOOL Initialize (GL_Window* window)					// Any GL Init Code & User Initialiazati
 	glUniform1i= (PFNGLUNIFORM1IPROC) wglGetProcAddress("glUniform1i");
 	glUniform4f= (PFNGLUNIFORM4FARBPROC) wglGetProcAddress("glUniform4fARB");
 	glUniformMatrix4fv= (PFNGLUNIFORMMATRIX4FVPROC) wglGetProcAddress("glUniformMatrix4fv");
+	
+
 
 	aspect = (float)window->init.width / (float)window->init.height;
 
@@ -146,9 +148,6 @@ BOOL Initialize (GL_Window* window)					// Any GL Init Code & User Initialiazati
 	mh.rotate(90, 1.0f, 0.0f, 0.0f);
 
 	mh.translate(-8.0, 8.0, 0.0);
-
-	
-
 
 
 	// read our heightmap
@@ -204,6 +203,7 @@ BOOL Initialize (GL_Window* window)					// Any GL Init Code & User Initialiazati
 	delete[] data;
 	data=NULL;
 
+	rm.load_all();
 
 	return TRUE;												// Return TRUE (Initialization Successful)
 }
@@ -256,6 +256,10 @@ void Draw (void)
 {
 	glzResourcemanager rm;
 
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+//	glBindFramebuffer(GL_FRAMEBUFFER_EXT, 0);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		// Clear Screen And Depth Buffer
 	float mtemp[16];
 	glEnable(GL_TEXTURE_2D);
@@ -266,7 +270,7 @@ void Draw (void)
 	glUseProgram(ProgramObject);
 	glUniform1i(loc2, 0);	
 	glUniform4f(loc3, 1.0f,1.0f,1.0f,1.0f);
-
+	
 	// draw objects
 	m.LoadIdentity();
 	m.perspective(45.0f, 1.618f, 1.0f, 1000.0f);

@@ -96,6 +96,9 @@
     <ClCompile Include="..\..\glz\utilities\color.cpp">
       <Filter>utilities</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\glz\utilities\framebuffer.cpp">
+      <Filter>utilities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\examples\Resource.h">
@@ -165,6 +168,9 @@
       <Filter>utilities</Filter>
     </ClInclude>
     <ClInclude Include="..\..\glz\utilities\sprite.h">
+      <Filter>utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz\utilities\framebuffer.h">
       <Filter>utilities</Filter>
     </ClInclude>
   </ItemGroup>

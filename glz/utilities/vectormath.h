@@ -245,15 +245,12 @@ public:
 	float x, y, z;
 	vert3() : x(0.0f), y(0.0f), z(0.0f) {}
 	//vert3(float xin, float yin, float zin) : x{ xin }, y{ yin }, z{ zin } {}
-	vert3(double xin, double yin, double zin)
+	vert3(double xin, double yin, double zin=0.0)
 	{
 		x = (float)xin;
 		y = (float)yin;
 		z = (float)zin;
 	}
-
-
-
 
 	vert3 vert3::operator+ (vec3 b) { return vert3(x + b.x, y + b.y, z + b.z); }
 	vert3 vert3::operator+= (vec3 b) { x += b.x; y += b.y; z += b.z; return *this; }
@@ -288,7 +285,6 @@ public:
 	void project(glzMatrix m);
 
 };
-
 
 
 
@@ -332,7 +328,6 @@ class glzMatrix{ //matrix class
 private:
 	void multThis(glzMatrix b) { *this *= b; }
 
-	//glzMatrix() : glzMatrix((double[16]){ 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0 }) {}
 public:
 	double m[16];
 	//double inverted_m[16]; 
@@ -351,7 +346,10 @@ public:
 	//glzMatrix glzMatrix::operator*= (glzMatrix c, glzQuaternion b);
 	// movements
 	void translate(float x, float y, float z);// {m[12] += x; m[13] += y;  m[14] += z; }
+	void translate(vec2 p) { this->translate(p.x, p.y, 0.0f); }
+	void translate(vec3 p) { this->translate(p.x, p.y, p.z); }
 	void translate(vert3 p) { this->translate(p.x, p.y, p.z); }
+
 	void scale(float x, float y, float z);
 	void scale(vec3 s) { this->scale(s.x, s.y, s.z); }
 	void rotate(float a, float x, float y, float z);
