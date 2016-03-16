@@ -540,8 +540,8 @@ void Draw (void)
 		glzDrawSprite(rm.gettexture("sprite.derpy_phirana"), -0.5f, -0.5f, 0.5f, aspect, glzBlendingMode::ALPHA);
 		
 
-		glzDrawText("Full screen quads", -0.8f, 0.49f, 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_BLACK);
-		glzDrawText("Switch screens with 1, 2, 3, 4, 5, 6", 0.8f, -0.5f, 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_BLACK, glzOrigin::BOTTOM_RIGHT);
+		glzDrawText("Full screen quads", vert3(-0.8f, 0.49f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_BLACK);
+		glzDrawText("Switch screens with 1, 2, 3, 4, 5, 6", vert3(0.8f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_BLACK, glzOrigin::BOTTOM_RIGHT);
 
 	
 	}	
@@ -552,8 +552,8 @@ void Draw (void)
 		
 		glzDrawSprite(rm.gettexture("sprite.explotion128a"), glzSprite(8, 4, spriteframe, 0.0f), 0.0f, 0.0f, 1.0f, aspect, glzBlendingMode::ALPHA);
 		
-		glzDrawText("Sprites", -0.8f, 0.49f, 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
-		glzDrawText("Switch screens with 1, 2, 3, 4, 5, 6", 0.8f, -0.5f, 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
+		glzDrawText("Sprites", vert3(-0.8f, 0.49f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
+		glzDrawText("Switch screens with 1, 2, 3, 4, 5, 6", vert3(0.8f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
 
 	}
 
@@ -571,8 +571,8 @@ void Draw (void)
 	glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("atlas.tinytiles"));
 	glzDrawVAO(vao_num[2],vao[2],GL_TRIANGLES);
 
-	glzDrawText("Atlas grid", -0.8f, 0.49f, 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
-	glzDrawText("Switch screens with 1, 2, 3, 4, 5, 6", 0.8f, -0.5f, 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
+	glzDrawText("Atlas grid", vert3(-0.8f, 0.49f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
+	glzDrawText("Switch screens with 1, 2, 3, 4, 5, 6", vert3(0.8f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
 
 
 	}
@@ -631,12 +631,12 @@ void Draw (void)
 
 	
 		glzDirectSpriteRenderAtlas(0, 0, 0, 100, 100, 4, 4, 14, glzOrigin::CENTERED);
-	glUniform4f(loc3, 1.0f, 0.0f, 1.0f, 1.0f);
+		glUniform4f(loc3, 1.0f, 0.0f, 1.0f, 1.0f);
 		glzDirectSpriteRenderAtlasPixelPerfect(192, 192, 1, 64, 64, 4, 4, 1, glzOrigin::BOTTOM_LEFT);
 		glzDirectSpriteRenderAtlasPixelPerfectQuantized(208, 192, 1, 64, 64, 4, 4, 1, 16.0f, glzOrigin::BOTTOM_LEFT);		
 			
-		glzDrawText("Direct draw sprites in various modes", -0.8f, 0.49f, 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
-		glzDrawText("Switch screens with 1, 2, 3, 4, 5, 6", 0.8f, -0.5f, 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
+		glzDrawText("Direct draw sprites in various modes", vert3(-0.8f, 0.49f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
+		glzDrawText("Switch screens with 1, 2, 3, 4, 5, 6", vert3(0.8f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
 		
 		glEnable(GL_DEPTH_TEST);
 
@@ -650,8 +650,8 @@ void Draw (void)
 		glPointSize(3.0f);
 		ps.render_out();
 
-		glzDrawText("Simple 2D particle system, easy to use, not hard to master",-0.8f, 0.49f, 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
-		glzDrawText("Switch screens with 1, 2, 3, 4, 5, 6", 0.8f, -0.5f, 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
+		glzDrawText("Simple 2D particle system, easy to use, not hard to master", vert3(-0.8f, 0.49f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
+		glzDrawText("Switch screens with 1, 2, 3, 4, 5, 6", vert3(0.8f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
 
 	}
 
@@ -659,13 +659,13 @@ void Draw (void)
 	if (gamestate == 7)
 	{	
 		draw_backdrop_glitch(rm.gettextureHandle("background.cv90"), rm.gettextureHandle("sprite.blob"));
-		glzDrawText("Switch screens with 1, 2, 3, 4, 5, 6", 0.8f, -0.5f, 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
+		glzDrawText("Switch screens with 1, 2, 3, 4, 5, 6", vert3(0.8f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
 	}
 
 	if (gamestate == 8)
 	{
 		tempgraph.draw();
-		glzDrawText("Switch screens with 1, 2, 3, 4, 5, 6", 0.8f, -0.5f, 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
+		glzDrawText("Switch screens with 1, 2, 3, 4, 5, 6", vert3(0.8f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
 	}
 
 
