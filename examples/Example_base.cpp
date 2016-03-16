@@ -258,7 +258,6 @@ void Draw (void)
 
 
 	glBindTexture(GL_TEXTURE_2D, 0);
-//	glBindFramebuffer(GL_FRAMEBUFFER_EXT, 0);
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		// Clear Screen And Depth Buffer
 	float mtemp[16];
@@ -320,12 +319,9 @@ void Draw (void)
 
 	glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("texture.gridlines"));
 	glzDrawVAO(vao_num[4],vao[4],GL_TRIANGLES);
-
-
+	
 	// draw text
 	glzDrawText("Geometry generation test, try the arrow keys.", -0.8f, 0.49f, 0.05f, 1.3f, aspect, rm.gettexture("font.digitalstrip_l"), COL_WHITE);
-
-
 
 	glUseProgram(0);
 	glFlush ();													// Flush The GL Rendering Pipeline

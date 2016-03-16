@@ -98,6 +98,5 @@ glzMatrix glzViewPort::returnOrthoMatrix()
 
 glzSprite glzViewPort::returnSprite()
 {
-
 	return glzSprite(tex2(left, right), tex2(bottom, top), 0.0f);
 }
