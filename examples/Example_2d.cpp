@@ -43,6 +43,7 @@
 #include "..\glz\2d\2d-utilities.h"
 #include "..\glz\utilities\resourcemanager.h"
 #include "..\glz\input\input.h"
+#include "..\glz\layout\viewport.h"
 
 using namespace std;										
 
@@ -79,6 +80,8 @@ node3 n;
 
 glztiles tilemap;
 glztiles tilemap2;
+
+glzViewport view1, view2;
 
 
 GLhandleARB  ProgramObject, ProgramObjectFT, ProgramObjectFSQ, ProgramObjectFSQ_glitch;
@@ -147,7 +150,20 @@ BOOL Initialize (GL_Window* window)					// Any GL Init Code & User Initialiazati
 	aspect = (float)window->init.width / (float)window->init.height;
 	
 
+	view1.init(aspect,0.05f);
+	view1.setDisplay(0, 0, window->init.width, window->init.height);
+	view2.init(aspect);
+	view2.setParent(&view1);
+	view2.setOrigin(glzOrigin::BOTTOM_LEFT);
+	view2.setSize(1.0f, 0.5f);
+	view2.update();
+	view2.update();
 
+	view2.update();
+	view2.update();
+	view2.update();
+	view2.update();
+	view2.update();
 
 
 	glzMatrix mo;
@@ -443,14 +459,15 @@ if (gamestate == 8)
 	n.tick(seconds);
 	tempgraph.update(seconds);
 
-	if (input.getKeyState('1') == TRUE) gamestate = 1;
-	if (input.getKeyState('2') == TRUE) gamestate = 2;
-	if (input.getKeyState('3') == TRUE) gamestate = 3;
-	if (input.getKeyState('4') == TRUE) gamestate = 4;
-	if (input.getKeyState('5') == TRUE) gamestate = 5;
-	if (input.getKeyState('6') == TRUE) gamestate = 6;
-	if (input.getKeyState('7') == TRUE) gamestate = 7;
-	if (input.getKeyState('8') == TRUE) gamestate = 8;
+	if(input.getKeyState('1') == TRUE) gamestate = 1;
+	if(input.getKeyState('2') == TRUE) gamestate = 2;
+	if(input.getKeyState('3') == TRUE) gamestate = 3;
+	if(input.getKeyState('4') == TRUE) gamestate = 4;
+	if(input.getKeyState('5') == TRUE) gamestate = 5;
+	if(input.getKeyState('6') == TRUE) gamestate = 6;
+	if(input.getKeyState('7') == TRUE) gamestate = 7;
+	if(input.getKeyState('8') == TRUE) gamestate = 8;
+	if(input.getKeyState('9') == TRUE) gamestate = 9;
 }
 
 
@@ -521,7 +538,7 @@ void Draw (void)
 		glzDrawText("Using", vert3(-0.8f, -0.03f), 0.05f, 1.0f, aspect, rm.gettexture("font.minya_m"), COL_WHITE);
 		glzDrawText("all kinds", vert3(-0.8f, -0.1f), 0.05f, 1.0f, aspect, rm.gettexture("font.digitalstrip_l"), COL_WHITE);
 		glzDrawText("of fonts", vert3(-0.8f, -0.17f), 0.05f, 1.0f, aspect, rm.gettexture("font.morpheus_l"), COL_WHITE);
-		glzDrawText("Switch screens with 1, 2, 3, 4, 5, 6", vert3(0.8f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
+		glzDrawText("Switch screens with 1, 2, 3...", vert3(0.8f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
 	}
 
 
@@ -541,9 +558,8 @@ void Draw (void)
 		
 
 		glzDrawText("Full screen quads", vert3(-0.8f, 0.49f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_BLACK);
-		glzDrawText("Switch screens with 1, 2, 3, 4, 5, 6", vert3(0.8f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_BLACK, glzOrigin::BOTTOM_RIGHT);
+		glzDrawText("Switch screens with 1, 2, 3...", vert3(0.8f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_BLACK, glzOrigin::BOTTOM_RIGHT);
 
-	
 	}	
 
 
@@ -553,7 +569,7 @@ void Draw (void)
 		glzDrawSprite(rm.gettexture("sprite.explotion128a"), glzSprite(8, 4, spriteframe, 0.0f), 0.0f, 0.0f, 1.0f, aspect, glzBlendingMode::ALPHA);
 		
 		glzDrawText("Sprites", vert3(-0.8f, 0.49f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
-		glzDrawText("Switch screens with 1, 2, 3, 4, 5, 6", vert3(0.8f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
+		glzDrawText("Switch screens with 1, 2, 3...", vert3(0.8f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
 
 	}
 
@@ -572,7 +588,7 @@ void Draw (void)
 	glzDrawVAO(vao_num[2],vao[2],GL_TRIANGLES);
 
 	glzDrawText("Atlas grid", vert3(-0.8f, 0.49f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
-	glzDrawText("Switch screens with 1, 2, 3, 4, 5, 6", vert3(0.8f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
+	glzDrawText("Switch screens with 1, 2, 3...", vert3(0.8f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
 
 
 	}
@@ -636,7 +652,7 @@ void Draw (void)
 		glzDirectSpriteRenderAtlasPixelPerfectQuantized(208, 192, 1, 64, 64, 4, 4, 1, 16.0f, glzOrigin::BOTTOM_LEFT);		
 			
 		glzDrawText("Direct draw sprites in various modes", vert3(-0.8f, 0.49f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
-		glzDrawText("Switch screens with 1, 2, 3, 4, 5, 6", vert3(0.8f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
+		glzDrawText("Switch screens with 1, 2, 3...", vert3(0.8f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
 		
 		glEnable(GL_DEPTH_TEST);
 
@@ -657,7 +673,7 @@ void Draw (void)
 		ps.render_out();
 
 		glzDrawText("Simple 2D particle system, easy to use, not hard to master", vert3(-0.8f, 0.49f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
-		glzDrawText("Switch screens with 1, 2, 3, 4, 5, 6", vert3(0.8f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
+		glzDrawText("Switch screens with 1, 2, 3...", vert3(0.8f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
 
 	}
 
@@ -665,13 +681,25 @@ void Draw (void)
 	if (gamestate == 7)
 	{	
 		draw_backdrop_glitch(rm.gettextureHandle("background.cv90"), rm.gettextureHandle("sprite.blob"));
-		glzDrawText("Switch screens with 1, 2, 3, 4, 5, 6", vert3(0.8f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
+		glzDrawText("Switch screens with 1, 2, 3...", vert3(0.8f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
 	}
 
 	if (gamestate == 8)
 	{
 		tempgraph.draw();
-		glzDrawText("Switch screens with 1, 2, 3, 4, 5, 6", vert3(0.8f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
+		glzDrawText("Switch screens with 1, 2, 3...", vert3(0.8f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
+	}
+
+
+	if(gamestate == 9)
+	{
+
+		view2.setupViewport();
+		glzBackdrop(rm.gettexture("background.back"), glzBlendingMode::NONE);
+		view2.disableViewport();
+
+		glzDrawText("viewport rendering", vert3(-0.8f, 0.49f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_BLACK);
+		glzDrawText("Switch screens with 1, 2, 3...", vert3(0.8f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
 	}
 
 

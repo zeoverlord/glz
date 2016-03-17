@@ -34,7 +34,7 @@
 // at a start the viewport its inside it's parent window
 // if width is wider than what the origin coordinate allows then the window will be resized
 
-class glzViewPort
+class glzViewport
 {
 private:
 	float left;
@@ -62,7 +62,7 @@ private:
 
 	glzOrigin ReferenceOrigin;
 
-	shared_ptr<glzViewPort> parent;
+	glzViewport *parent;
 
 private:
 
@@ -91,7 +91,7 @@ private:
 
 public:
 
-	glzViewPort(float inAspect=1.0f, float padding=1.0f)
+	glzViewport(float inAspect=1.0f, float padding=0.0f)
 	{
 		left = -inAspect*0.5f;
 		right = inAspect*0.5f;
@@ -119,9 +119,38 @@ public:
 
 		ReferenceOrigin=glzOrigin::TOP_LEFT;
 	}
-	~glzViewPort(){ parent = nullptr; }
+	~glzViewport(){ parent = nullptr; }
 
-	void setParent(shared_ptr<glzViewPort> inParent)
+	void init(float inAspect = 1.0f, float padding = 0.0f)
+	{
+		left = -inAspect*0.5f;
+		right = inAspect*0.5f;
+		top = 0.5f;
+		bottom = -0.5f;
+
+		aspect = inAspect;
+
+		paddingLeft = inAspect*padding;
+		paddingRight = -inAspect*padding;
+		paddingTop = -padding;
+		paddingBottom = padding;
+
+		width = 1.0f;
+		height = 1.0f;
+
+		originX = 0.0f;
+		originY = 0.0f;
+
+		displayX = 0;
+		displayY = 0;
+
+		displayWidth = 100; // non realistic screen, but should not cause problems if abused
+		displayHeight = 100;
+
+		ReferenceOrigin = glzOrigin::TOP_LEFT;
+	}
+
+	void setParent(glzViewport *inParent)
 	{
 		parent = inParent;
 		update();
@@ -153,6 +182,7 @@ public:
 		displayY = inY;
 		displayWidth = inWidth; 
 		displayHeight = inHeight;
+		update();
 	}
 
 	int getDisplayX(void) { return displayX; }
@@ -165,7 +195,7 @@ public:
 	void setOrigin(glzOrigin origin) { ReferenceOrigin = origin; update(); }
 	glzOrigin getOrigin(void) { return ReferenceOrigin; }
 
-	shared_ptr<glzViewPort> getParent()	{ return parent; }
+	glzViewport *getParent()	{ return parent; }
 	float getWidth(){return width;}
 	float getHeight(){ return height; }
 	float getOriginX(){ return originX; }
@@ -173,8 +203,8 @@ public:
 	float getAspect(){ return aspect; }
 
 	void update();
-	void setupCliping(); //set up cliping
-	void disableCliping();
+	void setupViewport(); //set up cliping
+	void disableViewport();
 	glzMatrix returnOrthoMatrix();
 	glzSprite returnSprite();
 

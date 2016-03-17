@@ -145,6 +145,7 @@ unsigned int glzFrameBuffer::getColorBufferHandle()
 	{
 		return ColorBufferHandle;
 	}
+	return 0;
 }
 
 unsigned int glzFrameBuffer::getDepthBufferHandle()
@@ -153,5 +154,6 @@ unsigned int glzFrameBuffer::getDepthBufferHandle()
 	{
 		return DepthBufferHandle;
 	}
+	return 0;
 }
 
