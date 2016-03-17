@@ -646,6 +646,12 @@ void Draw (void)
 	{
 		glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("background.back"));
 
+		m.LoadIdentity(); // this should only be temp code
+		m.ortho(-400, 400, -250, 250, -100, 100);
+
+
+		m.transferMatrix(&mtemp[0]);
+		glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
 
 		glPointSize(3.0f);
 		ps.render_out();

@@ -54,6 +54,12 @@ private:
 	float originX;
 	float originY;
 
+	int displayX;
+	int displayY;
+	int displayWidth;
+	int displayHeight;
+	
+
 	glzOrigin ReferenceOrigin;
 
 	shared_ptr<glzViewPort> parent;
@@ -66,6 +72,11 @@ private:
 		right = parent->right;
 		top = parent->top;
 		bottom = parent->bottom;
+
+		displayX = parent->getDisplayX();
+		displayY = parent->getDisplayY();
+		displayWidth = parent->getDisplayWidth();
+		displayHeight = parent->getDisplayHeigth();
 	}
 	void pushInPaddingParent(void)
 	{
@@ -100,6 +111,12 @@ public:
 		originX = 0.0f;
 		originY = 0.0f;
 
+		displayX=0; 
+		displayY=0;
+
+		displayWidth = 100; // non realistic screen, but should not cause problems if abused
+		displayHeight = 100;
+
 		ReferenceOrigin=glzOrigin::TOP_LEFT;
 	}
 	~glzViewPort(){ parent = nullptr; }
@@ -130,6 +147,20 @@ public:
 		update();
 	}
 
+	void setDisplay(int inX, int inY, int inWidth, int inHeight)
+	{
+		displayX = inX;
+		displayY = inY;
+		displayWidth = inWidth; 
+		displayHeight = inHeight;
+	}
+
+	int getDisplayX(void) { return displayX; }
+	int getDisplayY(void) { return displayY; }
+	int getDisplayWidth(void) { return displayWidth; }
+	int getDisplayHeigth(void) { return displayHeight; }
+
+
 
 	void setOrigin(glzOrigin origin) { ReferenceOrigin = origin; update(); }
 	glzOrigin getOrigin(void) { return ReferenceOrigin; }
@@ -142,8 +173,8 @@ public:
 	float getAspect(){ return aspect; }
 
 	void update();
-	void setupRendering(); //set up cliping
-	void disableRendering();
+	void setupCliping(); //set up cliping
+	void disableCliping();
 	glzMatrix returnOrthoMatrix();
 	glzSprite returnSprite();
 

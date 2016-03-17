@@ -34,6 +34,7 @@ void glzViewPort::resizeView(void)
 	float tempTop = top;
 	float tempBottom = bottom;
 
+
 	float tempWidth = right - left;
 	float tempHeight = top - bottom;
 
@@ -86,6 +87,32 @@ void glzViewPort::update()
 	}	
 	resizeView();
 }
+
+void glzViewPort::setupCliping()
+{
+	float oSspect = (float)displayWidth / (float)displayHeight;
+	float oLeft = -oSspect*0.5f;
+	float oRight = oSspect*0.5f;
+	float oTop = 0.5f;
+	float oBottom = -0.5f;
+
+	int newDisplayX = (int)glzRemapToRange(oLeft, oRight, left, (float)0, (float)displayWidth);
+	int newDisplayY = (int)glzRemapToRange(oBottom, oTop, bottom, (float)0, (float)displayHeight);
+
+
+	int newDisplayWidth = (int)glzRemapToRange(oLeft, oRight, right, (float)0, (float)displayWidth) - newDisplayX;
+	int newDisplayHeight = (int)glzRemapToRange(oBottom, oTop, top, (float)0, (float)displayHeight) - newDisplayY;
+
+	glScissor(newDisplayX, newDisplayY, newDisplayWidth, newDisplayHeight);
+	glEnable(GL_SCISSOR_TEST);
+}
+
+void glzViewPort::disableCliping()
+{
+	glDisable(GL_SCISSOR_TEST);
+	glScissor(displayX, displayY, displayWidth, displayHeight);	
+}
+
 
 glzMatrix glzViewPort::returnOrthoMatrix()
 {
