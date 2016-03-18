@@ -130,8 +130,10 @@ public:
 
 		aspect = inAspect;
 
-		paddingLeft = inAspect*padding;
-		paddingRight = -inAspect*padding;
+	//	paddingLeft = inAspect*padding;
+	//	paddingRight = -inAspect*padding;
+		paddingLeft = padding;
+		paddingRight = -padding;
 		paddingTop = -padding;
 		paddingBottom = padding;
 

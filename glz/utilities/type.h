@@ -29,7 +29,7 @@ using namespace std;
 
 
 enum class glzVAOType {NONE, AUTO, VERTEX, VERTEX_TEXTURE, VERTEX_NORMAL, VERTEX_TEXTURE_NORMAL };
-enum class glzOrigin { BOTTOM_LEFT, BOTTOM_RIGHT, TOP_LEFT, TOP_RIGHT, CENTERED };
+enum class glzOrigin { BOTTOM_LEFT, BOTTOM_RIGHT, TOP_LEFT, TOP_RIGHT, CENTERED, LEFT, RIGHT, TOP, BOTTOM };
 enum class glzAxis { X, Y, Z };
 enum class glzDistribution { UNIFORM, NORMAL, GAMMA, EXPONENTIAL };
 

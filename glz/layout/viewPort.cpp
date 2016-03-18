@@ -73,11 +73,43 @@ void glzViewport::resizeView(void)
 
 	if(ReferenceOrigin == glzOrigin::CENTERED)
 	{
-		right = tempRight - (resizedTempWidth*0.5f);
-		top = tempTop - (resizedTempHeight*0.5f);
+		right = ((tempRight + tempLeft)*0.5) + (resizedTempWidth*0.5f);
+		left = ((tempRight + tempLeft)*0.5) - (resizedTempWidth*0.5f);
 
-		left = tempLeft + (resizedTempWidth*0.5f);
-		bottom = tempBottom + (resizedTempHeight*0.5f);
+		top = ((tempTop + tempBottom)*0.5) + (resizedTempHeight*0.5f);
+		bottom = ((tempTop + tempBottom)*0.5) - (resizedTempHeight*0.5f);
+	}
+
+	if (ReferenceOrigin == glzOrigin::LEFT)
+	{
+		right = tempLeft + resizedTempWidth;
+		left = tempLeft;
+		top = ((tempTop + tempBottom)*0.5) + (resizedTempHeight*0.5f);
+		bottom = ((tempTop + tempBottom)*0.5) - (resizedTempHeight*0.5f);
+	}
+
+	if (ReferenceOrigin == glzOrigin::RIGHT)
+	{
+		right = tempRight;
+		left = tempRight - resizedTempWidth;
+		top = ((tempTop + tempBottom)*0.5) + (resizedTempHeight*0.5f);
+		bottom = ((tempTop + tempBottom)*0.5) - (resizedTempHeight*0.5f);
+	}
+
+	if (ReferenceOrigin == glzOrigin::TOP)
+	{
+		right = ((tempRight + tempLeft)*0.5) + (resizedTempWidth*0.5f);
+		left = ((tempRight + tempLeft)*0.5) - (resizedTempWidth*0.5f);
+		top = tempTop;
+		bottom = tempTop - resizedTempHeight;
+	}
+
+	if (ReferenceOrigin == glzOrigin::BOTTOM)
+	{
+		right = ((tempRight + tempLeft)*0.5) + (resizedTempWidth*0.5f);
+		left = ((tempRight + tempLeft)*0.5) - (resizedTempWidth*0.5f);
+		top = tempBottom + resizedTempHeight;
+		bottom = tempBottom;
 	}
 
 	aspect = resizedTempWidth / resizedTempHeight;
@@ -113,12 +145,13 @@ void glzViewport::disableViewport()
 }
 
 
+
 glzMatrix glzViewport::returnOrthoMatrix()
 {
 	glzMatrix m;
 
-	m.LoadIdentity();
-	m.ortho2D(left,right,bottom,top);
+	m.LoadIdentity();		
+	m.ortho2D(-aspect*0.5f, aspect*0.5f, -0.5f, 0.5f);
 	return m;
 }
 

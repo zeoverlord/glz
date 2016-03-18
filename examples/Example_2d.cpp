@@ -81,7 +81,7 @@ node3 n;
 glztiles tilemap;
 glztiles tilemap2;
 
-glzViewport view1, view2;
+glzViewport view1, view2, view3;
 
 
 GLhandleARB  ProgramObject, ProgramObjectFT, ProgramObjectFSQ, ProgramObjectFSQ_glitch;
@@ -152,18 +152,16 @@ BOOL Initialize (GL_Window* window)					// Any GL Init Code & User Initialiazati
 
 	view1.init(aspect,0.05f);
 	view1.setDisplay(0, 0, window->init.width, window->init.height);
-	view2.init(aspect);
-	view2.setParent(&view1);
-	view2.setOrigin(glzOrigin::BOTTOM_LEFT);
-	view2.setSize(1.0f, 0.5f);
-	view2.update();
-	view2.update();
 
-	view2.update();
-	view2.update();
-	view2.update();
-	view2.update();
-	view2.update();
+	view2.init(aspect, 0.055f);
+	view2.setParent(&view1);
+	view2.setOrigin(glzOrigin::BOTTOM);
+	view2.setSize(1.0f, 0.5f);
+
+	view3.init(view2.getAspect());
+	view3.setParent(&view2);
+	view3.setOrigin(glzOrigin::RIGHT);
+	view3.setSize(0.25f, 1.0f);
 
 
 	glzMatrix mo;
@@ -243,8 +241,10 @@ BOOL Initialize (GL_Window* window)					// Any GL Init Code & User Initialiazati
 	rm.createTexture("atlas.tinytiles", "data\\tinytiles.tga", glzTexFilter::NEAREST);
 	rm.createTexture("atlas.tileset", "data\\tileset.tga", glzTexFilter::NEAREST);
 
-
-
+	//backgrounds
+	rm.createTexture("dialog.box", "data\\dialogbox.tga", glzTexFilter::NEAREST);
+	rm.createTexture("dialog.character", "data\\character.tga", glzTexFilter::NEAREST);
+	
 	
 	//unsigned int tx;
 	//texturecontainer *txx;
@@ -695,10 +695,14 @@ void Draw (void)
 	{
 
 		view2.setupViewport();
-		glzBackdrop(rm.gettexture("background.back"), glzBlendingMode::NONE);
+		glzBackdrop(rm.gettexture("dialog.box"), glzBlendingMode::NONE);
 		view2.disableViewport();
 
-		glzDrawText("viewport rendering", vert3(-0.8f, 0.49f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_BLACK);
+		view3.setupViewport();
+		glzBackdrop(rm.gettexture("dialog.character"), glzBlendingMode::NONE);
+		view3.disableViewport();
+
+		glzDrawText("viewport rendering", vert3(-0.8f, 0.49f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
 		glzDrawText("Switch screens with 1, 2, 3...", vert3(0.8f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
 	}
 
