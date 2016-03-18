@@ -73,4 +73,6 @@ void Deinitialize (void);							// Performs All Your DeInitialization
 
 void Update (float seconds);					// Perform Motion Updates
 
+void DisplayUpdate(int width, int height);
+
 void Draw (void);									// Perform All Your Scene Drawing

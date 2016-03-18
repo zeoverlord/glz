@@ -69,6 +69,7 @@ void ToggleFullscreen (GL_Window* window)								// Toggle Fullscreen/Windowed
 
 void ReshapeGL (int width, int height)									// Reshape The Window When It's Moved Or Resized
 {
+	DisplayUpdate(width, height);
 	glViewport (0, 0, (GLsizei)(width), (GLsizei)(height));				// Reset The Current Viewport
 }
 

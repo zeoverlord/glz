@@ -153,7 +153,7 @@ BOOL Initialize (GL_Window* window)					// Any GL Init Code & User Initialiazati
 	view1.init(aspect,0.05f);
 	view1.setDisplay(0, 0, window->init.width, window->init.height);
 
-	view2.init(aspect, 0.055f);
+	view2.init(view1.getAspect(),0.057f);
 	view2.setParent(&view1);
 	view2.setOrigin(glzOrigin::BOTTOM);
 	view2.setSize(1.0f, 0.5f);
@@ -161,7 +161,7 @@ BOOL Initialize (GL_Window* window)					// Any GL Init Code & User Initialiazati
 	view3.init(view2.getAspect());
 	view3.setParent(&view2);
 	view3.setOrigin(glzOrigin::RIGHT);
-	view3.setSize(0.25f, 1.0f);
+	view3.setSize(0.33f, 1.0f);
 
 
 	glzMatrix mo;
@@ -505,6 +505,23 @@ void draw_backdrop_glitch(unsigned int bgtexture, unsigned int bgtexture2)
 }
 
 
+void DisplayUpdate(int width, int height)
+{
+	if(g_window != nullptr)
+	{
+	//	g_window->init.width = width;
+	//	g_window->init.height = height;
+	}
+
+	aspect = (float)width / (float)height;
+	
+	view1.setDisplay(0, 0, width, height);
+	view2.update();
+	view3.update();
+
+}
+
+
 void Draw (void)
 {
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -530,15 +547,15 @@ void Draw (void)
 
 	if (gamestate==1)  
 	{
-		glzDrawText("Normal text", vert3(-0.8f, 0.49f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
-		glzDrawText("Tabs and endlines work just as well\nTab\t\t\t\\t\nEndline \t\t\\n", vert3(-0.8f, 0.42f), 0.05f, 1.0f, aspect, rm.gettexture("font.arial"), COL_WHITE);
-		glzDrawText(tbuffer, vert3(-0.8f, 0.25f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
-		glzDrawText(tbuffer2, vert3(-0.8f, 0.19f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
-		glzDrawText("You can also play with the kerning if you want", vert3(-0.8f, 0.07f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
-		glzDrawText("Using", vert3(-0.8f, -0.03f), 0.05f, 1.0f, aspect, rm.gettexture("font.minya_m"), COL_WHITE);
-		glzDrawText("all kinds", vert3(-0.8f, -0.1f), 0.05f, 1.0f, aspect, rm.gettexture("font.digitalstrip_l"), COL_WHITE);
-		glzDrawText("of fonts", vert3(-0.8f, -0.17f), 0.05f, 1.0f, aspect, rm.gettexture("font.morpheus_l"), COL_WHITE);
-		glzDrawText("Switch screens with 1, 2, 3...", vert3(0.8f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
+		glzDrawText("Normal text", vert3(-0.5f, 0.49f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
+		glzDrawText("Tabs and endlines work just as well\nTab\t\t\t\\t\nEndline \t\t\\n", vert3(-0.5f, 0.42f), 0.05f, 1.0f, aspect, rm.gettexture("font.arial"), COL_WHITE);
+		glzDrawText(tbuffer, vert3(-0.5f, 0.25f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
+		glzDrawText(tbuffer2, vert3(-0.5f, 0.19f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
+		glzDrawText("You can also play with the kerning if you want", vert3(-0.5f, 0.07f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
+		glzDrawText("Using", vert3(-0.5f, -0.03f), 0.05f, 1.0f, aspect, rm.gettexture("font.minya_m"), COL_WHITE);
+		glzDrawText("all kinds", vert3(-0.5f, -0.1f), 0.05f, 1.0f, aspect, rm.gettexture("font.digitalstrip_l"), COL_WHITE);
+		glzDrawText("of fonts", vert3(-0.5f, -0.17f), 0.05f, 1.0f, aspect, rm.gettexture("font.morpheus_l"), COL_WHITE);
+		glzDrawText("Switch screens with 1, 2, 3...", vert3(0.5f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
 	}
 
 
@@ -557,8 +574,8 @@ void Draw (void)
 		glzDrawSprite(rm.gettexture("sprite.derpy_phirana"), -0.5f, -0.5f, 0.5f, aspect, glzBlendingMode::ALPHA);
 		
 
-		glzDrawText("Full screen quads", vert3(-0.8f, 0.49f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_BLACK);
-		glzDrawText("Switch screens with 1, 2, 3...", vert3(0.8f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_BLACK, glzOrigin::BOTTOM_RIGHT);
+		glzDrawText("Full screen quads", vert3(-0.5f, 0.49f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_BLACK);
+		glzDrawText("Switch screens with 1, 2, 3...", vert3(0.5f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_BLACK, glzOrigin::BOTTOM_RIGHT);
 
 	}	
 
@@ -568,8 +585,8 @@ void Draw (void)
 		
 		glzDrawSprite(rm.gettexture("sprite.explotion128a"), glzSprite(8, 4, spriteframe, 0.0f), 0.0f, 0.0f, 1.0f, aspect, glzBlendingMode::ALPHA);
 		
-		glzDrawText("Sprites", vert3(-0.8f, 0.49f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
-		glzDrawText("Switch screens with 1, 2, 3...", vert3(0.8f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
+		glzDrawText("Sprites", vert3(-0.5f, 0.49f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
+		glzDrawText("Switch screens with 1, 2, 3...", vert3(0.5f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
 
 	}
 
@@ -587,8 +604,8 @@ void Draw (void)
 	glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("atlas.tinytiles"));
 	glzDrawVAO(vao_num[2],vao[2],GL_TRIANGLES);
 
-	glzDrawText("Atlas grid", vert3(-0.8f, 0.49f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
-	glzDrawText("Switch screens with 1, 2, 3...", vert3(0.8f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
+	glzDrawText("Atlas grid", vert3(-0.5f, 0.49f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
+	glzDrawText("Switch screens with 1, 2, 3...", vert3(0.5f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
 
 
 	}
@@ -651,8 +668,8 @@ void Draw (void)
 		glzDirectSpriteRenderAtlasPixelPerfect(192, 192, 1, 64, 64, 4, 4, 1, glzOrigin::BOTTOM_LEFT);
 		glzDirectSpriteRenderAtlasPixelPerfectQuantized(208, 192, 1, 64, 64, 4, 4, 1, 16.0f, glzOrigin::BOTTOM_LEFT);		
 			
-		glzDrawText("Direct draw sprites in various modes", vert3(-0.8f, 0.49f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
-		glzDrawText("Switch screens with 1, 2, 3...", vert3(0.8f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
+		glzDrawText("Direct draw sprites in various modes", vert3(-0.5f, 0.49f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
+		glzDrawText("Switch screens with 1, 2, 3...", vert3(0.5f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
 		
 		glEnable(GL_DEPTH_TEST);
 
@@ -672,8 +689,8 @@ void Draw (void)
 		glPointSize(3.0f);
 		ps.render_out();
 
-		glzDrawText("Simple 2D particle system, easy to use, not hard to master", vert3(-0.8f, 0.49f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
-		glzDrawText("Switch screens with 1, 2, 3...", vert3(0.8f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
+		glzDrawText("Simple 2D particle system, easy to use, not hard to master", vert3(-0.5f, 0.49f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
+		glzDrawText("Switch screens with 1, 2, 3...", vert3(0.5f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
 
 	}
 
@@ -681,13 +698,13 @@ void Draw (void)
 	if (gamestate == 7)
 	{	
 		draw_backdrop_glitch(rm.gettextureHandle("background.cv90"), rm.gettextureHandle("sprite.blob"));
-		glzDrawText("Switch screens with 1, 2, 3...", vert3(0.8f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
+		glzDrawText("Switch screens with 1, 2, 3...", vert3(0.5f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
 	}
 
 	if (gamestate == 8)
 	{
 		tempgraph.draw();
-		glzDrawText("Switch screens with 1, 2, 3...", vert3(0.8f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
+		glzDrawText("Switch screens with 1, 2, 3...", vert3(0.5f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
 	}
 
 
@@ -702,8 +719,8 @@ void Draw (void)
 		glzBackdrop(rm.gettexture("dialog.character"), glzBlendingMode::NONE);
 		view3.disableViewport();
 
-		glzDrawText("viewport rendering", vert3(-0.8f, 0.49f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
-		glzDrawText("Switch screens with 1, 2, 3...", vert3(0.8f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
+		glzDrawText("viewport rendering", vert3(-0.5f, 0.49f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
+		glzDrawText("Switch screens with 1, 2, 3...", vert3(0.5f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
 	}
 
 
