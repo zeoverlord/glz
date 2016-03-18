@@ -151,7 +151,7 @@ glzMatrix glzViewport::returnOrthoMatrix()
 	glzMatrix m;
 
 	m.LoadIdentity();		
-	m.ortho2D(-aspect*0.5f, aspect*0.5f, -0.5f, 0.5f);
+	m.ortho2D(-0.5f, 0.5f, -0.5f, 0.5f);
 	return m;
 }
 

@@ -146,7 +146,7 @@ void glzDrawText(string text, float x, float y, float scale, float kern, float a
 	glzShaderUseBasic();
 	glzMatrix m;
 	m.LoadIdentity();
-	m.ortho(-aspect*0.5f, aspect*0.5f, -0.5f, 0.5f, 0.0f, 1.0f);
+	m.ortho(-0.5f, 0.5f, -0.5f, 0.5f, 0.0f, 1.0f);
 	m.translate(x, y, 0);
 
 	unsigned int basic_program = glzShaderReurnBasic();
