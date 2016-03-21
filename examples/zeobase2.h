@@ -24,16 +24,6 @@
 #include "resource.h"
 #include <wchar.h>
 
-typedef struct {									// Structure For Keyboard Stuff
-	bool keyDown[256];								// Holds TRUE / FALSE For Each Key
-	bool LMdown;
-	bool RMdown;
-	bool MMdown;
-	int Mpos_x;
-	int Mpos_y;
-	int Mweel;
-	bool Mactive;
-} Keys;											// Keys
 
 typedef struct {									// Contains Information Vital To Applications
 	HINSTANCE		hInstance;						// Application Instance
@@ -63,11 +53,11 @@ typedef struct {									// Contains Information Vital To A Window
 
 void preInitialize(void);
 
-void TerminateApplication (GL_Window* window);		// Terminate The Application
+void TerminateApplication();		// Terminate The Application
 
-void ToggleFullscreen (GL_Window* window);			// Toggle Fullscreen / Windowed Mode
+void ToggleFullscreen();			// Toggle Fullscreen / Windowed Mode
 
-BOOL Initialize (GL_Window* window);	// Performs All Your Initialization
+BOOL Initialize (int width, int height);	// Performs All Your Initialization
 
 void Deinitialize (void);							// Performs All Your DeInitialization
 

@@ -40,9 +40,6 @@
 #define CDS_FULLSCREEN 4										// Compilers. By Defining It This Way,
 #endif															// We Can Avoid Errors
 
-
-GL_Window*	g_window;
-
 // User Defined Variables
 float		angle,width,height;												// Used To Rotate The Triangles
 int			rot1, rot2;											// Counter Variables
@@ -61,9 +58,8 @@ void preInitialize(void)
 
 
 
-BOOL Initialize (GL_Window* window)					// Any GL Init Code & User Initialiazation Goes Here
+BOOL Initialize(int width, int height)					// Any GL Init Code & User Initialiazation Goes Here
 {
-	g_window	= window;
 
 	GetFocus();
 	GetAsyncKeyState(WM_KEYUP);
@@ -95,17 +91,21 @@ void Update (float seconds)								// Perform Motion Updates Here
 
 	if (input.getKeyState(VK_ESCAPE))					// Is ESC Being Pressed?
 	{
-		TerminateApplication(g_window);						// Terminate The Program
+		TerminateApplication();						// Terminate The Program
 	}
 
 	if (input.getKeyState(VK_F1))						// Is F1 Being Pressed?
 	{
-		ToggleFullscreen(g_window);							// Toggle Fullscreen Mode
+		ToggleFullscreen();							// Toggle Fullscreen Mode
 	}
 
 	
 }
 
+void DisplayUpdate(int width, int height)
+{
+	//aspect = (float)width / (float)height;
+}
 
 void Draw (void)
 {

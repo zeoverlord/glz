@@ -52,18 +52,19 @@ HINSTANCE hInst;								// current instance
 TCHAR szTitle[MAX_LOADSTRING];					// The title bar text
 TCHAR szWindowClass[MAX_LOADSTRING];			// the main window class name
 
+GL_Window window;
 
-void TerminateApplication (GL_Window* window)							// Terminate The Application
+void TerminateApplication()							// Terminate The Application
 {
-	PostMessage (window->hWnd, WM_QUIT, 0, 0);							// Send A WM_QUIT Message
+	PostMessage (window.hWnd, WM_QUIT, 0, 0);							// Send A WM_QUIT Message
 	g_isProgramLooping = FALSE;											// Stop Looping Of The Program
 }
 
-void ToggleFullscreen (GL_Window* window)								// Toggle Fullscreen/Windowed
+void ToggleFullscreen()								// Toggle Fullscreen/Windowed
 {
 	glzAppinitialization app;
 	if (app.data.ALLOW_FULLSCREENSWITCH)
-		PostMessage (window->hWnd, WM_TOGGLEFULLSCREEN, 0, 0);				// Send A WM_TOGGLEFULLSCREEN Message
+		PostMessage (window.hWnd, WM_TOGGLEFULLSCREEN, 0, 0);				// Send A WM_TOGGLEFULLSCREEN Message
 }
 
 
@@ -89,10 +90,10 @@ BOOL ChangeScreenResolution (int width, int height, int bitsPerPixel)	// Change 
 	return TRUE;														// Display Change Was Successful, Return True
 }
 
-BOOL CreateWindowGL (GL_Window* window)									// This Code Creates Our OpenGL Window
+BOOL CreateWindowGL ()									// This Code Creates Our OpenGL Window
 {
-
-glzAppinitialization app;
+	
+  glzAppinitialization app;
   PIXELFORMATDESCRIPTOR pfd;
   memset(&pfd, 0, sizeof(PIXELFORMATDESCRIPTOR));
   pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
@@ -104,7 +105,7 @@ glzAppinitialization app;
   pfd.cColorBits = 32;                // 32 bits colors
 
 
-	RECT windowRect = {0, 0, window->init.width, window->init.height};	// Define Our Window Coordinates
+	RECT windowRect = {0, 0, window.init.width, window.init.height};	// Define Our Window Coordinates
 
 	int x=0,y=0;
 	GLuint PixelFormat;													// Will Hold The Selected Pixel Format
@@ -124,15 +125,15 @@ glzAppinitialization app;
 
 
 
-	if (window->init.isFullScreen == TRUE)								// Fullscreen Requested, Try Changing Video Modes
+	if (window.init.isFullScreen == TRUE)								// Fullscreen Requested, Try Changing Video Modes
 	{
-		if (ChangeScreenResolution (window->init.width, window->init.height, window->init.bitsPerPixel) == FALSE)
+		if (ChangeScreenResolution (window.init.width, window.init.height, window.init.bitsPerPixel) == FALSE)
 		{
 			// Fullscreen Mode Failed.  Run In Windowed Mode Instead
 			if (app.data.DISPLAY_ERRORS) MessageBox(HWND_DESKTOP, L"Mode Switch Failed.\nRunning In Windowed Mode.", L"Error", MB_OK | MB_ICONEXCLAMATION);
-			window->init.isFullScreen = FALSE;							// Set isFullscreen To False (Windowed Mode)
-			x=window->x;									
-			y=window->y;
+			window.init.isFullScreen = FALSE;							// Set isFullscreen To False (Windowed Mode)
+			x=window.x;									
+			y=window.y;
 		}
 		else															// Otherwise (If Fullscreen Mode Was Successful)
 		{
@@ -153,50 +154,50 @@ glzAppinitialization app;
 	}
 
 	// Create The OpenGL Window
-	window->hWnd = CreateWindowEx (windowExtendedStyle,					// Extended Style
-								   window->init.application->className,	// Class Name
-								   window->init.title,					// Window Title
+	window.hWnd = CreateWindowEx (windowExtendedStyle,					// Extended Style
+								   window.init.application->className,	// Class Name
+								   window.init.title,					// Window Title
 								   WS_CLIPSIBLINGS | WS_CLIPCHILDREN | windowStyle,							// Window Style
-								   window->x, window->y,								// Window X,Y Position
+								   window.x, window.y,								// Window X,Y Position
 								   windowRect.right - windowRect.left,	// Window Width
 								   windowRect.bottom - windowRect.top,	// Window Height
 								   HWND_DESKTOP,						// Desktop Is Window's Parent
 								   0,									// No Menu
-								   window->init.application->hInstance, // Pass The Window Instance
-								   window);
+								   window.init.application->hInstance, // Pass The Window Instance
+								   &window);
 
-	if (window->hWnd == 0)												// Was Window Creation A Success?
+	if (window.hWnd == 0)												// Was Window Creation A Success?
 	{
 		return FALSE;													// If Not Return False
 	}
 
-	window->hDC = GetDC (window->hWnd);									// Grab A Device Context For This Window
-	if (window->hDC == 0)												// Did We Get A Device Context?
+	window.hDC = GetDC (window.hWnd);									// Grab A Device Context For This Window
+	if (window.hDC == 0)												// Did We Get A Device Context?
 	{
 		// Failed
-		DestroyWindow (window->hWnd);									// Destroy The Window
-		window->hWnd = 0;												// Zero The Window Handle
+		DestroyWindow (window.hWnd);									// Destroy The Window
+		window.hWnd = 0;												// Zero The Window Handle
 		return FALSE;													// Return False
 	}
 
-	PixelFormat = ChoosePixelFormat (window->hDC, &pfd);				// Find A Compatible Pixel Format
+	PixelFormat = ChoosePixelFormat (window.hDC, &pfd);				// Find A Compatible Pixel Format
 	if (PixelFormat == 0)												// Did We Find A Compatible Format?
 	{
 		// Failed
-		ReleaseDC (window->hWnd, window->hDC);							// Release Our Device Context
-		window->hDC = 0;												// Zero The Device Context
-		DestroyWindow (window->hWnd);									// Destroy The Window
-		window->hWnd = 0;												// Zero The Window Handle
+		ReleaseDC (window.hWnd, window.hDC);							// Release Our Device Context
+		window.hDC = 0;												// Zero The Device Context
+		DestroyWindow (window.hWnd);									// Destroy The Window
+		window.hWnd = 0;												// Zero The Window Handle
 		return FALSE;													// Return False
 	}
 
-	if (SetPixelFormat (window->hDC, PixelFormat, &pfd) == FALSE)		// Try To Set The Pixel Format
+	if (SetPixelFormat (window.hDC, PixelFormat, &pfd) == FALSE)		// Try To Set The Pixel Format
 	{
 		// Failed
-		ReleaseDC (window->hWnd, window->hDC);							// Release Our Device Context
-		window->hDC = 0;												// Zero The Device Context
-		DestroyWindow (window->hWnd);									// Destroy The Window
-		window->hWnd = 0;												// Zero The Window Handle
+		ReleaseDC (window.hWnd, window.hDC);							// Release Our Device Context
+		window.hDC = 0;												// Zero The Device Context
+		DestroyWindow (window.hWnd);									// Destroy The Window
+		window.hWnd = 0;												// Zero The Window Handle
 		return FALSE;													// Return False
 	}
 
@@ -209,8 +210,8 @@ glzAppinitialization app;
 	  0, 0
 	};
 
-	HGLRC tempContext = wglCreateContext(window->hDC);
-	wglMakeCurrent(window->hDC,tempContext);
+	HGLRC tempContext = wglCreateContext(window.hDC);
+	wglMakeCurrent(window.hDC,tempContext);
 	
 	PFNWGLCREATECONTEXTATTRIBSARBPROC wglCreateContextAttribsARB;
 	wglCreateContextAttribsARB = (PFNWGLCREATECONTEXTATTRIBSARBPROC) wglGetProcAddress("wglCreateContextAttribsARB");
@@ -219,15 +220,15 @@ glzAppinitialization app;
 	{
 		if ((app.data.DISPLAY_ERRORS) && (app.data.FORCE_OPENGL_VERSION)) MessageBox(NULL, L"Cannot get Proc Adress for CreateContextAttribs.\n\nThe cause for this error is usually when your graphics drivers does not support at least openGL 3.0 \nIf they do then, try rebooting, that might fix it\n\nDefaulting to a regular decive context even though this couls cause problems", L"ERROR", MB_OK);
 
-		if (!(window->hRC = wglCreateContext(window->hDC)))												// Did We Get A normal Rendering Context?
+		if (!(window.hRC = wglCreateContext(window.hDC)))												// Did We Get A normal Rendering Context?
 		{
 			// Failed
 			wglDeleteContext(tempContext);
 
-			ReleaseDC (window->hWnd, window->hDC);							// Release Our Device Context
-			window->hDC = 0;												// Zero The Device Context
-			DestroyWindow (window->hWnd);									// Destroy The Window
-			window->hWnd = 0;												// Zero The Window Handle
+			ReleaseDC (window.hWnd, window.hDC);							// Release Our Device Context
+			window.hDC = 0;												// Zero The Device Context
+			DestroyWindow (window.hWnd);									// Destroy The Window
+			window.hWnd = 0;												// Zero The Window Handle
 			return FALSE;													// Return False
 		}
 	
@@ -235,15 +236,15 @@ glzAppinitialization app;
 		
 	}
 	
-	else if (!(window->hRC=wglCreateContextAttribsARB(window->hDC,0, attribList)))												// Did We Get A openGL 3.0+ Rendering Context?
+	else if (!(window.hRC=wglCreateContextAttribsARB(window.hDC,0, attribList)))												// Did We Get A openGL 3.0+ Rendering Context?
 	{
 		// Failed
 		wglDeleteContext(tempContext);
 
-		ReleaseDC (window->hWnd, window->hDC);							// Release Our Device Context
-		window->hDC = 0;												// Zero The Device Context
-		DestroyWindow (window->hWnd);									// Destroy The Window
-		window->hWnd = 0;												// Zero The Window Handle
+		ReleaseDC (window.hWnd, window.hDC);							// Release Our Device Context
+		window.hDC = 0;												// Zero The Device Context
+		DestroyWindow (window.hWnd);									// Destroy The Window
+		window.hWnd = 0;												// Zero The Window Handle
 		return FALSE;													// Return False
 	}
 
@@ -252,22 +253,22 @@ glzAppinitialization app;
 
 
 	// Make The Rendering Context Our Current Rendering Context
-	if (wglMakeCurrent (window->hDC, window->hRC) == FALSE)
+	if (wglMakeCurrent (window.hDC, window.hRC) == FALSE)
 	{
 		// Failed
-		wglDeleteContext (window->hRC);									// Delete The Rendering Context
-		window->hRC = 0;												// Zero The Rendering Context
-		ReleaseDC (window->hWnd, window->hDC);							// Release Our Device Context
-		window->hDC = 0;												// Zero The Device Context
-		DestroyWindow (window->hWnd);									// Destroy The Window
-		window->hWnd = 0;												// Zero The Window Handle
+		wglDeleteContext (window.hRC);									// Delete The Rendering Context
+		window.hRC = 0;												// Zero The Rendering Context
+		ReleaseDC (window.hWnd, window.hDC);							// Release Our Device Context
+		window.hDC = 0;												// Zero The Device Context
+		DestroyWindow (window.hWnd);									// Destroy The Window
+		window.hWnd = 0;												// Zero The Window Handle
 		return FALSE;													// Return False
 	}
 
-	ShowWindow (window->hWnd, SW_SHOW);								// Make The Window Visible
-	window->isVisible = TRUE;											// Set isVisible To True
+	ShowWindow (window.hWnd, SW_SHOW);								// Make The Window Visible
+	window.isVisible = TRUE;											// Set isVisible To True
 
-	ReshapeGL (window->init.width, window->init.height);				// Reshape Our GL Window
+	ReshapeGL (window.init.width, window.init.height);				// Reshape Our GL Window
 
 	PFNWGLSWAPINTERVALEXTPROC       wglSwapIntervalEXT = NULL;
 
@@ -275,39 +276,35 @@ glzAppinitialization app;
 
 	if (app.data.ENABLE_VSYNC) wglSwapIntervalEXT(1);
 	else wglSwapIntervalEXT(0);
-
-
-
-//	ZeroMemory (window->keys, sizeof (Keys));							// Clear All Keys
-
-	window->lastTickCount = GetTickCount ();							// Get Tick Count
+	
+	window.lastTickCount = GetTickCount ();							// Get Tick Count
 
 
 	return TRUE;														// Window Creating Was A Success
 																		// Initialization Will Be Done In WM_CREATE
 }
 
-BOOL DestroyWindowGL (GL_Window* window)								// Destroy The OpenGL Window & Release Resources
+BOOL DestroyWindowGL ()								// Destroy The OpenGL Window & Release Resources
 {
-	if (window->hWnd != 0)												// Does The Window Have A Handle?
+	if (window.hWnd != 0)												// Does The Window Have A Handle?
 	{	
-		if (window->hDC != 0)											// Does The Window Have A Device Context?
+		if (window.hDC != 0)											// Does The Window Have A Device Context?
 		{
-			wglMakeCurrent (window->hDC, 0);							// Set The Current Active Rendering Context To Zero
-			if (window->hRC != 0)										// Does The Window Have A Rendering Context?
+			wglMakeCurrent (window.hDC, 0);							// Set The Current Active Rendering Context To Zero
+			if (window.hRC != 0)										// Does The Window Have A Rendering Context?
 			{
-				wglDeleteContext (window->hRC);							// Release The Rendering Context
-				window->hRC = 0;										// Zero The Rendering Context
+				wglDeleteContext (window.hRC);							// Release The Rendering Context
+				window.hRC = 0;										// Zero The Rendering Context
 
 			}
-			ReleaseDC (window->hWnd, window->hDC);						// Release The Device Context
-			window->hDC = 0;											// Zero The Device Context
+			ReleaseDC (window.hWnd, window.hDC);						// Release The Device Context
+			window.hDC = 0;											// Zero The Device Context
 		}
-		DestroyWindow (window->hWnd);									// Destroy The Window
-		window->hWnd = 0;												// Zero The Window Handle
+		DestroyWindow (window.hWnd);									// Destroy The Window
+		window.hWnd = 0;												// Zero The Window Handle
 	}
 
-	if (window->init.isFullScreen)										// Is Window In Fullscreen Mode
+	if (window.init.isFullScreen)										// Is Window In Fullscreen Mode
 	{
 		ChangeDisplaySettings (NULL,0);									// Switch Back To Desktop Resolution
 		ShowCursor (TRUE);												// Show The Cursor
@@ -320,9 +317,9 @@ LRESULT CALLBACK WindowProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	glzAppinitialization app;
 	glzInput input;
-
+	
 	// Get The Window Context
-	GL_Window* window = (GL_Window*)(GetWindowLong (hWnd, GWL_USERDATA));
+	//GL_Window* window = (GL_Window*)(GetWindowLong (hWnd, GWL_USERDATA));
 
 	switch (uMsg)														// Evaluate Window Message
 	{
@@ -341,30 +338,30 @@ LRESULT CALLBACK WindowProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		case WM_CREATE:													// Window Creation
 		{
 			        // Get the creation parameters.
-			CREATESTRUCT* creation = (CREATESTRUCT*)(lParam);			// Store Window Structure Pointer
-			window = (GL_Window*)(creation->lpCreateParams);
-			SetWindowLong (hWnd, GWL_USERDATA, (LONG)(window));
+		//	CREATESTRUCT* creation = (CREATESTRUCT*)(lParam);			// Store Window Structure Pointer
+		//	window = (GL_Window*)(creation->lpCreateParams);
+		//	SetWindowLong (hWnd, GWL_USERDATA, (LONG)(window));
 		}
 		return 0;														// Return
 
 		case WM_CLOSE:													// Closing The Window
-			TerminateApplication(window);								// Terminate The Application
+			TerminateApplication();								// Terminate The Application
 		return 0;														// Return
 
 		case WM_SIZE:													// Size Action Has Taken Place
 			switch (wParam)												// Evaluate Size Action
 			{
 				case SIZE_MINIMIZED:									// Was Window Minimized?
-					window->isVisible = FALSE;							// Set isVisible To False
+					window.isVisible = FALSE;							// Set isVisible To False
 				return 0;												// Return
 
 				case SIZE_MAXIMIZED:									// Was Window Maximized?
-					window->isVisible = TRUE;							// Set isVisible To True
+					window.isVisible = TRUE;							// Set isVisible To True
 					ReshapeGL (LOWORD (lParam), HIWORD (lParam));		// Reshape Window - LoWord=Width, HiWord=Height
 				return 0;												// Return
 
 				case SIZE_RESTORED:										// Was Window Restored?
-					window->isVisible = TRUE;							// Set isVisible To True
+					window.isVisible = TRUE;							// Set isVisible To True
 					ReshapeGL (LOWORD (lParam), HIWORD (lParam));		// Reshape Window - LoWord=Width, HiWord=Height
 				return 0;												// Return
 			}
@@ -417,11 +414,11 @@ LRESULT CALLBACK WindowProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 		case WM_MOUSEWHEEL:
 			input.addMouseWeel(GET_WHEEL_DELTA_WPARAM(wParam));
-			//window->keys->Mactive = true;
+			//window.keys->Mactive = true;
 			break;
 
 		case WM_CAPTURECHANGED:
-			//	window->keys->Mactive=false;
+			//	window.keys->Mactive=false;
 			break;
 
 
@@ -430,27 +427,27 @@ LRESULT CALLBACK WindowProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 			if (g_createFullScreen== TRUE)							
 			{
-				window->init.width = app.data.FULLSCREEN_WIDTH;						// Window Width
-				window->init.height = app.data.FULLSCREEN_HEIGHT;					// Window Height
+				window.init.width = app.data.FULLSCREEN_WIDTH;						// Window Width
+				window.init.height = app.data.FULLSCREEN_HEIGHT;					// Window Height
 
 				ShowCursor (FALSE);										// Turn Off The Cursor
 				
 				SetWindowLong(hWnd,GWL_EXSTYLE,WS_EX_TOPMOST);			// places the window so it is allways on top
-				ChangeScreenResolution (window->init.width, window->init.height, window->init.bitsPerPixel);	// changes the screen resolution to set values
-				SetWindowPos(hWnd,HWND_TOPMOST,0,0,window->init.width,window->init.height,SWP_NOZORDER);
+				ChangeScreenResolution (window.init.width, window.init.height, window.init.bitsPerPixel);	// changes the screen resolution to set values
+				SetWindowPos(hWnd,HWND_TOPMOST,0,0,window.init.width,window.init.height,SWP_NOZORDER);
 				
 
 			}														
 			else
 			{	
 				
-				window->init.width = app.data.WINDOW_WIDTH;						// Window Width
-				window->init.height = app.data.WINDOW_HEIGHT;					// Window Height
+				window.init.width = app.data.WINDOW_WIDTH;						// Window Width
+				window.init.height = app.data.WINDOW_HEIGHT;					// Window Height
 				ShowCursor (TRUE);										// Turn On The Cursor
 
 				SetWindowLong(hWnd,GWL_EXSTYLE,WS_EX_APPWINDOW);		// returns the window back to normalcy
 				ChangeDisplaySettings (NULL,0);							// returns to the default screen resolution
-				SetWindowPos(hWnd,HWND_TOPMOST,window->x,window->y,window->init.width,window->init.height,SWP_NOZORDER);
+				SetWindowPos(hWnd,HWND_TOPMOST,window.x,window.y,window.init.width,window.init.height,SWP_NOZORDER);
 
 				Draw ();
 			}
@@ -501,8 +498,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 	app.pull();	
 
 	Application			application;									// Application Structure
-	GL_Window			window;											// Window Structure
-	Keys				keys;											// Key Structure
+	//GL_Window			window;											// Window Structure
 	BOOL				isMessagePumpActive;							// Message Pump Active?
 	MSG					msg;											// Window Message Structure
 	DWORD				tickCount;										// Used For The Tick Counter
@@ -513,6 +509,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 	application.className = L"OpenGL";									// Application Class Name
 	application.hInstance = hInstance;									// Application Instance
 
+
 	// Fill Out Window
 	ZeroMemory (&window, sizeof (GL_Window));							// Make Sure Memory Is Zeroed
 //	window.keys					= &keys;								// Window Key Structure
@@ -520,12 +517,11 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 	window.init.title = app.data.WINDOW_TITLE;							// Window Title
 	window.init.width = app.data.FULLSCREEN_WIDTH;						// Window Width
 	window.init.height = app.data.FULLSCREEN_HEIGHT;					// Window Height
-	window.init.bitsPerPixel	= 32;									// Bits Per Pixel
-	window.init.isFullScreen	= true;								// Fullscreen? (Set To TRUE)
-	window.x					= 0;									// x position of window
-	window.y					= 0;									// y position of window
+	window.init.bitsPerPixel = 32;									// Bits Per Pixel
+	window.init.isFullScreen = true;								// Fullscreen? (Set To TRUE)
+	window.x = 0;									// x position of window
+	window.y = 0;									// y position of window
 
-	ZeroMemory (&keys, sizeof (Keys));									// Zero keys Structure
 		
 	DEVMODE devMode = {0};
 	devMode.dmSize = sizeof(devMode);
@@ -534,8 +530,8 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 
 	if (app.data.NATIVE_FULLSCREEN) // normally better than to force a fixed resolution, but do make sure your app likes running att different resolutions
 	{
-		window.init.width			= (int)devMode.dmPelsWidth;					// Window Width
-		window.init.height			= (int)devMode.dmPelsHeight;					// Window Height
+		window.init.width = (int)devMode.dmPelsWidth;					// Window Width
+		window.init.height = (int)devMode.dmPelsHeight;					// Window Height
 
 	}
 
@@ -571,13 +567,13 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 	{
 		// Create A Window
 		window.init.isFullScreen = g_createFullScreen;					// Set Init Param Of Window Creation To Fullscreen?
-		if (CreateWindowGL (&window) == TRUE)							// Was Window Creation Successful?
+		if (CreateWindowGL() == TRUE)							// Was Window Creation Successful?
 		{
 			// At This Point We Should Have A Window That Is Setup To Render OpenGL
-			if (Initialize (&window) == FALSE)					// Call User Intialization
+			if(Initialize(window.init.width, window.init.width) == FALSE)					// Call User Intialization
 			{
 				// Failure
-				TerminateApplication (&window);							// Close Window, This Will Handle The Shutdown
+				TerminateApplication();							// Close Window, This Will Handle The Shutdown
 			}
 			else														// Otherwise (Start The Message Pump)
 			{	// Initialize was a success
@@ -585,7 +581,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 				while (isMessagePumpActive == TRUE)						// While The Message Pump Is Active
 				{
 					// Success Creating Window.  Check For Window Messages
-					if (PeekMessage (&msg, window.hWnd, 0, 0, PM_REMOVE) != 0)
+					if(PeekMessage(&msg, window.hWnd, 0, 0, PM_REMOVE) != 0)
 					{
 						// Check For WM_QUIT Message
 						if (msg.message != WM_QUIT)						// Is The Message A WM_QUIT Message?
@@ -599,9 +595,9 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 					}
 					else												// If There Are No Messages
 					{
-						if (window.isVisible == FALSE)					// If Window Is Not Visible
+						if(window.isVisible == FALSE)					// If Window Is Not Visible
 						{
-							WaitMessage ();								// Application Is Minimized Wait For A Message
+							WaitMessage();								// Application Is Minimized Wait For A Message
 						}
 						else											// If Window Is Visible
 						{
@@ -610,14 +606,14 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 
 							// timing functions
 							tickCount = GetTickCount ();				// Get The Tick Count
-							window.deltaTime = ((float)(tickCount - window.lastTickCount))/1000;	// Update The _Delta time
+							window.deltaTime = ((float)(tickCount - window.lastTickCount)) / 1000;	// Update The _Delta time
 							window.lastTickCount = tickCount;			// Set Last Count To Current Count
 
 							input.updateKeys(window.deltaTime);
 						
-							Update (window.deltaTime);			// Update The Counter
-							Draw ();							// Draw Our Scene
-							SwapBuffers (window.hDC);			// Swap Buffers (Double Buffering)
+							Update(window.deltaTime);			// Update The Counter
+							Draw();							// Draw Our Scene
+							SwapBuffers(window.hDC);			// Swap Buffers (Double Buffering)
 								
 								
 
@@ -627,9 +623,9 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 			}															// If (Initialize (...
 
 			// Application Is Finished
-			Deinitialize ();											// User Defined DeInitialization
+			Deinitialize();											// User Defined DeInitialization
 
-			DestroyWindowGL (&window);									// Destroy The Active Window
+			DestroyWindowGL();									// Destroy The Active Window
 		}
 		else															// If Window Creation Failed
 		{

@@ -54,10 +54,6 @@ using namespace std;
 #define CDS_FULLSCREEN 4										// Compilers. By Defining It This Way,
 #endif															// We Can Avoid Errors
 
-
-GL_Window*	g_window;
-//Keys*		g_keys;
-
 // User Defined Variables
 float		angle=0,width,height;												// Used To Rotate The Triangles
 unsigned int vao[16],vao_num[16];
@@ -111,10 +107,8 @@ void preInitialize(void)
 	WINDOW_WIDTH = app.data.WINDOW_WIDTH;
 }
 
-BOOL Initialize (GL_Window* window)					// Any GL Init Code & User Initialiazation Goes Here
+BOOL Initialize(int width, int height)					// Any GL Init Code & User Initialiazation Goes Here
 {
-	g_window	= window;
-	//g_keys		= keys;
 
 	glzResourcemanager rm;
 
@@ -147,11 +141,11 @@ BOOL Initialize (GL_Window* window)					// Any GL Init Code & User Initialiazati
 	glBlendColor = (PFNGLBLENDCOLORPROC)wglGetProcAddress("glBlendColor");
 	glActiveTexture = (PFNGLACTIVETEXTUREPROC)wglGetProcAddress("glActiveTexture");
 
-	aspect = (float)window->init.width / (float)window->init.height;
+	aspect = (float)width / (float)height;
 	
 
 	view1.init(aspect,0.05f);
-	view1.setDisplay(0, 0, window->init.width, window->init.height);
+	view1.setDisplay(0, 0, width, height);
 
 	view2.init(view1.getAspect(),0.057f);
 	view2.setParent(&view1);
@@ -360,12 +354,12 @@ void Update (float seconds)								// Perform Motion Updates Here
 
 	if (input.getKeyState(VK_ESCAPE) == TRUE)					// Is ESC Being Pressed?
 	{
-		TerminateApplication (g_window);						// Terminate The Program
+		TerminateApplication();						// Terminate The Program
 	}
 
 	if (input.getKeyState(VK_F1) == TRUE)						// Is F1 Being Pressed?
 	{
-		ToggleFullscreen (g_window);							// Toggle Fullscreen Mode
+		ToggleFullscreen();							// Toggle Fullscreen Mode
 	}
 	
 	angle += seconds*10;						// Update angle Based On The Clock
@@ -507,12 +501,6 @@ void draw_backdrop_glitch(unsigned int bgtexture, unsigned int bgtexture2)
 
 void DisplayUpdate(int width, int height)
 {
-	if(g_window != nullptr)
-	{
-	//	g_window->init.width = width;
-	//	g_window->init.height = height;
-	}
-
 	aspect = (float)width / (float)height;
 	
 	view1.setDisplay(0, 0, width, height);

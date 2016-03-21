@@ -49,11 +49,6 @@ using namespace std;
 #define CDS_FULLSCREEN 4										// Compilers. By Defining It This Way,
 #endif															// We Can Avoid Errors
 
-
-GL_Window*	g_window;
-
-
-
 enum ztUIP { NONE, BACKGROUND, PIXELMAP, SPRITESHEET, SPRITE, UIFRAME };
 
 enum ztLeveltex { L1A, L1B, L2A, L2B, DYNAMIC_A, DYNAMIC_B, DYNAMIC_C, DYNAMIC_D, NO_CHANGE };
@@ -140,14 +135,6 @@ static PFNGLGETUNIFORMLOCATIONPROC              glGetUniformLocation;
 static PFNGLBLENDCOLORPROC						glBlendColor;
 static PFNGLACTIVETEXTUREPROC					glActiveTexture;
 
-
-#define COL_BLACK	0
-#define COL_WHITE	1
-#define COL_RED		2
-#define COL_GREEN	3
-#define COL_BLUE	4
-
-
 int WINDOW_HEIGHT;
 int WINDOW_WIDTH;
 
@@ -165,9 +152,8 @@ void preInitialize(void)
 }
 
 
-BOOL Initialize(GL_Window* window)					// Any GL Init Code & User Initialiazation Goes Here
+BOOL Initialize(int width, int height)					// Any GL Init Code & User Initialiazation Goes Here
 {
-	g_window = window;
 	glzResourcemanager rm;
 
 	GetFocus();
@@ -276,12 +262,12 @@ void Update(float seconds)								// Perform Motion Updates Here
 
 	if (input.getKeyState(VK_ESCAPE))					// Is ESC Being Pressed?
 	{
-		TerminateApplication(g_window);						// Terminate The Program
+		TerminateApplication();						// Terminate The Program
 	}
 
 	if (input.getKeyState(VK_F1))						// Is F1 Being Pressed?
 	{
-		ToggleFullscreen(g_window);							// Toggle Fullscreen Mode
+		ToggleFullscreen();							// Toggle Fullscreen Mode
 	}
 
 	gamestate = 1;
@@ -358,7 +344,7 @@ void Update(float seconds)								// Perform Motion Updates Here
 		if (paintarea_Zoom < 120.0f) paintarea_Zoom = 120.0f;
 
 
-		float aspect = map_l1.width / map_l1.height;
+		float aspect = (float)map_l1.width / (float)map_l1.height;
 
 		if (Mweel_rel>0)
 		{
@@ -562,7 +548,10 @@ void Update(float seconds)								// Perform Motion Updates Here
 	}
 }
 
-
+void DisplayUpdate(int width, int height)
+{
+	//aspect = (float)width / (float)height;
+}
 
 
 void Draw(void)

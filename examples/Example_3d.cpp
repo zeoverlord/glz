@@ -51,8 +51,6 @@ using namespace std;
 #endif															// We Can Avoid Errors
 
 
-GL_Window*	g_window;
-
 // User Defined Variables
 float		angle=0,width,height;												// Used To Rotate The Triangles
 unsigned int vao[16],vao_num[16];
@@ -104,9 +102,8 @@ void preInitialize(void)
 }
 
 
-BOOL Initialize (GL_Window* window)					// Any GL Init Code & User Initialiazation Goes Here
+BOOL Initialize(int width, int height)					// Any GL Init Code & User Initialiazation Goes Here
 {
-	g_window	= window;
 	glzResourcemanager rm;
 
 	GetFocus();
@@ -135,7 +132,7 @@ BOOL Initialize (GL_Window* window)					// Any GL Init Code & User Initialiazati
 	glUniformMatrix4fv= (PFNGLUNIFORMMATRIX4FVPROC) wglGetProcAddress("glUniformMatrix4fv");
 	glUniformMatrix4dv = (PFNGLUNIFORMMATRIX4DVPROC)wglGetProcAddress("glUniformMatrix4dv");
 
-	aspect = (float)window->init.width / (float)window->init.height;
+	aspect = (float)width / (float)height;
 
 
 	glzMatrix mt;
@@ -277,12 +274,12 @@ void Update (float seconds)								// Perform Motion Updates Here
 
 	if (input.getKeyState(VK_ESCAPE) == TRUE)					// Is ESC Being Pressed?
 	{
-		TerminateApplication (g_window);						// Terminate The Program
+		TerminateApplication();						// Terminate The Program
 	}
 
 	if (input.getKeyState(VK_F1) == TRUE)						// Is F1 Being Pressed?
 	{
-		ToggleFullscreen (g_window);							// Toggle Fullscreen Mode
+		ToggleFullscreen();							// Toggle Fullscreen Mode
 	}
 
 	if (gamestate==1)
@@ -352,7 +349,10 @@ void Update (float seconds)								// Perform Motion Updates Here
 }
 
 
-
+void DisplayUpdate(int width, int height)
+{
+	aspect = (float)width / (float)height;
+}
 
 
 void draw_object(texturecontainer *tx, int prim, float x, float y)

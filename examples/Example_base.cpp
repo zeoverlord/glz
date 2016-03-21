@@ -50,7 +50,6 @@ using namespace std;
 #endif															// We Can Avoid Errors
 
 
-GL_Window*	g_window;
 
 // User Defined Variables
 float		angle,width,height;												// Used To Rotate The Triangles
@@ -89,9 +88,8 @@ void preInitialize(void)
 	WINDOW_WIDTH = app.data.WINDOW_WIDTH;
 }
 
-BOOL Initialize (GL_Window* window)					// Any GL Init Code & User Initialiazation Goes Here
+BOOL Initialize (int width, int height)					// Any GL Init Code & User Initialiazation Goes Here
 {	
-	g_window	= window;
 
 	glzResourcemanager rm;
 
@@ -118,7 +116,7 @@ BOOL Initialize (GL_Window* window)					// Any GL Init Code & User Initialiazati
 	
 
 
-	aspect = (float)window->init.width / (float)window->init.height;
+	aspect = (float)width / (float)height;
 
 
 	glzMatrix mt;
@@ -227,12 +225,12 @@ void Update (float seconds)								// Perform Motion Updates Here
 
 	if (input.getKeyState(VK_ESCAPE))					// Is ESC Being Pressed?
 	{
-		TerminateApplication(g_window);						// Terminate The Program
+		TerminateApplication();						// Terminate The Program
 	}
 
 	if (input.getKeyState(VK_F1))						// Is F1 Being Pressed?
 	{
-		ToggleFullscreen(g_window);							// Toggle Fullscreen Mode
+		ToggleFullscreen();							// Toggle Fullscreen Mode
 	}
 
 	angle += seconds*50;						// Update angle Based On The Clock
@@ -251,6 +249,10 @@ void Update (float seconds)								// Perform Motion Updates Here
 
 }
 
+void DisplayUpdate(int width, int height)
+{
+	aspect = (float)width / (float)height;
+}
 
 void Draw (void)
 {
