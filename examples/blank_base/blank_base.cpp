@@ -21,15 +21,15 @@
 
 
 
-#include "stdafx.h"
 
 #include <windows.h>											// Header File For Windows
 #include <gl\gl.h>												// Header File For The OpenGL32 Library
 #include <gl\glu.h>												// Header File For The GLu32 Library
 #include <gl\glext.h>
-#include "zeobase2.h"
-#include "..\glz\appbase.h"
-#include "..\glz\input\input.h"
+#include "blank_base.h"
+#include "..\..\glz\appbase.h"
+#include "..\..\glz\input\input.h"
+
 
 //using namespace std;										
 
@@ -40,32 +40,22 @@
 #define CDS_FULLSCREEN 4										// Compilers. By Defining It This Way,
 #endif															// We Can Avoid Errors
 
-// User Defined Variables
-float		angle,width,height;												// Used To Rotate The Triangles
-int			rot1, rot2;											// Counter Variables
-unsigned int vao[5],vao_num[5];
-int e=0,e2=0;
-unsigned int texture[5],fonttexture;
 
 
-
-void preInitialize(void)
+BlankBaseState::BlankBaseState()
 {
-	glzAppinitialization app;
-	app.set_title(L"ZeoBase GL Framework");
 
 }
 
 
 
-BOOL Initialize(int width, int height)					// Any GL Init Code & User Initialiazation Goes Here
+BOOL BlankBaseState::Initialize(int width, int height)					// Any GL Init Code & User Initialiazation Goes Here
 {
 
 	GetFocus();
 	GetAsyncKeyState(WM_KEYUP);
 
 	// Start Of User Initialization
-	angle		= 0.0f;											// Set Starting Angle To Zero
 
 	glClearColor (0.0f, 1.0f, 1.0f, 0.5f);						// Black Background
 	glClearDepth (1.0f);										// Depth Buffer Setup
@@ -81,33 +71,33 @@ BOOL Initialize(int width, int height)					// Any GL Init Code & User Initialiaz
 }
 
 
-void Deinitialize (void)										// Any User DeInitialization Goes Here
+void BlankBaseState::Deinitialize(void)										// Any User DeInitialization Goes Here
 {
 }
 
-void Update (float seconds)								// Perform Motion Updates Here
+void BlankBaseState::Update(float seconds)								// Perform Motion Updates Here
 {
 	glzInput input;
 
-	if (input.getKeyState(VK_ESCAPE))					// Is ESC Being Pressed?
+	if(input.getKeyState(VK_ESCAPE) == TRUE)					// Is ESC Being Pressed?
 	{
-		TerminateApplication();						// Terminate The Program
+		mMessageQuit = true;						// Terminate The Program
 	}
 
-	if (input.getKeyState(VK_F1))						// Is F1 Being Pressed?
+	if(input.getKeyState(VK_F1) == TRUE)						// Is F1 Being Pressed?
 	{
-		ToggleFullscreen();							// Toggle Fullscreen Mode
+		mMessageFullscreen = true;							// Toggle Fullscreen Mode
 	}
 
 	
 }
 
-void DisplayUpdate(int width, int height)
+void BlankBaseState::DisplayUpdate(int width, int height)
 {
-	//aspect = (float)width / (float)height;
+	view.setDisplay(0, 0, width, height);
 }
 
-void Draw (void)
+void BlankBaseState::Draw(void)
 {
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		// Clear Screen And Depth Buffer
 	

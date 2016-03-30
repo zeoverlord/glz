@@ -29,12 +29,7 @@
 
 
 
-void glzBaseState::preInitialize(void)
-{
-	glzAppinitialization app;
-	app.set_title(L"ZeoBase GL Framework");
 
-}
 
 
 

@@ -25,12 +25,9 @@
 #include "..\..\glz\utilities\type.h"
 #include "..\..\glz\utilities\glz.h"
 #include "..\..\glz\utilities\sprite.h"
-#include "..\..\glz\utilities\resourcemanager.h"
 #include "..\..\glz\utilities\vectormath.h"
 #include "..\..\glz\layout\viewport.h"
 #include "..\..\glz\state\baseState.h"
-#include "..\..\glz\effects\particle.h"
-#include "..\..\glz\2d\2d-graph.h"
 #include <vector>
 #include <memory>
 
@@ -38,41 +35,18 @@
 // at a start the viewport its inside it's parent window
 // if width is wider than what the origin coordinate allows then the window will be resized
 
-class Example2DState : public glzBaseState
+class BlankBaseState : public glzBaseState
 {
 
 public:
 
-	Example2DState();
-	~Example2DState(){ Deinitialize(); }
+	BlankBaseState();
+	~BlankBaseState(){ Deinitialize(); }
 	BOOL Initialize(int width, int height) override;
 	void Deinitialize(void) override;
 	void Update(float seconds) override;
 	void DisplayUpdate(int width, int height) override;
 	void Draw(void) override;
 
-private:
-		
-	float		angle, width, height;												// Used To Rotate The Triangles
-	unsigned int vao[16], vao_num[16];
-	string tbuffer;
-	string tbuffer2;
-	float spriteframetimer;
-	int spriteframe;
-	int gamestate;
-	glzCamera2D cam;
-	Object2DGraph tempgraph;
-	node3 n;
-	glztiles tilemap;
-	glztiles tilemap2;
-	glzViewport view1, view2, view3;
-	GLhandleARB  ProgramObject, ProgramObjectFT, ProgramObjectFSQ, ProgramObjectFSQ_glitch;
-	glzSimpleParticleSystem ps;
-
-
-public:
-
-	void draw_backdrop_glitch(unsigned int bgtexture, unsigned int bgtexture2);
 	
-
 };

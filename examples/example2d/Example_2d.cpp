@@ -74,15 +74,6 @@ tempgraph(&cam)
 
 
 
-void Example2DState::preInitialize(void)
-{
-	glzAppinitialization app;
-	app.set_title(L"ZeoBase GL Framework");	
-	//app.data.START_WINDOWED = false;
-	//app.data.SHOW_FRAME = false;
-	app.data.ALLOW_RESIZE = true;
-	view.setDisplay(0, 0, app.data.WINDOW_WIDTH, app.data.WINDOW_HEIGHT);
-}
 
 BOOL Example2DState::Initialize(int width, int height)					// Any GL Init Code & User Initialiazation Goes Here
 {

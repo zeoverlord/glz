@@ -18,9 +18,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\examples\blank_base.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\examples\stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -32,6 +29,12 @@
     </ClCompile>
     <ClCompile Include="..\..\glz\input\input.cpp">
       <Filter>input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\examples\blank_base\bootStrap_blank_base.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\examples\blank_base\blank_base.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -52,6 +55,9 @@
     </ClInclude>
     <ClInclude Include="..\..\glz\input\input.h">
       <Filter>input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\examples\blank_base\blank_base.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

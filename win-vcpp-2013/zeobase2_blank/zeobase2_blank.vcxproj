@@ -89,13 +89,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\examples\blank_base.cpp" />
+    <ClCompile Include="..\..\examples\blank_base\blank_base.cpp" />
+    <ClCompile Include="..\..\examples\blank_base\bootStrap_blank_base.cpp" />
     <ClCompile Include="..\..\examples\stdafx.cpp" />
     <ClCompile Include="..\..\examples\zeobase2.cpp" />
     <ClCompile Include="..\..\glz\appbase.cpp" />
     <ClCompile Include="..\..\glz\input\input.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\examples\blank_base\blank_base.h" />
     <ClInclude Include="..\..\examples\Resource.h" />
     <ClInclude Include="..\..\examples\stdafx.h" />
     <ClInclude Include="..\..\examples\targetver.h" />

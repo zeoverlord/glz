@@ -1,4 +1,4 @@
-// Copyright 2016 Peter Wallström
+// Copyright 2013 Peter Wallström
 //
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 //
@@ -14,66 +14,29 @@
 // 3. If you make something comersiol or at least something you release publicly that relies on this code then i would like to know and maybe use in my CV
 // 4. Please do include me in your credits
 
-// glz base state class
+// blank example app - i wouldn't say it produces any meningfull results, but it's a start.
 // visit http://www.flashbang.se or contact me at overlord@flashbang.se
 // the entire toolkit should exist in it's entirety at github
 // https://github.com/zeoverlord/glz.git
 
-#pragma once
 
 
-#include "..\utilities\type.h"
-#include "..\utilities\glz.h"
-#include "..\utilities\sprite.h"
-#include "..\utilities\resourcemanager.h"
-#include "..\utilities\vectormath.h"
-#include "..\layout\viewport.h"
-#include <vector>
-#include <memory>
+#include "..\zeobase2.h"
+#include "..\..\glz\appbase.h"
+#include "..\..\glz\state\baseState.h"
+#include "blank_base.h"
 
-// how it works
-// at a start the viewport its inside it's parent window
-// if width is wider than what the origin coordinate allows then the window will be resized
 
-class glzBaseState
+
+
+std::shared_ptr<glzBaseState> preInitialize(void)
 {
-public:
+	std::shared_ptr<BlankBaseState> gameState(new BlankBaseState);
+	glzAppinitialization app;
+	app.set_title(L"ZeoBase GL Framework");
+	app.data.ALLOW_RESIZE = true;
 
-	glzViewport view;
-	bool mMessageQuit;
-	bool mMessageFullscreen;
+	return gameState;
 
-public:
+}
 
-	glzBaseState(){ mMessageQuit = false; mMessageFullscreen = false; }
-	~glzBaseState(){ Deinitialize(); }
-	virtual BOOL Initialize(int width, int height);
-	virtual void Deinitialize(void);
-	virtual void Update(float seconds);
-	virtual void DisplayUpdate(int width, int height);
-	virtual void Draw(void);
-
-	bool pollMessageQuit()
-	{
-		if(!mMessageQuit) 
-			return false;
-		else
-		{
-			mMessageQuit = false;
-			return true;
-		}
-	}
-
-	bool pollMessageFullscreen()
-	{
-		if(!mMessageFullscreen)
-			return false;
-		else
-		{
-			mMessageFullscreen = false;
-			return true;
-		}
-	}
-	
-
-};
