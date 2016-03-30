@@ -93,10 +93,10 @@
     <ClCompile Include="..\..\glz\utilities\framebuffer.cpp">
       <Filter>utilities</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\examples\example3d\bootStrap_example3d.cpp">
+    <ClCompile Include="..\..\examples\example3d\Example_3d.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\examples\example3d\Example_3d.cpp">
+    <ClCompile Include="..\..\examples\bootStrap_example3d.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

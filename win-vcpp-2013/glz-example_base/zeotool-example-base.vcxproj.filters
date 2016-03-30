@@ -99,6 +99,9 @@
     <ClCompile Include="..\..\glz\utilities\framebuffer.cpp">
       <Filter>utilities</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\examples\bootStrap_example_base.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\examples\Resource.h">

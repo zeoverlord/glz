@@ -90,8 +90,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\examples\bootStrap_z-tile.cpp" />
     <ClCompile Include="..\..\examples\stdafx.cpp" />
-    <ClCompile Include="..\..\examples\z-tile\bootStrap_z-tile.cpp" />
     <ClCompile Include="..\..\examples\z-tile\z-tile.cpp" />
     <ClCompile Include="..\..\examples\zeobase2.cpp" />
     <ClCompile Include="..\..\glz\2d\2d-graph.cpp" />

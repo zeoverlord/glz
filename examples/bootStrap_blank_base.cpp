@@ -21,21 +21,19 @@
 
 
 
-#include "..\zeobase2.h"
-#include "..\..\glz\appbase.h"
-#include "..\..\glz\state\baseState.h"
-#include "z-tile.h"
+#include "zeobase2.h"
+#include "..\glz\appbase.h"
+#include "..\glz\state\baseState.h"
+#include "blank_base\blank_base.h"
 
 
 
 
 std::shared_ptr<glzBaseState> preInitialize(void)
 {
-	std::shared_ptr<glzBaseState> gameState(new ZtileState);
+	std::shared_ptr<glzBaseState> gameState(new BlankBaseState);
 	glzAppinitialization app;
-	app.set_title(L"z-tile level editor");
-	app.data.WINDOW_WIDTH = 1280;
-	app.data.WINDOW_HEIGHT = 720;
+	app.set_title(L"ZeoBase GL Framework");
 	app.data.ALLOW_RESIZE = true;
 
 	return gameState;

@@ -33,7 +33,7 @@
     <ClCompile Include="..\..\examples\blank_base\blank_base.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\examples\blank_base\bootStrap_blank_base.cpp">
+    <ClCompile Include="..\..\examples\bootStrap_blank_base.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

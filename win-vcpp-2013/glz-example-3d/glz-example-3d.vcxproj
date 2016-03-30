@@ -89,7 +89,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\examples\example3d\bootStrap_example3d.cpp" />
+    <ClCompile Include="..\..\examples\bootStrap_example3d.cpp" />
     <ClCompile Include="..\..\examples\example3d\Example_3d.cpp" />
     <ClCompile Include="..\..\examples\zeobase2.cpp" />
     <ClCompile Include="..\..\glz\2d\2d-graph.cpp" />

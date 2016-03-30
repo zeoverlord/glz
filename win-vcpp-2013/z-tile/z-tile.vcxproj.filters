@@ -96,10 +96,10 @@
     <ClCompile Include="..\..\glz\utilities\framebuffer.cpp">
       <Filter>utilities</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\examples\z-tile\bootStrap_z-tile.cpp">
+    <ClCompile Include="..\..\examples\z-tile\z-tile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\examples\z-tile\z-tile.cpp">
+    <ClCompile Include="..\..\examples\bootStrap_z-tile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
