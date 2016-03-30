@@ -14,7 +14,7 @@
 // 3. If you make something comersiol or at least something you release publicly that relies on this code then i would like to know and maybe use in my CV
 // 4. Please do include me in your credits
 
-// glz base state class
+// glz example 2d class
 // visit http://www.flashbang.se or contact me at overlord@flashbang.se
 // the entire toolkit should exist in it's entirety at github
 // https://github.com/zeoverlord/glz.git
@@ -22,12 +22,15 @@
 #pragma once
 
 
-#include "..\utilities\type.h"
-#include "..\utilities\glz.h"
-#include "..\utilities\sprite.h"
-#include "..\utilities\resourcemanager.h"
-#include "..\utilities\vectormath.h"
-#include "..\layout\viewport.h"
+#include "..\glz\utilities\type.h"
+#include "..\glz\utilities\glz.h"
+#include "..\glz\utilities\sprite.h"
+#include "..\glz\utilities\resourcemanager.h"
+#include "..\glz\utilities\vectormath.h"
+#include "..\glz\layout\viewport.h"
+#include "..\glz\state\baseState.h"
+#include "..\glz\effects\particle.h"
+#include "..\glz\2d\2d-graph.h"
 #include <vector>
 #include <memory>
 
@@ -35,46 +38,42 @@
 // at a start the viewport its inside it's parent window
 // if width is wider than what the origin coordinate allows then the window will be resized
 
-class glzBaseState
+class Example2DState : public glzBaseState
 {
-public:
-
-	glzViewport view;
-	bool mMessageQuit;
-	bool mMessageFullscreen;
 
 public:
 
-	glzBaseState(){ mMessageQuit = false; mMessageFullscreen = false; }
-	~glzBaseState(){ Deinitialize(); }
-	virtual void preInitialize(void);
-	virtual BOOL Initialize(int width, int height);
-	virtual void Deinitialize(void);
-	virtual void Update(float seconds);
-	virtual void DisplayUpdate(int width, int height);
-	virtual void Draw(void);
+	Example2DState();
+	~Example2DState(){ Deinitialize(); }
+	void preInitialize(void) override;
+	BOOL Initialize(int width, int height) override;
+	void Deinitialize(void) override;
+	void Update(float seconds) override;
+	void DisplayUpdate(int width, int height) override;
+	void Draw(void) override;
 
-	bool pollMessageQuit()
-	{
-		if(!mMessageQuit) 
-			return false;
-		else
-		{
-			mMessageQuit = false;
-			return true;
-		}
-	}
+private:
+		
+	float		angle, width, height;												// Used To Rotate The Triangles
+	unsigned int vao[16], vao_num[16];
+	string tbuffer;
+	string tbuffer2;
+	float spriteframetimer;
+	int spriteframe;
+	int gamestate;
+	glzCamera2D cam;
+	Object2DGraph tempgraph;
+	node3 n;
+	glztiles tilemap;
+	glztiles tilemap2;
+	glzViewport view1, view2, view3;
+	GLhandleARB  ProgramObject, ProgramObjectFT, ProgramObjectFSQ, ProgramObjectFSQ_glitch;
+	glzSimpleParticleSystem ps;
 
-	bool pollMessageFullscreen()
-	{
-		if(!mMessageFullscreen)
-			return false;
-		else
-		{
-			mMessageFullscreen = false;
-			return true;
-		}
-	}
+
+public:
+
+	void draw_backdrop_glitch(unsigned int bgtexture, unsigned int bgtexture2);
 	
 
 };

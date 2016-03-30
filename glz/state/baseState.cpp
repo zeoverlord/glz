@@ -62,14 +62,14 @@ void glzBaseState::Update(float seconds)								// Perform Motion Updates Here
 {
 	glzInput input;
 
-	if(input.getKeyState(VK_ESCAPE))					// Is ESC Being Pressed?
+	if(input.getKeyState(VK_ESCAPE) == TRUE)					// Is ESC Being Pressed?
 	{
-		TerminateApplication();						// Terminate The Program
+		mMessageQuit = true;						// Terminate The Program
 	}
 
-	if(input.getKeyState(VK_F1))						// Is F1 Being Pressed?
+	if(input.getKeyState(VK_F1) == TRUE)						// Is F1 Being Pressed?
 	{
-		ToggleFullscreen();							// Toggle Fullscreen Mode
+		mMessageFullscreen = true;							// Toggle Fullscreen Mode
 	}
 
 

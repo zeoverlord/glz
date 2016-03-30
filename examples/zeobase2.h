@@ -23,6 +23,7 @@
 
 #include "resource.h"
 #include <wchar.h>
+#include "..\glz\state\baseState.h"
 
 
 typedef struct {									// Contains Information Vital To Applications
@@ -51,18 +52,19 @@ typedef struct {									// Contains Information Vital To A Window
 	int					x,y;
 } GL_Window;										// GL_Window
 
-void preInitialize(void);
+
+std::shared_ptr<glzBaseState> preInitialize(void);
 
 void TerminateApplication();		// Terminate The Application
 
 void ToggleFullscreen();			// Toggle Fullscreen / Windowed Mode
 
-BOOL Initialize (int width, int height);	// Performs All Your Initialization
+//BOOL Initialize (int width, int height);	// Performs All Your Initialization
 
-void Deinitialize (void);							// Performs All Your DeInitialization
+//void Deinitialize (void);							// Performs All Your DeInitialization
 
-void Update (float seconds);					// Perform Motion Updates
+//void Update (float seconds);					// Perform Motion Updates
 
-void DisplayUpdate(int width, int height);
+//void DisplayUpdate(int width, int height);
 
-void Draw (void);									// Perform All Your Scene Drawing
+//void Draw (void);									// Perform All Your Scene Drawing

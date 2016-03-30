@@ -68,6 +68,9 @@ private:
 
 	void copyParentView(void)
 	{
+		if(parent == nullptr)
+			return;
+
 		left = parent->left;
 		right = parent->right;
 		top = parent->top;
@@ -118,6 +121,7 @@ public:
 		displayHeight = 100;
 
 		ReferenceOrigin=glzOrigin::TOP_LEFT;
+		parent = nullptr;
 	}
 	~glzViewport(){ parent = nullptr; }
 

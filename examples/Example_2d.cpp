@@ -25,11 +25,11 @@
 #include <gl\gl.h>												// Header File For The OpenGL32 Library
 #include <gl\glu.h>												// Header File For The GLu32 Library
 #include <gl\glext.h>
-#include "zeobase2.h"
 #include "..\glz\appbase.h"
 #include <fstream>
 #include <math.h>
 #include <string>
+#include "Example_2d.h"
 #include "..\glz\3d\geo.h"
 #include "..\glz\shader\shader.h"
 #include "..\glz\utilities\glz.h"
@@ -38,12 +38,9 @@
 #include "..\glz\image\tex.h"
 #include "..\glz\2d\geo-2d.h"
 #include "..\glz\3d\geo-generate.h"
-#include "..\glz\effects\particle.h"
-#include "..\glz\2d\2d-graph.h"
 #include "..\glz\2d\2d-utilities.h"
 #include "..\glz\utilities\resourcemanager.h"
 #include "..\glz\input\input.h"
-#include "..\glz\layout\viewport.h"
 
 using namespace std;										
 
@@ -54,36 +51,6 @@ using namespace std;
 #define CDS_FULLSCREEN 4										// Compilers. By Defining It This Way,
 #endif															// We Can Avoid Errors
 
-// User Defined Variables
-float		angle=0,width,height;												// Used To Rotate The Triangles
-unsigned int vao[16],vao_num[16];
-glzMatrix m;
-
-
-string tbuffer;
-string tbuffer2;
-float spriteframetimer=0;
-int spriteframe=0;
-
-int gamestate=1;
-
-float aspect = 1.0f;
-
-glzCamera2D cam;
-Object2DGraph tempgraph(&cam);
-//Object2DGraph tempgraph2(&cam);
-node3 n;
-
-glztiles tilemap;
-glztiles tilemap2;
-
-glzViewport view1, view2, view3;
-
-
-GLhandleARB  ProgramObject, ProgramObjectFT, ProgramObjectFSQ, ProgramObjectFSQ_glitch;
-//texture_transform text_tt;
-
-glzSimpleParticleSystem ps;
 
 static PFNGLUSEPROGRAMPROC						glUseProgram;
 static PFNGLUNIFORM1IPROC                       glUniform1i;
@@ -93,21 +60,31 @@ static PFNGLGETUNIFORMLOCATIONPROC              glGetUniformLocation;
 static PFNGLBLENDCOLORPROC						glBlendColor;
 static PFNGLACTIVETEXTUREPROC					glActiveTexture;
 
-int WINDOW_HEIGHT;
-int WINDOW_WIDTH;
 
-void preInitialize(void)
+Example2DState::Example2DState() :
+angle(0.0f),
+spriteframetimer(0.0f),
+spriteframe(0),
+gamestate(1),
+cam(),
+tempgraph(&cam)
+{
+
+}
+
+
+
+void Example2DState::preInitialize(void)
 {
 	glzAppinitialization app;
 	app.set_title(L"ZeoBase GL Framework");	
 	//app.data.START_WINDOWED = false;
 	//app.data.SHOW_FRAME = false;
 	app.data.ALLOW_RESIZE = true;
-	WINDOW_HEIGHT = app.data.WINDOW_HEIGHT;
-	WINDOW_WIDTH = app.data.WINDOW_WIDTH;
+	view.setDisplay(0, 0, app.data.WINDOW_WIDTH, app.data.WINDOW_HEIGHT);
 }
 
-BOOL Initialize(int width, int height)					// Any GL Init Code & User Initialiazation Goes Here
+BOOL Example2DState::Initialize(int width, int height)					// Any GL Init Code & User Initialiazation Goes Here
 {
 
 	glzResourcemanager rm;
@@ -141,10 +118,10 @@ BOOL Initialize(int width, int height)					// Any GL Init Code & User Initialiaz
 	glBlendColor = (PFNGLBLENDCOLORPROC)wglGetProcAddress("glBlendColor");
 	glActiveTexture = (PFNGLACTIVETEXTUREPROC)wglGetProcAddress("glActiveTexture");
 
-	aspect = (float)width / (float)height;
+	view.setDisplay(0, 0, width, height);
 	
 
-	view1.init(aspect,0.05f);
+	view1.init(view.getAspect(),0.05f);
 	view1.setDisplay(0, 0, width, height);
 
 	view2.init(view1.getAspect(),0.057f);
@@ -325,7 +302,7 @@ BOOL Initialize(int width, int height)					// Any GL Init Code & User Initialiaz
 }
 
 
-void Deinitialize (void)										// Any User DeInitialization Goes Here
+void Example2DState::Deinitialize(void)										// Any User DeInitialization Goes Here
 {
 
 	// this shouldn't normally be nessecary, but it's better to make it a habit to delete data for when you start to load and unload resources mid game.
@@ -335,31 +312,29 @@ void Deinitialize (void)										// Any User DeInitialization Goes Here
 
 }
 
-void Update (float seconds)								// Perform Motion Updates Here
+void Example2DState::Update(float seconds)								// Perform Motion Updates Here
 {
 
 	glzAppinitialization app;
 	glzInput input;
-	WINDOW_HEIGHT = app.data.WINDOW_HEIGHT;
-	WINDOW_WIDTH = app.data.WINDOW_WIDTH;
-		glzMatrix mt;
-		mt.LoadIdentity();
-		mt.scale(0.17f,0.17f,0.17f);
+	glzMatrix mt;
+	mt.LoadIdentity();
+	mt.scale(0.17f,0.17f,0.17f);
 
 
-		glzResourcemanager rm;
-		rm.load_one();
+	glzResourcemanager rm;
+	rm.load_one();
 
 
 
 	if (input.getKeyState(VK_ESCAPE) == TRUE)					// Is ESC Being Pressed?
 	{
-		TerminateApplication();						// Terminate The Program
+		mMessageQuit = true;						// Terminate The Program
 	}
 
 	if (input.getKeyState(VK_F1) == TRUE)						// Is F1 Being Pressed?
 	{
-		ToggleFullscreen();							// Toggle Fullscreen Mode
+		mMessageFullscreen=true;							// Toggle Fullscreen Mode
 	}
 	
 	angle += seconds*10;						// Update angle Based On The Clock
@@ -468,7 +443,7 @@ if (gamestate == 8)
 
 
 
-void draw_backdrop_glitch(unsigned int bgtexture, unsigned int bgtexture2)
+void Example2DState::draw_backdrop_glitch(unsigned int bgtexture, unsigned int bgtexture2)
 {
 	glUseProgram(ProgramObjectFSQ_glitch);
 	unsigned int loc1 = glGetUniformLocation(ProgramObjectFSQ_glitch, "projMat");
@@ -478,6 +453,7 @@ void draw_backdrop_glitch(unsigned int bgtexture, unsigned int bgtexture2)
 	unsigned int loc5 = glGetUniformLocation(ProgramObjectFSQ_glitch, "width");
 	unsigned int loc6 = glGetUniformLocation(ProgramObjectFSQ_glitch, "height");
 
+	glzMatrix m;
 
 	m.LoadIdentity();
 
@@ -487,8 +463,8 @@ void draw_backdrop_glitch(unsigned int bgtexture, unsigned int bgtexture2)
 	glUniform1i(loc2, 0);
 	glUniform1i(loc3, 1);
 	glUniform4f(loc4, 1.0f, 1.0f, 1.0f, 1.0f);
-	glUniform1i(loc5, WINDOW_WIDTH);
-	glUniform1i(loc6, WINDOW_HEIGHT);
+	glUniform1i(loc5, view.getDisplayWidth());
+	glUniform1i(loc6, view.getDisplayHeigth());
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, bgtexture);
 	glActiveTexture(GL_TEXTURE1);
@@ -499,9 +475,9 @@ void draw_backdrop_glitch(unsigned int bgtexture, unsigned int bgtexture2)
 }
 
 
-void DisplayUpdate(int width, int height)
+void Example2DState::DisplayUpdate(int width, int height)
 {
-	aspect = (float)width / (float)height;
+	view.setDisplay(0, 0, width, height);
 	
 	view1.setDisplay(0, 0, width, height);
 	view2.update();
@@ -510,12 +486,13 @@ void DisplayUpdate(int width, int height)
 }
 
 
-void Draw (void)
+void Example2DState::Draw(void)
 {
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		// Clear Screen And Depth Buffer
 	
 	glzResourcemanager rm;
+	glzMatrix m;
 
 	float mtemp[16];
 	glEnable(GL_TEXTURE_2D);
@@ -535,15 +512,15 @@ void Draw (void)
 
 	if (gamestate==1)  
 	{
-		glzDrawText("Normal text", vert3(-0.5f, 0.49f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
-		glzDrawText("Tabs and endlines work just as well\nTab\t\t\t\\t\nEndline \t\t\\n", vert3(-0.5f, 0.42f), 0.05f, 1.0f, aspect, rm.gettexture("font.arial"), COL_WHITE);
-		glzDrawText(tbuffer, vert3(-0.5f, 0.25f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
-		glzDrawText(tbuffer2, vert3(-0.5f, 0.19f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
-		glzDrawText("You can also play with the kerning if you want", vert3(-0.5f, 0.07f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
-		glzDrawText("Using", vert3(-0.5f, -0.03f), 0.05f, 1.0f, aspect, rm.gettexture("font.minya_m"), COL_WHITE);
-		glzDrawText("all kinds", vert3(-0.5f, -0.1f), 0.05f, 1.0f, aspect, rm.gettexture("font.digitalstrip_l"), COL_WHITE);
-		glzDrawText("of fonts", vert3(-0.5f, -0.17f), 0.05f, 1.0f, aspect, rm.gettexture("font.morpheus_l"), COL_WHITE);
-		glzDrawText("Switch screens with 1, 2, 3...", vert3(0.5f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
+		glzDrawText("Normal text", vert3(-0.5f, 0.49f), 0.05f, 1.0f, view.getAspect(), rm.gettexture("font.ms_gothic"), COL_WHITE);
+		glzDrawText("Tabs and endlines work just as well\nTab\t\t\t\\t\nEndline \t\t\\n", vert3(-0.5f, 0.42f), 0.05f, 1.0f, view.getAspect(), rm.gettexture("font.arial"), COL_WHITE);
+		glzDrawText(tbuffer, vert3(-0.5f, 0.25f), 0.05f, 1.0f, view.getAspect(), rm.gettexture("font.ms_gothic"), COL_WHITE);
+		glzDrawText(tbuffer2, vert3(-0.5f, 0.19f), 0.05f, 1.0f, view.getAspect(), rm.gettexture("font.ms_gothic"), COL_WHITE);
+		glzDrawText("You can also play with the kerning if you want", vert3(-0.5f, 0.07f), 0.05f, 1.0f, view.getAspect(), rm.gettexture("font.ms_gothic"), COL_WHITE);
+		glzDrawText("Using", vert3(-0.5f, -0.03f), 0.05f, 1.0f, view.getAspect(), rm.gettexture("font.minya_m"), COL_WHITE);
+		glzDrawText("all kinds", vert3(-0.5f, -0.1f), 0.05f, 1.0f, view.getAspect(), rm.gettexture("font.digitalstrip_l"), COL_WHITE);
+		glzDrawText("of fonts", vert3(-0.5f, -0.17f), 0.05f, 1.0f, view.getAspect(), rm.gettexture("font.morpheus_l"), COL_WHITE);
+		glzDrawText("Switch screens with 1, 2, 3...", vert3(0.5f, -0.5f), 0.04f, 1.0f, view.getAspect(), rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
 	}
 
 
@@ -559,11 +536,11 @@ void Draw (void)
 		mi.translate(-2.7f, -2.7f, 0.0f);
 		glzColor blendcolor(1.0, 1.0, 1.0, 1.0);
 
-		glzDrawSprite(rm.gettexture("sprite.derpy_phirana"), -0.5f, -0.5f, 0.5f, aspect, glzBlendingMode::ALPHA);
+		glzDrawSprite(rm.gettexture("sprite.derpy_phirana"), -0.5f, -0.5f, 0.5f, view.getAspect(), glzBlendingMode::ALPHA);
 		
 
-		glzDrawText("Full screen quads", vert3(-0.5f, 0.49f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_BLACK);
-		glzDrawText("Switch screens with 1, 2, 3...", vert3(0.5f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_BLACK, glzOrigin::BOTTOM_RIGHT);
+		glzDrawText("Full screen quads", vert3(-0.5f, 0.49f), 0.05f, 1.0f, view.getAspect(), rm.gettexture("font.ms_gothic"), COL_BLACK);
+		glzDrawText("Switch screens with 1, 2, 3...", vert3(0.5f, -0.5f), 0.04f, 1.0f, view.getAspect(), rm.gettexture("font.ms_gothic"), COL_BLACK, glzOrigin::BOTTOM_RIGHT);
 
 	}	
 
@@ -571,10 +548,10 @@ void Draw (void)
 	if (gamestate==3)
 	{	
 		
-		glzDrawSprite(rm.gettexture("sprite.explotion128a"), glzSprite(8, 4, spriteframe, 0.0f), 0.0f, 0.0f, 1.0f, aspect, glzBlendingMode::ALPHA);
+		glzDrawSprite(rm.gettexture("sprite.explotion128a"), glzSprite(8, 4, spriteframe, 0.0f), 0.0f, 0.0f, 1.0f, view.getAspect(), glzBlendingMode::ALPHA);
 		
-		glzDrawText("Sprites", vert3(-0.5f, 0.49f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
-		glzDrawText("Switch screens with 1, 2, 3...", vert3(0.5f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
+		glzDrawText("Sprites", vert3(-0.5f, 0.49f), 0.05f, 1.0f, view.getAspect(), rm.gettexture("font.ms_gothic"), COL_WHITE);
+		glzDrawText("Switch screens with 1, 2, 3...", vert3(0.5f, -0.5f), 0.04f, 1.0f, view.getAspect(), rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
 
 	}
 
@@ -592,8 +569,8 @@ void Draw (void)
 	glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("atlas.tinytiles"));
 	glzDrawVAO(vao_num[2],vao[2],GL_TRIANGLES);
 
-	glzDrawText("Atlas grid", vert3(-0.5f, 0.49f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
-	glzDrawText("Switch screens with 1, 2, 3...", vert3(0.5f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
+	glzDrawText("Atlas grid", vert3(-0.5f, 0.49f), 0.05f, 1.0f, view.getAspect(), rm.gettexture("font.ms_gothic"), COL_WHITE);
+	glzDrawText("Switch screens with 1, 2, 3...", vert3(0.5f, -0.5f), 0.04f, 1.0f, view.getAspect(), rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
 
 
 	}
@@ -656,8 +633,8 @@ void Draw (void)
 		glzDirectSpriteRenderAtlasPixelPerfect(192, 192, 1, 64, 64, 4, 4, 1, glzOrigin::BOTTOM_LEFT);
 		glzDirectSpriteRenderAtlasPixelPerfectQuantized(208, 192, 1, 64, 64, 4, 4, 1, 16.0f, glzOrigin::BOTTOM_LEFT);		
 			
-		glzDrawText("Direct draw sprites in various modes", vert3(-0.5f, 0.49f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
-		glzDrawText("Switch screens with 1, 2, 3...", vert3(0.5f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
+		glzDrawText("Direct draw sprites in various modes", vert3(-0.5f, 0.49f), 0.05f, 1.0f, view.getAspect(), rm.gettexture("font.ms_gothic"), COL_WHITE);
+		glzDrawText("Switch screens with 1, 2, 3...", vert3(0.5f, -0.5f), 0.04f, 1.0f, view.getAspect(), rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
 		
 		glEnable(GL_DEPTH_TEST);
 
@@ -677,8 +654,8 @@ void Draw (void)
 		glPointSize(3.0f);
 		ps.render_out();
 
-		glzDrawText("Simple 2D particle system, easy to use, not hard to master", vert3(-0.5f, 0.49f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
-		glzDrawText("Switch screens with 1, 2, 3...", vert3(0.5f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
+		glzDrawText("Simple 2D particle system, easy to use, not hard to master", vert3(-0.5f, 0.49f), 0.05f, 1.0f, view.getAspect(), rm.gettexture("font.ms_gothic"), COL_WHITE);
+		glzDrawText("Switch screens with 1, 2, 3...", vert3(0.5f, -0.5f), 0.04f, 1.0f, view.getAspect(), rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
 
 	}
 
@@ -686,13 +663,13 @@ void Draw (void)
 	if (gamestate == 7)
 	{	
 		draw_backdrop_glitch(rm.gettextureHandle("background.cv90"), rm.gettextureHandle("sprite.blob"));
-		glzDrawText("Switch screens with 1, 2, 3...", vert3(0.5f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
+		glzDrawText("Switch screens with 1, 2, 3...", vert3(0.5f, -0.5f), 0.04f, 1.0f, view.getAspect(), rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
 	}
 
 	if (gamestate == 8)
 	{
 		tempgraph.draw();
-		glzDrawText("Switch screens with 1, 2, 3...", vert3(0.5f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
+		glzDrawText("Switch screens with 1, 2, 3...", vert3(0.5f, -0.5f), 0.04f, 1.0f, view.getAspect(), rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
 	}
 
 
@@ -707,8 +684,8 @@ void Draw (void)
 		glzBackdrop(rm.gettexture("dialog.character"), glzBlendingMode::NONE);
 		view3.disableViewport();
 
-		glzDrawText("viewport rendering", vert3(-0.5f, 0.49f), 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
-		glzDrawText("Switch screens with 1, 2, 3...", vert3(0.5f, -0.5f), 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
+		glzDrawText("viewport rendering", vert3(-0.5f, 0.49f), 0.05f, 1.0f, view.getAspect(), rm.gettexture("font.ms_gothic"), COL_WHITE);
+		glzDrawText("Switch screens with 1, 2, 3...", vert3(0.5f, -0.5f), 0.04f, 1.0f, view.getAspect(), rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
 	}
 
 

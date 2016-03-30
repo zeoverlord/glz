@@ -32,6 +32,7 @@
 #include <windowsx.h>
 #include "..\glz\appbase.h"
 #include "..\glz\input\input.h"
+#include "..\glz\state\baseState.h"
 
 #pragma comment( lib, "opengl32.lib" )							// Search For OpenGL32.lib While Linking
 #pragma comment( lib, "glu32.lib" )								// Search For GLu32.lib While Linking
@@ -54,6 +55,8 @@ TCHAR szWindowClass[MAX_LOADSTRING];			// the main window class name
 
 GL_Window window;
 
+std::shared_ptr<glzBaseState> gameState;
+
 void TerminateApplication()							// Terminate The Application
 {
 	PostMessage (window.hWnd, WM_QUIT, 0, 0);							// Send A WM_QUIT Message
@@ -70,7 +73,7 @@ void ToggleFullscreen()								// Toggle Fullscreen/Windowed
 
 void ReshapeGL (int width, int height)									// Reshape The Window When It's Moved Or Resized
 {
-	DisplayUpdate(width, height);
+	gameState->DisplayUpdate(width, height);
 	glViewport (0, 0, (GLsizei)(width), (GLsizei)(height));				// Reset The Current Viewport
 }
 
@@ -449,7 +452,7 @@ LRESULT CALLBACK WindowProc (HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				ChangeDisplaySettings (NULL,0);							// returns to the default screen resolution
 				SetWindowPos(hWnd,HWND_TOPMOST,window.x,window.y,window.init.width,window.init.height,SWP_NOZORDER);
 
-				Draw ();
+				gameState->Draw();
 			}
 
 
@@ -491,8 +494,8 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 
 	glzAppinitialization app;
 	glzInput input;
-	preInitialize();
-	app.pull();
+	gameState=preInitialize();
+//	app.pull();
 
 	//since the app data structure has allready been created, we need to do a pull operation to update the data in the structure to have up to date data in it
 	app.pull();	
@@ -570,7 +573,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 		if (CreateWindowGL() == TRUE)							// Was Window Creation Successful?
 		{
 			// At This Point We Should Have A Window That Is Setup To Render OpenGL
-			if(Initialize(window.init.width, window.init.width) == FALSE)					// Call User Intialization
+			if(gameState->Initialize(window.init.width, window.init.width) == FALSE)					// Call User Intialization
 			{
 				// Failure
 				TerminateApplication();							// Close Window, This Will Handle The Shutdown
@@ -611,8 +614,15 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 
 							input.updateKeys(window.deltaTime);
 						
-							Update(window.deltaTime);			// Update The Counter
-							Draw();							// Draw Our Scene
+							gameState->Update(window.deltaTime);			// Update The Counter
+
+							if(gameState->pollMessageQuit())
+								TerminateApplication();
+
+							if(gameState->pollMessageFullscreen())
+								ToggleFullscreen();
+
+							gameState->Draw();							// Draw Our Scene
 							SwapBuffers(window.hDC);			// Swap Buffers (Double Buffering)
 								
 								
@@ -623,7 +633,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCm
 			}															// If (Initialize (...
 
 			// Application Is Finished
-			Deinitialize();											// User Defined DeInitialization
+			gameState->Deinitialize();											// User Defined DeInitialization
 
 			DestroyWindowGL();									// Destroy The Active Window
 		}
