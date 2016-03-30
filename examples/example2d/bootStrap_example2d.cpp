@@ -21,9 +21,9 @@
 
 
 
-#include "zeobase2.h"
-#include "..\glz\appbase.h"
-#include "..\glz\state\baseState.h"
+#include "..\zeobase2.h"
+#include "..\..\glz\appbase.h"
+#include "..\..\glz\state\baseState.h"
 #include "Example_2d.h"
 
 

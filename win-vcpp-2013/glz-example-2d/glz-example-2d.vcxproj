@@ -89,8 +89,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\examples\bootStrap_example2d.cpp" />
-    <ClCompile Include="..\..\examples\Example_2d.cpp" />
+    <ClCompile Include="..\..\examples\example2d\bootStrap_example2d.cpp" />
+    <ClCompile Include="..\..\examples\example2d\Example_2d.cpp" />
     <ClCompile Include="..\..\examples\stdafx.cpp" />
     <ClCompile Include="..\..\examples\zeobase2.cpp" />
     <ClCompile Include="..\..\glz\2d\2d-graph.cpp" />
@@ -115,7 +115,7 @@
     <ClCompile Include="..\..\glz\utilities\vectormath.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\examples\Example_2d.h" />
+    <ClInclude Include="..\..\examples\example2d\Example_2d.h" />
     <ClInclude Include="..\..\examples\Resource.h" />
     <ClInclude Include="..\..\examples\stdafx.h" />
     <ClInclude Include="..\..\examples\targetver.h" />

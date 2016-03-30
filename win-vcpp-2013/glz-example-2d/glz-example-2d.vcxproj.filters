@@ -42,9 +42,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\examples\Example_2d.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\examples\stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -111,7 +108,10 @@
     <ClCompile Include="..\..\glz\state\baseState.cpp">
       <Filter>state</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\examples\bootStrap_example2d.cpp">
+    <ClCompile Include="..\..\examples\example2d\Example_2d.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\examples\example2d\bootStrap_example2d.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -194,7 +194,7 @@
     <ClInclude Include="..\..\glz\state\baseState.h">
       <Filter>state</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\examples\Example_2d.h">
+    <ClInclude Include="..\..\examples\example2d\Example_2d.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
