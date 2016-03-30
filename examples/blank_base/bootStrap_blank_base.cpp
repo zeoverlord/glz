@@ -31,7 +31,7 @@
 
 std::shared_ptr<glzBaseState> preInitialize(void)
 {
-	std::shared_ptr<BlankBaseState> gameState(new BlankBaseState);
+	std::shared_ptr<glzBaseState> gameState(new BlankBaseState);
 	glzAppinitialization app;
 	app.set_title(L"ZeoBase GL Framework");
 	app.data.ALLOW_RESIZE = true;

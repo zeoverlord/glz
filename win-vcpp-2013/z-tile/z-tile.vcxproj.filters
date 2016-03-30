@@ -42,9 +42,6 @@
     <ClCompile Include="..\..\examples\zeobase2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\examples\z-tile.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\glz\2d\2d-graph.cpp">
       <Filter>2d</Filter>
     </ClCompile>
@@ -98,6 +95,12 @@
     </ClCompile>
     <ClCompile Include="..\..\glz\utilities\framebuffer.cpp">
       <Filter>utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\examples\z-tile\bootStrap_z-tile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\examples\z-tile\z-tile.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -172,6 +175,9 @@
     </ClInclude>
     <ClInclude Include="..\..\glz\utilities\framebuffer.h">
       <Filter>utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\examples\z-tile\z-tile.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -20,25 +20,24 @@
 // https://github.com/zeoverlord/glz.git
 
 
-
+#include "z-tile.h"
 #include <windows.h>											// Header File For Windows
 #include <gl\gl.h>												// Header File For The OpenGL32 Library
 #include <gl\glu.h>												// Header File For The GLu32 Library
 #include <gl\glext.h>
-#include "zeobase2.h"
 #include <fstream>
 #include <math.h>
-#include "..\glz\appbase.h"
-#include "..\glz\3d\geo.h"
-#include "..\glz\shader\shader.h"
-#include "..\glz\utilities\glz.h"
-#include "..\glz\utilities\vectormath.h"
-#include "..\glz\image\tex.h"
-#include "..\glz\2d\geo-2d.h"
-#include "..\glz\3d\geo-generate.h"
-#include "..\glz\utilities\tiletools.h"
-#include "..\glz\utilities\resourcemanager.h"
-#include "..\glz\input\input.h"
+#include "..\..\glz\appbase.h"
+#include "..\..\glz\3d\geo.h"
+#include "..\..\glz\shader\shader.h"
+#include "..\..\glz\utilities\glz.h"
+#include "..\..\glz\utilities\vectormath.h"
+#include "..\..\glz\image\tex.h"
+#include "..\..\glz\2d\geo-2d.h"
+#include "..\..\glz\3d\geo-generate.h"
+#include "..\..\glz\utilities\tiletools.h"
+#include "..\..\glz\utilities\resourcemanager.h"
+#include "..\..\glz\input\input.h"
 
 using namespace std;
 
@@ -49,81 +48,9 @@ using namespace std;
 #define CDS_FULLSCREEN 4										// Compilers. By Defining It This Way,
 #endif															// We Can Avoid Errors
 
-enum ztUIP { NONE, BACKGROUND, PIXELMAP, SPRITESHEET, SPRITE, UIFRAME };
-
-enum ztLeveltex { L1A, L1B, L2A, L2B, DYNAMIC_A, DYNAMIC_B, DYNAMIC_C, DYNAMIC_D, NO_CHANGE };
-
-
-// User Defined Variables
-float		angle = 0, width, height;												// Used To Rotate The Triangles
-unsigned int vao[16], vao_num[16], textvao[16], textvao_num[16];
-glzMatrix m;
-//unsigned int spritetexture[10], fonttexture[15];
-
-
-char tbuffer[160];
-char tbuffer2[160];
-float texttimer = 0;
-float spriteframetimer = 0;
-int spriteframe = 0;
-
-int gamestate = 1, testanim = 0;
-float testanimTimer = 0;
-float keyTimer = 0;
-
-//int arm_width = 16, arm_height = 16;
-int tiles_width = 16, tiles_height = 16;
 
 
 
-//float paintarea_x = WINDOW_WIDTH / 2, paintarea_y = WINDOW_HEIGHT / 2, paintarea_Zoom = 512;
-
-float paintarea_x = 0.0f, paintarea_y = 0.0f, paintarea_Zoom = 512;
-float paintarea_pixel_x = 0.0f, paintarea_pixel_y = 0.0f;
-
-float paintarea_x_s = 0.0f, paintarea_y_s = 0.0f, paintarea_Zoom_s = 512;
-float paintarea_pixel_x_s = 0.0f, paintarea_pixel_y_s = 0.0f;
-
-unsigned int  ProgramObject, ProgramObjectFT, ProgramObjectFSQ, ProgramObjectAtlas;
-texture_transform text_tt;
-
-
-int Mpos_x_old;
-int Mpos_y_old;
-int Mpos_x_rel;
-int Mpos_y_rel;
-int Mweel_old;
-int Mweel_rel;
-
-vert3 mwp; // mouse work position, z is ignored
-
-vert3 muip;
-
-int z_tileUI_point = ztUIP::BACKGROUND;
-
-
-int cursprite_x = 0, cursprite_y = 0;
-bool cursprite_anim = false, cursprite_extra = false;
-
-bool dual_view = false;
-bool toggle_extra = false;
-
-
-
-
-ztLeveltex curlayer = ztLeveltex::L1A;
-bool has_l1 = true;
-bool has_l2 = true;
-bool has_d = true;
-
-char leveltex_1_filename[255] = "data\\supertiles1.tga";
-char leveltex_2_filename[255] = "data\\supertiles2.tga";
-char leveltex_d_filename[255] = "data\\supertilesd.tga";
-//char leveltex_filename[255] = "data\\supertilesaspect.tga";
-//char leveltex_filename[255] = "data\\a-map.tga";
-glztiles map_l1;
-glztiles map_l2;
-glztiles map_dynamic;
 
 
 
@@ -135,24 +62,67 @@ static PFNGLGETUNIFORMLOCATIONPROC              glGetUniformLocation;
 static PFNGLBLENDCOLORPROC						glBlendColor;
 static PFNGLACTIVETEXTUREPROC					glActiveTexture;
 
-int WINDOW_HEIGHT;
-int WINDOW_WIDTH;
 
 
-void preInitialize(void)
+ZtileState::ZtileState()
 {
-	glzAppinitialization app;
-	app.set_title(L"z-tile level editor");
-	app.data.WINDOW_WIDTH = 1280;
-	app.data.WINDOW_HEIGHT = 720;
-	WINDOW_HEIGHT = app.data.WINDOW_HEIGHT;
-	WINDOW_WIDTH = app.data.WINDOW_WIDTH;
+	angle = 0;
+	texttimer = 0;
+	spriteframetimer = 0;
+	spriteframe = 0;
 
-	app.data.ALLOW_RESIZE = true;
+	gamestate = 1;
+	testanim = 0;
+	testanimTimer = 0;
+	keyTimer = 0;
+
+	tiles_width = 16;
+	tiles_height = 16;
+	paintarea_x = 0.0f;
+	paintarea_y = 0.0f;
+	paintarea_Zoom = 512;
+	paintarea_pixel_x = 0.0f;
+	paintarea_pixel_y = 0.0f;
+
+	paintarea_x_s = 0.0f;
+	paintarea_y_s = 0.0f;
+	paintarea_Zoom_s = 512;
+	paintarea_pixel_x_s = 0.0f;
+	paintarea_pixel_y_s = 0.0f;
+	
+	z_tileUI_point = ztUIP::BACKGROUND;
+
+
+	cursprite_x = 0;
+	cursprite_y = 0;
+	cursprite_anim = false;
+	cursprite_extra = false;
+
+	dual_view = false;
+	toggle_extra = false;
+
+
+
+
+	curlayer = ztLeveltex::L1A;
+	has_l1 = true;
+	has_l2 = true;
+	has_d = true;
+
+	//strncat(leveltex_1_filename, "data\\supertiles1.tga", sizeof("data\\supertiles1.tga"));
+	//strncat(leveltex_2_filename, "data\\supertiles1.tga", sizeof("data\\supertiles2.tga"));
+	//strncat(leveltex_d_filename, "data\\supertiles1.tga", sizeof("data\\supertilesd.tga"));
+	leveltex_1_filename = "data\\supertiles1.tga";
+	leveltex_2_filename = "data\\supertiles2.tga";
+	leveltex_d_filename = "data\\supertilesd.tga";
+	//char leveltex_filename[255] = "data\\supertilesaspect.tga";
+	//char leveltex_filename[255] = "data\\a-map.tga";
+
 }
 
 
-BOOL Initialize(int width, int height)					// Any GL Init Code & User Initialiazation Goes Here
+
+BOOL ZtileState::Initialize(int width, int height)					// Any GL Init Code & User Initialiazation Goes Here
 {
 	glzResourcemanager rm;
 
@@ -223,7 +193,7 @@ BOOL Initialize(int width, int height)					// Any GL Init Code & User Initialiaz
 }
 
 
-void Deinitialize(void)										// Any User DeInitialization Goes Here
+void ZtileState::Deinitialize(void)										// Any User DeInitialization Goes Here
 {
 
 	// this shouldn't normally be nessecary, but it's better to make it a habit to delete data for when you start to load and unload resources mid game.
@@ -234,7 +204,7 @@ void Deinitialize(void)										// Any User DeInitialization Goes Here
 }
 
 
-void Update(float seconds)								// Perform Motion Updates Here
+void ZtileState::Update(float seconds)								// Perform Motion Updates Here
 {
 
 	glzInput input;
@@ -260,14 +230,14 @@ void Update(float seconds)								// Perform Motion Updates Here
 	mt.scale(0.17f, 0.17f, 0.17f);
 
 
-	if (input.getKeyState(VK_ESCAPE))					// Is ESC Being Pressed?
+	if(input.getKeyState(VK_ESCAPE) == TRUE)					// Is ESC Being Pressed?
 	{
-		TerminateApplication();						// Terminate The Program
+		mMessageQuit = true;						// Terminate The Program
 	}
 
-	if (input.getKeyState(VK_F1))						// Is F1 Being Pressed?
+	if(input.getKeyState(VK_F1) == TRUE)						// Is F1 Being Pressed?
 	{
-		ToggleFullscreen();							// Toggle Fullscreen Mode
+		mMessageFullscreen = true;							// Toggle Fullscreen Mode
 	}
 
 	gamestate = 1;
@@ -548,13 +518,13 @@ void Update(float seconds)								// Perform Motion Updates Here
 	}
 }
 
-void DisplayUpdate(int width, int height)
+void ZtileState::DisplayUpdate(int width, int height)
 {
 	//aspect = (float)width / (float)height;
 }
 
 
-void Draw(void)
+void ZtileState::Draw(void)
 {
 
 	glzResourcemanager rm;

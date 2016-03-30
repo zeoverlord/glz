@@ -19,7 +19,7 @@
 // the entire toolkit should exist in it's entirety at github
 // https://github.com/zeoverlord/glz.git
 
-
+#include "Example_2d.h"
 
 #include <windows.h>											// Header File For Windows
 #include <gl\gl.h>												// Header File For The OpenGL32 Library
@@ -29,7 +29,6 @@
 #include <fstream>
 #include <math.h>
 #include <string>
-#include "Example_2d.h"
 #include "..\..\glz\3d\geo.h"
 #include "..\..\glz\shader\shader.h"
 #include "..\..\glz\utilities\glz.h"

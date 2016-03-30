@@ -20,13 +20,12 @@
 // https://github.com/zeoverlord/glz.git
 
 
-
+#include "blank_base.h"
 
 #include <windows.h>											// Header File For Windows
 #include <gl\gl.h>												// Header File For The OpenGL32 Library
 #include <gl\glu.h>												// Header File For The GLu32 Library
 #include <gl\glext.h>
-#include "blank_base.h"
 #include "..\..\glz\appbase.h"
 #include "..\..\glz\input\input.h"
 
@@ -42,10 +41,7 @@
 
 
 
-BlankBaseState::BlankBaseState()
-{
-
-}
+BlankBaseState::BlankBaseState(){}
 
 
 
