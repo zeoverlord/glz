@@ -34,6 +34,12 @@
     <Filter Include="input">
       <UniqueIdentifier>{639be047-105c-4660-876a-5a09cb80df15}</UniqueIdentifier>
     </Filter>
+    <Filter Include="state">
+      <UniqueIdentifier>{19c42207-29a4-498d-8612-33416c4067ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="layout">
+      <UniqueIdentifier>{9b86967c-b060-4d74-b9ec-c57081295460}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\examples\zeobase2.cpp">
@@ -98,6 +104,15 @@
     </ClCompile>
     <ClCompile Include="..\..\examples\bootStrap_example3d.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\examples\stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz\state\baseState.cpp">
+      <Filter>state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz\layout\viewport.cpp">
+      <Filter>layout</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -175,6 +190,12 @@
     </ClInclude>
     <ClInclude Include="..\..\examples\example3d\Example_3d.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz\state\baseState.h">
+      <Filter>state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz\layout\viewport.h">
+      <Filter>layout</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

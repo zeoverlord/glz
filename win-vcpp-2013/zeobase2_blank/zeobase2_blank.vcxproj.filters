@@ -16,6 +16,15 @@
     <Filter Include="input">
       <UniqueIdentifier>{edb2913b-1307-489e-b8d7-a05f00c7da9f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="state">
+      <UniqueIdentifier>{d0189e27-7edf-44dd-96d8-bc11760320e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="layout">
+      <UniqueIdentifier>{11309728-e76c-496e-a3cd-802b0738dd64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utilities">
+      <UniqueIdentifier>{1a97e421-f3e4-4421-8726-0db3144e83c5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\examples\stdafx.cpp">
@@ -35,6 +44,27 @@
     </ClCompile>
     <ClCompile Include="..\..\examples\bootStrap_blank_base.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz\state\baseState.cpp">
+      <Filter>state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz\layout\viewport.cpp">
+      <Filter>layout</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz\utilities\color.cpp">
+      <Filter>utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz\utilities\glz.cpp">
+      <Filter>utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz\utilities\sprite.cpp">
+      <Filter>utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz\utilities\type.cpp">
+      <Filter>utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz\utilities\vectormath.cpp">
+      <Filter>utilities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -58,6 +88,27 @@
     </ClInclude>
     <ClInclude Include="..\..\examples\blank_base\blank_base.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz\state\baseState.h">
+      <Filter>state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz\layout\viewport.h">
+      <Filter>layout</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz\utilities\color.h">
+      <Filter>utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz\utilities\glz.h">
+      <Filter>utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz\utilities\sprite.h">
+      <Filter>utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz\utilities\type.h">
+      <Filter>utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz\utilities\vectormath.h">
+      <Filter>utilities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

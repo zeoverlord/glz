@@ -26,17 +26,11 @@
 #include "..\glz\state\baseState.h"
 #include "blank_base\blank_base.h"
 
-
-
-
 std::shared_ptr<glzBaseState> preInitialize(void)
 {
 	std::shared_ptr<glzBaseState> gameState(new BlankBaseState);
 	glzAppinitialization app;
 	app.set_title(L"ZeoBase GL Framework");
 	app.data.ALLOW_RESIZE = true;
-
 	return gameState;
-
 }
-

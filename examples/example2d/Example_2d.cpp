@@ -74,7 +74,7 @@ tempgraph(&cam)
 
 
 
-BOOL Example2DState::Initialize(int width, int height)					// Any GL Init Code & User Initialiazation Goes Here
+bool Example2DState::Initialize(int width, int height)					// Any GL Init Code & User Initialiazation Goes Here
 {
 
 	glzResourcemanager rm;

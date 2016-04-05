@@ -25,20 +25,20 @@
 #include <gl\gl.h>												// Header File For The OpenGL32 Library
 #include <gl\glu.h>												// Header File For The GLu32 Library
 #include <gl\glext.h>
-#include "zeobase2.h"
+#include "Example_base.h"
 #include <fstream>
 #include <math.h>
-#include "..\glz\appbase.h"
-#include "..\glz\3d\geo.h"
-#include "..\glz\3d\geo-generate.h"
-#include "..\glz\utilities\vectormath.h"
-#include "..\glz\2d\geo-2d.h"
-#include "..\glz\shader\shader.h"
-#include "..\glz\utilities\glz.h"
-#include "..\glz\image\tex.h"
-#include "..\glz\utilities\resourcemanager.h"
-#include "..\glz\input\input.h"
-#include "..\glz\2d\2d-utilities.h"
+#include "..\..\glz\appbase.h"
+#include "..\..\glz\3d\geo.h"
+#include "..\..\glz\3d\geo-generate.h"
+#include "..\..\glz\utilities\vectormath.h"
+#include "..\..\glz\2d\geo-2d.h"
+#include "..\..\glz\shader\shader.h"
+#include "..\..\glz\utilities\glz.h"
+#include "..\..\glz\image\tex.h"
+#include "..\..\glz\utilities\resourcemanager.h"
+#include "..\..\glz\input\input.h"
+#include "..\..\glz\2d\2d-utilities.h"
 
 using namespace std;										
 
@@ -50,25 +50,8 @@ using namespace std;
 #endif															// We Can Avoid Errors
 
 
-
 // User Defined Variables
-float		angle,width,height;												// Used To Rotate The Triangles
-int			rot1, rot2;											// Counter Variables
-unsigned int vao[5],vao_num[5];
-glzMatrix m;
-int e=0,e2=0;
 
-glzQuaternion q;
-glzQuaternion q2;
-glzQuaternion q3;
-
-img_head img;
-unsigned char *data;
-
-
-float aspect = 1.0f;
-
-GLhandleARB  ProgramObject, ProgramObjectFSQ;
 
 static PFNGLUSEPROGRAMPROC						glUseProgram;
 static PFNGLUNIFORM1IPROC                       glUniform1i;
@@ -76,19 +59,15 @@ static PFNGLUNIFORMMATRIX4FVPROC                glUniformMatrix4fv;
 static PFNGLUNIFORM4FARBPROC                    glUniform4f;
 static PFNGLGETUNIFORMLOCATIONPROC              glGetUniformLocation;
 
-
-int WINDOW_HEIGHT;
-int WINDOW_WIDTH;
-
-void preInitialize(void)
+ExampleBaseState::ExampleBaseState() :
+e(0),
+e2(0)
 {
-	glzAppinitialization app;
-	app.set_title(L"ZeoBase GL Framework");
-	WINDOW_HEIGHT = app.data.WINDOW_HEIGHT;
-	WINDOW_WIDTH = app.data.WINDOW_WIDTH;
+
 }
 
-BOOL Initialize (int width, int height)					// Any GL Init Code & User Initialiazation Goes Here
+
+bool ExampleBaseState::Initialize(int width, int height)					// Any GL Init Code & User Initialiazation Goes Here
 {	
 
 	glzResourcemanager rm;
@@ -114,9 +93,6 @@ BOOL Initialize (int width, int height)					// Any GL Init Code & User Initialia
 	glUniform4f= (PFNGLUNIFORM4FARBPROC) wglGetProcAddress("glUniform4fARB");
 	glUniformMatrix4fv= (PFNGLUNIFORMMATRIX4FVPROC) wglGetProcAddress("glUniformMatrix4fv");
 	
-
-
-	aspect = (float)width / (float)height;
 
 
 	glzMatrix mt;
@@ -207,7 +183,7 @@ BOOL Initialize (int width, int height)					// Any GL Init Code & User Initialia
 }
 
 
-void Deinitialize (void)										// Any User DeInitialization Goes Here
+void ExampleBaseState::Deinitialize(void)										// Any User DeInitialization Goes Here
 {
 
 	// this shouldn't normally be nessecary, but it's better to make it a habit for when you load and unload resources mid game.
@@ -216,21 +192,21 @@ void Deinitialize (void)										// Any User DeInitialization Goes Here
 
 }
 
-void Update (float seconds)								// Perform Motion Updates Here
+void ExampleBaseState::Update(float seconds)								// Perform Motion Updates Here
 {
 	glzResourcemanager rm;
 	rm.load_one();
 
 	glzInput input;
 
-	if (input.getKeyState(VK_ESCAPE))					// Is ESC Being Pressed?
+	if(input.getKeyState(VK_ESCAPE) == TRUE)					// Is ESC Being Pressed?
 	{
-		TerminateApplication();						// Terminate The Program
+		mMessageQuit = true;						// Terminate The Program
 	}
 
-	if (input.getKeyState(VK_F1))						// Is F1 Being Pressed?
+	if(input.getKeyState(VK_F1) == TRUE)						// Is F1 Being Pressed?
 	{
-		ToggleFullscreen();							// Toggle Fullscreen Mode
+		mMessageFullscreen = true;							// Toggle Fullscreen Mode
 	}
 
 	angle += seconds*50;						// Update angle Based On The Clock
@@ -249,12 +225,12 @@ void Update (float seconds)								// Perform Motion Updates Here
 
 }
 
-void DisplayUpdate(int width, int height)
+void ExampleBaseState::DisplayUpdate(int width, int height)
 {
-	aspect = (float)width / (float)height;
+	view.setDisplay(0, 0, width, height);
 }
 
-void Draw (void)
+void ExampleBaseState::Draw(void)
 {
 	glzResourcemanager rm;
 
@@ -323,7 +299,7 @@ void Draw (void)
 	glzDrawVAO(vao_num[4],vao[4],GL_TRIANGLES);
 	
 	// draw text
-	glzDrawText("Geometry generation test, try the arrow keys.", -0.8f, 0.49f, 0.05f, 1.3f, aspect, rm.gettexture("font.digitalstrip_l"), COL_WHITE);
+	glzDrawText("Geometry generation test, try the arrow keys.", -0.8f, 0.49f, 0.05f, 1.3f, view.getAspect(), rm.gettexture("font.digitalstrip_l"), COL_WHITE);
 
 	glUseProgram(0);
 	glFlush ();													// Flush The GL Rendering Pipeline

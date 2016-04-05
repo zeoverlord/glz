@@ -95,6 +95,13 @@
     <ClCompile Include="..\..\examples\zeobase2.cpp" />
     <ClCompile Include="..\..\glz\appbase.cpp" />
     <ClCompile Include="..\..\glz\input\input.cpp" />
+    <ClCompile Include="..\..\glz\layout\viewport.cpp" />
+    <ClCompile Include="..\..\glz\state\baseState.cpp" />
+    <ClCompile Include="..\..\glz\utilities\color.cpp" />
+    <ClCompile Include="..\..\glz\utilities\glz.cpp" />
+    <ClCompile Include="..\..\glz\utilities\sprite.cpp" />
+    <ClCompile Include="..\..\glz\utilities\type.cpp" />
+    <ClCompile Include="..\..\glz\utilities\vectormath.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\examples\blank_base\blank_base.h" />
@@ -104,6 +111,13 @@
     <ClInclude Include="..\..\examples\zeobase2.h" />
     <ClInclude Include="..\..\glz\appbase.h" />
     <ClInclude Include="..\..\glz\input\input.h" />
+    <ClInclude Include="..\..\glz\layout\viewport.h" />
+    <ClInclude Include="..\..\glz\state\baseState.h" />
+    <ClInclude Include="..\..\glz\utilities\color.h" />
+    <ClInclude Include="..\..\glz\utilities\glz.h" />
+    <ClInclude Include="..\..\glz\utilities\sprite.h" />
+    <ClInclude Include="..\..\glz\utilities\type.h" />
+    <ClInclude Include="..\..\glz\utilities\vectormath.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\examples\small.ico" />

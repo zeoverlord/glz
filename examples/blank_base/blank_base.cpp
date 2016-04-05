@@ -45,7 +45,7 @@ BlankBaseState::BlankBaseState(){}
 
 
 
-BOOL BlankBaseState::Initialize(int width, int height)					// Any GL Init Code & User Initialiazation Goes Here
+bool BlankBaseState::Initialize(int width, int height)					// Any GL Init Code & User Initialiazation Goes Here
 {
 
 	GetFocus();

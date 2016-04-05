@@ -122,7 +122,7 @@ ZtileState::ZtileState()
 
 
 
-BOOL ZtileState::Initialize(int width, int height)					// Any GL Init Code & User Initialiazation Goes Here
+bool ZtileState::Initialize(int width, int height)					// Any GL Init Code & User Initialiazation Goes Here
 {
 	glzResourcemanager rm;
 

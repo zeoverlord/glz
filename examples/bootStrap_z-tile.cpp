@@ -28,7 +28,6 @@
 
 
 
-
 std::shared_ptr<glzBaseState> preInitialize(void)
 {
 	std::shared_ptr<glzBaseState> gameState(new ZtileState);
@@ -37,8 +36,5 @@ std::shared_ptr<glzBaseState> preInitialize(void)
 	app.data.WINDOW_WIDTH = 1280;
 	app.data.WINDOW_HEIGHT = 720;
 	app.data.ALLOW_RESIZE = true;
-
 	return gameState;
-
 }
-

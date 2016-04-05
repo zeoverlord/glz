@@ -38,14 +38,14 @@
 // at a start the viewport its inside it's parent window
 // if width is wider than what the origin coordinate allows then the window will be resized
 
-class Example2DState : public glzBaseState
+class ExampleBaseState : public glzBaseState
 {
 
 public:
 
-	Example2DState();
-	~Example2DState(){ Deinitialize(); }
-	BOOL Initialize(int width, int height) override;
+	ExampleBaseState();
+	~ExampleBaseState(){ Deinitialize(); }
+	bool Initialize(int width, int height) override;
 	void Deinitialize(void) override;
 	void Update(float seconds) override;
 	void DisplayUpdate(int width, int height) override;
@@ -54,25 +54,17 @@ public:
 private:
 		
 	float		angle, width, height;												// Used To Rotate The Triangles
-	unsigned int vao[16], vao_num[16];
-	string tbuffer;
-	string tbuffer2;
-	float spriteframetimer;
-	int spriteframe;
-	int gamestate;
-	glzCamera2D cam;
-	Object2DGraph tempgraph;
-	node3 n;
-	glztiles tilemap;
-	glztiles tilemap2;
-	glzViewport view1, view2, view3;
-	GLhandleARB  ProgramObject, ProgramObjectFT, ProgramObjectFSQ, ProgramObjectFSQ_glitch;
-	glzSimpleParticleSystem ps;
+	int			rot1, rot2;											// Counter Variables
+	unsigned int vao[5], vao_num[5];
+	glzMatrix m;
+	int e, e2;
 
+	glzQuaternion q;
+	glzQuaternion q2;
+	glzQuaternion q3;
 
-public:
+	img_head img;
+	unsigned char *data;
 
-	void draw_backdrop_glitch(unsigned int bgtexture, unsigned int bgtexture2);
-	
-
+	GLhandleARB  ProgramObject, ProgramObjectFSQ;
 };

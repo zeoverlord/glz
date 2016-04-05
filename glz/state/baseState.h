@@ -47,7 +47,7 @@ public:
 
 	glzBaseState(){ mMessageQuit = false; mMessageFullscreen = false; }
 	~glzBaseState(){ Deinitialize(); }
-	virtual BOOL Initialize(int width, int height);
+	virtual bool Initialize(int width, int height);
 	virtual void Deinitialize(void);
 	virtual void Update(float seconds);
 	virtual void DisplayUpdate(int width, int height);

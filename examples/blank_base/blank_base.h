@@ -42,7 +42,7 @@ public:
 
 	BlankBaseState();
 	~BlankBaseState(){ Deinitialize(); }
-	BOOL Initialize(int width, int height) override;
+	bool Initialize(int width, int height) override;
 	void Deinitialize(void) override;
 	void Update(float seconds) override;
 	void DisplayUpdate(int width, int height) override;

@@ -59,12 +59,15 @@ void TerminateApplication();		// Terminate The Application
 
 void ToggleFullscreen();			// Toggle Fullscreen / Windowed Mode
 
-//BOOL Initialize (int width, int height);	// Performs All Your Initialization
+//bool Initialize(int width, int height);	// Performs All Your Initialization
 
-//void Deinitialize (void);							// Performs All Your DeInitialization
+//void Deinitialize(void);							// Performs All Your DeInitialization
 
-//void Update (float seconds);					// Perform Motion Updates
+//void Update(float seconds);					// Perform Motion Updates
 
 //void DisplayUpdate(int width, int height);
 
-//void Draw (void);									// Perform All Your Scene Drawing
+//void Draw(void);									// Perform All Your Scene Drawing
+
+//bool pollMessageQuit();
+//bool pollMessageFullscreen();

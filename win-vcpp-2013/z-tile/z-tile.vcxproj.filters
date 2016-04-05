@@ -34,6 +34,12 @@
     <Filter Include="input">
       <UniqueIdentifier>{8cbe2800-ee2b-4eb4-88e0-cfeadc074369}</UniqueIdentifier>
     </Filter>
+    <Filter Include="state">
+      <UniqueIdentifier>{7f7db14c-c3e2-444c-81f6-2fd8cc606463}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="layout">
+      <UniqueIdentifier>{0ff42ebc-237e-4d35-9c27-4f6f6b4e5313}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\examples\stdafx.cpp">
@@ -101,6 +107,12 @@
     </ClCompile>
     <ClCompile Include="..\..\examples\bootStrap_z-tile.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz\state\baseState.cpp">
+      <Filter>state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz\layout\viewport.cpp">
+      <Filter>layout</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -178,6 +190,12 @@
     </ClInclude>
     <ClInclude Include="..\..\examples\z-tile\z-tile.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz\state\baseState.h">
+      <Filter>state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz\layout\viewport.h">
+      <Filter>layout</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

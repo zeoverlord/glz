@@ -34,11 +34,14 @@
     <Filter Include="input">
       <UniqueIdentifier>{a2e916ba-d910-48e4-936c-e09b3e4a7bbf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="state">
+      <UniqueIdentifier>{099b6663-969f-41f4-95fa-99fa66b4c19b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="layout">
+      <UniqueIdentifier>{adf9f841-9e77-4781-b5ea-755a44c04d57}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\examples\Example_base.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\examples\stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -100,6 +103,15 @@
       <Filter>utilities</Filter>
     </ClCompile>
     <ClCompile Include="..\..\examples\bootStrap_example_base.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz\state\baseState.cpp">
+      <Filter>state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz\layout\viewport.cpp">
+      <Filter>layout</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\examples\example_base\Example_base.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -175,6 +187,15 @@
     </ClInclude>
     <ClInclude Include="..\..\glz\utilities\framebuffer.h">
       <Filter>utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz\state\baseState.h">
+      <Filter>state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz\layout\viewport.h">
+      <Filter>layout</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\examples\example_base\Example_base.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

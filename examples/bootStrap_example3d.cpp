@@ -28,15 +28,11 @@
 
 
 
-
 std::shared_ptr<glzBaseState> preInitialize(void)
 {
-	std::shared_ptr<Example3DState> gameState(new Example3DState);
+	std::shared_ptr<glzBaseState> gameState(new Example3DState);
 	glzAppinitialization app;
 	app.set_title(L"ZeoBase GL Framework");
 	app.data.ALLOW_RESIZE = true;
-
 	return gameState;
-
 }
-

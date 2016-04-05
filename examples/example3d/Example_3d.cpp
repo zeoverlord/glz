@@ -104,7 +104,7 @@ gamestate(4)
 	tankpos.pos=vert3(0.0f, -2.0f, -17.0f);
 }
 
-BOOL Example3DState::Initialize(int width, int height)					// Any GL Init Code & User Initialiazation Goes Here
+bool Example3DState::Initialize(int width, int height)					// Any GL Init Code & User Initialiazation Goes Here
 {
 	glzResourcemanager rm;
 

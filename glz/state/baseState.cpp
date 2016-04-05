@@ -33,7 +33,7 @@
 
 
 
-BOOL glzBaseState::Initialize(int width, int height)					// Any GL Init Code & User Initialiazation Goes Here
+bool glzBaseState::Initialize(int width, int height)					// Any GL Init Code & User Initialiazation Goes Here
 {
 	GetFocus();
 	GetAsyncKeyState(WM_KEYUP);	
