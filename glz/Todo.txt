@@ -1,11 +1,12 @@
-State manager
 
-Fix tile rendering
+Before 2d game project
+	State manager
+	Fix tile rendering
+	Sound engine
+	More 2d layouting stuff
+		text that fits in a box
 
-Sound engine
 
-More 2d layouting stuff
-	text that fits in a box
 
 3D Object class that takes care of object loading and management
 
@@ -14,11 +15,13 @@ Resource manager for
 	Nodes
 	2d Graphs
 
-expand color class to include color conversion
-	Investigate srgb and adobeRGB
 
 Start reorganizing image loading
 
-improve frambuffer
 
-Start splitting vectormath and glz into multiple files and give each class its own file
+Other stuff
+	expand color class to include color conversion
+		Investigate srgb and adobeRGB
+
+	improve frambuffer
+	Start splitting vectormath and glz into multiple files and give each class its own file
