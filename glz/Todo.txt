@@ -1,5 +1,9 @@
 State manager
 
+Fix tile rendering
+
+Sound engine
+
 More 2d layouting stuff
 	text that fits in a box
 
@@ -14,8 +18,6 @@ expand color class to include color conversion
 	Investigate srgb and adobeRGB
 
 Start reorganizing image loading
-
-Fix tile rendering
 
 improve frambuffer
 
