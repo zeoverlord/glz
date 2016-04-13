@@ -53,6 +53,7 @@ public:
 	virtual void DisplayUpdate(int width, int height);
 	virtual void Draw(void);
 
+	// these should only be temporary 
 	bool pollMessageQuit()
 	{
 		if(!mMessageQuit) 

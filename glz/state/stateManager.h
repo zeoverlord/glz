@@ -58,6 +58,9 @@ public:
 	bool switchState(string inName);
 	bool hasState();
 	bool stateExists(string inName);
+	std::shared_ptr<glzBaseState> getState(string inName);
+	std::shared_ptr<glzBaseState> getCurrentState();
+
 
 	bool Initialize(int width, int height);
 	void Deinitialize(void);
@@ -65,6 +68,7 @@ public:
 	void DisplayUpdate(int width, int height);
 	void Draw(void);
 
+	// these should only be temporary 
 	bool pollMessageQuit();
 	bool pollMessageFullscreen();
 	

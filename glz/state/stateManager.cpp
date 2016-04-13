@@ -106,6 +106,23 @@ bool glzStateManager::stateExists(string inName)
 	return false;
 }
 
+std::shared_ptr<glzBaseState> glzStateManager::getState(string inName)
+{
+	for (auto a : states)
+		if (a.mStateName == inName)
+		{
+			return a.mState;
+		}
+	return nullptr;
+}
+
+std::shared_ptr<glzBaseState> glzStateManager::getCurrentState()
+{
+	return CurrentState;
+}
+
+
+
 bool glzStateManager::Initialize(int width, int height)
 {
 	view.setDisplay(0, 0, width, height);
