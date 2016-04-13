@@ -227,7 +227,7 @@ void ExampleBaseState::Update(float seconds)								// Perform Motion Updates He
 
 void ExampleBaseState::DisplayUpdate(int width, int height)
 {
-	view.setDisplay(0, 0, width, height);
+	mView.setDisplay(0, 0, width, height);
 }
 
 void ExampleBaseState::Draw(void)
@@ -299,7 +299,7 @@ void ExampleBaseState::Draw(void)
 	glzDrawVAO(vao_num[4],vao[4],GL_TRIANGLES);
 	
 	// draw text
-	glzDrawText("Geometry generation test, try the arrow keys.", -0.8f, 0.49f, 0.05f, 1.3f, view.getAspect(), rm.gettexture("font.digitalstrip_l"), COL_WHITE);
+	glzDrawText("Geometry generation test, try the arrow keys.", -0.8f, 0.49f, 0.05f, 1.3f, mView.getAspect(), rm.gettexture("font.digitalstrip_l"), COL_WHITE);
 
 	glUseProgram(0);
 	glFlush ();													// Flush The GL Rendering Pipeline

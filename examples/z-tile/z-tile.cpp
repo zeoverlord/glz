@@ -520,7 +520,7 @@ void ZtileState::Update(float seconds)								// Perform Motion Updates Here
 
 void ZtileState::DisplayUpdate(int width, int height)
 {
-	//aspect = (float)width / (float)height;
+	mView.setDisplay(0, 0, width, height);
 }
 
 

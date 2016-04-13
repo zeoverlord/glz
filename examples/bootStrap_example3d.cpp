@@ -24,15 +24,17 @@
 #include "zeobase2.h"
 #include "..\glz\appbase.h"
 #include "..\glz\state\baseState.h"
+#include "..\glz\state\stateManager.h"
 #include "example3d\Example_3d.h"
 
-
-
-std::shared_ptr<glzBaseState> preInitialize(void)
+void preInitialize(void)
 {
+	glzStateManager stateManager;
 	std::shared_ptr<glzBaseState> gameState(new Example3DState);
+	stateManager.addState(gameState, "mainstate");
+	stateManager.switchState("mainstate");
 	glzAppinitialization app;
 	app.set_title(L"ZeoBase GL Framework");
 	app.data.ALLOW_RESIZE = true;
-	return gameState;
+	return;
 }

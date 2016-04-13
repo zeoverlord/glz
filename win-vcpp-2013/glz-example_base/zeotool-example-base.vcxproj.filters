@@ -114,6 +114,9 @@
     <ClCompile Include="..\..\examples\example_base\Example_base.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\glz\state\stateManager.cpp">
+      <Filter>state</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\examples\Resource.h">
@@ -196,6 +199,9 @@
     </ClInclude>
     <ClInclude Include="..\..\examples\example_base\Example_base.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz\state\stateManager.h">
+      <Filter>state</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -90,7 +90,7 @@ void BlankBaseState::Update(float seconds)								// Perform Motion Updates Here
 
 void BlankBaseState::DisplayUpdate(int width, int height)
 {
-	view.setDisplay(0, 0, width, height);
+	mView.setDisplay(0, 0, width, height);
 }
 
 void BlankBaseState::Draw(void)

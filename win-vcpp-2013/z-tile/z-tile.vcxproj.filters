@@ -114,6 +114,9 @@
     <ClCompile Include="..\..\glz\layout\viewport.cpp">
       <Filter>layout</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\glz\state\stateManager.cpp">
+      <Filter>state</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\examples\Resource.h">
@@ -196,6 +199,9 @@
     </ClInclude>
     <ClInclude Include="..\..\glz\layout\viewport.h">
       <Filter>layout</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz\state\stateManager.h">
+      <Filter>state</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

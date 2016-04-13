@@ -353,7 +353,7 @@ void Example3DState::Update(float seconds)								// Perform Motion Updates Here
 
 void Example3DState::DisplayUpdate(int width, int height)
 {
-	aspect = (float)width / (float)height;
+	mView.setDisplay(0, 0, width, height);
 }
 
 

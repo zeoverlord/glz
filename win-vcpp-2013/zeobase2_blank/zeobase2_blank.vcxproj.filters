@@ -66,6 +66,9 @@
     <ClCompile Include="..\..\glz\utilities\vectormath.cpp">
       <Filter>utilities</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\glz\state\stateManager.cpp">
+      <Filter>state</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\examples\Resource.h">
@@ -109,6 +112,9 @@
     </ClInclude>
     <ClInclude Include="..\..\glz\utilities\vectormath.h">
       <Filter>utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz\state\stateManager.h">
+      <Filter>state</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
