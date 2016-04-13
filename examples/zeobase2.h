@@ -53,7 +53,7 @@ typedef struct {									// Contains Information Vital To A Window
 } GL_Window;										// GL_Window
 
 
-std::shared_ptr<glzBaseState> preInitialize(void);
+void preInitialize(void);
 
 void TerminateApplication();		// Terminate The Application
 

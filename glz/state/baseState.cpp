@@ -72,7 +72,7 @@ void glzBaseState::Update(float seconds)								// Perform Motion Updates Here
 
 void glzBaseState::DisplayUpdate(int width, int height)
 {
-	view.setDisplay(0,0,width,height);
+	mView.setDisplay(0,0,width,height);
 }
 
 void glzBaseState::Draw(void)

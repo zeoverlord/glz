@@ -54,7 +54,7 @@ public:
 private:
 		
 	float		angle, width, height;												// Used To Rotate The Triangles
-	unsigned int vao[16], vao_num[16];
+	unsigned int vao[4], vao_num[4];
 	string tbuffer;
 	string tbuffer2;
 	float spriteframetimer;

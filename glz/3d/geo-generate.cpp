@@ -1092,7 +1092,7 @@ long glzVAOMakePrimitive(primitive_gen pg, unsigned int *vao)
 
 	unsigned int vaopoint;
 	vaopoint = *vao;
-	if (glIsVertexArray((GLuint)&vao) == GL_FALSE) glzKillVAO(vaopoint);
+	if (glIsVertexArray((GLuint)&vao) == false) glzKillVAO(vaopoint);
 
 	primitive_gen pg2[2];
 	pg2[0] = pg;
@@ -1295,7 +1295,7 @@ long glzVAOMakePrimitives(int num, primitive_gen pg[], unsigned int *vao)
 
 	unsigned int vaopoint;
 	vaopoint = *vao;
-	if (glIsVertexArray((GLuint)&vao) == GL_FALSE) glzKillVAO(vaopoint);
+	if (glIsVertexArray((GLuint)&vao) == false) glzKillVAO(vaopoint);
 
 	int i = 0;
 

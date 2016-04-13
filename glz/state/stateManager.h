@@ -14,7 +14,7 @@
 // 3. If you make something comersiol or at least something you release publicly that relies on this code then i would like to know and maybe use in my CV
 // 4. Please do include me in your credits
 
-// glz base state class
+// glz state manager
 // visit http://www.flashbang.se or contact me at overlord@flashbang.se
 // the entire toolkit should exist in it's entirety at github
 // https://github.com/zeoverlord/glz.git
@@ -28,52 +28,45 @@
 #include "..\utilities\resourcemanager.h"
 #include "..\utilities\vectormath.h"
 #include "..\layout\viewport.h"
+#include "baseState.h"
 #include <vector>
 #include <memory>
 
-// how it works
-// at a start the viewport its inside it's parent window
-// if width is wider than what the origin coordinate allows then the window will be resized
-
-class glzBaseState
+class glzStateManagerData
 {
 public:
 
-	glzViewport mView;
-	bool mMessageQuit;
-	bool mMessageFullscreen;
+	glzStateManagerData(){ mState = nullptr; mStateName = ""; }
+	glzStateManagerData(std::shared_ptr<glzBaseState> inState, string inName){ mState = inState; mStateName = inName; }
+	~glzStateManagerData(){ mState = nullptr;  mStateName = ""; }
+
+	std::shared_ptr<glzBaseState> mState;
+	string mStateName;
+
+};
+
+class glzStateManager
+{
 
 public:
 
-	glzBaseState(){ mMessageQuit = false; mMessageFullscreen = false; }
-	~glzBaseState(){ Deinitialize(); }
-	virtual bool Initialize(int width, int height);
-	virtual void Deinitialize(void);
-	virtual void Update(float seconds);
-	virtual void DisplayUpdate(int width, int height);
-	virtual void Draw(void);
+	glzStateManager(){}
+	~glzStateManager(){}
 
-	bool pollMessageQuit()
-	{
-		if(!mMessageQuit) 
-			return false;
-		else
-		{
-			mMessageQuit = false;
-			return true;
-		}
-	}
+	bool addState(std::shared_ptr<glzBaseState> inState, string inName);
+	void removeState(string inName);
+	bool switchState(string inName);
+	bool hasState();
+	bool stateExists(string inName);
 
-	bool pollMessageFullscreen()
-	{
-		if(!mMessageFullscreen)
-			return false;
-		else
-		{
-			mMessageFullscreen = false;
-			return true;
-		}
-	}
+	bool Initialize(int width, int height);
+	void Deinitialize(void);
+	void Update(float seconds);
+	void DisplayUpdate(int width, int height);
+	void Draw(void);
+
+	bool pollMessageQuit();
+	bool pollMessageFullscreen();
 	
-
+		
 };
