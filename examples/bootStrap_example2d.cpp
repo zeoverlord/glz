@@ -31,7 +31,6 @@ void preInitialize(void)
 {	
 	glzStateManager stateManager;
 	std::shared_ptr<glzBaseState> gameState(new Example2DState);
-	//gameState->Initialize(100,100);
 	stateManager.addState(gameState,"mainstate");
 	stateManager.switchState("mainstate");
 	glzAppinitialization app;

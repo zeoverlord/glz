@@ -36,12 +36,9 @@ static glzViewport view;
 
 
 bool glzStateManager::addState(std::shared_ptr<glzBaseState> inState, string inName)
-{	
-
-		states.push_back(glzStateManagerData(inState, inName));
-		return true;
-	
-
+{			
+	states.push_back(glzStateManagerData(inState, inName));
+	return true;
 }
 
 
