@@ -209,16 +209,8 @@ bool Example2DState::Initialize(int width, int height)					// Any GL Init Code &
 	rm.createTexture("dialog.box", "data\\dialogbox.tga", glzTexFilter::NEAREST);
 	rm.createTexture("dialog.character", "data\\character.tga", glzTexFilter::NEAREST);
 	
-	
-	//unsigned int tx;
-	//texturecontainer *txx;
-	//rm.createTexture("default", "data\\cv90-1080p-04.tga", glzTexFilter::LINEAR);
-	//rm.load_all();
+
 	rm.load_all();
-	//rm.manipulate("default");
-
-
-
 
 
 	cam.setsize(800, 500);

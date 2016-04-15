@@ -69,7 +69,6 @@ e2(0)
 
 bool ExampleBaseState::Initialize(int width, int height)					// Any GL Init Code & User Initialiazation Goes Here
 {	
-
 	glzResourcemanager rm;
 
 	GetFocus();
@@ -85,6 +84,7 @@ bool ExampleBaseState::Initialize(int width, int height)					// Any GL Init Code
 	glShadeModel (GL_SMOOTH);									// Select Smooth Shading
 	glHint (GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);			// Set Perspective Calculations To Most Accurate
 
+	mView.setDisplay(0, 0, width, height);
 
 
 	glUseProgram				= (PFNGLUSEPROGRAMPROC) wglGetProcAddress("glUseProgram");
@@ -299,7 +299,7 @@ void ExampleBaseState::Draw(void)
 	glzDrawVAO(vao_num[4],vao[4],GL_TRIANGLES);
 	
 	// draw text
-	glzDrawText("Geometry generation test, try the arrow keys.", -0.8f, 0.49f, 0.05f, 1.3f, mView.getAspect(), rm.gettexture("font.digitalstrip_l"), COL_WHITE);
+	glzDrawText("Geometry generation test, try the arrow keys.", -0.5f, 0.49f, 0.05f, 1.3f, mView.getAspect(), rm.gettexture("font.digitalstrip_l"), COL_WHITE);
 
 	glUseProgram(0);
 	glFlush ();													// Flush The GL Rendering Pipeline

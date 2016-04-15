@@ -133,8 +133,8 @@ bool Example3DState::Initialize(int width, int height)					// Any GL Init Code &
 	glUniform4f= (PFNGLUNIFORM4FARBPROC) wglGetProcAddress("glUniform4fARB");
 	glUniformMatrix4fv= (PFNGLUNIFORMMATRIX4FVPROC) wglGetProcAddress("glUniformMatrix4fv");
 	glUniformMatrix4dv = (PFNGLUNIFORMMATRIX4DVPROC)wglGetProcAddress("glUniformMatrix4dv");
-
-	aspect = (float)width / (float)height;
+	
+	mView.setDisplay(0, 0, width, height);
 
 
 	glzMatrix mt;
@@ -389,7 +389,6 @@ void draw_object2(texturecontainer *tx, int prim, float x, float y)
 	glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
 	glPointSize(1);
 
-
 	glBindTexture(GL_TEXTURE_2D, tx->handle);
 	glzDrawVAO(vao_num[prim], vao[prim], GL_POINTS);
 }
@@ -427,8 +426,8 @@ void Example3DState::Draw(void)
 		draw_object(rm.gettexture("background.back"), 6, 1.0f, -1.5f);
 		draw_object(rm.gettexture("background.back"), 7, 2.5f, -1.5f);
 		
-		glzDrawText("Primitives", -0.8f, 0.49f, 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
-		glzDrawText("Switch screens with 1, 2, 3, 4, 5", 0.8f, -0.5f, 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
+		glzDrawText("Primitives", -0.5f, 0.49f, 0.05f, 1.0f, mView.getAspect(), rm.gettexture("font.ms_gothic"), COL_WHITE);
+		glzDrawText("Switch screens with 1, 2, 3, 4, 5", 0.5f, -0.5f, 0.04f, 1.0f, mView.getAspect(), rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
 	}
 
 
@@ -457,8 +456,8 @@ void Example3DState::Draw(void)
 	glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("texture.cv90base"));
 	glzDrawVAO(vao_num[8],vao[8],GL_TRIANGLES);
 				
-	glzDrawText(".obj loading, try using the arrow keys", -0.8f, 0.49f, 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
-	glzDrawText("Switch screens with 1, 2, 3, 4, 5", 0.8f, -0.5f, 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
+	glzDrawText(".obj loading, try using the arrow keys", -0.5f, 0.49f, 0.05f, 1.0f, mView.getAspect(), rm.gettexture("font.ms_gothic"), COL_WHITE);
+	glzDrawText("Switch screens with 1, 2, 3, 4, 5", 0.5f, -0.5f, 0.04f, 1.0f, mView.getAspect(), rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
 
 	}	
 
@@ -482,8 +481,8 @@ void Example3DState::Draw(void)
 		glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("texture.gridlines"));
 		glzDrawVAO(vao_num[9],vao[9],GL_TRIANGLES);
 
-		glzDrawText("Heightfield", -0.8f, 0.49f, 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
-		glzDrawText("Switch screens with 1, 2, 3, 4, 5", 0.8f, -0.5f, 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
+		glzDrawText("Heightfield", -0.5f, 0.49f, 0.05f, 1.0f, mView.getAspect(), rm.gettexture("font.ms_gothic"), COL_WHITE);
+		glzDrawText("Switch screens with 1, 2, 3, 4, 5", 0.5f, -0.5f, 0.04f, 1.0f, mView.getAspect(), rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
 	}
 
 	if (gamestate == 4)
@@ -503,20 +502,19 @@ void Example3DState::Draw(void)
 
 		glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("texture.gridlines"));
 
-		glzDirectCubeRender(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, box_tt, 1);
-		//glzDrawVAO(vao_num[9], vao[9], GL_TRIANGLES);
+		glzDirectCubeRender(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, box_tt, 1);		
 
-		glzDrawText("A lonely cube rotating in nothingness", -0.8f, 0.49f, 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
-		glzDrawText("Switch screens with 1, 2, 3, 4, 5", 0.8f, -0.5f, 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
+		glzDrawText("A lonely cube rotating in nothingness", -0.5f, 0.49f, 0.05f, 1.0f, mView.getAspect(), rm.gettexture("font.ms_gothic"), COL_WHITE);
+		glzDrawText("Switch screens with 1, 2, 3, 4, 5", 0.5f, -0.5f, 0.04f, 1.0f, mView.getAspect(), rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
 	}
 
 	if (gamestate == 5)
 	{
 		
-		draw_object2(rm.gettexture("background.back"), 10, 0.0f, 0.5f);
+		draw_object2(rm.gettexture("background.back"), 10, 0.0f, 0.0f);
 
-		glzDrawText("Particle cube using random dots", -0.8f, 0.49f, 0.05f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE);
-		glzDrawText("Switch screens with 1, 2, 3, 4, 5", 0.8f, -0.5f, 0.04f, 1.0f, aspect, rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
+		glzDrawText("Particle cube using random dots", -0.5f, 0.49f, 0.05f, 1.0f, mView.getAspect(), rm.gettexture("font.ms_gothic"), COL_WHITE);
+		glzDrawText("Switch screens with 1, 2, 3, 4, 5", 0.5f, -0.5f, 0.04f, 1.0f, mView.getAspect(), rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
 	}
 
 

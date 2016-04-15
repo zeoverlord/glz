@@ -112,7 +112,7 @@ void glzViewport::resizeView(void)
 		bottom = tempBottom;
 	}
 
-	aspect = resizedTempWidth / resizedTempHeight;
+	aspect = (resizedTempWidth*displayWidth) / (resizedTempHeight*displayHeight);
 }
 
 
