@@ -93,16 +93,16 @@
     <ClCompile Include="..\..\examples\bootStrap_blank_base.cpp" />
     <ClCompile Include="..\..\examples\stdafx.cpp" />
     <ClCompile Include="..\..\examples\zeobase2.cpp" />
-    <ClCompile Include="..\..\glz\appbase.cpp" />
-    <ClCompile Include="..\..\glz\input\input.cpp" />
-    <ClCompile Include="..\..\glz\layout\viewport.cpp" />
-    <ClCompile Include="..\..\glz\state\baseState.cpp" />
-    <ClCompile Include="..\..\glz\state\stateManager.cpp" />
-    <ClCompile Include="..\..\glz\utilities\color.cpp" />
-    <ClCompile Include="..\..\glz\utilities\glz.cpp" />
-    <ClCompile Include="..\..\glz\utilities\sprite.cpp" />
-    <ClCompile Include="..\..\glz\utilities\type.cpp" />
-    <ClCompile Include="..\..\glz\utilities\vectormath.cpp" />
+    <ClCompile Include="..\..\glz-core\appbase.cpp" />
+    <ClCompile Include="..\..\glz-core\input\input.cpp" />
+    <ClCompile Include="..\..\glz-core\layout\viewport.cpp" />
+    <ClCompile Include="..\..\glz-core\state\baseState.cpp" />
+    <ClCompile Include="..\..\glz-core\state\stateManager.cpp" />
+    <ClCompile Include="..\..\glz-core\utilities\color.cpp" />
+    <ClCompile Include="..\..\glz-core\utilities\glz.cpp" />
+    <ClCompile Include="..\..\glz-core\utilities\sprite.cpp" />
+    <ClCompile Include="..\..\glz-core\utilities\type.cpp" />
+    <ClCompile Include="..\..\glz-core\utilities\vectormath.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\examples\blank_base\blank_base.h" />
@@ -110,16 +110,16 @@
     <ClInclude Include="..\..\examples\stdafx.h" />
     <ClInclude Include="..\..\examples\targetver.h" />
     <ClInclude Include="..\..\examples\zeobase2.h" />
-    <ClInclude Include="..\..\glz\appbase.h" />
-    <ClInclude Include="..\..\glz\input\input.h" />
-    <ClInclude Include="..\..\glz\layout\viewport.h" />
-    <ClInclude Include="..\..\glz\state\baseState.h" />
-    <ClInclude Include="..\..\glz\state\stateManager.h" />
-    <ClInclude Include="..\..\glz\utilities\color.h" />
-    <ClInclude Include="..\..\glz\utilities\glz.h" />
-    <ClInclude Include="..\..\glz\utilities\sprite.h" />
-    <ClInclude Include="..\..\glz\utilities\type.h" />
-    <ClInclude Include="..\..\glz\utilities\vectormath.h" />
+    <ClInclude Include="..\..\glz-core\appbase.h" />
+    <ClInclude Include="..\..\glz-core\input\input.h" />
+    <ClInclude Include="..\..\glz-core\layout\viewport.h" />
+    <ClInclude Include="..\..\glz-core\state\baseState.h" />
+    <ClInclude Include="..\..\glz-core\state\stateManager.h" />
+    <ClInclude Include="..\..\glz-core\utilities\color.h" />
+    <ClInclude Include="..\..\glz-core\utilities\glz.h" />
+    <ClInclude Include="..\..\glz-core\utilities\sprite.h" />
+    <ClInclude Include="..\..\glz-core\utilities\type.h" />
+    <ClInclude Include="..\..\glz-core\utilities\vectormath.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\examples\small.ico" />

@@ -22,15 +22,15 @@
 #pragma once
 
 
-#include "..\..\glz\utilities\type.h"
-#include "..\..\glz\utilities\glz.h"
-#include "..\..\glz\utilities\sprite.h"
-#include "..\..\glz\utilities\resourcemanager.h"
-#include "..\..\glz\utilities\vectormath.h"
-#include "..\..\glz\layout\viewport.h"
-#include "..\..\glz\state\baseState.h"
-#include "..\..\glz\effects\particle.h"
-#include "..\..\glz\2d\2d-graph.h"
+#include "..\..\glz-core\utilities\type.h"
+#include "..\..\glz-core\utilities\glz.h"
+#include "..\..\glz-core\utilities\sprite.h"
+#include "..\..\glz-core\utilities\resourcemanager.h"
+#include "..\..\glz-core\utilities\vectormath.h"
+#include "..\..\glz-core\layout\viewport.h"
+#include "..\..\glz-core\state\baseState.h"
+#include "..\..\glz-core\effects\particle.h"
+#include "..\..\glz-core\2d\2d-graph.h"
 #include <vector>
 #include <memory>
 

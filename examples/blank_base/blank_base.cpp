@@ -26,8 +26,8 @@
 #include <gl\gl.h>												// Header File For The OpenGL32 Library
 #include <gl\glu.h>												// Header File For The GLu32 Library
 #include <gl\glext.h>
-#include "..\..\glz\appbase.h"
-#include "..\..\glz\input\input.h"
+#include "..\..\glz-core\appbase.h"
+#include "..\..\glz-core\input\input.h"
 
 
 //using namespace std;										

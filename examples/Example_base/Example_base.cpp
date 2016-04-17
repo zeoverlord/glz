@@ -28,17 +28,17 @@
 #include "Example_base.h"
 #include <fstream>
 #include <math.h>
-#include "..\..\glz\appbase.h"
-#include "..\..\glz\3d\geo.h"
-#include "..\..\glz\3d\geo-generate.h"
-#include "..\..\glz\utilities\vectormath.h"
-#include "..\..\glz\2d\geo-2d.h"
-#include "..\..\glz\shader\shader.h"
-#include "..\..\glz\utilities\glz.h"
-#include "..\..\glz\image\tex.h"
-#include "..\..\glz\utilities\resourcemanager.h"
-#include "..\..\glz\input\input.h"
-#include "..\..\glz\2d\2d-utilities.h"
+#include "..\..\glz-core\appbase.h"
+#include "..\..\glz-core\3d\geo.h"
+#include "..\..\glz-core\3d\geo-generate.h"
+#include "..\..\glz-core\utilities\vectormath.h"
+#include "..\..\glz-core\2d\geo-2d.h"
+#include "..\..\glz-core\shader\shader.h"
+#include "..\..\glz-core\utilities\glz.h"
+#include "..\..\glz-core\image\tex.h"
+#include "..\..\glz-core\utilities\resourcemanager.h"
+#include "..\..\glz-core\input\input.h"
+#include "..\..\glz-core\2d\2d-utilities.h"
 
 using namespace std;										
 

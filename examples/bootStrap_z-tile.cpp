@@ -22,9 +22,9 @@
 
 
 #include "zeobase2.h"
-#include "..\glz\appbase.h"
-#include "..\glz\state\baseState.h"
-#include "..\glz\state\stateManager.h"
+#include "..\glz-core\appbase.h"
+#include "..\glz-core\state\baseState.h"
+#include "..\glz-core\state\stateManager.h"
 #include "z-tile\z-tile.h"
 
 void preInitialize(void)

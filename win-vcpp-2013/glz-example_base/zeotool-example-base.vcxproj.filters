@@ -48,73 +48,73 @@
     <ClCompile Include="..\..\examples\zeobase2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\glz\2d\2d-graph.cpp">
+    <ClCompile Include="..\..\glz-core\2d\2d-graph.cpp">
       <Filter>2d</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\glz\2d\geo-2d.cpp">
+    <ClCompile Include="..\..\glz-core\2d\geo-2d.cpp">
       <Filter>2d</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\glz\3d\geo-generate.cpp">
+    <ClCompile Include="..\..\glz-core\3d\geo-generate.cpp">
       <Filter>3d</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\glz\3d\geo.cpp">
+    <ClCompile Include="..\..\glz-core\3d\geo.cpp">
       <Filter>3d</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\glz\image\tex.cpp">
+    <ClCompile Include="..\..\glz-core\image\tex.cpp">
       <Filter>image</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\glz\effects\particle.cpp">
+    <ClCompile Include="..\..\glz-core\effects\particle.cpp">
       <Filter>effects</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\glz\shader\shader.cpp">
+    <ClCompile Include="..\..\glz-core\shader\shader.cpp">
       <Filter>shader</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\glz\utilities\tiletools.cpp">
+    <ClCompile Include="..\..\glz-core\utilities\tiletools.cpp">
       <Filter>utilities</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\glz\utilities\type.cpp">
+    <ClCompile Include="..\..\glz-core\utilities\type.cpp">
       <Filter>utilities</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\glz\utilities\vectormath.cpp">
+    <ClCompile Include="..\..\glz-core\utilities\vectormath.cpp">
       <Filter>utilities</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\glz\utilities\glz.cpp">
+    <ClCompile Include="..\..\glz-core\utilities\glz.cpp">
       <Filter>utilities</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\glz\utilities\resourcemanager.cpp">
+    <ClCompile Include="..\..\glz-core\utilities\resourcemanager.cpp">
       <Filter>utilities</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\glz\appbase.cpp">
+    <ClCompile Include="..\..\glz-core\appbase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\glz\2d\2d-utilities.cpp">
+    <ClCompile Include="..\..\glz-core\2d\2d-utilities.cpp">
       <Filter>2d</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\glz\input\input.cpp">
+    <ClCompile Include="..\..\glz-core\input\input.cpp">
       <Filter>input</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\glz\utilities\sprite.cpp">
+    <ClCompile Include="..\..\glz-core\utilities\sprite.cpp">
       <Filter>utilities</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\glz\utilities\color.cpp">
+    <ClCompile Include="..\..\glz-core\utilities\color.cpp">
       <Filter>utilities</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\glz\utilities\framebuffer.cpp">
+    <ClCompile Include="..\..\glz-core\utilities\framebuffer.cpp">
       <Filter>utilities</Filter>
     </ClCompile>
     <ClCompile Include="..\..\examples\bootStrap_example_base.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\glz\state\baseState.cpp">
+    <ClCompile Include="..\..\glz-core\state\baseState.cpp">
       <Filter>state</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\glz\layout\viewport.cpp">
+    <ClCompile Include="..\..\glz-core\layout\viewport.cpp">
       <Filter>layout</Filter>
     </ClCompile>
     <ClCompile Include="..\..\examples\example_base\Example_base.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\glz\state\stateManager.cpp">
+    <ClCompile Include="..\..\glz-core\state\stateManager.cpp">
       <Filter>state</Filter>
     </ClCompile>
   </ItemGroup>
@@ -131,76 +131,76 @@
     <ClInclude Include="..\..\examples\zeobase2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\2d\2d-graph.h">
+    <ClInclude Include="..\..\glz-core\2d\2d-graph.h">
       <Filter>2d</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\2d\geo-2d.h">
+    <ClInclude Include="..\..\glz-core\2d\geo-2d.h">
       <Filter>2d</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\3d\geo-generate.h">
+    <ClInclude Include="..\..\glz-core\3d\geo-generate.h">
       <Filter>3d</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\3d\primitives.h">
+    <ClInclude Include="..\..\glz-core\3d\primitives.h">
       <Filter>3d</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\3d\geo.h">
+    <ClInclude Include="..\..\glz-core\3d\geo.h">
       <Filter>3d</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\image\tex.h">
+    <ClInclude Include="..\..\glz-core\image\tex.h">
       <Filter>image</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\effects\particle.h">
+    <ClInclude Include="..\..\glz-core\effects\particle.h">
       <Filter>effects</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\shader\shader.h">
+    <ClInclude Include="..\..\glz-core\shader\shader.h">
       <Filter>shader</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\shader\shader-programs.h">
+    <ClInclude Include="..\..\glz-core\shader\shader-programs.h">
       <Filter>shader</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\utilities\resourcemanager.h">
+    <ClInclude Include="..\..\glz-core\utilities\resourcemanager.h">
       <Filter>utilities</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\utilities\tiletools.h">
+    <ClInclude Include="..\..\glz-core\utilities\tiletools.h">
       <Filter>utilities</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\utilities\type.h">
+    <ClInclude Include="..\..\glz-core\utilities\type.h">
       <Filter>utilities</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\utilities\vectormath.h">
+    <ClInclude Include="..\..\glz-core\utilities\vectormath.h">
       <Filter>utilities</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\utilities\glz.h">
+    <ClInclude Include="..\..\glz-core\utilities\glz.h">
       <Filter>utilities</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\appbase.h">
+    <ClInclude Include="..\..\glz-core\appbase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\2d\2d-utilities.h">
+    <ClInclude Include="..\..\glz-core\2d\2d-utilities.h">
       <Filter>2d</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\input\input.h">
+    <ClInclude Include="..\..\glz-core\input\input.h">
       <Filter>input</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\utilities\color.h">
+    <ClInclude Include="..\..\glz-core\utilities\color.h">
       <Filter>utilities</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\utilities\sprite.h">
+    <ClInclude Include="..\..\glz-core\utilities\sprite.h">
       <Filter>utilities</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\utilities\framebuffer.h">
+    <ClInclude Include="..\..\glz-core\utilities\framebuffer.h">
       <Filter>utilities</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\state\baseState.h">
+    <ClInclude Include="..\..\glz-core\state\baseState.h">
       <Filter>state</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\layout\viewport.h">
+    <ClInclude Include="..\..\glz-core\layout\viewport.h">
       <Filter>layout</Filter>
     </ClInclude>
     <ClInclude Include="..\..\examples\example_base\Example_base.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\state\stateManager.h">
+    <ClInclude Include="..\..\glz-core\state\stateManager.h">
       <Filter>state</Filter>
     </ClInclude>
   </ItemGroup>

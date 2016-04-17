@@ -33,10 +33,10 @@
     <ClCompile Include="..\..\examples\zeobase2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\glz\appbase.cpp">
+    <ClCompile Include="..\..\glz-core\appbase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\glz\input\input.cpp">
+    <ClCompile Include="..\..\glz-core\input\input.cpp">
       <Filter>input</Filter>
     </ClCompile>
     <ClCompile Include="..\..\examples\blank_base\blank_base.cpp">
@@ -45,28 +45,28 @@
     <ClCompile Include="..\..\examples\bootStrap_blank_base.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\glz\state\baseState.cpp">
+    <ClCompile Include="..\..\glz-core\state\baseState.cpp">
       <Filter>state</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\glz\layout\viewport.cpp">
+    <ClCompile Include="..\..\glz-core\layout\viewport.cpp">
       <Filter>layout</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\glz\utilities\color.cpp">
+    <ClCompile Include="..\..\glz-core\utilities\color.cpp">
       <Filter>utilities</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\glz\utilities\glz.cpp">
+    <ClCompile Include="..\..\glz-core\utilities\glz.cpp">
       <Filter>utilities</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\glz\utilities\sprite.cpp">
+    <ClCompile Include="..\..\glz-core\utilities\sprite.cpp">
       <Filter>utilities</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\glz\utilities\type.cpp">
+    <ClCompile Include="..\..\glz-core\utilities\type.cpp">
       <Filter>utilities</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\glz\utilities\vectormath.cpp">
+    <ClCompile Include="..\..\glz-core\utilities\vectormath.cpp">
       <Filter>utilities</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\glz\state\stateManager.cpp">
+    <ClCompile Include="..\..\glz-core\state\stateManager.cpp">
       <Filter>state</Filter>
     </ClCompile>
   </ItemGroup>
@@ -83,37 +83,37 @@
     <ClInclude Include="..\..\examples\zeobase2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\appbase.h">
+    <ClInclude Include="..\..\glz-core\appbase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\input\input.h">
+    <ClInclude Include="..\..\glz-core\input\input.h">
       <Filter>input</Filter>
     </ClInclude>
     <ClInclude Include="..\..\examples\blank_base\blank_base.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\state\baseState.h">
+    <ClInclude Include="..\..\glz-core\state\baseState.h">
       <Filter>state</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\layout\viewport.h">
+    <ClInclude Include="..\..\glz-core\layout\viewport.h">
       <Filter>layout</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\utilities\color.h">
+    <ClInclude Include="..\..\glz-core\utilities\color.h">
       <Filter>utilities</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\utilities\glz.h">
+    <ClInclude Include="..\..\glz-core\utilities\glz.h">
       <Filter>utilities</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\utilities\sprite.h">
+    <ClInclude Include="..\..\glz-core\utilities\sprite.h">
       <Filter>utilities</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\utilities\type.h">
+    <ClInclude Include="..\..\glz-core\utilities\type.h">
       <Filter>utilities</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\utilities\vectormath.h">
+    <ClInclude Include="..\..\glz-core\utilities\vectormath.h">
       <Filter>utilities</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz\state\stateManager.h">
+    <ClInclude Include="..\..\glz-core\state\stateManager.h">
       <Filter>state</Filter>
     </ClInclude>
   </ItemGroup>
