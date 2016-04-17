@@ -21,20 +21,22 @@
 
 
 
-#include "..\glz-basecode\zeobase2.h"
-#include "..\glz-core\appbase.h"
-#include "..\glz-core\state\baseState.h"
-#include "..\glz-core\state\stateManager.h"
-#include "blank_base\blank_base.h"
+#include "..\..\glz-basecode\zeobase2.h"
+#include "..\..\glz-core\appbase.h"
+#include "..\..\glz-core\state\baseState.h"
+#include "..\..\glz-core\state\stateManager.h"
+#include "z-tile.h"
 
 void preInitialize(void)
 {
 	glzStateManager stateManager;
-	std::shared_ptr<glzBaseState> gameState(new BlankBaseState);
+	std::shared_ptr<glzBaseState> gameState(new ZtileState);
 	stateManager.addState(gameState, "mainstate");
 	stateManager.switchState("mainstate");
 	glzAppinitialization app;
-	app.set_title(L"ZeoBase GL Framework");
+	app.set_title(L"z-tile level editor");
+	app.data.WINDOW_WIDTH = 1280;
+	app.data.WINDOW_HEIGHT = 720;
 	app.data.ALLOW_RESIZE = true;
 	return;
 }

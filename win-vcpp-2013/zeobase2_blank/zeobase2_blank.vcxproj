@@ -90,7 +90,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\examples\blank_base\blank_base.cpp" />
-    <ClCompile Include="..\..\examples\bootStrap_blank_base.cpp" />
+    <ClCompile Include="..\..\examples\blank_base\bootStrap_blank_base.cpp" />
     <ClCompile Include="..\..\glz-basecode\stdafx.cpp" />
     <ClCompile Include="..\..\glz-basecode\zeobase2.cpp" />
     <ClCompile Include="..\..\glz-core\appbase.cpp" />

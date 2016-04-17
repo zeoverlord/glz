@@ -21,16 +21,16 @@
 
 
 
-#include "..\glz-basecode\zeobase2.h"
-#include "..\glz-core\appbase.h"
-#include "..\glz-core\state\baseState.h"
-#include "..\glz-core\state\stateManager.h"
-#include "Example_base\Example_Base.h"
+#include "..\..\glz-basecode\zeobase2.h"
+#include "..\..\glz-core\appbase.h"
+#include "..\..\glz-core\state\baseState.h"
+#include "..\..\glz-core\state\stateManager.h"
+#include "Example_3d.h"
 
 void preInitialize(void)
 {
 	glzStateManager stateManager;
-	std::shared_ptr<glzBaseState> gameState(new ExampleBaseState);
+	std::shared_ptr<glzBaseState> gameState(new Example3DState);
 	stateManager.addState(gameState, "mainstate");
 	stateManager.switchState("mainstate");
 	glzAppinitialization app;

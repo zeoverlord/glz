@@ -102,7 +102,7 @@
     <ClCompile Include="..\..\glz-core\utilities\framebuffer.cpp">
       <Filter>utilities</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\examples\bootStrap_example_base.cpp">
+    <ClCompile Include="..\..\examples\example_base\bootStrap_example_base.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\glz-core\state\baseState.cpp">
