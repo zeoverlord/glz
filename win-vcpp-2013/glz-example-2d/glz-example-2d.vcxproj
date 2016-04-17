@@ -91,8 +91,8 @@
   <ItemGroup>
     <ClCompile Include="..\..\examples\bootStrap_example2d.cpp" />
     <ClCompile Include="..\..\examples\example2d\Example_2d.cpp" />
-    <ClCompile Include="..\..\examples\stdafx.cpp" />
-    <ClCompile Include="..\..\examples\zeobase2.cpp" />
+    <ClCompile Include="..\..\glz-basecode\stdafx.cpp" />
+    <ClCompile Include="..\..\glz-basecode\zeobase2.cpp" />
     <ClCompile Include="..\..\glz-core\2d\2d-graph.cpp" />
     <ClCompile Include="..\..\glz-core\2d\2d-utilities.cpp" />
     <ClCompile Include="..\..\glz-core\2d\geo-2d.cpp" />
@@ -117,10 +117,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\examples\example2d\Example_2d.h" />
-    <ClInclude Include="..\..\examples\Resource.h" />
-    <ClInclude Include="..\..\examples\stdafx.h" />
-    <ClInclude Include="..\..\examples\targetver.h" />
-    <ClInclude Include="..\..\examples\zeobase2.h" />
+    <ClInclude Include="..\..\glz-basecode\Resource.h" />
+    <ClInclude Include="..\..\glz-basecode\stdafx.h" />
+    <ClInclude Include="..\..\glz-basecode\targetver.h" />
+    <ClInclude Include="..\..\glz-basecode\zeobase2.h" />
     <ClInclude Include="..\..\glz-core\2d\2d-graph.h" />
     <ClInclude Include="..\..\glz-core\2d\2d-utilities.h" />
     <ClInclude Include="..\..\glz-core\2d\geo-2d.h" />
@@ -146,11 +146,11 @@
     <ClInclude Include="..\..\glz-core\utilities\vectormath.h" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\..\examples\small.ico" />
-    <Image Include="..\..\examples\zeobase2.ico" />
+    <Image Include="..\..\glz-basecode\small.ico" />
+    <Image Include="..\..\glz-basecode\zeobase2.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="..\..\examples\zeobase2.rc" />
+    <ResourceCompile Include="..\..\glz-basecode\zeobase2.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

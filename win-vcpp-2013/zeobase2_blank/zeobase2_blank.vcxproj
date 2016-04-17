@@ -91,8 +91,8 @@
   <ItemGroup>
     <ClCompile Include="..\..\examples\blank_base\blank_base.cpp" />
     <ClCompile Include="..\..\examples\bootStrap_blank_base.cpp" />
-    <ClCompile Include="..\..\examples\stdafx.cpp" />
-    <ClCompile Include="..\..\examples\zeobase2.cpp" />
+    <ClCompile Include="..\..\glz-basecode\stdafx.cpp" />
+    <ClCompile Include="..\..\glz-basecode\zeobase2.cpp" />
     <ClCompile Include="..\..\glz-core\appbase.cpp" />
     <ClCompile Include="..\..\glz-core\input\input.cpp" />
     <ClCompile Include="..\..\glz-core\layout\viewport.cpp" />
@@ -106,10 +106,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\examples\blank_base\blank_base.h" />
-    <ClInclude Include="..\..\examples\Resource.h" />
-    <ClInclude Include="..\..\examples\stdafx.h" />
-    <ClInclude Include="..\..\examples\targetver.h" />
-    <ClInclude Include="..\..\examples\zeobase2.h" />
+    <ClInclude Include="..\..\glz-basecode\Resource.h" />
+    <ClInclude Include="..\..\glz-basecode\stdafx.h" />
+    <ClInclude Include="..\..\glz-basecode\targetver.h" />
+    <ClInclude Include="..\..\glz-basecode\zeobase2.h" />
     <ClInclude Include="..\..\glz-core\appbase.h" />
     <ClInclude Include="..\..\glz-core\input\input.h" />
     <ClInclude Include="..\..\glz-core\layout\viewport.h" />
@@ -122,11 +122,11 @@
     <ClInclude Include="..\..\glz-core\utilities\vectormath.h" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\..\examples\small.ico" />
-    <Image Include="..\..\examples\zeobase2.ico" />
+    <Image Include="..\..\glz-basecode\small.ico" />
+    <Image Include="..\..\glz-basecode\zeobase2.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="..\..\examples\zeobase2.rc" />
+    <ResourceCompile Include="..\..\glz-basecode\zeobase2.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
