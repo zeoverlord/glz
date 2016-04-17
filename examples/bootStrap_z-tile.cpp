@@ -21,7 +21,7 @@
 
 
 
-#include "zeobase2.h"
+#include "..\glz-basecode\zeobase2.h"
 #include "..\glz-core\appbase.h"
 #include "..\glz-core\state\baseState.h"
 #include "..\glz-core\state\stateManager.h"
