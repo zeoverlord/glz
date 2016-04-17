@@ -1,0 +1,3 @@
+[submodule "glz-core"]
+	path = glz-core
+	url = https://github.com/zeoverlord/glz-core.git
