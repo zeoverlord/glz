@@ -91,9 +91,9 @@
   <ItemGroup>
     <ClCompile Include="..\..\examples\blank_base\blank_base.cpp" />
     <ClCompile Include="..\..\examples\blank_base\bootStrap_blank_base.cpp" />
-    <ClCompile Include="..\..\glz-basecode\stdafx.cpp" />
-    <ClCompile Include="..\..\glz-basecode\zeobase2.cpp" />
-    <ClCompile Include="..\..\glz-core\appbase.cpp" />
+    <ClCompile Include="..\..\glz-basecode\win\stdafx.cpp" />
+    <ClCompile Include="..\..\glz-basecode\win\zeobase2.cpp" />
+    <ClCompile Include="..\..\glz-core\app\appbase.cpp" />
     <ClCompile Include="..\..\glz-core\input\input.cpp" />
     <ClCompile Include="..\..\glz-core\layout\viewport.cpp" />
     <ClCompile Include="..\..\glz-core\state\baseState.cpp" />
@@ -106,11 +106,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\examples\blank_base\blank_base.h" />
-    <ClInclude Include="..\..\glz-basecode\Resource.h" />
-    <ClInclude Include="..\..\glz-basecode\stdafx.h" />
-    <ClInclude Include="..\..\glz-basecode\targetver.h" />
-    <ClInclude Include="..\..\glz-basecode\zeobase2.h" />
-    <ClInclude Include="..\..\glz-core\appbase.h" />
+    <ClInclude Include="..\..\glz-basecode\win\Resource.h" />
+    <ClInclude Include="..\..\glz-basecode\win\stdafx.h" />
+    <ClInclude Include="..\..\glz-basecode\win\targetver.h" />
+    <ClInclude Include="..\..\glz-basecode\win\zeobase2.h" />
+    <ClInclude Include="..\..\glz-core\app\appbase.h" />
     <ClInclude Include="..\..\glz-core\input\input.h" />
     <ClInclude Include="..\..\glz-core\layout\viewport.h" />
     <ClInclude Include="..\..\glz-core\state\baseState.h" />
@@ -122,11 +122,11 @@
     <ClInclude Include="..\..\glz-core\utilities\vectormath.h" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\..\glz-basecode\small.ico" />
-    <Image Include="..\..\glz-basecode\zeobase2.ico" />
+    <Image Include="..\..\glz-basecode\win\small.ico" />
+    <Image Include="..\..\glz-basecode\win\zeobase2.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="..\..\glz-basecode\zeobase2.rc" />
+    <ResourceCompile Include="..\..\glz-basecode\win\zeobase2.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

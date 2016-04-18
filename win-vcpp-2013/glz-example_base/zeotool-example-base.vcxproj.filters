@@ -42,10 +42,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\glz-basecode\stdafx.cpp">
+    <ClCompile Include="..\..\glz-basecode\win\stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\glz-basecode\zeobase2.cpp">
+    <ClCompile Include="..\..\glz-basecode\win\zeobase2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\glz-core\2d\2d-graph.cpp">
@@ -84,7 +84,7 @@
     <ClCompile Include="..\..\glz-core\utilities\resourcemanager.cpp">
       <Filter>utilities</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\glz-core\appbase.cpp">
+    <ClCompile Include="..\..\glz-core\app\appbase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\glz-core\2d\2d-utilities.cpp">
@@ -119,16 +119,16 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\glz-basecode\Resource.h">
+    <ClInclude Include="..\..\glz-basecode\win\Resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz-basecode\stdafx.h">
+    <ClInclude Include="..\..\glz-basecode\win\stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz-basecode\targetver.h">
+    <ClInclude Include="..\..\glz-basecode\win\targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz-basecode\zeobase2.h">
+    <ClInclude Include="..\..\glz-basecode\win\zeobase2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\glz-core\2d\2d-graph.h">
@@ -173,7 +173,7 @@
     <ClInclude Include="..\..\glz-core\utilities\glz.h">
       <Filter>utilities</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz-core\appbase.h">
+    <ClInclude Include="..\..\glz-core\app\appbase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\glz-core\2d\2d-utilities.h">
@@ -205,15 +205,15 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\..\glz-basecode\small.ico">
+    <Image Include="..\..\glz-basecode\win\small.ico">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="..\..\glz-basecode\zeobase2.ico">
+    <Image Include="..\..\glz-basecode\win\zeobase2.ico">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="..\..\glz-basecode\zeobase2.rc">
+    <ResourceCompile Include="..\..\glz-basecode\win\zeobase2.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>

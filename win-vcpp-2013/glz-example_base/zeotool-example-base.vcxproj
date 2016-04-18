@@ -92,14 +92,14 @@
   <ItemGroup>
     <ClCompile Include="..\..\examples\example_base\bootStrap_example_base.cpp" />
     <ClCompile Include="..\..\examples\example_base\Example_base.cpp" />
-    <ClCompile Include="..\..\glz-basecode\stdafx.cpp" />
-    <ClCompile Include="..\..\glz-basecode\zeobase2.cpp" />
+    <ClCompile Include="..\..\glz-basecode\win\win\stdafx.cpp" />
+    <ClCompile Include="..\..\glz-basecode\win\zeobase2.cpp" />
     <ClCompile Include="..\..\glz-core\2d\2d-graph.cpp" />
     <ClCompile Include="..\..\glz-core\2d\2d-utilities.cpp" />
     <ClCompile Include="..\..\glz-core\2d\geo-2d.cpp" />
     <ClCompile Include="..\..\glz-core\3d\geo-generate.cpp" />
     <ClCompile Include="..\..\glz-core\3d\geo.cpp" />
-    <ClCompile Include="..\..\glz-core\appbase.cpp" />
+    <ClCompile Include="..\..\glz-core\app\appbase.cpp" />
     <ClCompile Include="..\..\glz-core\effects\particle.cpp" />
     <ClCompile Include="..\..\glz-core\image\tex.cpp" />
     <ClCompile Include="..\..\glz-core\input\input.cpp" />
@@ -118,17 +118,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\examples\example_base\Example_base.h" />
-    <ClInclude Include="..\..\glz-basecode\Resource.h" />
-    <ClInclude Include="..\..\glz-basecode\stdafx.h" />
-    <ClInclude Include="..\..\glz-basecode\targetver.h" />
-    <ClInclude Include="..\..\glz-basecode\zeobase2.h" />
+    <ClInclude Include="..\..\glz-basecode\win\Resource.h" />
+    <ClInclude Include="..\..\glz-basecode\win\stdafx.h" />
+    <ClInclude Include="..\..\glz-basecode\win\targetver.h" />
+    <ClInclude Include="..\..\glz-basecode\win\zeobase2.h" />
     <ClInclude Include="..\..\glz-core\2d\2d-graph.h" />
     <ClInclude Include="..\..\glz-core\2d\2d-utilities.h" />
     <ClInclude Include="..\..\glz-core\2d\geo-2d.h" />
     <ClInclude Include="..\..\glz-core\3d\geo-generate.h" />
     <ClInclude Include="..\..\glz-core\3d\geo.h" />
     <ClInclude Include="..\..\glz-core\3d\primitives.h" />
-    <ClInclude Include="..\..\glz-core\appbase.h" />
+    <ClInclude Include="..\..\glz-core\app\appbase.h" />
     <ClInclude Include="..\..\glz-core\effects\particle.h" />
     <ClInclude Include="..\..\glz-core\image\tex.h" />
     <ClInclude Include="..\..\glz-core\input\input.h" />
@@ -147,11 +147,11 @@
     <ClInclude Include="..\..\glz-core\utilities\vectormath.h" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\..\glz-basecode\small.ico" />
-    <Image Include="..\..\glz-basecode\zeobase2.ico" />
+    <Image Include="..\..\glz-basecode\win\small.ico" />
+    <Image Include="..\..\glz-basecode\win\zeobase2.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="..\..\glz-basecode\zeobase2.rc" />
+    <ResourceCompile Include="..\..\glz-basecode\win\zeobase2.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
