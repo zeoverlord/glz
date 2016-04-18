@@ -92,7 +92,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\examples\example_base\bootStrap_example_base.cpp" />
     <ClCompile Include="..\..\examples\example_base\Example_base.cpp" />
-    <ClCompile Include="..\..\glz-basecode\win\win\stdafx.cpp" />
+    <ClCompile Include="..\..\glz-basecode\win\stdafx.cpp" />
     <ClCompile Include="..\..\glz-basecode\win\zeobase2.cpp" />
     <ClCompile Include="..\..\glz-core\2d\2d-graph.cpp" />
     <ClCompile Include="..\..\glz-core\2d\2d-utilities.cpp" />

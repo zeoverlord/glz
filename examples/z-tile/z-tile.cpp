@@ -27,7 +27,7 @@
 #include <gl\glext.h>
 #include <fstream>
 #include <math.h>
-#include "..\..\glz-core\appbase.h"
+#include "..\..\glz-core\app\appbase.h"
 #include "..\..\glz-core\3d\geo.h"
 #include "..\..\glz-core\shader\shader.h"
 #include "..\..\glz-core\utilities\glz.h"
