@@ -109,9 +109,6 @@ ZtileState::ZtileState()
 	has_l2 = true;
 	has_d = true;
 
-	//strncat(leveltex_1_filename, "data\\supertiles1.tga", sizeof("data\\supertiles1.tga"));
-	//strncat(leveltex_2_filename, "data\\supertiles1.tga", sizeof("data\\supertiles2.tga"));
-	//strncat(leveltex_d_filename, "data\\supertiles1.tga", sizeof("data\\supertilesd.tga"));
 	leveltex_1_filename = "data\\supertiles1.tga";
 	leveltex_2_filename = "data\\supertiles2.tga";
 	leveltex_d_filename = "data\\supertilesd.tga";
@@ -166,9 +163,7 @@ bool ZtileState::Initialize(int width, int height)					// Any GL Init Code & Use
 	mt.scale(0.17f, 0.17f, 0.17f);
 
 	ProgramObject = glzShaderLoad("data\\glsl.vert", "data\\glsl.frag", glzVAOType::AUTO);
-	ProgramObjectAtlas = glzShaderLoad("data\\atlastexture.vert", "data\\atlastexture.frag", glzVAOType::AUTO);
 	glzShaderLink(ProgramObject);
-	glzShaderLink(ProgramObjectAtlas);
 	rm.createTexture("font.arial", "data\\fonts\\arial.tga", glzTexFilter::LINEAR, 2);
 
 	// load data
@@ -533,49 +528,33 @@ void ZtileState::Draw(void)
 
 	float mtemp[16];
 	glEnable(GL_TEXTURE_2D);
+
+
+	unsigned int atlas_program = glzShaderReurnTilemap();
+
+
 	unsigned int loc1 = glGetUniformLocation(ProgramObject, "projMat");
 	unsigned int loc2 = glGetUniformLocation(ProgramObject, "texunit0");
 	unsigned int loc3 = glGetUniformLocation(ProgramObject, "tint");
-
-
-	unsigned int loc4 = glGetUniformLocation(ProgramObjectAtlas, "projMat");
-	unsigned int loc5 = glGetUniformLocation(ProgramObjectAtlas, "texunit0");
-	unsigned int loc6 = glGetUniformLocation(ProgramObjectAtlas, "texunit1");
-	unsigned int loc7 = glGetUniformLocation(ProgramObjectAtlas, "layer");
-	unsigned int loc8 = glGetUniformLocation(ProgramObjectAtlas, "anim");
-
-	unsigned int loc9 = glGetUniformLocation(ProgramObjectAtlas, "width");
-	unsigned int loc10 = glGetUniformLocation(ProgramObjectAtlas, "height");
-	unsigned int loc11 = glGetUniformLocation(ProgramObjectAtlas, "a_width");
-	unsigned int loc12 = glGetUniformLocation(ProgramObjectAtlas, "a_height");
-	unsigned int loc13 = glGetUniformLocation(ProgramObjectAtlas, "extr");
-
-
-
-
-	//	unsigned int loc4 = glGetUniformLocation(ProgramObjectFT,"projMat");
-	//	unsigned int loc5 = glGetUniformLocation(ProgramObjectFT,"texunit0");
-
+	
 	glUseProgram(ProgramObject);
 	glUniform1i(loc2, 0);
 	glUniform4f(loc3, 1.0f, 1.0f, 1.0f, 1.0f);
 
-	glUseProgram(ProgramObjectAtlas);
-	glUniform1i(loc5, 0);
-	glUniform1i(loc6, 1);
-	glUniform1i(loc7, curlayer);
-	glUniform1i(loc8, testanim);
 
-	glUniform1i(loc9, map_l1.width);
-	glUniform1i(loc10, map_l1.height);
-	glUniform1i(loc11, tiles_width);
-	glUniform1i(loc12, tiles_height);
-	glUniform1i(loc13, 0);
+	glUseProgram(atlas_program);
+	glzUniform1i(atlas_program, "texunit0", 0);
+	glzUniform1i(atlas_program, "texunit1", 1);
+	glzUniform4f(atlas_program, "color", 1.0f, 1.0f, 1.0f, 1.0f);
 
-
-
-
-
+	glzUniform1i(atlas_program, "layer", curlayer);
+	glzUniform1i(atlas_program, "anim", testanim);
+	glzUniform1i(atlas_program, "width", map_l1.width);
+	glzUniform1i(atlas_program, "height", map_l1.height);
+	glzUniform1i(atlas_program, "a_width", tiles_width);
+	glzUniform1i(atlas_program, "a_height", tiles_height);
+	glzUniform1i(atlas_program, "extr", 0);
+	
 
 	// i have used these gamestates in a few games for LD48 now and they are really quick and dirty, but effective.
 	// they allow you to quickly make a title screen and end screen at the end of the project without changing that much code, instead you just encapsulate it in a gamestate
@@ -596,22 +575,10 @@ void ZtileState::Draw(void)
 		m.ortho(-viewport[2] * 0.5f, viewport[2] * 0.5f, -viewport[3] * 0.5f, viewport[3] * 0.5f, -100.0f, 100.0f);
 		m.translate(paintarea_x, paintarea_y, 0.0f);
 		m.scale(paintarea_Zoom, paintarea_Zoom, 0.0f);
-		//glzMatrix m;
-		//m.LoadIdentity();
-		//m.ortho2DPixelspace(viewport[2], viewport[3], glzOrigin::BOTTOM_LEFT);
-		glUseProgram(ProgramObjectAtlas);
-
-
+		glUseProgram(atlas_program);
+		
 		m.transferMatrix(&mtemp[0]);
-		//glUniformMatrix4fv(loc4, 1, GL_FALSE, mtemp);
-
-		//unsigned int loc4 = glGetUniformLocation(ProgramObjectAtlas, "projMat");
-		glzUniformMatrix4fv(ProgramObjectAtlas, "projMat", m);
-
-
-
-
-
+		glzUniformMatrix4fv(atlas_program, "projMat", m);
 
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("spritemap.sm0"));
@@ -622,42 +589,38 @@ void ZtileState::Draw(void)
 		{
 
 
-			if ((curlayer == ztLeveltex::L1A) || (curlayer == ztLeveltex::L1B))	glBindTexture(GL_TEXTURE_2D, map_l1.tex);
-			if (has_l2) { if ((curlayer == ztLeveltex::L2A) || (curlayer == ztLeveltex::L2B))	glBindTexture(GL_TEXTURE_2D, map_l2.tex); }
-			if (has_d) { if ((curlayer == ztLeveltex::DYNAMIC_A) || (curlayer == ztLeveltex::DYNAMIC_B) || (curlayer == ztLeveltex::DYNAMIC_C) || (curlayer == ztLeveltex::DYNAMIC_D))	glBindTexture(GL_TEXTURE_2D, map_dynamic.tex); }
+			if((curlayer == ztLeveltex::L1A) || (curlayer == ztLeveltex::L1B))	glBindTexture(GL_TEXTURE_2D, map_l1.tex);
+			if(has_l2) { if ((curlayer == ztLeveltex::L2A) || (curlayer == ztLeveltex::L2B))	glBindTexture(GL_TEXTURE_2D, map_l2.tex); }
+			if(has_d) { if ((curlayer == ztLeveltex::DYNAMIC_A) || (curlayer == ztLeveltex::DYNAMIC_B) || (curlayer == ztLeveltex::DYNAMIC_C) || (curlayer == ztLeveltex::DYNAMIC_D))	glBindTexture(GL_TEXTURE_2D, map_dynamic.tex); }
 
 
-			if ((curlayer == ztLeveltex::L1A) || (curlayer == ztLeveltex::L2A))glUniform1i(loc7, 0);
-			if ((curlayer == ztLeveltex::L1B) || (curlayer == ztLeveltex::L2B))	glUniform1i(loc7, 1);
+			if ((curlayer == ztLeveltex::L1A) || (curlayer == ztLeveltex::L2A))	glzUniform1i(atlas_program, "layer", 0);
+			if((curlayer == ztLeveltex::L1B) || (curlayer == ztLeveltex::L2B))	glzUniform1i(atlas_program, "layer", 1);
 
 
 			glActiveTexture(GL_TEXTURE1);
-			if(curlayer == ztLeveltex::DYNAMIC_A)	{ glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("spritemap.sm1")); glUniform1i(loc7, 2); }
-			if(curlayer == ztLeveltex::DYNAMIC_B)	{ glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("spritemap.sm2")); glUniform1i(loc7, 3); }
-			if(curlayer == ztLeveltex::DYNAMIC_C)	{ glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("spritemap.sm3")); glUniform1i(loc7, 4); }
-			if(curlayer == ztLeveltex::DYNAMIC_D)	{ glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("spritemap.sm4")); glUniform1i(loc7, 5); }
+			if(curlayer == ztLeveltex::DYNAMIC_A)	{ glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("spritemap.sm1")); glzUniform1i(atlas_program, "layer", 2); }
+			if(curlayer == ztLeveltex::DYNAMIC_B)	{ glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("spritemap.sm2")); glzUniform1i(atlas_program, "layer", 3); }
+			if(curlayer == ztLeveltex::DYNAMIC_C)	{ glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("spritemap.sm3")); glzUniform1i(atlas_program, "layer", 4); }
+			if(curlayer == ztLeveltex::DYNAMIC_D)	{ glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("spritemap.sm4")); glzUniform1i(atlas_program, "layer", 5); }
 			glActiveTexture(GL_TEXTURE0);
 
 			glzDirectSpriteRender(0.0f, 0.0f, 2.0f, map_l1.width / map_l1.height, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, glzOrigin::CENTERED);
-
-
 
 			if (toggle_extra){
 				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 				glEnable(GL_BLEND);
 
-				glUniform1i(loc13, 1);
+				glzUniform1i(atlas_program, "a_height", 1);
 				glzDirectSpriteRender(0.0f, 0.0f, 2.0f, map_l1.width / map_l1.height, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, glzOrigin::CENTERED);
 				glDisable(GL_BLEND);
 			}
 
-			else glUniform1i(loc13, 0);
+			else glzUniform1i(atlas_program, "a_height", 0);
 
 		}
 		else
 		{
-
-
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 			glEnable(GL_BLEND);
 
@@ -665,20 +628,20 @@ void ZtileState::Draw(void)
 			{
 				glBindTexture(GL_TEXTURE_2D, map_l1.tex);
 
-				glUniform1i(loc7, 0);
+				glzUniform1i(atlas_program, "layer", 0);
 				glzDirectSpriteRender(0.0f, 0.0f, 2.0f, map_l1.width / map_l1.height, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, glzOrigin::CENTERED);
 
-				glUniform1i(loc7, 1);
+				glzUniform1i(atlas_program, "layer", 1);
 				glzDirectSpriteRender(0.0f, 0.0f, 2.0f, map_l1.width / map_l1.height, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, glzOrigin::CENTERED);
 
 			}
 			if (has_l2)
 			{
 				glBindTexture(GL_TEXTURE_2D, map_l2.tex);
-				glUniform1i(loc7, 0);
+				glzUniform1i(atlas_program, "layer", 0);
 				glzDirectSpriteRender(0.0f, 0.0f, 2.0f, map_l1.width / map_l1.height, 1.0, 0.0f, 0.0f, 1.0f, 1.0f, glzOrigin::CENTERED);
 
-				glUniform1i(loc7, 1);
+				glzUniform1i(atlas_program, "layer", 1);
 				glzDirectSpriteRender(0.0f, 0.0f, 2.0f, map_l1.width / map_l1.height, 1.0, 0.0f, 0.0f, 1.0f, 1.0f, glzOrigin::CENTERED);
 
 			}
@@ -687,25 +650,18 @@ void ZtileState::Draw(void)
 			{
 
 				glActiveTexture(GL_TEXTURE1);
-				if(curlayer == ztLeveltex::DYNAMIC_A)	{ glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("spritemap.sm1")); glUniform1i(loc7, 2); }
-				if(curlayer == ztLeveltex::DYNAMIC_B)	{ glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("spritemap.sm2")); glUniform1i(loc7, 3); }
-				if(curlayer == ztLeveltex::DYNAMIC_C)	{ glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("spritemap.sm3")); glUniform1i(loc7, 4); }
-				if(curlayer == ztLeveltex::DYNAMIC_D)	{ glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("spritemap.sm4")); glUniform1i(loc7, 5); }
+				if(curlayer == ztLeveltex::DYNAMIC_A)	{ glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("spritemap.sm1")); glzUniform1i(atlas_program, "layer", 2); }
+				if(curlayer == ztLeveltex::DYNAMIC_B)	{ glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("spritemap.sm2")); glzUniform1i(atlas_program, "layer", 3); }
+				if(curlayer == ztLeveltex::DYNAMIC_C)	{ glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("spritemap.sm3")); glzUniform1i(atlas_program, "layer", 4); }
+				if(curlayer == ztLeveltex::DYNAMIC_D)	{ glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("spritemap.sm4")); glzUniform1i(atlas_program, "layer", 5); }
 				glActiveTexture(GL_TEXTURE0);
 
 				glBindTexture(GL_TEXTURE_2D, map_dynamic.tex);
 				glzDirectSpriteRender(0.0f, 0.0f, 2.0f, map_l1.width / map_l1.height, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, glzOrigin::CENTERED);
-
-
 			}
-
-
-
-
 			glDisable(GL_BLEND);
 
 		}
-
 
 
 		glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("sprite.cursor"));
@@ -775,7 +731,7 @@ void ZtileState::Draw(void)
 
 		m.transferMatrix(&mtemp[0]);
 		glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
-		glUniform1i(loc7, 0);
+		glzUniform1i(atlas_program, "layer", 0);
 
 
 		glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("spritemap.sm0"));
@@ -810,7 +766,7 @@ void ZtileState::Draw(void)
 
 		m.transferMatrix(&mtemp[0]);
 		glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
-		glUniform1i(loc7, 0);
+		glzUniform1i(atlas_program, "layer", 0);
 
 		glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("spritemap.sm0"));
 

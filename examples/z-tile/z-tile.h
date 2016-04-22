@@ -82,8 +82,7 @@ private:
 	float paintarea_x_s, paintarea_y_s, paintarea_Zoom_s;
 	float paintarea_pixel_x_s, paintarea_pixel_y_s;
 
-	unsigned int  ProgramObject, ProgramObjectFT, ProgramObjectFSQ, ProgramObjectAtlas;
-//	texture_transform text_tt;
+	unsigned int  ProgramObject;
 
 
 	int Mpos_x_old;
