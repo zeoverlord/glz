@@ -38,7 +38,7 @@
 // at a start the viewport its inside it's parent window
 // if width is wider than what the origin coordinate allows then the window will be resized
 
-class Example2DState : public glzBaseState
+class Example2DState : public GLZ::glzBaseState
 {
 
 public:
@@ -55,19 +55,19 @@ private:
 		
 	float		angle, width, height;												// Used To Rotate The Triangles
 	unsigned int vao[4], vao_num[4];
-	string tbuffer;
-	string tbuffer2;
+	std::string tbuffer;
+	std::string tbuffer2;
 	float spriteframetimer;
 	int spriteframe;
 	int gamestate;
-	glzCamera2D cam;
-	Object2DGraph tempgraph;
-	node3 n;
-	glztiles tilemap;
-	glztiles tilemap2;
-	glzViewport view1, view2, view3;
+	GLZ::glzCamera2D cam;
+	GLZ::Object2DGraph tempgraph;
+	GLZ::node3 n;
+	GLZ::glztiles tilemap;
+	GLZ::glztiles tilemap2;
+	GLZ::glzViewport view1, view2, view3;
 	GLhandleARB  ProgramObject, ProgramObjectFT, ProgramObjectFSQ, ProgramObjectFSQ_glitch;
-	glzSimpleParticleSystem ps;
+	GLZ::glzSimpleParticleSystem ps;
 
 
 public:

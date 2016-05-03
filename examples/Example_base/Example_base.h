@@ -38,7 +38,7 @@
 // at a start the viewport its inside it's parent window
 // if width is wider than what the origin coordinate allows then the window will be resized
 
-class ExampleBaseState : public glzBaseState
+class ExampleBaseState : public GLZ::glzBaseState
 {
 
 public:
@@ -56,14 +56,14 @@ private:
 	float		angle, width, height;												// Used To Rotate The Triangles
 	int			rot1, rot2;											// Counter Variables
 	unsigned int vao[5], vao_num[5];
-	glzMatrix m;
+	GLZ::glzMatrix m;
 	int e, e2;
 
-	glzQuaternion q;
-	glzQuaternion q2;
-	glzQuaternion q3;
+	GLZ::glzQuaternion q;
+	GLZ::glzQuaternion q2;
+	GLZ::glzQuaternion q3;
 
-	img_head img;
+	GLZ::img_head img;
 	unsigned char *data;
 
 	GLhandleARB  ProgramObject, ProgramObjectFSQ;

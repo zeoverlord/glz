@@ -39,7 +39,7 @@
 // at a start the viewport its inside it's parent window
 // if width is wider than what the origin coordinate allows then the window will be resized
 
-class ZtileState : public glzBaseState
+class ZtileState : public GLZ::glzBaseState
 {
 
 public:
@@ -62,7 +62,7 @@ private:
 	// User Defined Variables
 	float		angle, width, height;												// Used To Rotate The Triangles
 	unsigned int vao[16], vao_num[16], textvao[16], textvao_num[16];
-	glzMatrix m;
+	GLZ::glzMatrix m;
 
 	char tbuffer[160];
 	char tbuffer2[160];
@@ -92,9 +92,9 @@ private:
 	int Mweel_old;
 	int Mweel_rel;
 
-	vert3 mwp; // mouse work position, z is ignored
+	GLZ::vert3 mwp; // mouse work position, z is ignored
 
-	vert3 muip;
+	GLZ::vert3 muip;
 
 	int z_tileUI_point;
 
@@ -113,12 +113,12 @@ private:
 	bool has_l2 = true;
 	bool has_d = true;
 
-	string leveltex_1_filename;
-	string leveltex_2_filename;
-	string leveltex_d_filename;
-	glztiles map_l1;
-	glztiles map_l2;
-	glztiles map_dynamic;
+	std::string leveltex_1_filename;
+	std::string leveltex_2_filename;
+	std::string leveltex_d_filename;
+	GLZ::glztiles map_l1;
+	GLZ::glztiles map_l2;
+	GLZ::glztiles map_dynamic;
 	
 
 };

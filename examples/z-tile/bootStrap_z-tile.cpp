@@ -29,11 +29,11 @@
 
 void preInitialize(void)
 {
-	glzStateManager stateManager;
-	std::shared_ptr<glzBaseState> gameState(new ZtileState);
+	GLZ::glzStateManager stateManager;
+	std::shared_ptr<GLZ::glzBaseState> gameState(new ZtileState);
 	stateManager.addState(gameState, "mainstate");
 	stateManager.switchState("mainstate");
-	glzAppinitialization app;
+	GLZ::glzAppinitialization app;
 	app.set_title(L"z-tile level editor");
 	app.data.WINDOW_WIDTH = 1280;
 	app.data.WINDOW_HEIGHT = 720;

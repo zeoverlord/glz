@@ -39,7 +39,8 @@
 #define CDS_FULLSCREEN 4										// Compilers. By Defining It This Way,
 #endif															// We Can Avoid Errors
 
-
+using namespace std;
+using namespace GLZ;
 
 BlankBaseState::BlankBaseState(){}
 

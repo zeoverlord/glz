@@ -29,11 +29,11 @@
 
 void preInitialize(void)
 {
-	glzStateManager stateManager;
-	std::shared_ptr<glzBaseState> gameState(new BlankBaseState);
+	GLZ::glzStateManager stateManager;
+	std::shared_ptr<GLZ::glzBaseState> gameState(new BlankBaseState);
 	stateManager.addState(gameState, "mainstate");
 	stateManager.switchState("mainstate");
-	glzAppinitialization app;
+	GLZ::glzAppinitialization app;
 	app.set_title(L"ZeoBase GL Framework");
 	app.data.ALLOW_RESIZE = true;
 	return;

@@ -38,7 +38,7 @@
 // at a start the viewport its inside it's parent window
 // if width is wider than what the origin coordinate allows then the window will be resized
 
-class Example3DState : public glzBaseState
+class Example3DState : public GLZ::glzBaseState
 {
 
 public:
@@ -55,8 +55,8 @@ private:
 		
 	float angle, width, height;												// Used To Rotate The Triangles
 	unsigned int vao[16], vao_num[16];
-	glzMatrix m;
-	glzMatrix mnew;
+	GLZ::glzMatrix m;
+	GLZ::glzMatrix mnew;
 
 
 	char tbuffer[160];
@@ -66,17 +66,17 @@ private:
 	int spriteframe;
 
 
-	glzQuaternion qr;
-	glzQuaternion q;
-	glzQuaternion q2;
-	glzQuaternion q3;
-	glzQuaternion qn;
+	GLZ::glzQuaternion qr;
+	GLZ::glzQuaternion q;
+	GLZ::glzQuaternion q2;
+	GLZ::glzQuaternion q3;
+	GLZ::glzQuaternion qn;
 
-	node3 tankpos;
+	GLZ::node3 tankpos;
 
 	int gamestate;
 
-	img_head img;
+	GLZ::img_head img;
 	unsigned char *data;
 	GLhandleARB  ProgramObject, ProgramObjectFT, ProgramObjectFSQ;
 //	texture_transform text_tt;

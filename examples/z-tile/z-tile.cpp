@@ -40,6 +40,7 @@
 #include "..\..\glz-core\input\input.h"
 
 using namespace std;
+using namespace GLZ;
 
 #pragma comment( lib, "opengl32.lib" )							// Search For OpenGL32.lib While Linking
 #pragma comment( lib, "glu32.lib" )								// Search For GLu32.lib While Linking

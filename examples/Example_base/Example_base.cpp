@@ -20,7 +20,6 @@
 // https://github.com/zeoverlord/glz.git
 
 
-
 #include <windows.h>											// Header File For Windows
 #include <gl\gl.h>												// Header File For The OpenGL32 Library
 #include <gl\glu.h>												// Header File For The GLu32 Library
@@ -40,7 +39,8 @@
 #include "..\..\glz-core\input\input.h"
 #include "..\..\glz-core\2d\2d-utilities.h"
 
-using namespace std;										
+using namespace std;
+using namespace GLZ;
 
 #pragma comment( lib, "opengl32.lib" )							// Search For OpenGL32.lib While Linking
 #pragma comment( lib, "glu32.lib" )								// Search For GLu32.lib While Linking

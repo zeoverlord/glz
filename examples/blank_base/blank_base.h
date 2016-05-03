@@ -35,7 +35,7 @@
 // at a start the viewport its inside it's parent window
 // if width is wider than what the origin coordinate allows then the window will be resized
 
-class BlankBaseState : public glzBaseState
+class BlankBaseState : public GLZ::glzBaseState
 {
 
 public:
