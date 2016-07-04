@@ -107,6 +107,7 @@
     <ClCompile Include="..\..\glz-core\state\baseState.cpp" />
     <ClCompile Include="..\..\glz-core\state\stateManager.cpp" />
     <ClCompile Include="..\..\glz-core\utilities\color.cpp" />
+    <ClCompile Include="..\..\glz-core\utilities\config.cpp" />
     <ClCompile Include="..\..\glz-core\utilities\framebuffer.cpp" />
     <ClCompile Include="..\..\glz-core\utilities\glz.cpp" />
     <ClCompile Include="..\..\glz-core\utilities\resourcemanager.cpp" />
@@ -137,6 +138,7 @@
     <ClInclude Include="..\..\glz-core\state\baseState.h" />
     <ClInclude Include="..\..\glz-core\state\stateManager.h" />
     <ClInclude Include="..\..\glz-core\utilities\color.h" />
+    <ClInclude Include="..\..\glz-core\utilities\config.h" />
     <ClInclude Include="..\..\glz-core\utilities\framebuffer.h" />
     <ClInclude Include="..\..\glz-core\utilities\glz.h" />
     <ClInclude Include="..\..\glz-core\utilities\resourcemanager.h" />

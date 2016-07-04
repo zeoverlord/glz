@@ -117,6 +117,9 @@
     <ClCompile Include="..\..\glz-core\state\stateManager.cpp">
       <Filter>state</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\glz-core\utilities\config.cpp">
+      <Filter>utilities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\glz-basecode\win\Resource.h">
@@ -202,6 +205,9 @@
     </ClInclude>
     <ClInclude Include="..\..\glz-core\state\stateManager.h">
       <Filter>state</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz-core\utilities\config.h">
+      <Filter>utilities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
