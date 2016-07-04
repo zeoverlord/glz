@@ -37,6 +37,7 @@
 #include "..\..\glz-core\3d\geo-generate.h"
 #include "..\..\glz-core\utilities\tiletools.h"
 #include "..\..\glz-core\utilities\resourcemanager.h"
+#include "..\..\glz-core\utilities\config.h"
 #include "..\..\glz-core\input\input.h"
 
 using namespace std;
@@ -178,11 +179,17 @@ bool ZtileState::Initialize(int width, int height)					// Any GL Init Code & Use
 	rm.createTexture("sprite.red", "data\\red.tga", glzTexFilter::NEAREST);
 	rm.createTexture("sprite.cursor", "data\\cursor.tga", glzTexFilter::NEAREST);
 
-
+	glzConfig config; 
+	config.load("data\\ztiledata.txt");
 	
-	if (has_l1) map_l1.load(leveltex_1_filename, glzTileType::DOUBLE_LAYER);
-	if (has_l2) map_l2.load(leveltex_2_filename, glzTileType::DOUBLE_LAYER);
-	if (has_d) map_dynamic.load(leveltex_d_filename, glzTileType::QUAD_LAYER);
+	if(has_l1) map_l1.load(config.readString("levelTex_1",leveltex_1_filename), glzTileType::DOUBLE_LAYER);
+	if(has_l2) map_l2.load(config.readString("levelTex_2", leveltex_2_filename), glzTileType::DOUBLE_LAYER);
+	if(has_d) map_dynamic.load(config.readString("levelTex_d", leveltex_d_filename), glzTileType::QUAD_LAYER);
+
+
+/*	if(has_l1) map_l1.load("data\\supertiles1.tga", glzTileType::DOUBLE_LAYER);
+	if(has_l2) map_l2.load("data\\supertiles2.tga", glzTileType::DOUBLE_LAYER);
+	if(has_d) map_dynamic.load("data\\supertilesd.tga", glzTileType::QUAD_LAYER);*/
 
 
 	return TRUE;												// Return TRUE (Initialization Successful)

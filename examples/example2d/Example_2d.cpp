@@ -39,6 +39,7 @@
 #include "..\..\glz-core\3d\geo-generate.h"
 #include "..\..\glz-core\2d\2d-utilities.h"
 #include "..\..\glz-core\utilities\resourcemanager.h"
+#include "..\..\glz-core\utilities\config.h"
 #include "..\..\glz-core\input\input.h"
 
 using namespace std;
@@ -231,8 +232,12 @@ bool Example2DState::Initialize(int width, int height)					// Any GL Init Code &
 	//tempgraph.add(obj2d_Fullscreen(-1, txx->handle));
 
 	// load the tilemap
-	tilemap.load("data\\supertiles1.tga", glzTileType::DOUBLE_LAYER);
-	tilemap2.load("data\\supertiles2.tga", glzTileType::DOUBLE_LAYER);
+	glzConfig config; 
+	config.load("data\\ztiledata.txt");
+
+	tilemap.load(config.readString("levelTex_1", "data\\supertiles1.tga"), glzTileType::DOUBLE_LAYER);
+	tilemap2.load(config.readString("levelTex_2", "data\\supertiles2.tga"), glzTileType::DOUBLE_LAYER);
+
 
 	tempgraph.add(obj2d_Tiles(42, &tilemap, 0, 16, 16, 1.0, nullptr, node3(vert3(-512, -256.0, 0.0)), rm.gettexture("atlas.tileset"), 128, 1.0f));
 	tempgraph.add(obj2d_Tiles(42, &tilemap, 1, 16, 16, 1.0, nullptr, node3(vert3(-512, -256.0, 0.0)), rm.gettexture("atlas.tileset"), 128, 1.0f));
