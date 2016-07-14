@@ -81,7 +81,7 @@ tempgraph(&cam)
 
 bool Example2DState::Initialize(int width, int height)					// Any GL Init Code & User Initialiazation Goes Here
 {
-
+	glzAppinitialization app;
 	glzResourcemanager rm;
 
 	GetFocus();
@@ -175,12 +175,23 @@ bool Example2DState::Initialize(int width, int height)					// Any GL Init Code &
 	texture_transform grid_tt = glzMakeTTAtlasArray(4, 4, ad, glzOrigin::BOTTOM_LEFT);
 	vao_num[2]=glzVAOMakeAtlasGrid(8, 8, mg, grid_tt, &vao[2]);
 	
+	if (app.data.legacyMode)
+	{
 
+		ProgramObject = glzShaderLoad("data\\glsl-legacy.vert", "data\\glsl-legacy.frag", glzVAOType::AUTO);
+		ProgramObjectFT = glzShaderLoad("data\\fancytext-legacy.vert", "data\\fancytext-legacy.frag", glzVAOType::AUTO);
+		ProgramObjectFSQ = glzShaderLoad("data\\fsq-legacy.vert", "data\\fsq-legacy.frag", glzVAOType::AUTO);
+		ProgramObjectFSQ_glitch = glzShaderLoad("data\\fsq_gltch-legacy.vert", "data\\fsq_gltch-legacy.frag", glzVAOType::AUTO);
+	}
+	else
+	{
 
-	ProgramObject = glzShaderLoad("data\\glsl.vert", "data\\glsl.frag", glzVAOType::AUTO);
-	ProgramObjectFT = glzShaderLoad("data\\fancytext.vert", "data\\fancytext.frag", glzVAOType::AUTO);
-	ProgramObjectFSQ = glzShaderLoad("data\\fsq.vert", "data\\fsq.frag", glzVAOType::AUTO);
-	ProgramObjectFSQ_glitch = glzShaderLoad("data\\fsq_gltch.vert", "data\\fsq_gltch.frag", glzVAOType::AUTO);
+		ProgramObject = glzShaderLoad("data\\glsl.vert", "data\\glsl.frag", glzVAOType::AUTO);
+		ProgramObjectFT = glzShaderLoad("data\\fancytext.vert", "data\\fancytext.frag", glzVAOType::AUTO);
+		ProgramObjectFSQ = glzShaderLoad("data\\fsq.vert", "data\\fsq.frag", glzVAOType::AUTO);
+		ProgramObjectFSQ_glitch = glzShaderLoad("data\\fsq_gltch.vert", "data\\fsq_gltch.frag", glzVAOType::AUTO);
+	}
+
 
 	
 	glzShaderLink(ProgramObject);
