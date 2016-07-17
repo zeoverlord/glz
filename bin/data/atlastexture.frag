@@ -34,21 +34,21 @@ vec4 arm = texture2D(texunit0, txcoord.xy);
 
 if (layer==0)
 {
-sx=floor(arm.x*255.0);
-sy=floor(arm.y*255.0);
+sx=floor(arm.x*256.0);
+sy=floor(arm.y*256.0);
 }
 
 if (layer==1)
 {
-sx=floor(arm.z*255.0);
-sy=floor(arm.w*255.0);
+sx=floor(arm.z*256.0);
+sy=floor(arm.w*256.0);
 }
 
 float atl=0.0;
 
 if (layer==2)
 {
-atl=floor(arm.x*255.0);
+atl=floor(arm.x*256.0);
 sx=mod(atl,16.0);
 sy=floor(atl/16.0);
 }
@@ -56,7 +56,7 @@ sy=floor(atl/16.0);
 
 if (layer==3)
 {
-atl=floor(arm.y*255.0);
+atl=floor(arm.y*256.0);
 sx=mod(atl,16.0);
 sy=floor(atl/16.0);
 }
@@ -64,14 +64,14 @@ sy=floor(atl/16.0);
 
 if (layer==4)
 {
-atl=floor(arm.z*255.0);
+atl=floor(arm.z*256.0);
 sx=mod(atl,16.0);
 sy=floor(atl/16.0);
 }
 
 if (layer==5)
 {
-atl=floor(arm.w*255.0);
+atl=floor(arm.w*256.0);
 sx=mod(atl,16.0);
 sy=floor(atl/16.0);
 }

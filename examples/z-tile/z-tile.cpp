@@ -123,6 +123,7 @@ ZtileState::ZtileState()
 
 bool ZtileState::Initialize(int width, int height)					// Any GL Init Code & User Initialiazation Goes Here
 {
+	glzAppinitialization app;
 	glzResourcemanager rm;
 
 	GetFocus();
@@ -163,8 +164,15 @@ bool ZtileState::Initialize(int width, int height)					// Any GL Init Code & Use
 	glzMatrix mt;
 	mt.LoadIdentity();
 	mt.scale(0.17f, 0.17f, 0.17f);
+	if (app.data.legacyMode)
+	{
+		ProgramObject = glzShaderLoad("data\\glsl-legacy.vert", "data\\glsl-legacy.frag", glzVAOType::AUTO);
+		}
+	else
+	{
 
-	ProgramObject = glzShaderLoad("data\\glsl.vert", "data\\glsl.frag", glzVAOType::AUTO);
+		ProgramObject = glzShaderLoad("data\\glsl.vert", "data\\glsl.frag", glzVAOType::AUTO);
+	}
 	glzShaderLink(ProgramObject);
 	rm.createTexture("font.arial", "data\\fonts\\arial.tga", glzTexFilter::LINEAR, 2);
 
