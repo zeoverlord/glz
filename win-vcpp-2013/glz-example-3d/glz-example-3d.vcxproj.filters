@@ -203,6 +203,9 @@
     <ClInclude Include="..\..\glz-core\state\stateManager.h">
       <Filter>state</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\glz-core\shader\shader-programs-legacy.h">
+      <Filter>shader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\glz-basecode\win\small.ico">

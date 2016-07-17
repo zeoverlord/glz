@@ -132,6 +132,7 @@
     <ClInclude Include="..\..\glz-core\image\tex.h" />
     <ClInclude Include="..\..\glz-core\input\input.h" />
     <ClInclude Include="..\..\glz-core\layout\viewport.h" />
+    <ClInclude Include="..\..\glz-core\shader\shader-programs-legacy.h" />
     <ClInclude Include="..\..\glz-core\shader\shader-programs.h" />
     <ClInclude Include="..\..\glz-core\shader\shader.h" />
     <ClInclude Include="..\..\glz-core\state\baseState.h" />

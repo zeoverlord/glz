@@ -51,6 +51,9 @@ public:
 	void DisplayUpdate(int width, int height) override;
 	void Draw(void) override;
 
+	void draw_object(GLZ::texturecontainer *tx, int prim, float x, float y);
+	void draw_object2(GLZ::texturecontainer *tx, int prim, float x, float y);
+
 private:
 		
 	float angle, width, height;												// Used To Rotate The Triangles
@@ -78,7 +81,7 @@ private:
 
 	GLZ::img_head img;
 	unsigned char *data;
-	GLhandleARB  ProgramObject, ProgramObjectFT, ProgramObjectFSQ;
+	GLhandleARB  ProgramObject;
 //	texture_transform text_tt;
 
 	

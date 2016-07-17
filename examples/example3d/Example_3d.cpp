@@ -81,8 +81,6 @@ unsigned char *data;
 
 float aspect = 1.0f;
 
-GLhandleARB  ProgramObject,ProgramObjectFT,ProgramObjectFSQ;
-texture_transform text_tt;
 
 static PFNGLUSEPROGRAMPROC						glUseProgram;
 static PFNGLUNIFORM1IPROC                       glUniform1i;
@@ -107,6 +105,7 @@ gamestate(4)
 
 bool Example3DState::Initialize(int width, int height)					// Any GL Init Code & User Initialiazation Goes Here
 {
+	glzAppinitialization app;
 	glzResourcemanager rm;
 
 	GetFocus();
@@ -238,8 +237,14 @@ bool Example3DState::Initialize(int width, int height)					// Any GL Init Code &
 
 
 
-
-	ProgramObject = glzShaderLoad("data\\glsl.vert", "data\\glsl.frag", glzVAOType::AUTO);
+	if (app.data.legacyMode)
+	{
+		ProgramObject = glzShaderLoad("data\\glsl-legacy.vert", "data\\glsl-legacy.frag", glzVAOType::AUTO);
+	}
+	else
+	{
+		ProgramObject = glzShaderLoad("data\\glsl.vert", "data\\glsl.frag", glzVAOType::AUTO);
+	}
 	glzShaderLink(ProgramObject);
 
 	// load the textures
@@ -358,7 +363,7 @@ void Example3DState::DisplayUpdate(int width, int height)
 }
 
 
-void draw_object(texturecontainer *tx, int prim, float x, float y)
+void Example3DState::draw_object(GLZ::texturecontainer *tx, int prim, float x, float y)
 {
 	unsigned int loc1 = glGetUniformLocation(ProgramObject,"projMat");
 	// draw objects
@@ -376,7 +381,7 @@ void draw_object(texturecontainer *tx, int prim, float x, float y)
 	glzDrawVAO(vao_num[prim],vao[prim],GL_TRIANGLES);
 }
 
-void draw_object2(texturecontainer *tx, int prim, float x, float y)
+void Example3DState::draw_object2(GLZ::texturecontainer *tx, int prim, float x, float y)
 {
 	unsigned int loc1 = glGetUniformLocation(ProgramObject, "projMat");
 	// draw objects
@@ -405,8 +410,6 @@ void Example3DState::Draw(void)
 	unsigned int loc2 = glGetUniformLocation(ProgramObject,"texunit0");
 	unsigned int loc3 = glGetUniformLocation(ProgramObject,"tint");
 
-	unsigned int loc4 = glGetUniformLocation(ProgramObjectFT,"projMat");
-	unsigned int loc5 = glGetUniformLocation(ProgramObjectFT,"texunit0");
 
 	glUseProgram(ProgramObject);
 	glUniform1i(loc2, 0);	

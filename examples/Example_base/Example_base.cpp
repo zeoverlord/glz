@@ -69,6 +69,7 @@ e2(0)
 
 bool ExampleBaseState::Initialize(int width, int height)					// Any GL Init Code & User Initialiazation Goes Here
 {	
+	glzAppinitialization app;
 	glzResourcemanager rm;
 
 	GetFocus();
@@ -159,9 +160,18 @@ bool ExampleBaseState::Initialize(int width, int height)					// Any GL Init Code
 
 
 	//glzKillVAO(vao2, GLZ_AUTO);  // kills any vao created by the glz toolkit and all buffers within
+	if (app.data.legacyMode)
+	{
 
-	ProgramObject = glzShaderLoad("data\\glsl.vert", "data\\glsl.frag", glzVAOType::AUTO);
-	ProgramObjectFSQ = glzShaderLoad("data\\fsq.vert", "data\\fsq.frag", glzVAOType::AUTO);
+		ProgramObject = glzShaderLoad("data\\glsl-legacy.vert", "data\\glsl-legacy.frag", glzVAOType::AUTO);
+		ProgramObjectFSQ = glzShaderLoad("data\\fsq-legacy.vert", "data\\fsq-legacy.frag", glzVAOType::AUTO);
+	}
+	else
+	{
+
+		ProgramObject = glzShaderLoad("data\\glsl.vert", "data\\glsl.frag", glzVAOType::AUTO);
+		ProgramObjectFSQ = glzShaderLoad("data\\fsq.vert", "data\\fsq.frag", glzVAOType::AUTO);
+	}
 	glzShaderLink(ProgramObject);
 	glzShaderLink(ProgramObjectFSQ);
 
