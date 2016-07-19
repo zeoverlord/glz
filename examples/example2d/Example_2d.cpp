@@ -439,6 +439,18 @@ if (gamestate == 8)
 	if(input.getKeyState('7') == TRUE) gamestate = 7;
 	if(input.getKeyState('8') == TRUE) gamestate = 8;
 	if(input.getKeyState('9') == TRUE) gamestate = 9;
+
+
+	if(input.getJoyButton(glzInputJoyButton::eSNESY)) gamestate = 1;
+	if(input.getJoyButton(glzInputJoyButton::eSNESX)) gamestate = 2;
+	if(input.getJoyButton(glzInputJoyButton::eSNESB)) gamestate = 3;
+	if(input.getJoyButton(glzInputJoyButton::eSNESA)) gamestate = 4;
+	if(input.getJoyButton(glzInputJoyButton::eButton05)) gamestate = 5;
+	if(input.getJoyButton(glzInputJoyButton::eButton06)) gamestate = 6;
+	if(input.getJoyButton(glzInputJoyButton::eButton07)) gamestate = 7;
+	if(input.getJoyButton(glzInputJoyButton::eButton08)) gamestate = 8;
+	if(input.getJoyButton(glzInputJoyButton::eButton09)) gamestate = 9;
+
 }
 
 
