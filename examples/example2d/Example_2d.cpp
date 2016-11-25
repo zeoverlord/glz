@@ -299,7 +299,7 @@ bool Example2DState::Initialize(int width, int height)					// Any GL Init Code &
 	//tempgraph.add(obj2d_ColorTint(66, glzBlendingMode::MULTIPLY, glzColor(1.0, 0.2, 0.0, 1.0)));
 
 	tempgraph.add(obj2d_Text(99, "testing text", nullptr, node3(vert3(-400.0, -250.0, 0.0)), rm.gettexture("font.arial"), 40.0, 1.0, 1.0, glzOrigin::BOTTOM_LEFT));
-	tempgraph.set(99, glzOBject2DSetvar::BLENDCOLOR, glzColor(1.0,0.5,0.0,1.0));
+	tempgraph.set(99, glzOBject2DSetvar::BLENDCOLOR, glzColor(1.0f,0.5f,0.0f,1.0f));
 	return TRUE;												// Return TRUE (Initialization Successful)
 }
 
@@ -548,7 +548,7 @@ void Example2DState::Draw(void)
 		mi.LoadIdentity();
 		mi.scale(0.27f*0.8f, 0.27f, 0.27f);
 		mi.translate(-2.7f, -2.7f, 0.0f);
-		glzColor blendcolor(1.0, 1.0, 1.0, 1.0);
+		glzColor blendcolor(1.0f, 1.0f, 1.0f, 1.0f);
 
 		glzDrawSprite(rm.gettexture("sprite.derpy_phirana"), -0.5f, -0.5f, 0.5f, mView.getAspect(), glzBlendingMode::ALPHA);
 		
