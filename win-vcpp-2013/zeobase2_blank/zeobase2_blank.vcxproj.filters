@@ -25,6 +25,9 @@
     <Filter Include="utilities">
       <UniqueIdentifier>{1a97e421-f3e4-4421-8726-0db3144e83c5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="3d">
+      <UniqueIdentifier>{bd896766-5597-4bef-b94f-aaa2902d9b8e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\glz-basecode\win\stdafx.cpp">
@@ -68,6 +71,12 @@
     </ClCompile>
     <ClCompile Include="..\..\glz-core\state\stateManager.cpp">
       <Filter>state</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz-core\3d\geo-generate.cpp">
+      <Filter>3d</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz-core\3d\geo.cpp">
+      <Filter>3d</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -116,6 +125,15 @@
     <ClInclude Include="..\..\glz-core\state\stateManager.h">
       <Filter>state</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\glz-core\3d\geo-generate.h">
+      <Filter>3d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz-core\3d\geo.h">
+      <Filter>3d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz-core\3d\primitives.h">
+      <Filter>3d</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\glz-basecode\win\small.ico">
@@ -126,7 +144,7 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="..\..\glz-basecodeles\zeobase2.rc">
+    <ResourceCompile Include="..\..\glz-basecode\win\zeobase2.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>
