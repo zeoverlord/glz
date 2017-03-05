@@ -1,0 +1,3 @@
+levelTex_1: "data\\supertiles1.tga"
+levelTex_2: "data\\supertiles2.tga"
+levelTex_d: "data\\supertilesd.tga"
