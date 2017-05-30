@@ -120,11 +120,14 @@
     <ClCompile Include="..\..\glz-core\utilities\config.cpp">
       <Filter>utilities</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\glz-core\image\tga.cpp">
-      <Filter>image</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\glz-core\utilities\filetype.cpp">
       <Filter>utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz-core\image\imageTGA.cpp">
+      <Filter>image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz-core\image\imagePNG.cpp">
+      <Filter>image</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -221,11 +224,14 @@
     <ClInclude Include="..\..\glz-core\image\textureData.h">
       <Filter>image</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\glz-core\image\tga.h">
-      <Filter>image</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\glz-core\utilities\filetype.h">
       <Filter>utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz-core\image\imagePNG.h">
+      <Filter>image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz-core\image\imageTGA.h">
+      <Filter>image</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -240,5 +246,8 @@
     <ResourceCompile Include="..\..\glz-basecode\win\zeobase2.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>
