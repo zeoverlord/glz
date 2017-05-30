@@ -120,6 +120,12 @@
     <ClCompile Include="..\..\glz-core\utilities\config.cpp">
       <Filter>utilities</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\glz-core\image\tga.cpp">
+      <Filter>image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz-core\utilities\filetype.cpp">
+      <Filter>utilities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\glz-basecode\win\Resource.h">
@@ -211,6 +217,15 @@
     </ClInclude>
     <ClInclude Include="..\..\glz-core\shader\shader-programs-legacy.h">
       <Filter>shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz-core\image\textureData.h">
+      <Filter>image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz-core\image\tga.h">
+      <Filter>image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz-core\utilities\filetype.h">
+      <Filter>utilities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
