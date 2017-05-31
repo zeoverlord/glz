@@ -40,6 +40,9 @@
     <Filter Include="state">
       <UniqueIdentifier>{c7d0191c-ab02-4ed7-be09-1a6373b851cf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="image\png">
+      <UniqueIdentifier>{97910d0d-a7fa-418e-93d7-a59a92d5bf0a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\glz-basecode\win\stdafx.cpp">
@@ -128,6 +131,9 @@
     </ClCompile>
     <ClCompile Include="..\..\glz-core\image\imagePNG.cpp">
       <Filter>image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz-core\image\png\lodepng.cpp">
+      <Filter>image\png</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -232,6 +238,9 @@
     </ClInclude>
     <ClInclude Include="..\..\glz-core\image\imageTGA.h">
       <Filter>image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz-core\image\png\lodepng.h">
+      <Filter>image\png</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
