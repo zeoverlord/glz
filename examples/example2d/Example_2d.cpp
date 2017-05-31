@@ -439,6 +439,7 @@ void Example2DState::Update(float seconds)								// Perform Motion Updates Here
 		if(input.getKeyState(VK_SPACE) == TRUE)
 		{
 			cam.zoomTo(5.0f);
+
 		}
 		else
 		{
@@ -450,10 +451,18 @@ void Example2DState::Update(float seconds)								// Perform Motion Updates Here
 			tempgraph.set(111, glzOBject2DSetvar::ANIMATIONPLAYONCE);
 		}
 
+
+
+
 		cam.update(seconds);
 	}
 	n.tick(seconds);
 	tempgraph.update(seconds);
+
+	if(input.getKeyState(VK_ADD) == TRUE)
+	{
+		glzScreenShot("pngsavetest.png", 800, 500, glzTexCompression::COMPRESSED);
+	}
 
 	if(input.getKeyState('1') == TRUE)
 	{
@@ -491,7 +500,6 @@ void Example2DState::Update(float seconds)								// Perform Motion Updates Here
 	{
 		gamestate = 9;
 	}
-
 
 	if(input.getJoyButton(glzInputJoyButton::eSNESY))
 	{
