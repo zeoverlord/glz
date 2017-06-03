@@ -101,6 +101,9 @@
     <ClCompile Include="..\..\glz-core\3d\geo.cpp" />
     <ClCompile Include="..\..\glz-core\app\appbase.cpp" />
     <ClCompile Include="..\..\glz-core\effects\particle.cpp" />
+    <ClCompile Include="..\..\glz-core\image\imagePNG.cpp" />
+    <ClCompile Include="..\..\glz-core\image\imageTGA.cpp" />
+    <ClCompile Include="..\..\glz-core\image\png\lodepng.cpp" />
     <ClCompile Include="..\..\glz-core\image\tex.cpp" />
     <ClCompile Include="..\..\glz-core\input\input.cpp" />
     <ClCompile Include="..\..\glz-core\layout\viewport.cpp" />
@@ -130,6 +133,9 @@
     <ClInclude Include="..\..\glz-core\3d\primitives.h" />
     <ClInclude Include="..\..\glz-core\app\appbase.h" />
     <ClInclude Include="..\..\glz-core\effects\particle.h" />
+    <ClInclude Include="..\..\glz-core\image\imagePNG.h" />
+    <ClInclude Include="..\..\glz-core\image\imageTGA.h" />
+    <ClInclude Include="..\..\glz-core\image\png\lodepng.h" />
     <ClInclude Include="..\..\glz-core\image\tex.h" />
     <ClInclude Include="..\..\glz-core\input\input.h" />
     <ClInclude Include="..\..\glz-core\layout\viewport.h" />

@@ -40,6 +40,9 @@
     <Filter Include="layout">
       <UniqueIdentifier>{0ff42ebc-237e-4d35-9c27-4f6f6b4e5313}</UniqueIdentifier>
     </Filter>
+    <Filter Include="image\png">
+      <UniqueIdentifier>{73a20075-8800-4661-89b4-aed4d7000ce6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\glz-basecode\win\stdafx.cpp">
@@ -119,6 +122,15 @@
     </ClCompile>
     <ClCompile Include="..\..\glz-core\utilities\config.cpp">
       <Filter>utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz-core\image\png\lodepng.cpp">
+      <Filter>image\png</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz-core\image\imagePNG.cpp">
+      <Filter>image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz-core\image\imageTGA.cpp">
+      <Filter>image</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -211,6 +223,15 @@
     </ClInclude>
     <ClInclude Include="..\..\glz-core\shader\shader-programs-legacy.h">
       <Filter>shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz-core\image\png\lodepng.h">
+      <Filter>image\png</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz-core\image\imagePNG.h">
+      <Filter>image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz-core\image\imageTGA.h">
+      <Filter>image</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
