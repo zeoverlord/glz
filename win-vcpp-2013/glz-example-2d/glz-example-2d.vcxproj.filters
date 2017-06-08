@@ -43,6 +43,9 @@
     <Filter Include="image\png">
       <UniqueIdentifier>{97910d0d-a7fa-418e-93d7-a59a92d5bf0a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="sound">
+      <UniqueIdentifier>{948bb5f8-26a3-4ba3-9b05-e51deb29bbfe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\glz-basecode\win\stdafx.cpp">
@@ -134,6 +137,9 @@
     </ClCompile>
     <ClCompile Include="..\..\glz-core\image\png\lodepng.cpp">
       <Filter>image\png</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz-core\sound\SoundManager.cpp">
+      <Filter>sound</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -241,6 +247,9 @@
     </ClInclude>
     <ClInclude Include="..\..\glz-core\image\png\lodepng.h">
       <Filter>image\png</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz-core\sound\SoundManager.h">
+      <Filter>sound</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
