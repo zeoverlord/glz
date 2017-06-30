@@ -30,6 +30,7 @@
 #include "..\..\glz-core\layout\viewport.h"
 #include "..\..\glz-core\state\baseState.h"
 #include "..\..\glz-core\effects\particle.h"
+#include "..\..\glz-core\sound\SoundManager.h"
 #include "..\..\glz-core\2d\2d-graph.h"
 #include <vector>
 #include <memory>
@@ -44,7 +45,10 @@ class Example2DState : public GLZ::glzBaseState
 public:
 
 	Example2DState();
-	~Example2DState(){ Deinitialize(); }
+	~Example2DState()
+	{
+		Deinitialize();
+	}
 	bool Initialize(int width, int height) override;
 	void Deinitialize(void) override;
 	void Update(float seconds) override;
@@ -52,7 +56,7 @@ public:
 	void Draw(void) override;
 
 private:
-		
+
 	float		angle, width, height;												// Used To Rotate The Triangles
 	unsigned int vao[4], vao_num[4];
 	std::string tbuffer;
@@ -68,11 +72,13 @@ private:
 	GLZ::glzViewport view1, view2, view3;
 	GLhandleARB  ProgramObject, ProgramObjectFT, ProgramObjectFSQ, ProgramObjectFSQ_glitch;
 	GLZ::glzSimpleParticleSystem ps;
+	GLZ::glzSoundManager mSoundManager;
+	GLZ::SoundSource mSoundSource;
 
 
 public:
 
 	void draw_backdrop_glitch(unsigned int bgtexture, unsigned int bgtexture2);
-	
+
 
 };

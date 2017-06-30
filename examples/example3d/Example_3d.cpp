@@ -53,17 +53,17 @@ using namespace GLZ;
 
 
 // User Defined Variables
-float		angle=0,width,height;												// Used To Rotate The Triangles
-unsigned int vao[16],vao_num[16];
+float		angle = 0, width, height;												// Used To Rotate The Triangles
+unsigned int vao[16], vao_num[16];
 glzMatrix m;
 glzMatrix mnew;
 
 
 char tbuffer[160];
 char tbuffer2[160];
-float texttimer=0;
-float spriteframetimer=0;
-int spriteframe=0;
+float texttimer = 0;
+float spriteframetimer = 0;
+int spriteframe = 0;
 
 
 glzQuaternion qr;
@@ -74,7 +74,7 @@ glzQuaternion qn;
 
 node3 tankpos(vert3(0, -2, -17));
 
-int gamestate=4;
+int gamestate = 4;
 
 img_head img;
 unsigned char *data;
@@ -93,14 +93,14 @@ int WINDOW_HEIGHT;
 int WINDOW_WIDTH;
 
 Example3DState::Example3DState() :
-angle(0),
-texttimer(0),
-spriteframetimer(0),
-spriteframe(0),
-gamestate(4)
+	angle(0),
+	texttimer(0),
+	spriteframetimer(0),
+	spriteframe(0),
+	gamestate(4)
 {
 
-	tankpos.pos=vert3(0.0f, -2.0f, -17.0f);
+	tankpos.pos = vert3(0.0f, -2.0f, -17.0f);
 }
 
 bool Example3DState::Initialize(int width, int height)					// Any GL Init Code & User Initialiazation Goes Here
@@ -114,26 +114,26 @@ bool Example3DState::Initialize(int width, int height)					// Any GL Init Code &
 	// Start Of User Initialization
 	angle		= 0.0f;											// Set Starting Angle To Zero
 
-	glClearColor (0.0f, 0.0f, 0.0f, 0.5f);						// Black Background
-	glClearDepth (1.0f);										// Depth Buffer Setup
-	glDepthFunc (GL_LEQUAL);									// The Type Of Depth Testing (Less Or Equal)
-	glEnable (GL_DEPTH_TEST);									// Enable Depth Testing
-	glShadeModel (GL_SMOOTH);									// Select Smooth Shading
-	glHint (GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);			// Set Perspective Calculations To Most Accurate
+	glClearColor(0.0f, 0.0f, 0.0f, 0.5f);						// Black Background
+	glClearDepth(1.0f);										// Depth Buffer Setup
+	glDepthFunc(GL_LEQUAL);									// The Type Of Depth Testing (Less Or Equal)
+	glEnable(GL_DEPTH_TEST);									// Enable Depth Testing
+	glShadeModel(GL_SMOOTH);									// Select Smooth Shading
+	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);			// Set Perspective Calculations To Most Accurate
 	glCullFace(GL_BACK);
 	glEnable(GL_CULL_FACE);
-	
+
 	glFrontFace(GL_CCW);
 
 
 
 	glUseProgram				= (PFNGLUSEPROGRAMPROC) wglGetProcAddress("glUseProgram");
-	glGetUniformLocation		= (PFNGLGETUNIFORMLOCATIONPROC) wglGetProcAddress("glGetUniformLocation");                                                                     
-	glUniform1i= (PFNGLUNIFORM1IPROC) wglGetProcAddress("glUniform1i");
-	glUniform4f= (PFNGLUNIFORM4FARBPROC) wglGetProcAddress("glUniform4fARB");
-	glUniformMatrix4fv= (PFNGLUNIFORMMATRIX4FVPROC) wglGetProcAddress("glUniformMatrix4fv");
+	glGetUniformLocation		= (PFNGLGETUNIFORMLOCATIONPROC) wglGetProcAddress("glGetUniformLocation");
+	glUniform1i = (PFNGLUNIFORM1IPROC) wglGetProcAddress("glUniform1i");
+	glUniform4f = (PFNGLUNIFORM4FARBPROC) wglGetProcAddress("glUniform4fARB");
+	glUniformMatrix4fv = (PFNGLUNIFORMMATRIX4FVPROC) wglGetProcAddress("glUniformMatrix4fv");
 	glUniformMatrix4dv = (PFNGLUNIFORMMATRIX4DVPROC)wglGetProcAddress("glUniformMatrix4dv");
-	
+
 	mView.setDisplay(0, 0, width, height);
 
 
@@ -144,14 +144,15 @@ bool Example3DState::Initialize(int width, int height)					// Any GL Init Code &
 	glzMatrix mg;
 	glzMatrix mh;
 
-	unsigned int ad[64]={2,2,2,1,2,2,2,2,
-						 2,2,4,1,4,2,2,2,
-						 3,3,0,1,0,3,3,3,
-						 3,3,0,1,0,3,3,3,
-						 2,2,4,1,4,2,2,2,
-						 2,2,2,1,2,2,2,2,
-						 2,2,2,1,1,1,1,1,
-						 2,2,2,2,2,2,2,2};
+	unsigned int ad[64] = {2, 2, 2, 1, 2, 2, 2, 2,
+	                       2, 2, 4, 1, 4, 2, 2, 2,
+	                       3, 3, 0, 1, 0, 3, 3, 3,
+	                       3, 3, 0, 1, 0, 3, 3, 3,
+	                       2, 2, 4, 1, 4, 2, 2, 2,
+	                       2, 2, 2, 1, 2, 2, 2, 2,
+	                       2, 2, 2, 1, 1, 1, 1, 1,
+	                       2, 2, 2, 2, 2, 2, 2, 2
+	                      };
 
 
 
@@ -163,81 +164,81 @@ bool Example3DState::Initialize(int width, int height)					// Any GL Init Code &
 	mg.LoadIdentity();
 	mh.LoadIdentity();
 
-	
-	
+
+
 	//glzTranslatef(mt,-3.9f,1.9f,0);
-	mg.translate(0,0,0);	
+	mg.translate(0, 0, 0);
 
-	mt.scale(0.17f,0.17f,0.17f);
-	mt2.scale(0.3f,0.3f,0.3f);
-	mt3.scale(0.17f,0.17f,0.17f);
+	mt.scale(0.17f, 0.17f, 0.17f);
+	mt2.scale(0.3f, 0.3f, 0.3f);
+	mt3.scale(0.17f, 0.17f, 0.17f);
 
-	mg.scale(32.0f,32.0f,32.0f);
-	mh.scale(0.4f,0.4f,0.4f);
+	mg.scale(32.0f, 32.0f, 32.0f);
+	mh.scale(0.4f, 0.4f, 0.4f);
 
-	mh.rotate(90,1.0f,0.0f,0.0f);
+	mh.rotate(90, 1.0f, 0.0f, 0.0f);
 
-	mh.translate(-8.0,8.0,0.0);
+	mh.translate(-8.0, 8.0, 0.0);
 
-	
-	primitive_gen primitives[10];	
+
+	primitive_gen primitives[10];
 
 	primitives[0] = glzMakePGDefault(glzPrimitive::CUBE);
-	primitives[0].tt=glzMakeTTDefault();
+	primitives[0].tt = glzMakeTTDefault();
 
 	primitives[1] = glzMakePGDefault(glzPrimitive::PYRAMID);
-	primitives[1].tt=glzMakeTTDefault();
+	primitives[1].tt = glzMakeTTDefault();
 
 	primitives[2] = glzMakePGDefault(glzPrimitive::TETRAHEDRON);
-	primitives[2].tt=glzMakeTTDefault();
-		
+	primitives[2].tt = glzMakeTTDefault();
+
 	primitives[3] = glzMakePGDefault(glzPrimitive::OCTAHEDRON);
-	primitives[3].tt=glzMakeTTDefault();
-		
+	primitives[3].tt = glzMakeTTDefault();
+
 	primitives[4] = glzMakePGDefault(glzPrimitive::DODECAHEDRON);
-	primitives[4].tt=glzMakeTTDefault();
-		
+	primitives[4].tt = glzMakeTTDefault();
+
 	primitives[5] = glzMakePGDefault(glzPrimitive::ICOSAHEDRON);
-	primitives[5].tt=glzMakeTTDefault();
+	primitives[5].tt = glzMakeTTDefault();
 
 	primitives[6] = glzMakePGDefault(glzPrimitive::ICOSIDODECAHEDRON);
-	primitives[6].tt=glzMakeTTDefault();
+	primitives[6].tt = glzMakeTTDefault();
 
 	primitives[7] = glzMakePGDefault(glzPrimitive::RANDOM_POINT);
 	primitives[7].resolution_x = 100000;
 	primitives[7].tt = glzMakeTTDefault();
-	
 
-	vao_num[1]=glzVAOMakePrimitive(primitives[0], &vao[1]); // change the first argument to 2 for an extra object, this is subject to some major redecorating
-	vao_num[2]=glzVAOMakePrimitive(primitives[1], &vao[2]); // change the first argument to 2 for an extra object, this is subject to some major redecorating
-	vao_num[3]=glzVAOMakePrimitive(primitives[2], &vao[3]); // change the first argument to 2 for an extra object, this is subject to some major redecorating
-	vao_num[4]=glzVAOMakePrimitive(primitives[3], &vao[4]); // change the first argument to 2 for an extra object, this is subject to some major redecorating
-	vao_num[5]=glzVAOMakePrimitive(primitives[4], &vao[5]); // change the first argument to 2 for an extra object, this is subject to some major redecorating
-	vao_num[6]=glzVAOMakePrimitive(primitives[5], &vao[6]); // change the first argument to 2 for an extra object, this is subject to some major redecorating
-	vao_num[7]=glzVAOMakePrimitive(primitives[6], &vao[7]); // change the first argument to 2 for an extra object, this is subject to some major redecorating
+
+	vao_num[1] = glzVAOMakePrimitive(primitives[0], &vao[1]); // change the first argument to 2 for an extra object, this is subject to some major redecorating
+	vao_num[2] = glzVAOMakePrimitive(primitives[1], &vao[2]); // change the first argument to 2 for an extra object, this is subject to some major redecorating
+	vao_num[3] = glzVAOMakePrimitive(primitives[2], &vao[3]); // change the first argument to 2 for an extra object, this is subject to some major redecorating
+	vao_num[4] = glzVAOMakePrimitive(primitives[3], &vao[4]); // change the first argument to 2 for an extra object, this is subject to some major redecorating
+	vao_num[5] = glzVAOMakePrimitive(primitives[4], &vao[5]); // change the first argument to 2 for an extra object, this is subject to some major redecorating
+	vao_num[6] = glzVAOMakePrimitive(primitives[5], &vao[6]); // change the first argument to 2 for an extra object, this is subject to some major redecorating
+	vao_num[7] = glzVAOMakePrimitive(primitives[6], &vao[7]); // change the first argument to 2 for an extra object, this is subject to some major redecorating
 
 	vao_num[10] = glzVAOMakePrimitive(primitives[7], &vao[10]); // change the first argument to 2 for an extra object, this is subject to some major redecorating
 
 
-	texture_transform obj_tt = glzMakeTTDefault(); 
-	vao_num[8]=glzVAOMakeFromFile("data\\objects\\cv9040c.obj",mo, obj_tt, &vao[8]);
+	texture_transform obj_tt = glzMakeTTDefault();
+	vao_num[8] = glzVAOMakeFromFile("data\\objects\\cv9040c.obj", mo, obj_tt, &vao[8]);
 	//vao_num[8] = glzVAOMakeFromFile("data\\objects\\lion_med.obj", mo, obj_tt, &vao[8]);
 
-	glzReadTgaHead(&img, "data\\heightmap.tga");
+	glzReadImageHead(&img, "data\\heightmap.tga");
 	data = new unsigned char[img.imageSize];
-	glzLoadTga(&img,"data\\heightmap.tga", data);
+	glzLoadImage(&img, "data\\heightmap.tga", data);
 
-	
+
 	texture_transform height_tt = glzMakeTTVertexCoordAdopt(1.0f, 1.0f, glzAxis::Z, glzOrigin::BOTTOM_LEFT);
 	image_geo_transform igt = glzMakeIGT(glzIGTType::DISPLACE_ADD, img.m_width, img.m_height, img.m_bpp, 0, 0, 0, 2.0f, 32.0, glzAxis::Z, data);
-	vao_num[9]=glzVAOMakeHeightAtlasGrid(16, 16, mh, height_tt, igt, &vao[9]);
-	
+	vao_num[9] = glzVAOMakeHeightAtlasGrid(16, 16, mh, height_tt, igt, &vao[9]);
+
 	delete[] data;
-	data=NULL;
+	data = NULL;
 
 
 
-	if (app.data.legacyMode)
+	if(app.data.legacyMode)
 	{
 		ProgramObject = glzShaderLoad("data\\glsl-legacy.vert", "data\\glsl-legacy.frag", glzVAOType::AUTO);
 	}
@@ -254,7 +255,7 @@ bool Example3DState::Initialize(int width, int height)					// Any GL Init Code &
 	rm.createTexture("texture.gridlines", "data\\gridlines.tga", glzTexFilter::ANSIO_MAX, 2);
 
 
-//	tankpos.pos = vert3(0, -2, -17);
+	//	tankpos.pos = vert3(0, -2, -17);
 	tankpos.scale = vec3(0.5, 0.5, 0.5);
 
 
@@ -290,7 +291,7 @@ void Example3DState::Update(float seconds)								// Perform Motion Updates Here
 		mMessageFullscreen = true;							// Toggle Fullscreen Mode
 	}
 
-	if (gamestate==1)
+	if(gamestate == 1)
 	{
 
 		qr.identity();
@@ -302,39 +303,51 @@ void Example3DState::Update(float seconds)								// Perform Motion Updates Here
 
 		q *= qr;
 
-		
+
 
 	}
 
-	if (gamestate==2)
-	{	
-		
+	if(gamestate == 2)
+	{
+
 		tankpos.rs.identity();
 
-		if (input.getKeyState(VK_UP))tankpos.rs.rotate(40, 1.0, 0.0, 0.0);
-		if (input.getKeyState(VK_DOWN))tankpos.rs.rotate(-40, 1.0, 0.0, 0.0);
+		if(input.getKeyState(VK_UP))
+		{
+			tankpos.rs.rotate(40, 1.0, 0.0, 0.0);
+		}
+		if(input.getKeyState(VK_DOWN))
+		{
+			tankpos.rs.rotate(-40, 1.0, 0.0, 0.0);
+		}
 
-		if (input.getKeyState(VK_LEFT))tankpos.rs.rotate(40, 0.0, 1.0, 0.0);
-		if (input.getKeyState(VK_RIGHT))tankpos.rs.rotate(-40, 0.0, 1.0, 0.0);		
+		if(input.getKeyState(VK_LEFT))
+		{
+			tankpos.rs.rotate(40, 0.0, 1.0, 0.0);
+		}
+		if(input.getKeyState(VK_RIGHT))
+		{
+			tankpos.rs.rotate(-40, 0.0, 1.0, 0.0);
+		}
 
-		tankpos.pos = vert3(0, -2+(sin(angle*PI_OVER_180)*2), -17);
-		tankpos.tick(seconds);		
+		tankpos.pos = vert3(0, -2 + (sin(angle * PI_OVER_180) * 2), -17);
+		tankpos.tick(seconds);
 	}
 
 
-	if (gamestate==3)
-	{	
+	if(gamestate == 3)
+	{
 
 		q3.rotate(seconds * 50, 0.0, 1.0, 0.0);
 	}
 
-	if (gamestate == 4)
+	if(gamestate == 4)
 	{
 
 		q3.rotate(seconds * 50, 0.0, 1.0, 0.0);
 		qn.rotate(seconds * 50, 0.0, 1.0, 0.0);
 	}
-	if (gamestate == 5)
+	if(gamestate == 5)
 	{
 
 		q.rotate(seconds * 50, 0.0, 1.0, 0.0);
@@ -344,13 +357,31 @@ void Example3DState::Update(float seconds)								// Perform Motion Updates Here
 
 
 	angle += seconds * 50;
-	if (angle > 360) angle -= 360;
+	if(angle > 360)
+	{
+		angle -= 360;
+	}
 
-	if (input.getKeyState('1')) gamestate = 1;
-	if (input.getKeyState('2')) gamestate = 2;
-	if (input.getKeyState('3')) gamestate = 3;
-	if (input.getKeyState('4')) gamestate = 4;
-	if (input.getKeyState('5')) gamestate = 5;
+	if(input.getKeyState('1'))
+	{
+		gamestate = 1;
+	}
+	if(input.getKeyState('2'))
+	{
+		gamestate = 2;
+	}
+	if(input.getKeyState('3'))
+	{
+		gamestate = 3;
+	}
+	if(input.getKeyState('4'))
+	{
+		gamestate = 4;
+	}
+	if(input.getKeyState('5'))
+	{
+		gamestate = 5;
+	}
 
 
 
@@ -365,12 +396,12 @@ void Example3DState::DisplayUpdate(int width, int height)
 
 void Example3DState::draw_object(GLZ::texturecontainer *tx, int prim, float x, float y)
 {
-	unsigned int loc1 = glGetUniformLocation(ProgramObject,"projMat");
+	unsigned int loc1 = glGetUniformLocation(ProgramObject, "projMat");
 	// draw objects
 	m.LoadIdentity();
 	m.perspective(45.0f, 1.618f, 1.0f, 1000.0f);
 
-	m.translate(x,y,-7);	
+	m.translate(x, y, -7);
 	m.loadQuanternion(q);
 
 	float mtemp[16];
@@ -378,7 +409,7 @@ void Example3DState::draw_object(GLZ::texturecontainer *tx, int prim, float x, f
 	glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
 
 	glBindTexture(GL_TEXTURE_2D, tx->handle);
-	glzDrawVAO(vao_num[prim],vao[prim],GL_TRIANGLES);
+	glzDrawVAO(vao_num[prim], vao[prim], GL_TRIANGLES);
 }
 
 void Example3DState::draw_object2(GLZ::texturecontainer *tx, int prim, float x, float y)
@@ -403,22 +434,22 @@ void Example3DState::draw_object2(GLZ::texturecontainer *tx, int prim, float x, 
 void Example3DState::Draw(void)
 {
 	glzResourcemanager rm;
-	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		// Clear Screen And Depth Buffer
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		// Clear Screen And Depth Buffer
 	float mtemp[16];
 	glEnable(GL_TEXTURE_2D);
-	unsigned int loc1 = glGetUniformLocation(ProgramObject,"projMat");
-	unsigned int loc2 = glGetUniformLocation(ProgramObject,"texunit0");
-	unsigned int loc3 = glGetUniformLocation(ProgramObject,"tint");
+	unsigned int loc1 = glGetUniformLocation(ProgramObject, "projMat");
+	unsigned int loc2 = glGetUniformLocation(ProgramObject, "texunit0");
+	unsigned int loc3 = glGetUniformLocation(ProgramObject, "tint");
 
 
 	glUseProgram(ProgramObject);
-	glUniform1i(loc2, 0);	
-	glUniform4f(loc3, 1.0f,1.0f,1.0f,1.0f);
+	glUniform1i(loc2, 0);
+	glUniform4f(loc3, 1.0f, 1.0f, 1.0f, 1.0f);
 
 	// i have used these gamestates in a few games for LD48 now and they are really quick and dirty, but effective.
 	// they allow you to quickly make a title screen and end screen at the end of the project without changing that much code, instead you just encapsulate it in a gamestate
 
-	if (gamestate==1)  
+	if(gamestate == 1)
 	{
 
 		draw_object(rm.gettexture("background.back"), 1, -2.5f, 1.5f);  // the cube only looks larger, but that's just because all primitives are made to fit within 0.5 to -0.5 cube, and naturally the cube fills that space perfectly
@@ -429,7 +460,7 @@ void Example3DState::Draw(void)
 		draw_object(rm.gettexture("background.back"), 5, -1.0f, -1.5f);
 		draw_object(rm.gettexture("background.back"), 6, 1.0f, -1.5f);
 		draw_object(rm.gettexture("background.back"), 7, 2.5f, -1.5f);
-		
+
 		glzDrawText("Primitives", -0.5f, 0.49f, 0.05f, 1.0f, mView.getAspect(), rm.gettexture("font.ms_gothic"), COL_WHITE);
 		glzDrawText("Switch screens with 1, 2, 3, 4, 5", 0.5f, -0.5f, 0.04f, 1.0f, mView.getAspect(), rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
 	}
@@ -437,39 +468,39 @@ void Example3DState::Draw(void)
 
 
 
-	if (gamestate==2)
+	if(gamestate == 2)
 	{
 
 		// draw tank
-	m.LoadIdentity();
-	m.perspective(45.0f, 1.618f, 1.0f, 100.0f);
-	
-	m*= tankpos.m;
-	//m.translate(0,-2,-17);	
-	//m.scale(0.5,0.5,0.5);
-	
-	//m.loadQuanternion(tankpos.r);
+		m.LoadIdentity();
+		m.perspective(45.0f, 1.618f, 1.0f, 100.0f);
 
-	m.transferMatrix(&mtemp[0]);
+		m *= tankpos.m;
+		//m.translate(0,-2,-17);
+		//m.scale(0.5,0.5,0.5);
 
+		//m.loadQuanternion(tankpos.r);
 
-
-	m.transferMatrix(&mtemp[0]);
-	glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
-
-	glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("texture.cv90base"));
-	glzDrawVAO(vao_num[8],vao[8],GL_TRIANGLES);
-				
-	glzDrawText(".obj loading, try using the arrow keys", -0.5f, 0.49f, 0.05f, 1.0f, mView.getAspect(), rm.gettexture("font.ms_gothic"), COL_WHITE);
-	glzDrawText("Switch screens with 1, 2, 3, 4, 5", 0.5f, -0.5f, 0.04f, 1.0f, mView.getAspect(), rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
-
-	}	
+		m.transferMatrix(&mtemp[0]);
 
 
-	if (gamestate==3)
-	{	
 
-			// draw height grid
+		m.transferMatrix(&mtemp[0]);
+		glUniformMatrix4fv(loc1, 1, GL_FALSE, mtemp);
+
+		glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("texture.cv90base"));
+		glzDrawVAO(vao_num[8], vao[8], GL_TRIANGLES);
+
+		glzDrawText(".obj loading, try using the arrow keys", -0.5f, 0.49f, 0.05f, 1.0f, mView.getAspect(), rm.gettexture("font.ms_gothic"), COL_WHITE);
+		glzDrawText("Switch screens with 1, 2, 3, 4, 5", 0.5f, -0.5f, 0.04f, 1.0f, mView.getAspect(), rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
+
+	}
+
+
+	if(gamestate == 3)
+	{
+
+		// draw height grid
 
 		m.LoadIdentity();
 		m.perspective(45.0f, 1.618f, 1.0f, 100.0f);
@@ -483,17 +514,17 @@ void Example3DState::Draw(void)
 
 
 		glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("texture.gridlines"));
-		glzDrawVAO(vao_num[9],vao[9],GL_TRIANGLES);
+		glzDrawVAO(vao_num[9], vao[9], GL_TRIANGLES);
 
 		glzDrawText("Heightfield", -0.5f, 0.49f, 0.05f, 1.0f, mView.getAspect(), rm.gettexture("font.ms_gothic"), COL_WHITE);
 		glzDrawText("Switch screens with 1, 2, 3, 4, 5", 0.5f, -0.5f, 0.04f, 1.0f, mView.getAspect(), rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
 	}
 
-	if (gamestate == 4)
+	if(gamestate == 4)
 	{
 		texture_transform box_tt = glzMakeTTDefault();
 		// draw direct box
-	
+
 
 		m.LoadIdentity();
 		m.perspective(45.0f, 1.618f, 1.0f, 100.0f);
@@ -506,15 +537,15 @@ void Example3DState::Draw(void)
 
 		glBindTexture(GL_TEXTURE_2D, rm.gettextureHandle("texture.gridlines"));
 
-		glzDirectCubeRender(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, box_tt, 1);		
+		glzDirectCubeRender(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, box_tt, 1);
 
 		glzDrawText("A lonely cube rotating in nothingness", -0.5f, 0.49f, 0.05f, 1.0f, mView.getAspect(), rm.gettexture("font.ms_gothic"), COL_WHITE);
 		glzDrawText("Switch screens with 1, 2, 3, 4, 5", 0.5f, -0.5f, 0.04f, 1.0f, mView.getAspect(), rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
 	}
 
-	if (gamestate == 5)
+	if(gamestate == 5)
 	{
-		
+
 		draw_object2(rm.gettexture("background.back"), 10, 0.0f, 0.0f);
 
 		glzDrawText("Particle cube using random dots", -0.5f, 0.49f, 0.05f, 1.0f, mView.getAspect(), rm.gettexture("font.ms_gothic"), COL_WHITE);
@@ -524,5 +555,5 @@ void Example3DState::Draw(void)
 
 
 	glUseProgram(0);
-	glFlush ();													// Flush The GL Rendering Pipeline
+	glFlush();													// Flush The GL Rendering Pipeline
 }

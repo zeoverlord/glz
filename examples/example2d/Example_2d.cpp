@@ -68,6 +68,8 @@ Example2DState::Example2DState() :
 	spriteframe(0),
 	gamestate(1),
 	cam(),
+	mSoundManager(),
+	mSoundSource(),
 	tempgraph(&cam)
 {
 	vao[0] = 0;
@@ -301,6 +303,13 @@ bool Example2DState::Initialize(int width, int height)					// Any GL Init Code &
 
 	tempgraph.add(obj2d_Text(99, "testing text", nullptr, node3(vert3(-400.0, -250.0, 0.0)), rm.gettexture("font.arial"), 40.0, 1.0, 1.0, glzOrigin::BOTTOM_LEFT));
 	tempgraph.set(99, glzOBject2DSetvar::BLENDCOLOR, glzColor(1.0f, 0.5f, 0.0f, 1.0f));
+
+	mSoundManager.initialize();
+	mSoundSource.init();
+
+	mSoundManager.LoadWAV("data\\stereo.wav", "test");
+	mSoundSource.setLooping(AL_FALSE);
+
 	return TRUE;												// Return TRUE (Initialization Successful)
 }
 
@@ -466,6 +475,7 @@ void Example2DState::Update(float seconds)								// Perform Motion Updates Here
 
 	if(input.getKeyState('1') == TRUE)
 	{
+		mSoundManager.playSound(&mSoundSource, "test");
 		gamestate = 1;
 	}
 	if(input.getKeyState('2') == TRUE)

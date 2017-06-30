@@ -108,6 +108,7 @@
     <ClCompile Include="..\..\glz-core\input\input.cpp" />
     <ClCompile Include="..\..\glz-core\layout\viewport.cpp" />
     <ClCompile Include="..\..\glz-core\shader\shader.cpp" />
+    <ClCompile Include="..\..\glz-core\sound\aldlist.cpp" />
     <ClCompile Include="..\..\glz-core\sound\SoundManager.cpp" />
     <ClCompile Include="..\..\glz-core\state\baseState.cpp" />
     <ClCompile Include="..\..\glz-core\state\stateManager.cpp" />
@@ -146,6 +147,7 @@
     <ClInclude Include="..\..\glz-core\shader\shader-programs-legacy.h" />
     <ClInclude Include="..\..\glz-core\shader\shader-programs.h" />
     <ClInclude Include="..\..\glz-core\shader\shader.h" />
+    <ClInclude Include="..\..\glz-core\sound\aldlist.h" />
     <ClInclude Include="..\..\glz-core\sound\SoundManager.h" />
     <ClInclude Include="..\..\glz-core\state\baseState.h" />
     <ClInclude Include="..\..\glz-core\state\stateManager.h" />
