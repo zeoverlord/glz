@@ -235,10 +235,11 @@ bool Example2DState::Initialize(int width, int height)					// Any GL Init Code &
 	//	cam.moveTo(vert3(0.0,100.0, 0.0));
 	cam.moveSpeed(100);
 
+	glzQuaternion tempQS = n.getRotationVelocity();
+	tempQS.rotate(20, 0.0, 0.0, 1.0);
+	n.setRotationVelocity(tempQS);
 
-	n.rs.rotate(20, 0.0, 0.0, 1.0);
-
-	n.pos = vert3(200.0, -130.0, 0.0);
+	n.setPosition(vert3(200.0, -130.0, 0.0));
 
 
 

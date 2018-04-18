@@ -46,6 +46,9 @@
     <Filter Include="sound">
       <UniqueIdentifier>{948bb5f8-26a3-4ba3-9b05-e51deb29bbfe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="object">
+      <UniqueIdentifier>{9885b7c0-3bff-4eb3-b488-1a8565d72b7d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\glz-basecode\win\stdafx.cpp">
@@ -143,6 +146,12 @@
     </ClCompile>
     <ClCompile Include="..\..\glz-core\sound\aldlist.cpp">
       <Filter>sound</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz-core\object\object.cpp">
+      <Filter>object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz-core\utilities\node3.cpp">
+      <Filter>utilities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -256,6 +265,12 @@
     </ClInclude>
     <ClInclude Include="..\..\glz-core\sound\aldlist.h">
       <Filter>sound</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz-core\object\object.h">
+      <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz-core\utilities\node3.h">
+      <Filter>utilities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

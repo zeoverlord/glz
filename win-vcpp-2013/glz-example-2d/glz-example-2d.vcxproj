@@ -107,6 +107,7 @@
     <ClCompile Include="..\..\glz-core\image\tex.cpp" />
     <ClCompile Include="..\..\glz-core\input\input.cpp" />
     <ClCompile Include="..\..\glz-core\layout\viewport.cpp" />
+    <ClCompile Include="..\..\glz-core\object\object.cpp" />
     <ClCompile Include="..\..\glz-core\shader\shader.cpp" />
     <ClCompile Include="..\..\glz-core\sound\aldlist.cpp" />
     <ClCompile Include="..\..\glz-core\sound\SoundManager.cpp" />
@@ -117,6 +118,7 @@
     <ClCompile Include="..\..\glz-core\utilities\filetype.cpp" />
     <ClCompile Include="..\..\glz-core\utilities\framebuffer.cpp" />
     <ClCompile Include="..\..\glz-core\utilities\glz.cpp" />
+    <ClCompile Include="..\..\glz-core\utilities\node3.cpp" />
     <ClCompile Include="..\..\glz-core\utilities\resourcemanager.cpp" />
     <ClCompile Include="..\..\glz-core\utilities\sprite.cpp" />
     <ClCompile Include="..\..\glz-core\utilities\tiletools.cpp" />
@@ -144,6 +146,7 @@
     <ClInclude Include="..\..\glz-core\image\textureData.h" />
     <ClInclude Include="..\..\glz-core\input\input.h" />
     <ClInclude Include="..\..\glz-core\layout\viewport.h" />
+    <ClInclude Include="..\..\glz-core\object\object.h" />
     <ClInclude Include="..\..\glz-core\shader\shader-programs-legacy.h" />
     <ClInclude Include="..\..\glz-core\shader\shader-programs.h" />
     <ClInclude Include="..\..\glz-core\shader\shader.h" />
@@ -156,6 +159,7 @@
     <ClInclude Include="..\..\glz-core\utilities\filetype.h" />
     <ClInclude Include="..\..\glz-core\utilities\framebuffer.h" />
     <ClInclude Include="..\..\glz-core\utilities\glz.h" />
+    <ClInclude Include="..\..\glz-core\utilities\node3.h" />
     <ClInclude Include="..\..\glz-core\utilities\resourcemanager.h" />
     <ClInclude Include="..\..\glz-core\utilities\sprite.h" />
     <ClInclude Include="..\..\glz-core\utilities\tiletools.h" />
