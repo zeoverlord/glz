@@ -43,6 +43,12 @@
     <Filter Include="image\png">
       <UniqueIdentifier>{47e5a103-ce85-492c-803d-fcd490ee17ca}</UniqueIdentifier>
     </Filter>
+    <Filter Include="object">
+      <UniqueIdentifier>{32db6a8c-c4f0-4816-a4ff-3338b7149800}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sound">
+      <UniqueIdentifier>{3a91e9a5-354c-4df1-a83f-b8881aafdef7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\glz-basecode\win\zeobase2.cpp">
@@ -128,6 +134,21 @@
     </ClCompile>
     <ClCompile Include="..\..\glz-core\image\imageTGA.cpp">
       <Filter>image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz-core\object\object.cpp">
+      <Filter>object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz-core\utilities\node3.cpp">
+      <Filter>utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz-core\sound\SoundManager.cpp">
+      <Filter>sound</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz-core\sound\aldlist.cpp">
+      <Filter>sound</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\glz-core\utilities\filetype.cpp">
+      <Filter>utilities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -226,6 +247,24 @@
     </ClInclude>
     <ClInclude Include="..\..\glz-core\image\imageTGA.h">
       <Filter>image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz-core\object\object.h">
+      <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz-core\utilities\node3.h">
+      <Filter>utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz-core\sound\SoundManager.h">
+      <Filter>sound</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz-core\sound\aldlist.h">
+      <Filter>sound</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz-core\image\textureData.h">
+      <Filter>image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\glz-core\utilities\filetype.h">
+      <Filter>utilities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

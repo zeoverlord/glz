@@ -33,6 +33,7 @@
 #include "..\..\glz-core\shader\shader.h"
 #include "..\..\glz-core\utilities\glz.h"
 #include "..\..\glz-core\utilities\vectormath.h"
+#include "..\..\glz-core\utilities\node3.h"
 #include "..\..\glz-core\image\tex.h"
 #include "..\..\glz-core\2d\geo-2d.h"
 #include "..\..\glz-core\2d\2d-utilities.h"
@@ -77,7 +78,7 @@ node3 tankpos(vert3(0, -2, -17));
 int gamestate = 4;
 
 img_head img;
-unsigned char *data;
+unsigned char* data;
 
 float aspect = 1.0f;
 
@@ -100,7 +101,7 @@ Example3DState::Example3DState() :
 	gamestate(4)
 {
 
-	tankpos.pos = vert3(0.0f, -2.0f, -17.0f);
+	tankpos.setPosition(vert3(0.0f, -2.0f, -17.0f));
 }
 
 bool Example3DState::Initialize(int width, int height)					// Any GL Init Code & User Initialiazation Goes Here
@@ -256,7 +257,7 @@ bool Example3DState::Initialize(int width, int height)					// Any GL Init Code &
 
 
 	//	tankpos.pos = vert3(0, -2, -17);
-	tankpos.scale = vec3(0.5, 0.5, 0.5);
+	tankpos.setScale(vec3(0.5, 0.5, 0.5));
 
 
 
@@ -309,28 +310,30 @@ void Example3DState::Update(float seconds)								// Perform Motion Updates Here
 
 	if(gamestate == 2)
 	{
-
-		tankpos.rs.identity();
+		glzQuaternion temQS;
+		temQS.identity();
 
 		if(input.getKeyState(VK_UP))
 		{
-			tankpos.rs.rotate(40, 1.0, 0.0, 0.0);
+			temQS.rotate(40, 1.0, 0.0, 0.0);
 		}
 		if(input.getKeyState(VK_DOWN))
 		{
-			tankpos.rs.rotate(-40, 1.0, 0.0, 0.0);
+			temQS.rotate(-40, 1.0, 0.0, 0.0);
 		}
 
 		if(input.getKeyState(VK_LEFT))
 		{
-			tankpos.rs.rotate(40, 0.0, 1.0, 0.0);
+			temQS.rotate(40, 0.0, 1.0, 0.0);
 		}
 		if(input.getKeyState(VK_RIGHT))
 		{
-			tankpos.rs.rotate(-40, 0.0, 1.0, 0.0);
+			temQS.rotate(-40, 0.0, 1.0, 0.0);
 		}
 
-		tankpos.pos = vert3(0, -2 + (sin(angle * PI_OVER_180) * 2), -17);
+		tankpos.setRotationVelocity(temQS);
+
+		tankpos.setPosition(vert3(0, -2 + (sin(angle * PI_OVER_180) * 2), -17));
 		tankpos.tick(seconds);
 	}
 
@@ -394,7 +397,7 @@ void Example3DState::DisplayUpdate(int width, int height)
 }
 
 
-void Example3DState::draw_object(GLZ::texturecontainer *tx, int prim, float x, float y)
+void Example3DState::draw_object(GLZ::texturecontainer* tx, int prim, float x, float y)
 {
 	unsigned int loc1 = glGetUniformLocation(ProgramObject, "projMat");
 	// draw objects
@@ -412,7 +415,7 @@ void Example3DState::draw_object(GLZ::texturecontainer *tx, int prim, float x, f
 	glzDrawVAO(vao_num[prim], vao[prim], GL_TRIANGLES);
 }
 
-void Example3DState::draw_object2(GLZ::texturecontainer *tx, int prim, float x, float y)
+void Example3DState::draw_object2(GLZ::texturecontainer* tx, int prim, float x, float y)
 {
 	unsigned int loc1 = glGetUniformLocation(ProgramObject, "projMat");
 	// draw objects
@@ -475,7 +478,7 @@ void Example3DState::Draw(void)
 		m.LoadIdentity();
 		m.perspective(45.0f, 1.618f, 1.0f, 100.0f);
 
-		m *= tankpos.m;
+		m *= tankpos.getMatrix();
 		//m.translate(0,-2,-17);
 		//m.scale(0.5,0.5,0.5);
 

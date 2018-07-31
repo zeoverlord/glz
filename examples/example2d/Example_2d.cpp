@@ -213,10 +213,12 @@ bool Example2DState::Initialize(int width, int height)					// Any GL Init Code &
 	//backgrounds
 	rm.createTexture("background.back", "data\\back.tga", glzTexFilter::LINEAR);
 	rm.createTexture("background.cv90", "data\\cv90-1080p-04.tga", glzTexFilter::LINEAR, 1);
+	rm.createTexture("blackandwhite.back", "data\\blackandwhite.tga", glzTexFilter::NEAREST);
 	//sprites
 	rm.createTexture("sprite.derpy_phirana", "data\\cat.png", glzTexFilter::LINEAR, 2);
 	rm.createTexture("sprite.explotion128a", "data\\explotion128a.tga", glzTexFilter::NEAREST, 3);
 	rm.createTexture("sprite.blob", "data\\blob.tga", glzTexFilter::NEAREST);
+	rm.createTexture("sprite.pen", "data\\test\\pen.png", glzTexFilter::TRILINEAR);
 	//tilesets
 	rm.createTexture("atlas.tinytiles", "data\\tinytiles.tga", glzTexFilter::NEAREST);
 	rm.createTexture("atlas.tileset", "data\\tileset.tga", glzTexFilter::NEAREST);
@@ -233,10 +235,11 @@ bool Example2DState::Initialize(int width, int height)					// Any GL Init Code &
 	//	cam.moveTo(vert3(0.0,100.0, 0.0));
 	cam.moveSpeed(100);
 
+	glzQuaternion tempQS = n.getRotationVelocity();
+	tempQS.rotate(20, 0.0, 0.0, 1.0);
+	n.setRotationVelocity(tempQS);
 
-	n.rs.rotate(20, 0.0, 0.0, 1.0);
-
-	n.pos = vert3(200.0, -130.0, 0.0);
+	n.setPosition(vert3(200.0, -130.0, 0.0));
 
 
 
@@ -773,7 +776,12 @@ void Example2DState::Draw(void)
 
 	if(gamestate == 7)
 	{
-		draw_backdrop_glitch(rm.gettextureHandle("background.cv90"), rm.gettextureHandle("sprite.blob"));
+		//draw_backdrop_glitch(rm.gettextureHandle("background.cv90"), rm.gettextureHandle("sprite.blob"));
+		glzBackdrop(rm.gettexture("blackandwhite.back"), glzBlendingMode::NONE);
+		glzDrawSprite(rm.gettexture("sprite.pen"), 0.0f, -0.4f, 0.5f, mView.getAspect(), glzBlendingMode::ALPHA);
+		glzDrawSprite(rm.gettexture("sprite.pen"), -0.5f, -0.0f, 0.25f, mView.getAspect(), glzBlendingMode::ALPHA);
+		glzDrawSprite(rm.gettexture("sprite.pen"), 0.5f, -0.0f, 0.25f, mView.getAspect(), glzBlendingMode::ALPHA);
+		glzDrawSprite(rm.gettexture("sprite.pen"), 0.0f, 0.4f, 0.5f, mView.getAspect(), glzBlendingMode::NONE);
 		glzDrawText("Switch screens with 1, 2, 3...", vert3(0.5f, -0.5f), 0.04f, 1.0f, mView.getAspect(), rm.gettexture("font.ms_gothic"), COL_WHITE, glzOrigin::BOTTOM_RIGHT);
 	}
 
