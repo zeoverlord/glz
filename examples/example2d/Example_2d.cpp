@@ -307,7 +307,7 @@ bool Example2DState::Initialize(int width, int height)					// Any GL Init Code &
 	mSoundManager.initialize();
 	mSoundSource.init();
 
-	mSoundManager.LoadWAV("data\\stereo.wav", "test");
+	mSoundManager.LoadWAV("data\\explosion.wav", "test");
 	mSoundSource.setLooping(AL_FALSE);
 
 	return TRUE;												// Return TRUE (Initialization Successful)
